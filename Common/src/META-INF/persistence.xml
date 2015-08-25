@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="PersistenceUnit">
+        <jta-data-source>jdbc/MAS</jta-data-source>
+        <class>MASCommon.User</class>
+        <class>MASCommon.Group</class>
+    </persistence-unit>
+</persistence>
