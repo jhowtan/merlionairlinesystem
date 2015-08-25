@@ -3,7 +3,10 @@
 
     <persistence-unit name="PersistenceUnit">
         <jta-data-source>jdbc/MAS</jta-data-source>
-        <class>MASCommon.User</class>
-        <class>MASCommon.Group</class>
+        <class>MAS.Common.User</class>
+        <class>MAS.Common.Role</class>
+        <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="create" />
+        </properties>
     </persistence-unit>
 </persistence>

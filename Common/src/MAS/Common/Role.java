@@ -1,15 +1,12 @@
-package MASCommon;
+package MAS.Common;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by Jonathan on 25/8/2015.
- */
 @Entity
-public class Group {
+public class Role {
     private Long id;
 
     @GeneratedValue

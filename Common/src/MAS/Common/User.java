@@ -1,18 +1,13 @@
-package MASCommon;
+package MAS.Common;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Jonathan on 25/8/2015.
- */
 @Entity
 public class User {
     private Long id;
 
+    @GeneratedValue
     @Id
     public Long getId() {
         return id;
@@ -77,14 +72,14 @@ public class User {
         this.email = email;
     }
 
-    private List<Group> groups;
+    private List<Role> roles;
 
     @ManyToMany
-    public List<Group> getGroups() {
-        return groups;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
