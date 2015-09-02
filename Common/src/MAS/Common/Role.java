@@ -1,9 +1,7 @@
 package MAS.Common;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Role {
@@ -28,5 +26,16 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private List<Permission> permissions;
+
+    @ManyToMany
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 }
