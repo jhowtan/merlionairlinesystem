@@ -120,6 +120,7 @@ public class User {
     private Date resetExpiry;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getResetExpiry() {
         return resetExpiry;
     }
