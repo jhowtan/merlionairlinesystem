@@ -14,11 +14,15 @@ public class CreateUserManagedBean {
     private String firstName;
     private String lastName;
     private String email;
-
     private String phone;
 
     public void createUser() {
         userBean.createUser(getUsername(), getFirstName(), getLastName(), getEmail(), getPhone());
+        setUsername(null);
+        setFirstName(null);
+        setLastName(null);
+        setEmail(null);
+        setPhone(null);
     }
 
     public String getUsername() {
