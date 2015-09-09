@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
+import java.util.List;
 
 @Stateless(name = "UserEJB")
 @LocalBean
@@ -82,6 +83,10 @@ public class UserBean {
             throw new BadPasswordException();
         user.setPasswordHash(Utils.hash(newPassword, user.getSalt()));
         em.persist(user);
+    }
+
+    public List<User> getAllUsers() {
+        return em.createQuery("SELECT u from User u").getResultList();
     }
 
 }
