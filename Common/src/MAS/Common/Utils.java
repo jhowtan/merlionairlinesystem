@@ -35,7 +35,7 @@ public class Utils {
         String hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            hash = new BigInteger(1, md.digest()).toString(16);
+            hash = new BigInteger(1, md.digest(plaintext.getBytes())).toString(16);
             while(hash.length() < 32) {
                 hash = "0" + hash;
             }
