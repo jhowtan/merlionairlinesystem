@@ -51,7 +51,7 @@ public class UserBean {
 
     public void createUser(String username, String firstName, String lastName, String email, String phone) {
         User user = new User();
-        user.setUsername(username);
+        user.setUsername(username.toLowerCase());
         user.setSalt(Utils.generateSalt());
         user.setLocked(false);
         user.setFirstName(firstName);
@@ -60,6 +60,10 @@ public class UserBean {
         user.setPhone(phone);
         user.setDeleted(false);
         em.persist(user);
+    }
+
+    public boolean isUsernameUnique(String username) {
+        return (Long) em.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username").setParameter("username", username.toLowerCase()).getSingleResult() == 0;
     }
 
     public void removeUser(long id) {
