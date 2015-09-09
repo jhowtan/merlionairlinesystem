@@ -52,7 +52,7 @@ public class UserBean {
     public void createUser(String username, String firstName, String lastName, String email, String phone) {
         User user = new User();
         user.setUsername(username);
-        user.setSalt(Utils.generateSecureRandom(32));
+        user.setSalt(Utils.generateSalt());
         user.setLocked(false);
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -69,7 +69,7 @@ public class UserBean {
     public void generateResetHash(long id) throws NotFoundException {
         User user = em.find(User.class, id);
         if(user == null) throw new NotFoundException();
-        user.setResetHash(Utils.generateSecureRandom(32));
+        user.setResetHash(Utils.generateSalt());
         user.setResetExpiry(Utils.hoursFromNow(72));
     }
 

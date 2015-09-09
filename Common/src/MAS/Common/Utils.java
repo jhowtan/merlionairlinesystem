@@ -11,11 +11,8 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static String generateSecureRandom(int length) {
-        SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[length];
-        random.nextBytes(bytes);
-        return new String(bytes);
+    public static String generateSalt() {
+        return new BigInteger(130, new SecureRandom()).toString(32);
     }
 
     public static Date hoursFromNow(int hours) {
