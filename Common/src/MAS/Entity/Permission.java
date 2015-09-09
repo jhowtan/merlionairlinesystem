@@ -1,4 +1,4 @@
-package MAS.Common;
+package MAS.Entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;

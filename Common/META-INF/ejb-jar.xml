@@ -7,7 +7,7 @@
     <enterprise-beans>
         <session>
             <ejb-name>UserEJB</ejb-name>
-            <ejb-class>MAS.Common.UserBean</ejb-class>
+            <ejb-class>MAS.Bean.UserBean</ejb-class>
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>

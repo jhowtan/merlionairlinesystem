@@ -4,7 +4,6 @@
     <root id="root">
       <element id="javaee-facet-resources" facet="Common/ejb/EJB" />
       <element id="module-output" name="Common" />
-      <element id="module-output" name="CommonInterface" />
     </root>
   </artifact>
 </component>

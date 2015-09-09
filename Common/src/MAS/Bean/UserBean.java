@@ -1,18 +1,23 @@
-package MAS.Common;
+package MAS.Bean;
 
-import MAS.CommonInterface.Exceptions.BadPasswordException;
-import MAS.CommonInterface.Exceptions.InvalidResetHashException;
-import MAS.CommonInterface.Exceptions.NotFoundException;
-import MAS.CommonInterface.UserBeanRemote;
+import MAS.Common.Utils;
+import MAS.Entity.Permission;
+import MAS.Entity.Role;
+import MAS.Entity.User;
+import MAS.Exception.BadPasswordException;
+import MAS.Exception.InvalidResetHashException;
+import MAS.Exception.NotFoundException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 
 @Stateless(name = "UserEJB")
-public class UserBean implements UserBeanRemote {
+@LocalBean
+public class UserBean {
     @PersistenceContext
     EntityManager em;
 

@@ -7,6 +7,8 @@
         <element id="directory" name="classes">
           <element id="module-output" name="InternalWeb" />
           <element id="module-output" name="CommonInterface" />
+          <element id="module-output" name="Common" />
+          <element id="jpa-descriptors" facet="Common/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="PrimeFaces-5.2" />
@@ -14,6 +16,7 @@
           <element id="library" level="project" name="org.webjars:font-awesome:4.4.0" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="Common/ejb/EJB" />
     </root>
   </artifact>
 </component>

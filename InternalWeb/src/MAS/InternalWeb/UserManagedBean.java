@@ -1,6 +1,6 @@
 package MAS.InternalWeb;
 
-import MAS.CommonInterface.UserBeanRemote;
+import MAS.Bean.UserBean;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name="user")
 public class UserManagedBean {
     @EJB
-    private UserBeanRemote userBean;
+    private UserBean userBean;
 
     private String username;
     private String password;

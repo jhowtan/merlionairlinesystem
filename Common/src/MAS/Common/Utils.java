@@ -1,7 +1,5 @@
 package MAS.Common;
 
-import sun.plugin2.message.Message;
-
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
