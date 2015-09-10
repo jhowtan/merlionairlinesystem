@@ -66,8 +66,11 @@ public class UserBean {
         return (Long) em.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username").setParameter("username", username.toLowerCase()).getSingleResult() == 0;
     }
 
-    public void removeUser(long id) {
-        throw new NotImplementedException();
+    public void removeUser(long id) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        user.setDeleted(true);
+        em.persist(user);
     }
 
     public void generateResetHash(long id) throws NotFoundException {
