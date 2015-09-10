@@ -11,9 +11,40 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Roles</h1>
-                    <p>Welcome to Merlion Airline System!</p>
+                    <table class="table" id="roles_table">
+                        <thead>
+                        <tr>
+                            <th>Role Name</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{roleManagedBean.getAllRoles()}" var="role">
+                            <tr>
+                                <td>#{role.name}</td>
+                                <td>
+                                    <h:form>
+                                        <h:commandLink styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:commandLink>
+                                        <h:commandLink styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete role #{role.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#roles_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [1] }
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>

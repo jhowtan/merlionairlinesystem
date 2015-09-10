@@ -61,6 +61,8 @@ public class RoleBean {
         return em.createQuery("SELECT p from Permission p").getResultList();
     }
 
-
+    public List<Role> getAllRoles() {
+        return em.createQuery("SELECT r from Role r").getResultList();
+    }
 
 }
