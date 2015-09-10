@@ -38,7 +38,11 @@
 
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#users_table').DataTable();
+            $('#users_table').DataTable({
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [3] }
+                ]
+            });
         </script>
     </ui:define>
 </ui:composition>
