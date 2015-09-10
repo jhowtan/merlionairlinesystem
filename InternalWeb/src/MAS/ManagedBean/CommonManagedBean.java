@@ -10,7 +10,6 @@ public class CommonManagedBean {
 
     public String getRoot() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-
     }
 
 }

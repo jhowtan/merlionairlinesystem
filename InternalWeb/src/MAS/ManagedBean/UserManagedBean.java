@@ -2,6 +2,7 @@ package MAS.ManagedBean;
 
 import MAS.Bean.UserBean;
 import MAS.Entity.User;
+import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -14,6 +15,13 @@ public class UserManagedBean {
 
     public List<User> getAllUsers() {
         return userBean.getAllUsers();
+    }
+
+    public void setLocked(long id, boolean isLocked) {
+        try {
+            userBean.setLocked(id, isLocked);
+        } catch (NotFoundException e) {
+        }
     }
 
 }
