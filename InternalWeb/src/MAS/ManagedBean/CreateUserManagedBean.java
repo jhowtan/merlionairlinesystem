@@ -3,7 +3,9 @@ package MAS.ManagedBean;
 import MAS.Bean.UserBean;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 public class CreateUserManagedBean {
@@ -23,6 +25,9 @@ public class CreateUserManagedBean {
         setLastName(null);
         setEmail(null);
         setPhone(null);
+        FacesMessage m = new FacesMessage("User created successfully.");
+        m.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
     public String getUsername() {
