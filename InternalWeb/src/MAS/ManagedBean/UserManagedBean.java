@@ -24,4 +24,11 @@ public class UserManagedBean {
         }
     }
 
+    public void delete(long id) {
+        try {
+            userBean.removeUser(id);
+        } catch (NotFoundException e) {
+        }
+    }
+
 }
