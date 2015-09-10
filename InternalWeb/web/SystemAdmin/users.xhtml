@@ -27,8 +27,8 @@
                                     <td>#{user.firstName} #{user.lastName}</td>
                                     <td>#{user.email}</td>
                                     <td>
-                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:link>
                                         <h:form>
+                                            <h:commandLink styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:commandLink>
                                             <h:commandLink action="#{userManagedBean.setLocked(user.id, true)}" styleClass="btn btn-default btn-xs btn-warning" rendered="#{!user.locked}"><i class="fa fa-lock"></i> Lock</h:commandLink>
                                             <h:commandLink action="#{userManagedBean.setLocked(user.id, false)}" styleClass="btn btn-default btn-xs btn-success" rendered="#{user.locked}"><i class="fa fa-unlock"></i> Unlock</h:commandLink>
                                         </h:form>
@@ -45,6 +45,7 @@
     <ui:define name="javascript">
         <script type="text/javascript">
             $('#users_table').DataTable({
+                "stateSave": true,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
