@@ -26,7 +26,10 @@
                                     <td>#{user.username}</td>
                                     <td>#{user.firstName} #{user.lastName}</td>
                                     <td>#{user.email}</td>
-                                    <td><h:link outcome="" styleClass="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</h:link></td>
+                                    <td>
+                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:link>
+                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-danger"><i class="fa fa-trash-o"></i> Delete</h:link>
+                                    </td>
                                 </tr>
                             </ui:repeat>
                         </tbody>
@@ -40,7 +43,7 @@
         <script type="text/javascript">
             $('#users_table').DataTable({
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [3] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
         </script>

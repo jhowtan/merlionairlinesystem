@@ -90,7 +90,7 @@ public class UserBean {
     }
 
     public List<User> getAllUsers() {
-        return em.createQuery("SELECT u from User u").getResultList();
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted").getResultList();
     }
 
 }
