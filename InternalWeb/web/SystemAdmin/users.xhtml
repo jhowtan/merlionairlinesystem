@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Users</h1>
-                    <table class="table">
+                    <table class="table" id="users_table">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
@@ -24,7 +24,7 @@
                                 <tr>
                                     <td>#{user.firstName} #{user.lastName}</td>
                                     <td>#{user.username}</td>
-                                    <td>Edit</td>
+                                    <td><h:link outcome="" styleClass="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</h:link></td>
                                 </tr>
                             </ui:repeat>
                         </tbody>
@@ -32,5 +32,11 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#users_table').DataTable();
+        </script>
     </ui:define>
 </ui:composition>
