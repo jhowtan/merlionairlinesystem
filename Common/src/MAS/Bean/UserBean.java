@@ -93,4 +93,11 @@ public class UserBean {
         return em.createQuery("SELECT u from User u WHERE NOT u.deleted").getResultList();
     }
 
+    public void setLocked(long id, boolean isLocked) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if(user == null) throw new NotFoundException();
+        user.setLocked(isLocked);
+        em.persist(user);
+    }
+
 }

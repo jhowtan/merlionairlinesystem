@@ -28,7 +28,8 @@
                                     <td>#{user.email}</td>
                                     <td>
                                         <h:link outcome="" styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:link>
-                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-danger"><i class="fa fa-trash-o"></i> Delete</h:link>
+                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-warning" rendered="#{!user.locked}"><i class="fa fa-lock"></i> Lock User</h:link>
+                                        <h:link outcome="" styleClass="btn btn-default btn-xs btn-success" rendered="#{user.locked}"><i class="fa fa-lock"></i> Unlock User</h:link>
                                     </td>
                                 </tr>
                             </ui:repeat>
