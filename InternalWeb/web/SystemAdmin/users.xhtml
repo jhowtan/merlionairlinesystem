@@ -14,16 +14,18 @@
                     <table class="table" id="users_table">
                         <thead>
                             <tr>
-                                <th>Full Name</th>
                                 <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <ui:repeat value="#{userManagedBean.getAllUsers()}" var="user">
                                 <tr>
-                                    <td>#{user.firstName} #{user.lastName}</td>
                                     <td>#{user.username}</td>
+                                    <td>#{user.firstName} #{user.lastName}</td>
+                                    <td>#{user.email}</td>
                                     <td><h:link outcome="" styleClass="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</h:link></td>
                                 </tr>
                             </ui:repeat>
