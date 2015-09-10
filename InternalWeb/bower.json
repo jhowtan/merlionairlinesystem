@@ -2,6 +2,7 @@
   "name": "InternalWeb",
   "version": "0.0.0",
   "dependencies": {
+    "datatables": "~1.10.9",
     "startbootstrap-sb-admin-2": "~1.0.7"
   }
 }

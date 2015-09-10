@@ -22,9 +22,6 @@
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.0 - CDI: Contexts and Dependency Injection" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.0 - JSF" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.0" level="application_server_libraries" />
-    <orderEntry type="library" name="org.webjars:font-awesome:4.4.0" level="project" />
     <orderEntry type="module" module-name="Common" />
-    <orderEntry type="library" name="org.webjars:bootstrap:3.3.5" level="project" />
-    <orderEntry type="library" name="org.webjars:datatables:1.10.7" level="project" />
   </component>
 </module>
