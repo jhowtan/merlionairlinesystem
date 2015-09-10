@@ -21,38 +21,40 @@
                         <div class="panel-heading">User Information</div>
                         <div class="panel-body">
                             <h:form>
-                                <div class="form-group col-lg-12 #{!username.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="username">Username</label>
-                                    <h:inputText id="username" binding="#{username}" value="#{createUserManagedBean.username}" styleClass="form-control" required="true" requiredMessage="Username is required.">
-                                        <f:validator validatorId="usernameValidator" />
-                                    </h:inputText>
-                                    <h:message for="username" styleClass="help-block" />
-                                </div>
-                                <div class="form-group col-lg-6 #{!firstName.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="firstName">First Name</label>
-                                    <h:inputText id="firstName" binding="#{firstName}" value="#{createUserManagedBean.firstName}" styleClass="form-control" required="true" pt:placeholder="John" requiredMessage="First Name is required." />
-                                    <h:message for="firstName" styleClass="help-block" />
-                                </div>
-                                <div class="form-group col-lg-6 #{!lastName.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="lastName">Last Name</label>
-                                    <h:inputText id="lastName" binding="#{lastName}" value="#{createUserManagedBean.lastName}" styleClass="form-control" required="true" pt:placeholder="Smith" requiredMessage="Last Name is required." />
-                                    <h:message for="lastName" styleClass="help-block" />
-                                </div>
-                                <div class="form-group col-lg-6 #{!email.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="email">Email</label>
-                                    <h:inputText id="email" binding="#{email}" value="#{createUserManagedBean.email}" styleClass="form-control" required="true" pt:placeholder="employee@merlionair.sg" requiredMessage="Email is required.">
-                                        <f:validator validatorId="emailValidator" />
-                                    </h:inputText>
-                                    <h:message for="email" styleClass="help-block" />
-                                </div>
-                                <div class="form-group col-lg-6 #{!phone.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="phone">Contact Number</label>
-                                    <h:inputText id="phone" binding="#{phone}" value="#{createUserManagedBean.phone}" styleClass="form-control" required="true" pt:placeholder="91234567" requiredMessage="Phone is required." />
-                                    <h:message for="phone" styleClass="help-block" />
-                                </div>
-                                <div class="col-lg-offset-6 col-lg-6">
-                                    <h:link outcome="/SystemAdmin/users" class="btn btn-default pull-right" value="Cancel" />
-                                    <h:commandButton action="#{createUserManagedBean.createUser}" value="Create User" styleClass="btn btn-default btn-success pull-right" />
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!username.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="username">Username</label>
+                                        <h:inputText id="username" binding="#{username}" value="#{createUserManagedBean.username}" styleClass="form-control" required="true" requiredMessage="Username is required.">
+                                            <f:validator validatorId="usernameValidator" />
+                                        </h:inputText>
+                                        <h:message for="username" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!firstName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="firstName">First Name</label>
+                                        <h:inputText id="firstName" binding="#{firstName}" value="#{createUserManagedBean.firstName}" styleClass="form-control" required="true" pt:placeholder="John" requiredMessage="First Name is required." />
+                                        <h:message for="firstName" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!lastName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="lastName">Last Name</label>
+                                        <h:inputText id="lastName" binding="#{lastName}" value="#{createUserManagedBean.lastName}" styleClass="form-control" required="true" pt:placeholder="Smith" requiredMessage="Last Name is required." />
+                                        <h:message for="lastName" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!email.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="email">Email</label>
+                                        <h:inputText id="email" binding="#{email}" value="#{createUserManagedBean.email}" styleClass="form-control" required="true" pt:placeholder="employee@merlionair.sg" requiredMessage="Email is required.">
+                                            <f:validator validatorId="emailValidator" />
+                                        </h:inputText>
+                                        <h:message for="email" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!phone.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="phone">Contact Number</label>
+                                        <h:inputText id="phone" binding="#{phone}" value="#{createUserManagedBean.phone}" styleClass="form-control" required="true" pt:placeholder="91234567" requiredMessage="Phone is required." />
+                                        <h:message for="phone" styleClass="help-block" />
+                                    </div>
+                                    <div class="col-lg-12 text-right">
+                                        <h:link outcome="/SystemAdmin/users" class="btn btn-default" value="Cancel" />
+                                        <h:commandButton action="#{createUserManagedBean.createUser}" value="Create User" styleClass="btn btn-default btn-success" />
+                                    </div>
                                 </div>
                             </h:form>
                         </div>
