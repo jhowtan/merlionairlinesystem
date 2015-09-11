@@ -13,6 +13,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class UserBean {
         throw new NotImplementedException();
     }
 
-    public void createUser(String username, String firstName, String lastName, String email, String phone) {
+    public long createUser(String username, String firstName, String lastName, String email, String phone) {
         User user = new User();
         user.setUsername(username.toLowerCase());
         user.setSalt(Utils.generateSalt());
@@ -59,6 +60,23 @@ public class UserBean {
         user.setEmail(email);
         user.setPhone(phone);
         user.setDeleted(false);
+        em.persist(user);
+        em.flush();
+        return user.getId();
+    }
+
+    public void setRoles(long id, List<Long> roleIds) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        Role role;
+        ArrayList<Role> roles = new ArrayList<>();
+        for(Long roleId : roleIds) {
+            role = em.find(Role.class, roleId);
+            if (role != null) {
+                roles.add(role);
+            }
+        }
+        user.setRoles(roles);
         em.persist(user);
     }
 

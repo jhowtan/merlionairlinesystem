@@ -39,7 +39,6 @@ public class CreateRoleManagedBean {
             Map.Entry pair = (Map.Entry) it.next();
             if ((Boolean) pair.getValue()) {
                 permissionIds.add((Long) pair.getKey());
-                System.out.println(pair.getKey().toString());
             }
         }
         roleBean.createRole(roleName, permissionIds);
