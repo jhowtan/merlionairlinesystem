@@ -16,6 +16,7 @@
                         <tr>
                             <th>Role Name</th>
                             <th>No. of Permissions</th>
+                            <th>No. of Users Assigned</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -24,6 +25,7 @@
                             <tr>
                                 <td>#{role.name}</td>
                                 <td>#{role.permissions.size()}</td>
+                                <td>#{role.users.size()}</td>
                                 <td>
                                     <h:form>
                                         <h:commandLink styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:commandLink>
