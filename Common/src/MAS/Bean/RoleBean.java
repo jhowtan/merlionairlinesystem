@@ -2,6 +2,7 @@ package MAS.Bean;
 
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
+import MAS.Exception.NotFoundException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.LocalBean;
@@ -28,10 +29,6 @@ public class RoleBean {
         return permission.getId();
     }
 
-    public void removePermission(long id) {
-        throw new NotImplementedException();
-    }
-
     public long createRole(String name, List<Long> permissionIds) {
         Role role = new Role();
         role.setName(name);
@@ -53,8 +50,10 @@ public class RoleBean {
         return (Long) em.createQuery("SELECT COUNT(r) FROM Role r WHERE r.name = :name").setParameter("name", name).getSingleResult() == 0;
     }
 
-    public void removeRole(long id) {
-        throw new NotImplementedException();
+    public void removeRole(long id) throws NotFoundException {
+        Role role = em.find(Role.class, id);
+        if (role == null) throw new NotFoundException();
+        em.remove(role);
     }
 
     public List<Permission> getAllPermissions() {

@@ -38,4 +38,15 @@ public class Role {
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
+
+    private List<User> users;
+
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.REMOVE)
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }
