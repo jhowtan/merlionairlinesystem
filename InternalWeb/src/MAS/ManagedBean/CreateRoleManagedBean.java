@@ -2,6 +2,7 @@ package MAS.ManagedBean;
 
 import MAS.Bean.RoleBean;
 import MAS.Entity.Permission;
+import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
