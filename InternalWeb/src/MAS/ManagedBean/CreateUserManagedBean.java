@@ -35,7 +35,7 @@ public class CreateUserManagedBean {
 
     private void populateRoles() {
         roles = roleBean.getAllRoles();
-        rolesMap = new HashMap<Long, Boolean>();
+        rolesMap = new HashMap<>();
         for (Role role : roles) {
             rolesMap.put(role.getId(), Boolean.FALSE);
         }
@@ -43,9 +43,8 @@ public class CreateUserManagedBean {
 
     public void createUser() {
         ArrayList<Long> roleIds = new ArrayList<>();
-        Iterator it = rolesMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : rolesMap.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if ((Boolean) pair.getValue()) {
                 roleIds.add((Long) pair.getKey());
             }

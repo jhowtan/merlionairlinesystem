@@ -21,7 +21,7 @@ import java.util.List;
 @LocalBean
 public class UserBean {
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public UserBean() {
     }
@@ -112,7 +112,7 @@ public class UserBean {
     }
 
     public List<User> getAllUsers() {
-        return em.createQuery("SELECT u from User u WHERE NOT u.deleted").getResultList();
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted", User.class).getResultList();
     }
 
     public void setLocked(long id, boolean isLocked) throws NotFoundException {

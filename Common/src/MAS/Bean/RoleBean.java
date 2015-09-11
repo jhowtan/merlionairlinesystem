@@ -3,7 +3,6 @@ package MAS.Bean;
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
 import MAS.Exception.NotFoundException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -16,7 +15,7 @@ import java.util.List;
 @LocalBean
 public class RoleBean {
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     public RoleBean() {
     }
@@ -57,11 +56,11 @@ public class RoleBean {
     }
 
     public List<Permission> getAllPermissions() {
-        return em.createQuery("SELECT p from Permission p").getResultList();
+        return em.createQuery("SELECT p from Permission p", Permission.class).getResultList();
     }
 
     public List<Role> getAllRoles() {
-        return em.createQuery("SELECT r from Role r").getResultList();
+        return em.createQuery("SELECT r from Role r", Role.class).getResultList();
     }
 
 }

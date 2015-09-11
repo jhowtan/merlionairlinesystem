@@ -1,7 +1,5 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.UserBean;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 

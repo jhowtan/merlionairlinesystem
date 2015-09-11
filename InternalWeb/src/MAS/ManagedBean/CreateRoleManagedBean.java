@@ -2,7 +2,6 @@ package MAS.ManagedBean;
 
 import MAS.Bean.RoleBean;
 import MAS.Entity.Permission;
-import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,7 +26,7 @@ public class CreateRoleManagedBean {
 
     private void populatePermissions() {
         permissions = roleBean.getAllPermissions();
-        permissionsMap = new HashMap<Long, Boolean>();
+        permissionsMap = new HashMap<>();
         for (Permission permission : permissions) {
             permissionsMap.put(permission.getId(), Boolean.FALSE);
         }
@@ -35,9 +34,8 @@ public class CreateRoleManagedBean {
 
     public void createRole() {
         ArrayList<Long> permissionIds = new ArrayList<>();
-        Iterator it = permissionsMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : permissionsMap.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if ((Boolean) pair.getValue()) {
                 permissionIds.add((Long) pair.getKey());
             }
