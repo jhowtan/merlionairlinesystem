@@ -11,6 +11,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Users</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/SystemAdmin/users">Summary</h:link></li>
+                        <li role="presentation"><h:link outcome="/SystemAdmin/createUser">Create User</h:link></li>
+                    </ul>
+
                     <table class="table" id="users_table">
                         <thead>
                             <tr>
@@ -51,6 +56,7 @@
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
+            $('#users_table_wrapper').addClass('well');
         </script>
     </ui:define>
 </ui:composition>
