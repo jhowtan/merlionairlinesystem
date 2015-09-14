@@ -1,0 +1,23 @@
+<ui:composition template="/WEB-INF/templates/auth.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Login - Merlion Airline System</ui:define>
+    <ui:define name="heading">Sign In to Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <div class="form-group">
+                <h:inputText styleClass="form-control" pt:placeholder="Username" value="" />
+            </div>
+            <div class="form-group">
+                <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="" />
+            </div>
+            <h:commandButton value="Login" styleClass="btn btn-default btn-success pull-right" />
+            <div><h:link outcome="/Auth/forgotPassword" styleClass="pull-left">Forgot Password</h:link></div>
+        </h:form>
+    </ui:define>
+</ui:composition>

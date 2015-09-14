@@ -64,7 +64,7 @@ public class UserBean {
         String msg = "Dear " + firstName + ",\n\n" +
                 "Welcome to Merlion Airlines!\n\n" +
                 "Please access the link below to activate your account and set your password:\n" +
-                Constants.WEB_ROOT + "activate.xhtml?u=" + user.getId() + "&h=" + user.getResetHash() + "\n\n" +
+                Constants.WEB_ROOT + "Auth/resetPassword.xhtml?u=" + user.getId() + "&h=" + user.getResetHash() + "\n\n" +
                 "For security reasons, the link will expire in 3 days.\n\n" +
                 "Yours Sincerely,\n" +
                 "Merlion Airlines";
