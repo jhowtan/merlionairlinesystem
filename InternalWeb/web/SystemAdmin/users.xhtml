@@ -14,8 +14,7 @@
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation" class="active"><h:link outcome="/SystemAdmin/users">Summary</h:link></li>
                         <li role="presentation"><h:link outcome="/SystemAdmin/createUser">Create User</h:link></li>
-                    </ul>
-
+                    </ul><br />
                     <table class="table" id="users_table">
                         <thead>
                             <tr>
@@ -56,7 +55,6 @@
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
-            $('#users_table_wrapper').addClass('well');
         </script>
     </ui:define>
 </ui:composition>
