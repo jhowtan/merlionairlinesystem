@@ -22,12 +22,6 @@ public class Utils {
         return calendar.getTime();
     }
 
-    public static boolean isGoodPassword(String password) {
-        Pattern p = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8}$");
-        Matcher m = p.matcher(password);
-        return m.matches();
-    }
-
     public static String hash(String plaintext) {
         String hash = null;
         try {

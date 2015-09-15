@@ -5,7 +5,6 @@ import MAS.Common.Utils;
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
 import MAS.Entity.User;
-import MAS.Exception.BadPasswordException;
 import MAS.Exception.InvalidResetHashException;
 import MAS.Exception.NotFoundException;
 
@@ -78,7 +77,7 @@ public class UserBean {
         if (user == null) throw new NotFoundException();
         Role role;
         ArrayList<Role> roles = new ArrayList<>();
-        for(Long roleId : roleIds) {
+        for (Long roleId : roleIds) {
             role = em.find(Role.class, roleId);
             if (role != null) {
                 roles.add(role);
@@ -100,14 +99,14 @@ public class UserBean {
         em.persist(user);
     }
 
-    public void resetPassword(long id, String resetHash, String newPassword) throws NotFoundException, InvalidResetHashException, BadPasswordException {
+    public void resetPassword(long id, String resetHash, String newPassword) throws NotFoundException, InvalidResetHashException {
         User user = em.find(User.class, id);
-        if(user == null)
+        if (user == null)
             throw new NotFoundException();
-        if(!user.getResetHash().equals(resetHash) || user.getResetExpiry().after(new Date()))
+        if (!isResetHashValid(id, resetHash))
             throw new InvalidResetHashException();
-        if(!Utils.isGoodPassword(newPassword))
-            throw new BadPasswordException();
+        user.setResetHash(null);
+        user.setResetExpiry(null);
         user.setPasswordHash(Utils.hash(newPassword, user.getSalt()));
         em.persist(user);
     }
@@ -116,9 +115,17 @@ public class UserBean {
         return em.createQuery("SELECT u from User u WHERE NOT u.deleted", User.class).getResultList();
     }
 
+    public boolean isResetHashValid(Long id, String resetHash) {
+        User user = em.find(User.class, id);
+        if (user == null) return false;
+        if (user.getResetHash() == null || !user.getResetHash().equals(resetHash)) return false;
+        if (user.getResetExpiry() == null || user.getResetExpiry().before(new Date())) return false;
+        return true;
+    }
+
     public void setLocked(long id, boolean isLocked) throws NotFoundException {
         User user = em.find(User.class, id);
-        if(user == null) throw new NotFoundException();
+        if (user == null) throw new NotFoundException();
         user.setLocked(isLocked);
         em.persist(user);
     }
