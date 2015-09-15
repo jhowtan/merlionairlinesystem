@@ -1,0 +1,84 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Create Workgroup - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Create Workgroup</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/SystemAdmin/workgroups">Summary</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/SystemAdmin/createWorkgroup">Create Workgroup</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Workgroup Details</div>
+                        <div class="panel-body">
+                            <h:form>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="workgroupName">Workgroup Name</label>
+                                        <h:inputText id="workgroupName" styleClass="form-control" required="true" requiredMessage="Workgroup name is required."/>
+                                        <label class="control-label" for="workgroupDesc">Workgroup Description</label>
+                                        <h:inputTextarea id="workgroupDesc" styleClass="form-control" required="true" requiredMessage="Workgroup description is required."/>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <table class="table" id="users_table">
+                                            <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <ui:repeat value="#{createWorkgroupManagedBean.users}" var="user">
+                                                <tr>
+                                                    <td>#{user.username}</td>
+                                                    <td>#{user.firstName} #{user.lastName}</td>
+                                                    <td>#{user.email}</td>
+                                                    <td>
+                                                        <label>
+                                                            <h:selectBooleanCheckbox value="#{createWorkgroupManagedBean.usersMap[user.id]}" />
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-12 text-right">
+                                        <h:link outcome="/App/SystemAdmin/workgroups" class="btn btn-default" value="Cancel" />
+                                        <h:commandButton action="#{createWorkgroupManagedBean.createWorkgroup}" value="Create Workgroup" styleClass="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#users_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
