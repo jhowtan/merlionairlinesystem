@@ -44,6 +44,12 @@ public class WorkgroupBean {
         return workgroup.getId();
     }
 
+    public boolean isNameUnique(String name) {
+        return (Long) em.createQuery("SELECT COUNT(w) FROM Workgroup w WHERE w.name = :name")
+                .setParameter("name", name)
+                .getSingleResult() == 0;
+    }
+
     public List<Workgroup> getOwnedWorkgroups(long userId) throws NotFoundException {
         User owner = em.find(User.class, userId);
         if (owner == null) throw new NotFoundException();
