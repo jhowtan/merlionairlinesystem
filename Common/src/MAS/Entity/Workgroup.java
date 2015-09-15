@@ -50,4 +50,15 @@ public class Workgroup {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+    private String description;
+
+    @Basic
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
