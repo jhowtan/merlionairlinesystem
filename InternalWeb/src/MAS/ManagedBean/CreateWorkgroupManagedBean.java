@@ -44,6 +44,9 @@ public class CreateWorkgroupManagedBean {
         usersMap = new HashMap<>();
         for (User user : users) {
             usersMap.put(user.getId(), Boolean.FALSE);
+            if (user.getId().equals(authManagedBean.getUserId())) {
+                usersMap.put(user.getId(), Boolean.TRUE);
+            }
         }
     }
 
@@ -51,6 +54,10 @@ public class CreateWorkgroupManagedBean {
         ArrayList<Long> userIds = new ArrayList<>();
         for (Object o : usersMap.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
+            if ((Long) pair.getKey() == authManagedBean.getUserId()) {
+                userIds.add((Long) pair.getKey());
+                continue;
+            }
             if ((Boolean) pair.getValue()) {
                 userIds.add((Long) pair.getKey());
             }
@@ -90,6 +97,10 @@ public class CreateWorkgroupManagedBean {
 
     public Map<Long, Boolean> getUsersMap() {
         return usersMap;
+    }
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
     }
 
     public void setUsersMap(Map<Long, Boolean> usersMap) {
