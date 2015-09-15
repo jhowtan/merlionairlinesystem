@@ -1,5 +1,6 @@
 package MAS.ManagedBean;
 
+import MAS.Bean.AuditLogBean;
 import MAS.Bean.UserBean;
 import MAS.Common.Constants;
 import MAS.Entity.Permission;
@@ -12,6 +13,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class AuthManagedBean {
     @EJB
     private UserBean userBean;
 
+    @EJB
+    private AuditLogBean auditLogBean;
+
     private long userId;
     private boolean authenticated = false;
 
@@ -28,6 +33,10 @@ public class AuthManagedBean {
         try {
             userId = userBean.login(username, password);
             authenticated = true;
+
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            createAuditLog("Logged in from " + request.getRemoteAddr(), "login");
+
             return true;
         } catch (InvalidLoginException e) {
             return false;
@@ -71,6 +80,14 @@ public class AuthManagedBean {
         return false;
     }
 
+    public void createAuditLog(String description, String category) {
+        try {
+            auditLogBean.createAuditLog(userId, description, category);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean isAuthenticated() {
         return authenticated;
     }
@@ -86,4 +103,6 @@ public class AuthManagedBean {
     public void setUserId(long userId) {
         this.userId = userId;
     }
+
+
 }
