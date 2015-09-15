@@ -5,8 +5,10 @@ import MAS.Common.Utils;
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
 import MAS.Entity.User;
+import MAS.Exception.InvalidLoginException;
 import MAS.Exception.InvalidResetHashException;
 import MAS.Exception.NotFoundException;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -137,6 +139,23 @@ public class UserBean {
         user.setResetExpiry(null);
         user.setPasswordHash(Utils.hash(newPassword, user.getSalt()));
         em.persist(user);
+    }
+
+    public User login(String username, String password) throws InvalidLoginException {
+        try {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username.toLowerCase())
+                    .getSingleResult();
+            if (user.isDeleted())
+                throw new InvalidLoginException();
+            if(user.isLocked())
+                throw new InvalidLoginException();
+            if (!Utils.hash(password, user.getSalt()).equals(user.getPasswordHash().toString()))
+                throw new InvalidLoginException();
+            return user;
+        } catch (NoResultException e) {
+            throw new InvalidLoginException();
+        }
     }
 
     public List<User> getAllUsers() {

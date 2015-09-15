@@ -9,14 +9,17 @@
     <ui:define name="heading">Sign In to Merlion Airline System</ui:define>
 
     <ui:define name="content">
+        <h:panelGroup rendered="#{loginManagedBean.invalidLogin}">
+            <p class="text-danger">Invalid username and password combination.</p>
+        </h:panelGroup>
         <h:form>
             <div class="form-group">
-                <h:inputText styleClass="form-control" pt:placeholder="Username" value="" />
+                <h:inputText styleClass="form-control" pt:placeholder="Username" value="#{loginManagedBean.username}" />
             </div>
             <div class="form-group">
-                <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="" />
+                <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="#{loginManagedBean.password}" />
             </div>
-            <h:commandButton value="Login" styleClass="btn btn-default btn-success pull-right" />
+            <h:commandButton action="#{loginManagedBean.login}" value="Login" styleClass="btn btn-default btn-success pull-right" />
             <div><h:link outcome="/Auth/forgotPassword" styleClass="pull-left">Forgot Password</h:link></div>
         </h:form>
     </ui:define>

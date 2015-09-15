@@ -98,7 +98,7 @@ public class User {
     private boolean locked;
 
     @Basic
-    public boolean getLocked() {
+    public boolean isLocked() {
         return locked;
     }
 
