@@ -21,12 +21,12 @@ public class AuthManagedBean {
     @EJB
     private UserBean userBean;
 
-    private User user;
+    private long userId;
     private boolean authenticated = false;
 
     public boolean login(String username, String password) {
         try {
-            user = userBean.login(username, password);
+            userId = userBean.login(username, password);
             authenticated = true;
             return true;
         } catch (InvalidLoginException e) {
@@ -35,7 +35,7 @@ public class AuthManagedBean {
     }
 
     public void logout() {
-        user = null;
+        userId = -1;
         authenticated = false;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         forwardToLogin();
@@ -57,22 +57,18 @@ public class AuthManagedBean {
 
     public boolean hasPermission(String permissionString) {
         if (!authenticated) return false;
-        for (Role role : user.getRoles()) {
-            for (Permission permission : role.getPermissions()) {
-                if (permission.getName().equals(permissionString)) {
-                    return true;
+        try {
+            for (Role role : userBean.getUser(userId).getRoles()) {
+                for (Permission permission : role.getPermissions()) {
+                    if (permission.getName().equals(permissionString)) {
+                        return true;
+                    }
                 }
             }
+        } catch (NotFoundException e) {
+            return false;
         }
         return false;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public boolean isAuthenticated() {
@@ -81,5 +77,13 @@ public class AuthManagedBean {
 
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
