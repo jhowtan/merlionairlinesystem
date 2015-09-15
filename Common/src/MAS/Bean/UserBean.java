@@ -12,6 +12,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,16 +61,39 @@ public class UserBean {
         em.persist(user);
         em.flush();
 
-        String msg = "Dear " + firstName + ",\n\n" +
+        String msg = "Dear " + user.getFirstName() + ",\n\n" +
                 "Welcome to Merlion Airlines!\n\n" +
                 "Please access the link below to activate your account and set your password:\n" +
                 Constants.WEB_ROOT + "Auth/resetPassword.xhtml?u=" + user.getId() + "&h=" + user.getResetHash() + "\n\n" +
                 "For security reasons, the link will expire in 3 days.\n\n" +
                 "Yours Sincerely,\n" +
                 "Merlion Airlines";
-        mailBean.send(email, firstName + " " + lastName, "Merlion Airlines Account Activation", msg);
+        mailBean.send(user.getEmail(), user.getFirstName() + " " + user.getLastName(), "Merlion Airlines Account Activation", msg);
 
         return user.getId();
+    }
+
+    public void forgotPassword(String usernameEmail) throws NotFoundException {
+        try {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :usernameEmail OR u.email = :usernameEmail", User.class)
+                    .setParameter("usernameEmail", usernameEmail.toLowerCase())
+                    .getSingleResult();
+
+            user.setResetHash(Utils.generateSalt());
+            user.setResetExpiry(Utils.hoursFromNow(72));
+            em.persist(user);
+
+            String msg = "Dear " + user.getFirstName() + ",\n\n" +
+                    "Welcome to Merlion Airlines!\n\n" +
+                    "Please access the link below to reset your password:\n" +
+                    Constants.WEB_ROOT + "Auth/resetPassword.xhtml?u=" + user.getId() + "&h=" + user.getResetHash() + "\n\n" +
+                    "For security reasons, the link will expire in 3 days.\n\n" +
+                    "Yours Sincerely,\n" +
+                    "Merlion Airlines";
+            mailBean.send(user.getEmail(), user.getFirstName() + " " + user.getLastName(), "Merlion Airlines Password Reset", msg);
+        } catch (NoResultException e) {
+            throw new NotFoundException();
+        }
     }
 
     public void setRoles(long id, List<Long> roleIds) throws NotFoundException {
