@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Create User - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">User Profile</h1>
+
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">User Information</div>
+                            <div class="panel-body">
+                                <ui:repeat value="#{facesContext.getMessageList('userInfo')}" var="message">
+                                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                                        #{message.detail}
+                                    </h:panelGroup>
+                                </ui:repeat>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="username">Username</label>
+                                        <h:inputText id="username" value="#{userProfileManagedBean.user.username}" styleClass="form-control" disabled="true" />
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="control-label" for="firstName">First Name</label>
+                                        <h:inputText id="firstName" value="#{userProfileManagedBean.user.firstName}" styleClass="form-control" disabled="true" />
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="control-label" for="lastName">Last Name</label>
+                                        <h:inputText id="lastName" value="#{userProfileManagedBean.user.lastName}" styleClass="form-control" disabled="true" />
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="control-label" for="email">Email</label>
+                                        <h:inputText id="email" binding="#{email}" value="#{userProfileManagedBean.user.email}" styleClass="form-control" disabled="true" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!phone.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="phone">Contact Number</label>
+                                        <h:inputText id="phone" binding="#{phone}" value="#{userProfileManagedBean.phone}" styleClass="form-control" required="true" pt:placeholder="91234567" requiredMessage="Phone is required." />
+                                        <h:message for="phone" styleClass="help-block" />
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <h:commandButton action="#{userProfileManagedBean.updateUserInfo}" value="Update Profile" styleClass="btn btn-default btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Change Password</div>
+                            <div class="panel-body">
+                                <ui:repeat value="#{facesContext.getMessageList('changePassword')}" var="message">
+                                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                                        #{message.detail}
+                                    </h:panelGroup>
+                                </ui:repeat>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 #{!newPassword.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="password">New Password</label>
+                                        <h:inputSecret id="password" styleClass="form-control" pt:placeholder="New Password" required="true" requiredMessage="Please enter a new password." binding="#{newPassword}">
+                                            <f:validator validatorId="passwordValidator" />
+                                            <f:attribute name="confirmPassword" value="#{confirmPassword}" />
+                                        </h:inputSecret>
+                                        <h:message for="password" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!newPassword.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="lastName">Repeat Password</label>
+                                        <h:inputSecret id="confirmPassword" styleClass="form-control" pt:placeholder="Repeat Password" binding="#{confirmPassword}" />
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <h:commandButton action="#{userProfileManagedBean.changePassword(newPassword.value)}" value="Change Password" styleClass="btn btn-default btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

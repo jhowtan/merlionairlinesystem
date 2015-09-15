@@ -141,7 +141,15 @@ public class UserBean {
         em.persist(user);
     }
 
-    public User login(String username, String password) throws InvalidLoginException {
+    public void changePassword(long id, String newPassword) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null)
+            throw new NotFoundException();
+        user.setPasswordHash(Utils.hash(newPassword, user.getSalt()));
+        em.persist(user);
+    }
+
+    public long login(String username, String password) throws InvalidLoginException {
         try {
             User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                     .setParameter("username", username.toLowerCase())
@@ -152,7 +160,7 @@ public class UserBean {
                 throw new InvalidLoginException();
             if (!Utils.hash(password, user.getSalt()).equals(user.getPasswordHash().toString()))
                 throw new InvalidLoginException();
-            return user;
+            return user.getId();
         } catch (NoResultException e) {
             throw new InvalidLoginException();
         }
@@ -175,6 +183,19 @@ public class UserBean {
         if (user == null) throw new NotFoundException();
         user.setLocked(isLocked);
         em.persist(user);
+    }
+
+    public void updateUserInfo(long id, String phone) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        user.setPhone(phone);
+        em.persist(user);
+    }
+
+    public User getUser(long id) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        return user;
     }
 
 }
