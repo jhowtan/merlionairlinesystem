@@ -37,6 +37,7 @@ public class UserProfileManagedBean {
     public void updateUserInfo() {
         try {
             userBean.updateUserInfo(user.getId(), phone);
+            authManagedBean.createAuditLog("Updated user information", "update_info");
             FacesMessage m = new FacesMessage("User information successfully updated.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("userInfo", m);
@@ -48,6 +49,7 @@ public class UserProfileManagedBean {
     public void changePassword(String newPassword) {
         try {
             userBean.changePassword(user.getId(), newPassword);
+            authManagedBean.createAuditLog("Changed password", "change_password");
             FacesMessage m = new FacesMessage("Password successfully changed.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("changePassword", m);

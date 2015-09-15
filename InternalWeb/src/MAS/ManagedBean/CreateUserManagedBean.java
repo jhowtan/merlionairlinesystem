@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.util.*;
 
@@ -18,6 +19,9 @@ public class CreateUserManagedBean {
     private UserBean userBean;
     @EJB
     private RoleBean roleBean;
+
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
 
     private String username;
     private String firstName;
@@ -42,6 +46,9 @@ public class CreateUserManagedBean {
     }
 
     public void createUser() {
+        username = username.toLowerCase();
+        email = email.toLowerCase();
+
         ArrayList<Long> roleIds = new ArrayList<>();
         for (Object o : rolesMap.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
@@ -49,17 +56,22 @@ public class CreateUserManagedBean {
                 roleIds.add((Long) pair.getKey());
             }
         }
-        Long userId = userBean.createUser(getUsername(), getFirstName(), getLastName(), getEmail(), getPhone());
+        Long userId = userBean.createUser(username, firstName, lastName, email, phone);
         try {
             userBean.setRoles(userId, roleIds);
         } catch (NotFoundException e) {
         }
+
+        authManagedBean.createAuditLog("Created new user: " + username, "create_user");
+
         setUsername(null);
         setFirstName(null);
         setLastName(null);
         setEmail(null);
         setPhone(null);
+
         populateRoles();
+
         FacesMessage m = new FacesMessage("User created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -119,5 +131,9 @@ public class CreateUserManagedBean {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
     }
 }

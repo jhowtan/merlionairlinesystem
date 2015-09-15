@@ -20,6 +20,12 @@ public class RoleBean {
     public RoleBean() {
     }
 
+    public Role getRole(long id) throws NotFoundException {
+        Role role = em.find(Role.class, id);
+        if (role == null) throw new NotFoundException();
+        return role;
+    }
+
     public long createPermission(String name) {
         Permission permission = new Permission();
         permission.setName(name);
