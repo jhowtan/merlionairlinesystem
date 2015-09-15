@@ -52,7 +52,7 @@ public class UserBean {
         user.setLocked(false);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setEmail(email);
+        user.setEmail(email.toLowerCase());
         user.setPhone(phone);
         user.setDeleted(false);
         user.setResetHash(Utils.generateSalt());
@@ -89,6 +89,10 @@ public class UserBean {
 
     public boolean isUsernameUnique(String username) {
         return (Long) em.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username").setParameter("username", username.toLowerCase()).getSingleResult() == 0;
+    }
+
+    public boolean isEmailUnique(String email) {
+        return (Long) em.createQuery("SELECT COUNT(u) FROM User u WHERE u.email = :email").setParameter("email", email.toLowerCase()).getSingleResult() == 0;
     }
 
     public void removeUser(long id) throws NotFoundException {
