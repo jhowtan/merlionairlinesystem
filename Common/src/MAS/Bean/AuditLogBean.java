@@ -39,4 +39,8 @@ public class AuditLogBean {
         return auditLog.getId();
     }
 
+    public List<AuditLog> getAllAuditLogs() {
+        return em.createQuery("SELECT a from AuditLog a", AuditLog.class).getResultList();
+    }
+
 }
