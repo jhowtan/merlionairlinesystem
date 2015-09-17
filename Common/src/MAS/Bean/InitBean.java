@@ -1,11 +1,12 @@
 package MAS.Bean;
 
-import MAS.Common.Constants;
+import MAS.Common.Permissions;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.lang.reflect.Field;
 
 @Singleton
 @Startup
@@ -16,8 +17,12 @@ public class InitBean {
     @PostConstruct
     public void init() {
         if(roleBean.getAllPermissions().size() == 0) {
-            for(String permission : Constants.PERMISSIONS) {
-                roleBean.createPermission(permission);
+            for(Field permissionField : Permissions.class.getDeclaredFields()) {
+                try {
+                    roleBean.createPermission((String) permissionField.get(null));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

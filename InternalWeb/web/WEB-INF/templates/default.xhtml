@@ -249,23 +249,24 @@
                                 </span>
                             </div>
                         </li>
-                        <li>
-                            <h:link outcome="/App/index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</h:link>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> System Admin<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/users">Users</h:link>
-                                </li>
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/roles">Roles</h:link>
-                                </li>
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/auditLog">Audit Log</h:link>
-                                </li>
-                            </ul>
-                        </li>
+                        <ui:repeat value="#{menuManagedBean.mainMenu.entries}" var="menuEntry">
+                            <li>
+                                <h:link rendered="#{!menuManagedBean.hasChildren(menuEntry)}" outcome="#{menuManagedBean.getPath(menuEntry)}">
+                                    <i class="fa fa-#{menuEntry.icon} fa-fw"></i> #{menuEntry.name}
+                                </h:link>
+                                <ui:fragment rendered="#{menuManagedBean.hasChildren(menuEntry)}">
+                                    <a href="#">
+                                        <i class="fa fa-#{menuEntry.icon} fa-fw"></i> #{menuEntry.name}
+                                        <span class="fa arrow"></span>
+                                    </a>
+                                    <ul class="nav nav-second-level">
+                                        <ui:repeat value="#{menuEntry.children}" var="submenuEntry">
+                                            <li><h:link outcome="#{menuManagedBean.getPath(submenuEntry)}">#{submenuEntry.name}</h:link></li>
+                                        </ui:repeat>
+                                    </ul>
+                                </ui:fragment>
+                            </li>
+                        </ui:repeat>
                     </ul>
                 </div>
             </div>
