@@ -44,6 +44,12 @@ public class WorkgroupBean {
         return workgroup.getId();
     }
 
+    public void removeWorkgroup(long id) throws NotFoundException {
+        Workgroup workgroup = em.find(Workgroup.class, id);
+        if (workgroup == null) throw new NotFoundException();
+        em.remove(workgroup);
+    }
+
     public boolean isNameUnique(String name) {
         return (Long) em.createQuery("SELECT COUNT(w) FROM Workgroup w WHERE w.name = :name")
                 .setParameter("name", name)
