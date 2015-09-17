@@ -80,8 +80,50 @@
                             </div>
                         </div>
                     </h:form>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Workgroups</div>
+                        <div class="panel-body">
+                            <table class="table" id="workgroups_table">
+                                <thead>
+                                <tr>
+                                    <th>Workgroup Name</th>
+                                    <th>Description</th>
+                                    <th>No. of Members</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{userProfileManagedBean.workgroups}" var="workgroup">
+                                    <tr>
+                                        <td>#{workgroup.name}</td>
+                                        <td>#{workgroup.description}</td>
+                                        <td>#{workgroup.users.size()}</td>
+                                        <td>
+                                            <h:form>
+                                                <h:commandLink styleClass="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</h:commandLink>
+                                            </h:form>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#workgroups_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>

@@ -65,4 +65,20 @@ public class WorkgroupBean {
                 .getResultList();
     }
 
+    public List<Workgroup> getUserWorkgroups(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+
+        List<Workgroup> allWorkgroups = em.createQuery("SELECT w from Workgroup w", Workgroup.class).getResultList();
+        ArrayList<Workgroup> userWorkgroups = new ArrayList<>();
+
+        for (Workgroup w : allWorkgroups) {
+            if (w.getUsers().contains(user)) {
+                userWorkgroups.add(w);
+            }
+        }
+
+        return userWorkgroups;
+    }
+
 }
