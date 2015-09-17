@@ -33,9 +33,9 @@
                                                  required="true" requiredMessage="Workgroup name is required.">
                                         <f:validator validatorId="workgroupValidator" />
                                     </h:inputText>
+                                    <h:message for="workgroupName" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!workgroupDesc.valid ? 'has-error' : ''}">
-                                    <h:message for="workgroupName" styleClass="help-block" />
                                     <label class="control-label" for="workgroupDesc">Workgroup Description</label>
                                     <h:inputTextarea id="workgroupDesc" binding="#{workgroupDesc}" value="#{createWorkgroupManagedBean.workgroupDesc}"
                                                      styleClass="form-control" pt:placeholder="Please provide a description for the workgroup."
