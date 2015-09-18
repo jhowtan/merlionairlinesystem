@@ -7,6 +7,7 @@
         <class>MAS.Entity.Role</class>
         <class>MAS.Entity.Permission</class>
         <class>MAS.Entity.AuditLog</class>
+        <class>MAS.Entity.Workgroup</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

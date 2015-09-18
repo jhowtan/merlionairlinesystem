@@ -1,0 +1,58 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Workgroups - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Workgroups</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/SystemAdmin/workgroups">Owned Workgroups</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/SystemAdmin/createWorkgroup">Create Workgroup</h:link></li>
+                    </ul><br/>
+                    <table class="table" id="workgroups_table">
+                        <thead>
+                        <tr>
+                            <th>Workgroup Name</th>
+                            <th>Description</th>
+                            <th>No. of Members</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{workgroupManagedBean.getAllOwnedWorkgroups()}" var="workgroup">
+                            <tr>
+                                <td>#{workgroup.name}</td>
+                                <td>#{workgroup.description}</td>
+                                <td>#{workgroup.users.size()}</td>
+                                <td>
+                                    <h:form>
+                                        <h:commandLink styleClass="btn btn-default btn-xs btn-info"><i class="fa fa-pencil"></i> Edit</h:commandLink>
+                                        <h:commandLink action="#{workgroupManagedBean.delete(workgroup.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete workgroup #{workgroup.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#workgroups_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
