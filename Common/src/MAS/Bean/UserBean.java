@@ -8,7 +8,6 @@ import MAS.Entity.User;
 import MAS.Exception.InvalidLoginException;
 import MAS.Exception.InvalidResetHashException;
 import MAS.Exception.NotFoundException;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -190,6 +189,19 @@ public class UserBean {
         if (user == null) throw new NotFoundException();
         user.setPhone(phone);
         em.persist(user);
+    }
+
+    public long adminUpdateUserInfo(long id, String firstName, String lastName, String email, String phone)
+        throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        em.persist(user);
+
+        return user.getId();
     }
 
     public User getUser(long id) throws NotFoundException {
