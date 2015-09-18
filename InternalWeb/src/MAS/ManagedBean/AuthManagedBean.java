@@ -35,7 +35,7 @@ public class AuthManagedBean {
     private Set<String> permissions;
     private MainMenu mainMenu;
 
-    public void popuplatePermissions() {
+    public void populatePermissions() {
         permissions = new HashSet<>();
         if (!authenticated) return;
         try {
@@ -52,7 +52,7 @@ public class AuthManagedBean {
         try {
             userId = userBean.login(username, password);
             authenticated = true;
-            popuplatePermissions();
+            populatePermissions();
             generateMenu(permissions);
 
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -94,7 +94,6 @@ public class AuthManagedBean {
     }
 
     public void generateMenu(Set<String> permissions) {
-        permissions = new HashSet<>();
         mainMenu = new MainMenu();
         List<MenuEntry> menuEntries = mainMenu.getEntries();
         Iterator<MenuEntry> it = menuEntries.iterator();
