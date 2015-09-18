@@ -15,8 +15,9 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("System Admin", "wrench",
-                        new MenuEntry("Users", null, Pages.LIST_USERS, Pages.CREATE_USER),
+                        new MenuEntry("Users", null, Pages.LIST_USERS, Pages.CREATE_USER, Pages.UPDATE_USER),
                         new MenuEntry("Roles", null, Pages.LIST_ROLES, Pages.CREATE_ROLE),
+                        new MenuEntry("Workgroups", null, Pages.LIST_WORKGROUPS, Pages.CREATE_WORKGROUP),
                         new MenuEntry("Audit Log", null, Pages.VIEW_AUDIT_LOG)
                 )
         );
