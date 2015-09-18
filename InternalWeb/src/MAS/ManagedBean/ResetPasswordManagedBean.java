@@ -30,7 +30,7 @@ public class ResetPasswordManagedBean {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (params.containsKey("u") && params.containsKey("h")) {
             try {
-                userId = Long.valueOf(params.get("u")).longValue();
+                userId = Long.valueOf(params.get("u"));
                 hash = (String) params.get("h");
                 resetHashValid = userBean.isResetHashValid(userId, hash);
             } catch (NumberFormatException e) {
