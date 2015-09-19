@@ -51,6 +51,31 @@ public class RoleBean {
         return role.getId();
     }
 
+    public long editRole(long id, String name) throws NotFoundException {
+        Role role = em.find(Role.class, id);
+        if (role == null) throw new NotFoundException();
+        role.setName(name);
+        em.persist(role);
+        em.flush();
+        return role.getId();
+    }
+
+    public void setPermissions(long roleId, List<Long> permissionIds) throws NotFoundException {
+        Role role = em.find(Role.class, roleId);
+        Permission permission;
+        ArrayList<Permission> permissions = new ArrayList<>();
+        for(Long permissionId : permissionIds) {
+            permission = em.find(Permission.class, permissionId);
+            if (permission != null) {
+                permissions.add(permission);
+            }
+        }
+        role.setPermissions(permissions);
+        em.persist(role);
+        em.flush();
+    }
+
+
     public boolean isNameUnique(String name) {
         return (Long) em.createQuery("SELECT COUNT(r) FROM Role r WHERE r.name = :name").setParameter("name", name).getSingleResult() == 0;
     }
