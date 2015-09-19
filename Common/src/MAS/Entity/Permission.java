@@ -7,15 +7,15 @@ import javax.persistence.Id;
 
 @Entity
 public class Permission {
-    private long id;
+    private Long id;
 
     @GeneratedValue
     @Id
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -28,5 +28,17 @@ public class Permission {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Permission)) {
+            return false;
+        }
+        else if (this.id.equals(((Permission) obj).id)
+                && this.name.equals(((Permission) obj).name)) {
+            return true;
+        }
+        return false;
     }
 }

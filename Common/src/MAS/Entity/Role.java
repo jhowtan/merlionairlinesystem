@@ -55,7 +55,7 @@ public class Role {
         if (!(obj instanceof Role)) {
             return false;
         }
-        if (this.id.equals(((Role) obj).id)
+        else if (this.id.equals(((Role) obj).id)
                 && this.name.equals(((Role) obj).name)) {
             return true;
         }
