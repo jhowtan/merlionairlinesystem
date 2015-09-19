@@ -44,10 +44,17 @@ public class WorkgroupBean {
         return workgroup.getId();
     }
 
-    public long editWorkgroup(long wgId, String name, String description, List<Long> userIds) throws NotFoundException {
+    public long editWorkgroup(long wgId, String name, String description) throws NotFoundException {
         Workgroup workgroup = em.find(Workgroup.class, wgId);
         workgroup.setName(name);
         workgroup.setDescription(description);
+        em.persist(workgroup);
+        em.flush();
+        return workgroup.getId();
+    }
+
+    public void setWorkgroupUsers(long wgId, List<Long> userIds) throws NotFoundException {
+        Workgroup workgroup = em.find(Workgroup.class, wgId);
         User user;
         ArrayList<User> users = new ArrayList<>();
         for(Long userId : userIds) {
@@ -59,7 +66,6 @@ public class WorkgroupBean {
         workgroup.setUsers(users);
         em.persist(workgroup);
         em.flush();
-        return workgroup.getId();
     }
 
     public long changeWorkgroupOwner(long wgId, long newOwnerId) throws NotFoundException {
@@ -124,4 +130,9 @@ public class WorkgroupBean {
         return userWorkgroups;
     }
 
+    public Workgroup getWorkgroup(long wgId) throws NotFoundException {
+        Workgroup workgroup = em.find(Workgroup.class, wgId);
+        if (workgroup == null) throw new NotFoundException();
+        return workgroup;
+    }
 }
