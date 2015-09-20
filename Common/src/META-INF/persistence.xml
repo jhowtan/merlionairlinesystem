@@ -7,6 +7,14 @@
         <class>MAS.Entity.Role</class>
         <class>MAS.Entity.Permission</class>
         <class>MAS.Entity.AuditLog</class>
+        <class>MAS.Entity.AircraftType</class>
+        <class>MAS.Entity.AircraftSeatConfig</class>
+        <class>MAS.Entity.Aircraft</class>
+        <class>MAS.Entity.Airport</class>
+        <class>MAS.Entity.Country</class>
+        <class>MAS.Entity.City</class>
+        <class>MAS.Entity.AircraftAssignment</class>
+        <class>MAS.Entity.Route</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />
