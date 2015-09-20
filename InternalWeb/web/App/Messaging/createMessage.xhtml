@@ -44,7 +44,8 @@
             });
             engine.initialize();
             $("[id='#{recipients.clientId}']").tokenfield({
-                typeahead: [null, { source: engine.ttAdapter() }]
+                typeahead: [null, { source: engine.ttAdapter(), displayKey: 'value' }],
+
             });
         </script>
     </ui:define>
