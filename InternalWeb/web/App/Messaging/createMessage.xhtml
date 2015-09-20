@@ -32,4 +32,20 @@
             </h:form>
         </div>
     </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var engine = new Bloodhound({
+                local: [{value: 'red'}, {value: 'blue'}, {value: 'green'} , {value: 'yellow'}, {value: 'violet'}, {value: 'brown'}, {value: 'purple'}, {value: 'black'}, {value: 'white'}],
+                datumTokenizer: function(d) {
+                    return Bloodhound.tokenizers.whitespace(d.value);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace
+            });
+            engine.initialize();
+            $("[id='#{recipients.clientId}']").tokenfield({
+                typeahead: [null, { source: engine.ttAdapter() }]
+            });
+        </script>
+    </ui:define>
 </ui:composition>
