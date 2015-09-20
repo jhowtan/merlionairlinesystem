@@ -11,9 +11,13 @@ public class Pages {
 
     public static final Page LIST_ROLES = new Page("/App/SystemAdmin/roles", Permissions.MANAGE_ROLES);
     public static final Page CREATE_ROLE = new Page("/App/SystemAdmin/createRole", Permissions.MANAGE_ROLES);
+    public static final Page UPDATE_ROLE = new Page("/App/SystemAdmin/updateRole", Permissions.MANAGE_ROLES);
+
 
     public static final Page LIST_WORKGROUPS = new Page("/App/SystemAdmin/workgroups", Permissions.MANAGE_WORKGROUPS);
     public static final Page CREATE_WORKGROUP = new Page("/App/SystemAdmin/createWorkgroup", Permissions.MANAGE_WORKGROUPS);
+    public static final Page UPDATE_WORKGROUP = new Page("/App/SystemAdmin/updateWorkgroup", Permissions.MANAGE_WORKGROUPS);
+
 
     public static final Page VIEW_AUDIT_LOG = new Page("/App/SystemAdmin/auditLog", Permissions.ACCESS_AUDIT_LOGS);
 }
