@@ -43,42 +43,20 @@
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
+                        <ui:repeat value="#{messageManagedBean.messages.subList(0, 3)}" var="message">
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <strong>#{message.sender.firstName} #{message.sender.lastName}</strong>
+                                    </div>
+                                    <div><span>#{message.subject}</span> <span class="text-muted">&#x2013; #{commonManagedBean.truncate(message.body, 50)}</span></div>
+                                    <div class="text-muted">
+                                        <small><em>#{commonManagedBean.formatDate("dd MMM YYYY, hh:mm a", message.sentTime)}</em></small>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        </ui:repeat>
                         <li>
                             <h:link styleClass="text-center" outcome="/App/Messaging/index">
                                 <strong>Read All Messages</strong>

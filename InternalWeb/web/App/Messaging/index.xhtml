@@ -12,7 +12,10 @@
             <div class="list-group">
                 <ui:repeat value="#{messageManagedBean.messages}" var="message">
                     <a href="#" class="list-group-item">
-                        <strong>#{message.subject}</strong> &#x2014; #{message.body}
+                        <strong>#{message.sender.firstName} #{message.sender.lastName}</strong>
+                        <div><em>#{message.subject}</em></div>
+                        <div class="text-muted">#{commonManagedBean.truncate(message.body, 100)}</div>
+                        <div><small><em>#{commonManagedBean.formatDate("dd MMM YYYY, hh:mm a", message.sentTime)}</em></small></div>
                     </a>
                 </ui:repeat>
             </div>

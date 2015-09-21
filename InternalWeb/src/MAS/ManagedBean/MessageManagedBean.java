@@ -1,6 +1,7 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.MessageBean;
+import MAS.Common.Utils;
 import MAS.Entity.Message;
 import MAS.Exception.NotFoundException;
 
