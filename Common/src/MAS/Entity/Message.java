@@ -76,4 +76,8 @@ public class Message {
         this.recipients = recipients;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Message && this.id.equals(((Message) obj).id);
+    }
 }
