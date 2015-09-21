@@ -4,6 +4,7 @@ import MAS.Common.Utils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,11 @@ public class CommonManagedBean {
     }
 
     public String formatDate(String format, Date date) {
-        return new SimpleDateFormat(format).format(date);
+        try {
+            return new SimpleDateFormat(format).format(date);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List truncateList(List list, int size) {
@@ -29,6 +34,14 @@ public class CommonManagedBean {
 
     public String makeParagraph(String string) {
         return string.replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>");
+    }
+
+    public void redirect(String path) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(getRoot() + path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

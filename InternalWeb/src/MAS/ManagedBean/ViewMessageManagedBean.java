@@ -23,10 +23,10 @@ public class ViewMessageManagedBean {
     @PostConstruct
     public void init() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        long id = Long.parseLong(params.get("id"));
         try {
+            long id = Long.parseLong(params.get("id"));
             message = messageBean.getMessage(id);
-        } catch (NotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
