@@ -15,26 +15,30 @@
             <h:form>
                 <div class="form-group #{!recipients.valid ? 'has-error' : ''}">
                     <label class="control-label" for="recipients">To</label>
-                    <h:inputText id="recipients" binding="#{recipients}" styleClass="form-control" required="true" pt:placeholder="Recipients" requiredMessage="At least one recipient is required." />
+                    <h:inputText id="recipients" binding="#{recipients}" value="#{createMessageManagedBean.recipients}" styleClass="form-control" pt:placeholder="Recipients">
+                        <f:converter converterId="userWorkgroupConverter" />
+                        <f:validator validatorId="userWorkgroupValidator" />
+                    </h:inputText>
                     <h:message for="recipients" styleClass="help-block" />
                 </div>
                 <div class="form-group #{!subject.valid ? 'has-error' : ''}">
                     <label class="control-label" for="recipients">Subject</label>
-                    <h:inputText id="subject" binding="#{subject}" styleClass="form-control" required="true" pt:placeholder="Subject" requiredMessage="A subject is required." />
+                    <h:inputText id="subject" binding="#{subject}" value="#{createMessageManagedBean.subject}" styleClass="form-control" required="true" pt:placeholder="Subject" requiredMessage="A subject is required." />
                     <h:message for="subject" styleClass="help-block" />
                 </div>
                 <div class="form-group #{!body.valid ? 'has-error' : ''}">
                     <label class="control-label" for="recipients">Message</label>
-                    <h:inputTextarea id="body" binding="#{body}" styleClass="form-control" required="true" pt:placeholder="Begin your message here..." rows="20" requiredMessage="Your message cannot be empty." />
+                    <h:inputTextarea id="body" binding="#{body}" value="#{createMessageManagedBean.body}" styleClass="form-control" required="true" pt:placeholder="Begin your message here..." rows="20" requiredMessage="Your message cannot be empty." />
                     <h:message for="body" styleClass="help-block" />
                 </div>
-                <h:commandButton action="#{createUserManagedBean.createUser}" value="Send Message" styleClass="btn btn-default btn-success" />
+                <h:commandButton action="#{createMessageManagedBean.createMessage}" value="Send Message" styleClass="btn btn-default btn-success" />
             </h:form>
         </div>
     </ui:define>
 
     <ui:define name="javascript">
         <script type="text/javascript">
+            //<![CDATA[
             var engine = new Bloodhound({
                 remote: {
                     url: 'userWorkgroupList.xhtml?q=%QUERY',
@@ -48,7 +52,7 @@
                 .on('tokenfield:createtoken', function(e) {
                     var data = e.attrs.value.split(":");
                     e.attrs.label = data[2];
-                    return ( (data[0] == "user" || data[0] == "workgroup") &amp;&amp; ! isNaN(data[1]) &amp;&amp; data.length == 3 );
+                    return ( (data[0] == "user" || data[0] == "workgroup") && ! isNaN(data[1]) && data.length == 3 );
                 })
                 .on('tokenfield:edittoken', function(e) {
                     return false;
@@ -56,6 +60,7 @@
                 .tokenfield({
                     typeahead: [null, { source: engine.ttAdapter(), displayKey: 'label' }]
                 });
+            //]]>
         </script>
     </ui:define>
 </ui:composition>

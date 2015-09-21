@@ -130,4 +130,10 @@ public class WorkgroupBean {
                 .getResultList();
     }
 
+    public Workgroup getWorkgroup(long id) throws NotFoundException {
+        Workgroup workgroup = em.find(Workgroup.class, id);
+        if (workgroup == null) throw new NotFoundException();
+        return workgroup;
+    }
+
 }
