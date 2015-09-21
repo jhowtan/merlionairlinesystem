@@ -6,18 +6,6 @@ import java.util.Date;
 @Entity
 public class Aircraft {
 
-    private long id;
-
-    @GeneratedValue
-    @Id
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     @Column(unique = true)
     private String tailNumber;
 
@@ -51,5 +39,17 @@ public class Aircraft {
 
     public void setManufacturedDate(Date manufacturedDate) {
         this.manufacturedDate = manufacturedDate;
+    }
+
+    @GeneratedValue
+    @Id
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
