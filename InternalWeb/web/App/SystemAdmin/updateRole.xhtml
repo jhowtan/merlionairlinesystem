@@ -34,9 +34,7 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!roleName.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="roleName">Role Name</label>
-                                        <h:inputText id="roleName" binding="#{roleName}" value="#{updateRoleManagedBean.roleName}" styleClass="form-control" required="true" requiredMessage="Role name is required.">
-                                            <!--<f:validator validatorId="roleValidator" />-->
-                                        </h:inputText>
+                                        <h:inputText id="roleName" binding="#{roleName}" value="#{updateRoleManagedBean.roleName}" styleClass="form-control" required="true" requiredMessage="Role name is required."/>
                                         <h:message for="roleName" styleClass="help-block" />
                                     </div>
                                     <div class="col-lg-12">
