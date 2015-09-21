@@ -13,10 +13,26 @@ public class Pages {
     public static final Page CREATE_ROLE = new Page("/App/SystemAdmin/createRole", Permissions.MANAGE_ROLES);
     public static final Page UPDATE_ROLE = new Page("/App/SystemAdmin/updateRole", Permissions.MANAGE_ROLES);
 
-
     public static final Page LIST_WORKGROUPS = new Page("/App/SystemAdmin/workgroups", Permissions.MANAGE_WORKGROUPS);
     public static final Page CREATE_WORKGROUP = new Page("/App/SystemAdmin/createWorkgroup", Permissions.MANAGE_WORKGROUPS);
     public static final Page UPDATE_WORKGROUP = new Page("/App/SystemAdmin/updateWorkgroup", Permissions.MANAGE_WORKGROUPS);
+
+    // Airline Planning System: Fleet Planning Pages
+    public static final Page LIST_TYPE = new Page("/App/FleetPlanning/aircraftTypes", Permissions.MANAGE_FLEET);
+    public static final Page CREATE_TYPE = new Page("/App/FleetPlanning/createAircraftType", Permissions.MANAGE_FLEET);
+    public static final Page UPDATE_TYPE = new Page("/App/FleetPlanning/updateAircraftType", Permissions.MANAGE_FLEET);
+    public static final Page LIST_AIRCRAFT = new Page("/App/FleetPlanning/aircraftTypes", Permissions.MANAGE_FLEET);
+    public static final Page CREATE_AIRCRAFT = new Page("/App/FleetPlanning/createAircraftType", Permissions.MANAGE_FLEET);
+    public static final Page UPDATE_AIRCRAFT = new Page("/App/FleetPlanning/updateAircraftType", Permissions.MANAGE_FLEET);
+    public static final Page CREATE_SEATCONFIG = new Page("/App/FleetPlanning/updateAircraftType", Permissions.MANAGE_FLEET);
+    public static final Page UPDATE_SEATCONFIG = new Page("/App/FleetPlanning/updateAircraftType", Permissions.MANAGE_FLEET);
+
+    // Airline Planning System: Route Planning Pages
+    public static final Page LIST_ROUTES = new Page("/App/RoutePlanning/routes", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_ROUTE = new Page("/App/RoutePlanning/createRoutes", Permissions.MANAGE_ROUTES);
+    public static final Page UPDATE_ROUTE = new Page("/App/RoutePlanning/updateRoutes", Permissions.MANAGE_ROUTES);
+
+    // Airline Planning System: Schedule Planning Pages
 
 
     public static final Page VIEW_AUDIT_LOG = new Page("/App/SystemAdmin/auditLog", Permissions.ACCESS_AUDIT_LOGS);
