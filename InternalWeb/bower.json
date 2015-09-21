@@ -2,7 +2,12 @@
   "name": "InternalWeb",
   "version": "0.0.0",
   "dependencies": {
+    "bootstrap-tokenfield": "~0.12.1",
     "datatables": "~1.10.9",
-    "startbootstrap-sb-admin-2": "~1.0.7"
+    "startbootstrap-sb-admin-2": "~1.0.7",
+    "typeahead.js": "~0.11.1"
+  },
+  "resolutions": {
+    "bootstrap": "~3.3.1"
   }
 }

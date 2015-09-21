@@ -12,6 +12,7 @@
           <element id="library" level="project" name="JPA 2.1-2.1" />
           <element id="library" level="project" name="javax.mail" />
           <element id="library" level="project" name="commons-csv-1.2" />
+          <element id="library" level="project" name="com.google.code.gson:gson:2.3.1" />
         </element>
       </element>
     </root>

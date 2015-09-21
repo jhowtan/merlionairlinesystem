@@ -162,6 +162,17 @@ public class User {
         this.manyToMany = manyToMany;
     }
 
+    private List<Message> messages;
+
+    @ManyToMany(mappedBy = "recipients")
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof User)) {
@@ -173,5 +184,5 @@ public class User {
             return true;
         }
         return false;
-    }
+	}
 }

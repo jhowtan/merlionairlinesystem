@@ -40,4 +40,11 @@ public class Utils {
         return hash(plaintext + salt);
     }
 
+    public static String truncate(String str, int chars) {
+        if (str.length() > chars) {
+            return str.substring(0, chars) + "...";
+        }
+        return str;
+    }
+
 }

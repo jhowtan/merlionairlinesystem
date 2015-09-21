@@ -1,0 +1,26 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Messages - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <h1 class="page-header">Messages</h1>
+            <div class="list-group">
+                <ui:repeat value="#{messageManagedBean.messages}" var="message">
+                    <h:link outcome="/App/Messaging/viewMessage" styleClass="list-group-item">
+                        <f:param name="id" value="#{message.id}" />
+                        <strong>#{message.sender.firstName} #{message.sender.lastName}</strong>
+                        <div><em>#{message.subject}</em></div>
+                        <div class="text-muted">#{commonManagedBean.truncate(message.body, 100)}</div>
+                        <div><small><em>#{commonManagedBean.formatDate("dd MMM YYYY, hh:mm a", message.sentTime)}</em></small></div>
+                    </h:link>
+                </ui:repeat>
+            </div>
+            <h:link outcome="/App/Messaging/createMessage" styleClass="btn btn-md btn-danger"><i class="glyphicon glyphicon-edit"/> Compose</h:link>
+        </div>
+    </ui:define>
+</ui:composition>

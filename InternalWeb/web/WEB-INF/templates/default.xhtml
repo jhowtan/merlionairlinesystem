@@ -18,6 +18,8 @@
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/font-awesome/css/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/css/dataTables.bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/typeahead.css" />
 
 </h:head>
 
@@ -41,47 +43,26 @@
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
+                        <ui:repeat value="#{commonManagedBean.truncateList(messageManagedBean.messages, 3)}" var="message">
+                            <li>
+                                <h:link outcome="/App/Messaging/viewMessage">
+                                    <f:param name="id" value="#{message.id}" />
+                                    <div>
+                                        <strong>#{message.sender.firstName} #{message.sender.lastName}</strong>
+                                    </div>
+                                    <div><span>#{message.subject}</span> <span class="text-muted">&#x2013; #{commonManagedBean.truncate(message.body, 50)}</span></div>
+                                    <div class="text-muted">
+                                        <small><em>#{commonManagedBean.formatDate("dd MMM YYYY, hh:mm a", message.sentTime)}</em></small>
+                                    </div>
+                                </h:link>
+                            </li>
+                            <li class="divider"></li>
+                        </ui:repeat>
                         <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
+                            <h:link styleClass="text-center" outcome="/App/Messaging/index">
                                 <strong>Read All Messages</strong>
                                 <i class="fa fa-angle-right"></i>
-                            </a>
+                            </h:link>
                         </li>
                     </ul>
                 </li>
@@ -286,6 +267,8 @@
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/typeahead.js/dist/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap-tokenfield/dist/bootstrap-tokenfield.min.js"></script>
 
     <ui:insert name="javascript"></ui:insert>
 
