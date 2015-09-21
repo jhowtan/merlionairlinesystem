@@ -9,6 +9,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,9 +22,10 @@ public class FleetBean {
     public FleetBean() {
     }
     //-----------------AIRCRAFT---------------------------
-    public long createAircraft(String tailNumber) {
+    public long createAircraft(String tailNumber, Date manufacturedDate) {
         Aircraft aircraft = new Aircraft();
         aircraft.setTailNumber(tailNumber);
+        aircraft.setManufacturedDate(manufacturedDate);
         em.persist(aircraft);
         em.flush();
 

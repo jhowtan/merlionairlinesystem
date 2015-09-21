@@ -1,6 +1,7 @@
 package MAS.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Aircraft {
@@ -38,5 +39,17 @@ public class Aircraft {
 
     public void setSeatConfig(AircraftSeatConfig seatConfig) {
         this.seatConfig = seatConfig;
+    }
+
+    @Basic
+    @Temporal(TemporalType.DATE)
+    private Date manufacturedDate;
+
+    public Date getManufacturedDate() {
+        return manufacturedDate;
+    }
+
+    public void setManufacturedDate(Date manufacturedDate) {
+        this.manufacturedDate = manufacturedDate;
     }
 }
