@@ -161,4 +161,15 @@ public class User {
     public void setManyToMany(List<User> manyToMany) {
         this.manyToMany = manyToMany;
     }
+
+    private List<Message> messages;
+
+    @ManyToMany(mappedBy = "recipients")
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }

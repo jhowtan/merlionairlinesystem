@@ -53,4 +53,10 @@ public class MessageBean {
         return message.getId();
     }
 
+    public List<Message> getUserMessages(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        return user.getMessages();
+    }
+
 }

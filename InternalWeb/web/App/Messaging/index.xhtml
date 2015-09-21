@@ -8,10 +8,14 @@
 
     <ui:define name="content">
         <div class="container-fluid">
-            <h1 class="page-header">
-                Messages
-            </h1>
-
+            <h1 class="page-header">Messages</h1>
+            <div class="list-group">
+                <ui:repeat value="#{messageManagedBean.messages}" var="message">
+                    <a href="#" class="list-group-item">
+                        <strong>#{message.subject}</strong> &#x2014; #{message.body}
+                    </a>
+                </ui:repeat>
+            </div>
             <h:link outcome="/App/Messaging/createMessage" styleClass="btn btn-md btn-danger"><i class="glyphicon glyphicon-edit"/> Compose</h:link>
         </div>
     </ui:define>
