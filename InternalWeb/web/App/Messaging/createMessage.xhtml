@@ -36,17 +36,26 @@
     <ui:define name="javascript">
         <script type="text/javascript">
             var engine = new Bloodhound({
-                local: [{value: 'red'}, {value: 'blue'}, {value: 'green'} , {value: 'yellow'}, {value: 'violet'}, {value: 'brown'}, {value: 'purple'}, {value: 'black'}, {value: 'white'}],
-                datumTokenizer: function(d) {
-                    return Bloodhound.tokenizers.whitespace(d.value);
+                remote: {
+                    url: 'userWorkgroupList.xhtml?q=%QUERY',
+                    wildcard: '%QUERY'
                 },
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
                 queryTokenizer: Bloodhound.tokenizers.whitespace
             });
             engine.initialize();
-            $("[id='#{recipients.clientId}']").tokenfield({
-                typeahead: [null, { source: engine.ttAdapter(), displayKey: 'value' }],
-
-            });
+            $("[id='#{recipients.clientId}']")
+                .on('tokenfield:createtoken', function(e) {
+                    var data = e.attrs.value.split(":");
+                    e.attrs.label = data[2];
+                    return ( (data[0] == "user" || data[0] == "workgroup") &amp;&amp; ! isNaN(data[1]) &amp;&amp; data.length == 3 );
+                })
+                .on('tokenfield:edittoken', function(e) {
+                    return false;
+                })
+                .tokenfield({
+                    typeahead: [null, { source: engine.ttAdapter(), displayKey: 'label' }]
+                });
         </script>
     </ui:define>
 </ui:composition>

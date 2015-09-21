@@ -22,24 +22,9 @@ public class UserWorkgroupListManagedBean {
     @EJB
     WorkgroupBean workgroupBean;
 
-    private class UserResult {
-        public long id;
-        public String username;
-        public String fullName;
-    }
-
-    private class WorkgroupResult {
-        public long id;
-        public String name;
-    }
-
-    private class SearchResults {
-        public List<UserResult> users;
-        public List<WorkgroupResult> workgroups;
-        public SearchResults() {
-            users = new ArrayList<>();
-            workgroups = new ArrayList<>();
-        }
+    private class SearchResult {
+        public String value;
+        public String label;
     }
 
     public void search() {
@@ -49,21 +34,20 @@ public class UserWorkgroupListManagedBean {
         List<User> users = userBean.searchForUser(query);
         List<Workgroup> workgroups = workgroupBean.searchForWorkgroup(query);
 
-        SearchResults searchResults = new SearchResults();
+        ArrayList<SearchResult> searchResults = new ArrayList<>();
 
         for (User user : users) {
-            UserResult userResult = new UserResult();
-            userResult.id = user.getId();
-            userResult.username = user.getUsername();
-            userResult.fullName = user.getFirstName() + " " + user.getLastName();
-            searchResults.users.add(userResult);
+            SearchResult r = new SearchResult();
+            r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + ")";
+            r.value = "user:" + user.getId() + ":" + r.label;
+            searchResults.add(r);
         }
 
         for (Workgroup workgroup : workgroups) {
-            WorkgroupResult workgroupResult = new WorkgroupResult();
-            workgroupResult.id = workgroup.getId();
-            workgroupResult.name = workgroup.getName();
-            searchResults.workgroups.add(workgroupResult);
+            SearchResult r = new SearchResult();
+            r.label = workgroup.getName();
+            r.value = "workgroup:" + workgroup.getId() + ":" + r.label;
+            searchResults.add(r);
         }
 
         Gson gson = new Gson();
