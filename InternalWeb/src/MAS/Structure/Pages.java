@@ -1,6 +1,6 @@
 package MAS.Structure;
 
-import MAS.Common.Permissions;
+        import MAS.Common.Permissions;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
@@ -30,9 +30,9 @@ public class Pages {
     public static final Page UPDATE_SEATCONFIG = new Page("/App/FleetPlanning/updateSeatConfig", Permissions.MANAGE_FLEET);
 
     // Airline Planning System: Route Planning Pages
-    public static final Page LIST_ROUTES = new Page("/App/RoutePlanning/routes", Permissions.MANAGE_ROUTES);
-    public static final Page CREATE_ROUTE = new Page("/App/RoutePlanning/createRoutes", Permissions.MANAGE_ROUTES);
-    public static final Page UPDATE_ROUTE = new Page("/App/RoutePlanning/updateRoutes", Permissions.MANAGE_ROUTES);
+    public static final Page LIST_ROUTES = new Page("/App/RoutePlanning/airports", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_ROUTE = new Page("/App/RoutePlanning/createAirports", Permissions.MANAGE_ROUTES);
+    public static final Page UPDATE_ROUTE = new Page("/App/RoutePlanning/updateAirports", Permissions.MANAGE_ROUTES);
 
     // Airline Planning System: Schedule Planning Pages
 
