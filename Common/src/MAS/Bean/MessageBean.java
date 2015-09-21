@@ -58,4 +58,10 @@ public class MessageBean {
         return messages;
     }
 
+    public Message getMessage(long id) throws NotFoundException {
+        Message message = em.find(Message.class, id);
+        if (message == null) throw new NotFoundException();
+        return message;
+    }
+
 }

@@ -43,9 +43,10 @@
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
-                        <ui:repeat value="#{messageManagedBean.messages.subList(0, 3)}" var="message">
+                        <ui:repeat value="#{commonManagedBean.truncateList(messageManagedBean.messages, 3)}" var="message">
                             <li>
-                                <a href="#">
+                                <h:link outcome="/App/Messaging/viewMessage">
+                                    <f:param name="id" value="#{message.id}" />
                                     <div>
                                         <strong>#{message.sender.firstName} #{message.sender.lastName}</strong>
                                     </div>
@@ -53,7 +54,7 @@
                                     <div class="text-muted">
                                         <small><em>#{commonManagedBean.formatDate("dd MMM YYYY, hh:mm a", message.sentTime)}</em></small>
                                     </div>
-                                </a>
+                                </h:link>
                             </li>
                             <li class="divider"></li>
                         </ui:repeat>
