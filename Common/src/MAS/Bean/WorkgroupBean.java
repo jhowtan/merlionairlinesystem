@@ -124,4 +124,10 @@ public class WorkgroupBean {
         return userWorkgroups;
     }
 
+    public List<Workgroup> searchForWorkgroup(String query) {
+        return em.createQuery("SELECT w from Workgroup w WHERE w.name LIKE :query", Workgroup.class)
+                .setParameter("query", "%" + query + "%")
+                .getResultList();
+    }
+
 }
