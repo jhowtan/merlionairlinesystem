@@ -2,6 +2,7 @@ package MAS.ManagedBean;
 
 import MAS.Bean.MessageBean;
 import MAS.Entity.Message;
+import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +27,13 @@ public class ViewMessageManagedBean {
         try {
             long id = Long.parseLong(params.get("id"));
             message = messageBean.getMessage(id);
+            User user = new User();
+            user.setId(authManagedBean.getUserId());
+            if (!message.getRecipients().contains(user)) {
+                throw new NotFoundException();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            message = null;
         }
     }
 
@@ -42,4 +48,5 @@ public class ViewMessageManagedBean {
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
     }
+
 }
