@@ -9,9 +9,12 @@
 
     <ui:define name="content">
         <div class="container-fluid">
-            <h1 class="page-header">
-                Send Message
-            </h1>
+            <h1 class="page-header">Send Message</h1>
+            <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                <h:panelGroup layout="block" styleClass="alert alert-info">
+                    #{message.detail}
+                </h:panelGroup>
+            </ui:repeat>
             <h:form>
                 <div class="form-group #{!recipients.valid ? 'has-error' : ''}">
                     <label class="control-label" for="recipients">To</label>
