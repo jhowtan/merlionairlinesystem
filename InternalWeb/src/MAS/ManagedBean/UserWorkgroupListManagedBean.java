@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,6 +22,12 @@ public class UserWorkgroupListManagedBean {
     UserBean userBean;
     @EJB
     WorkgroupBean workgroupBean;
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
 
     private class SearchResult {
         public String value;
@@ -52,6 +59,10 @@ public class UserWorkgroupListManagedBean {
 
         Gson gson = new Gson();
         String json = gson.toJson(searchResults);
+
+        if(!authManagedBean.isAuthenticated()) {
+            json = "[]";
+        }
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
