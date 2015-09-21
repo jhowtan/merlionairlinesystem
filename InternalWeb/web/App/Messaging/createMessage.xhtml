@@ -1,0 +1,52 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Send Message - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <h1 class="page-header">
+                Send Message
+            </h1>
+            <h:form>
+                <div class="form-group #{!recipients.valid ? 'has-error' : ''}">
+                    <label class="control-label" for="recipients">To</label>
+                    <h:inputText id="recipients" binding="#{recipients}" styleClass="form-control" required="true" pt:placeholder="Recipients" requiredMessage="At least one recipient is required." />
+                    <h:message for="recipients" styleClass="help-block" />
+                </div>
+                <div class="form-group #{!subject.valid ? 'has-error' : ''}">
+                    <label class="control-label" for="recipients">Subject</label>
+                    <h:inputText id="subject" binding="#{subject}" styleClass="form-control" required="true" pt:placeholder="Subject" requiredMessage="A subject is required." />
+                    <h:message for="subject" styleClass="help-block" />
+                </div>
+                <div class="form-group #{!body.valid ? 'has-error' : ''}">
+                    <label class="control-label" for="recipients">Message</label>
+                    <h:inputTextarea id="body" binding="#{body}" styleClass="form-control" required="true" pt:placeholder="Begin your message here..." rows="20" requiredMessage="Your message cannot be empty." />
+                    <h:message for="body" styleClass="help-block" />
+                </div>
+                <h:commandButton action="#{createUserManagedBean.createUser}" value="Send Message" styleClass="btn btn-default btn-success" />
+            </h:form>
+        </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var engine = new Bloodhound({
+                local: [{value: 'red'}, {value: 'blue'}, {value: 'green'} , {value: 'yellow'}, {value: 'violet'}, {value: 'brown'}, {value: 'purple'}, {value: 'black'}, {value: 'white'}],
+                datumTokenizer: function(d) {
+                    return Bloodhound.tokenizers.whitespace(d.value);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace
+            });
+            engine.initialize();
+            $("[id='#{recipients.clientId}']").tokenfield({
+                typeahead: [null, { source: engine.ttAdapter(), displayKey: 'value' }],
+
+            });
+        </script>
+    </ui:define>
+</ui:composition>
