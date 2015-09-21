@@ -95,6 +95,13 @@ public class FleetBean {
         return aircraftType.getId();
     }
 
+    public AircraftType getAircraftType(long id) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        return aircraftType;
+    }
+
+
     public void removeAircraftType(long id) throws NotFoundException {
         AircraftType aircraftType = em.find(AircraftType.class, id);
         if (aircraftType == null) throw new NotFoundException();
@@ -119,4 +126,20 @@ public class FleetBean {
     public List<AircraftType> getAllAircraftTypes() {
         return em.createQuery("SELECT a from AircraftType a", AircraftType.class).getResultList();
     }
+
+    public List<AircraftSeatConfig> findSeatConfigByType(long typeId) {
+        return em.createQuery("SELECT sc from AircraftSeatConfig sc WHERE sc.aircraftType = :typeId",
+                AircraftSeatConfig.class)
+                .setParameter("typeId", typeId)
+                .getResultList();
+    }
+
+    public Long getAircraftCountByType(long typeId) {
+        AircraftType aircraftType = em.find(AircraftType.class, typeId);
+        return (Long) em.createQuery("SELECT COUNT(ac) from AircraftSeatConfig sc, Aircraft ac WHERE sc.aircraftType = :typeId AND ac.seatConfig = :aircraftType")
+                .setParameter("typeId", typeId)
+                .setParameter("aircraftType", aircraftType)
+                .getSingleResult();
+    }
+
 }
