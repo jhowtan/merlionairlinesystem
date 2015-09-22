@@ -8,6 +8,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.List;
+
 import static java.lang.Math.*;
 
 @Stateless(name = "RouteEJB")
@@ -94,6 +96,18 @@ public class RouteBean {
         em.remove(country);
     }
 
+    public List<Airport> getAllAirports() {
+        return em.createQuery("SELECT a from Airport a", Airport.class).getResultList();
+    }
+
+    public Airport findAirportByName(String name) throws NotFoundException {
+        return (Airport) em.createQuery("SELECT a FROM Airport a WHERE a.name = :name").setParameter("name", name.toLowerCase()).getSingleResult();
+    }
+
+    public Airport findAirportByCode(String code) throws NotFoundException {
+        return (Airport) em.createQuery("SELECT a FROM Airport a WHERE a.code = :code").setParameter("code", code.toLowerCase()).getSingleResult();
+    }
+
     //-----------------ROUTES---------------------------
     public long createRoute(long originId, long destinationId) throws NotFoundException {
         Route route = new Route();
@@ -116,6 +130,14 @@ public class RouteBean {
         em.remove(route);
     }
 
+    public List<Route> findRouteByOrigin(long airportId) throws NotFoundException {
+        return em.createQuery("SELECT r from Route r WHERE r.origin = :airportId", Route.class).setParameter("airportId", airportId).getResultList();
+    }
+
+    public List<Route> findRouteByDest(long airportId) throws NotFoundException {
+        return em.createQuery("SELECT r from Route r WHERE r.destination = :airportId", Route.class).setParameter("airportId", airportId).getResultList();
+    }
+
     //-----------------AIRCRAFT ASSIGNMENTS---------------------------
     public long createAircraftAssignment (long aircraftId, long routeId) throws NotFoundException {
         AircraftAssignment aircraftAssignment = new AircraftAssignment();
@@ -135,6 +157,13 @@ public class RouteBean {
         em.remove(aircraftAssignment);
     }
 
+    public List<AircraftAssignment> findAAByAircraft(long aircraftId) throws NotFoundException {
+        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.aircraft = :aircraftId", AircraftAssignment.class).setParameter("aircraftId", aircraftId).getResultList();
+    }
+
+    public List<AircraftAssignment> findAAByRoute(long routeId) throws NotFoundException {
+        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.route = :routeId", AircraftAssignment.class).setParameter("routeId", routeId).getResultList();
+    }
     //-----------------OTHERS---------------------------
     private double calcDist(double oriLat, double oriLong, double destLat, double destLong) {
         double dLong = destLong - oriLong;

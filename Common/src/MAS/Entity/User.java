@@ -150,4 +150,28 @@ public class User {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    private List<User> manyToMany;
+
+    @ManyToMany
+    public List<User> getManyToMany() {
+        return manyToMany;
+    }
+
+    public void setManyToMany(List<User> manyToMany) {
+        this.manyToMany = manyToMany;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) {
+            return false;
+        }
+        else if (this.id.equals(((User) obj).id)
+                && this.username.equals(((User) obj).username)
+                && this.email.equals(((User) obj).email)) {
+            return true;
+        }
+        return false;
+    }
 }

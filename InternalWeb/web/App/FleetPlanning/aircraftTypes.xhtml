@@ -1,0 +1,57 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Aircraft Types - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Aircraft Types</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/FleetPlanning/aircraftTypes">Summary</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/FleetPlanning/createAircraftType">Create Type</h:link></li>
+                    </ul><br />
+                    <table class="table" id="aircraftTypes_table">
+                        <thead>
+                        <tr>
+                            <th>Name </th>
+                            <th>Fuel Capacity</th>
+                            <th>No. of Aircraft</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{aircraftTypeManagedBean.getAllAircraftTypes()}" var="type">
+                            <tr>
+                                <td>#{type.name}</td>
+                                <td>#{type.fuelCapacity}</td>
+                                <td>#{aircraftTypeManagedBean.getAircraftCount(type.id)}</td>
+                                <td>
+                                    <h:form>
+                                        <h:link outcome="/App/SystemAdmin/updateAircraftType" styleClass="btn btn-default btn-xs btn-info"><f:param name="typeId" value="#{type.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                        <h:commandLink action="#{aircraftTypeManagedBean.delete(type.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft type: #{type.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#aircraftTypes_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>

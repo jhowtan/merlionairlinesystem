@@ -15,6 +15,9 @@
         <class>MAS.Entity.City</class>
         <class>MAS.Entity.AircraftAssignment</class>
         <class>MAS.Entity.Route</class>
+        <class>MAS.Entity.Workgroup</class>
+        <class>MAS.Entity.Message</class>
+        <class>MAS.Entity.Flight</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

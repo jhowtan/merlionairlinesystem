@@ -18,6 +18,8 @@
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/font-awesome/css/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/css/dataTables.bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/typeahead.css" />
 
 </h:head>
 
@@ -78,10 +80,10 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a class="text-center" href="#">
+                            <h:link styleClass="text-center" outcome="/App/Messaging/index">
                                 <strong>Read All Messages</strong>
                                 <i class="fa fa-angle-right"></i>
-                            </a>
+                            </h:link>
                         </li>
                     </ul>
                 </li>
@@ -249,23 +251,26 @@
                                 </span>
                             </div>
                         </li>
-                        <li>
-                            <h:link outcome="/App/index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</h:link>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> System Admin<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/users">Users</h:link>
-                                </li>
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/roles">Roles</h:link>
-                                </li>
-                                <li>
-                                    <h:link outcome="/App/SystemAdmin/auditLog">Audit Log</h:link>
-                                </li>
-                            </ul>
-                        </li>
+                        <ui:repeat value="#{authManagedBean.mainMenu.entries}" var="menuEntry">
+                            <li>
+                                <h:link rendered="#{not empty menuManagedBean.getPath(menuEntry)}" outcome="#{menuManagedBean.getPath(menuEntry)}">
+                                    <i class="fa fa-#{menuEntry.icon} fa-fw"></i>
+                                    #{menuEntry.name}
+                                </h:link>
+                                <ui:fragment rendered="#{empty menuManagedBean.getPath(menuEntry)}">
+                                    <a href="#">
+                                        <i class="fa fa-#{menuEntry.icon} fa-fw"></i>
+                                        #{menuEntry.name}
+                                        <span class="fa arrow"></span>
+                                    </a>
+                                    <ul class="nav nav-second-level">
+                                        <ui:repeat value="#{menuEntry.children}" var="submenuEntry">
+                                              <li><h:link outcome="#{menuManagedBean.getPath(submenuEntry)}">#{submenuEntry.name}</h:link></li>
+                                        </ui:repeat>
+                                    </ul>
+                                </ui:fragment>
+                            </li>
+                        </ui:repeat>
                     </ul>
                 </div>
             </div>
@@ -283,6 +288,8 @@
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/typeahead.js/dist/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap-tokenfield/dist/bootstrap-tokenfield.min.js"></script>
 
     <ui:insert name="javascript"></ui:insert>
 

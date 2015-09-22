@@ -1,7 +1,9 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.UserBean;
+import MAS.Bean.WorkgroupBean;
 import MAS.Entity.User;
+import MAS.Entity.Workgroup;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import java.util.List;
 
 @ManagedBean
 public class UserProfileManagedBean {
@@ -19,8 +22,12 @@ public class UserProfileManagedBean {
     @EJB
     private UserBean userBean;
 
+    @EJB
+    private WorkgroupBean workgroupBean;
+
     private User user = new User();
     private String phone = "";
+    private List<Workgroup> workgroups;
 
     @PostConstruct
     public void init() {
@@ -28,6 +35,7 @@ public class UserProfileManagedBean {
             try {
                 user = userBean.getUser(authManagedBean.getUserId());
                 phone = user.getPhone();
+                workgroups = workgroupBean.getUserWorkgroups(authManagedBean.getUserId());
             } catch (NotFoundException e) {
                 e.printStackTrace();
             }
@@ -56,6 +64,14 @@ public class UserProfileManagedBean {
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Workgroup> getWorkgroups() {
+        return workgroups;
+    }
+
+    public void setWorkgroups(List<Workgroup> workgroups) {
+        this.workgroups = workgroups;
     }
 
     public User getUser() {
