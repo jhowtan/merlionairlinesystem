@@ -35,6 +35,7 @@ public class AuthManagedBean {
     private AuditLogBean auditLogBean;
 
     private long userId;
+    private String userDisplayName;
     private boolean authenticated = false;
     private Set<String> permissions;
     private MainMenu mainMenu;
@@ -69,6 +70,8 @@ public class AuthManagedBean {
     public boolean login(String username, String password) {
         try {
             userId = userBean.login(username, password);
+            User user = userBean.getUser(userId);
+            userDisplayName = user.getFirstName() + " " + user.getLastName();
             authenticated = true;
             populatePermissions();
             generateMenu(permissions);
@@ -77,7 +80,7 @@ public class AuthManagedBean {
             createAuditLog("Logged in from " + request.getRemoteAddr(), "login");
 
             return true;
-        } catch (InvalidLoginException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -179,5 +182,13 @@ public class AuthManagedBean {
 
     public void setPages(HashMap<String, Page> pages) {
         this.pages = pages;
+    }
+
+    public String getUserDisplayName() {
+        return userDisplayName;
+    }
+
+    public void setUserDisplayName(String userDisplayName) {
+        this.userDisplayName = userDisplayName;
     }
 }
