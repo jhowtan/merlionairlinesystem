@@ -2,6 +2,7 @@ package MAS.ManagedBean;
 
 import MAS.Bean.FareRuleBean;
 import MAS.Entity.FareRule;
+import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -18,6 +19,15 @@ public class FareRuleManagedBean {
 
     public List<FareRule> getAllFareRules() {
         return fareRuleBean.getAllFareRules();
+    }
+
+    public void delete(long id) {
+        try {
+            FareRule fareRule = fareRuleBean.getFareRule(id);
+            fareRuleBean.removeFareRule(id);
+            authManagedBean.createAuditLog("Deleted fare rule: " + fareRule.getName(), "delete_role");
+        } catch (NotFoundException e) {
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

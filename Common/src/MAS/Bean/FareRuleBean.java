@@ -1,6 +1,7 @@
 package MAS.Bean;
 
 import MAS.Entity.FareRule;
+import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -15,6 +16,18 @@ public class FareRuleBean {
     private EntityManager em;
 
     public FareRuleBean() {
+    }
+
+    public FareRule getFareRule(long id) throws NotFoundException {
+        FareRule fareRule = em.find(FareRule.class, id);
+        if (fareRule == null) throw new NotFoundException();
+        return fareRule;
+    }
+
+    public void removeFareRule(long id) throws NotFoundException {
+        FareRule fareRule = em.find(FareRule.class, id);
+        if (fareRule == null) throw new NotFoundException();
+        em.remove(fareRule);
     }
 
     public long createFareRule(String name, int minimumStay, int maximumStay, int advancePurchase, int minimumPassengers, int milesAccrual, boolean freeCancellation) {
