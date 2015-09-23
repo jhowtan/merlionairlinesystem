@@ -132,9 +132,10 @@ public class FleetBean {
     }
 
     public List<AircraftSeatConfig> findSeatConfigByType(long typeId) {
-        return em.createQuery("SELECT sc from AircraftSeatConfig sc WHERE sc.aircraftType = :typeId",
+        AircraftType aircraftType = em.find(AircraftType.class, typeId);
+        return em.createQuery("SELECT sc from AircraftSeatConfig sc WHERE sc.aircraftType = :aircraftType",
                 AircraftSeatConfig.class)
-                .setParameter("typeId", typeId)
+                .setParameter("aircraftType", aircraftType)
                 .getResultList();
     }
 
