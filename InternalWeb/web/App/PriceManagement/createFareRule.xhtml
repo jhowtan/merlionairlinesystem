@@ -1,0 +1,100 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Create Fare Rule - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Create Fare Rule</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/PriceManagement/createFareRule">Summary</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/PriceManagement/createFareRule">Create Fare Rule</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Fare Rule</div>
+                            <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12 #{!name.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="name">Fare Rule Name</label>
+                                            <h:inputText id="name" binding="#{name}" value="#{createFareRuleManagedBean.name}" styleClass="form-control" pt:placeholder="e.g. SVR-2" required="true" requiredMessage="Please enter a name for your fare rule." />
+                                            <h:message for="name" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!minimumStay.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="minimumStay">Minimum Stay</label>
+                                            <div class="input-group">
+                                                <h:inputText pt:type="number" pt:min="0" id="minimumStay" binding="#{minimumStay}" value="#{createFareRuleManagedBean.minimumStay}" styleClass="form-control" />
+                                                <div class="input-group-addon">days</div>
+                                            </div>
+                                            <h:message for="minimumStay" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!maximumStay.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="maximumStay">Maximum Stay</label>
+                                            <div class="input-group">
+                                                <h:inputText pt:type="number" pt:min="0" id="maximumStay" binding="#{maximumStay}" value="#{createFareRuleManagedBean.maximumStay}" styleClass="form-control" />
+                                                <div class="input-group-addon">days</div>
+                                            </div>
+                                            <h:message for="maximumStay" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!advancePurchase.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="advancePurchase">Advance Purchase</label>
+                                            <div class="input-group">
+                                                <h:inputText pt:type="number" pt:min="0" id="advancePurchase" binding="#{advancePurchase}" value="#{createFareRuleManagedBean.advancePurchase}" styleClass="form-control" />
+                                                <div class="input-group-addon">days</div>
+                                            </div>
+                                            <h:message for="advancePurchase" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!milesAccrual.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="milesAccrual">FFP Millage Accrual</label>
+                                            <div class="input-group">
+                                                <h:inputText pt:type="number" pt:min="0" pt:max="100" id="milesAccrual" binding="#{milesAccrual}" value="#{createFareRuleManagedBean.milesAccrual}" styleClass="form-control" />
+                                                <div class="input-group-addon">%</div>
+                                            </div>
+                                            <h:message for="milesAccrual" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!minimumPassengers.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="minimumPassengers">Minimum Passengers in Group</label>
+                                            <h:inputText pt:type="number" pt:min="0" id="minimumPassengers" binding="#{minimumPassengers}" value="#{createFareRuleManagedBean.minimumPassengers}" styleClass="form-control" />
+                                            <h:message for="minimumPassengers" styleClass="help-block" />
+                                        </div>
+
+                                        <div class="form-group col-lg-6 #{!freeCancellation.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="freeCancellation">Free Cancellation</label>
+                                            <h:selectOneMenu id="freeCancellation" binding="#{freeCancellation}" value="#{createFareRuleManagedBean.freeCancellation}" styleClass="form-control">
+                                                <f:selectItem itemValue="#{true}" itemLabel="Yes" />
+                                                <f:selectItem itemValue="#{false}" itemLabel="No" />
+                                            </h:selectOneMenu>
+                                            <h:message for="freeCancellation" styleClass="help-block" />
+                                        </div>
+
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/PriceManagement/createFareRule" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createFareRuleManagedBean.createFareRule}" value="Create Fare Rule" styleClass="btn btn-default btn-success" />
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

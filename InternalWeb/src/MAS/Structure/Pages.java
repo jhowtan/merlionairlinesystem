@@ -39,4 +39,7 @@ public class Pages {
 
     // Airline Planning System: Schedule Planning Pages
 
+    // Airline Inventory Subsystem: Price Management Module
+    public static final Page CREATE_FARE_RULE = new Page("/App/PriceManagement/createFareRule", Permissions.MANAGE_FARE_RULES);
+
 }
