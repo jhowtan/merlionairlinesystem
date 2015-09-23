@@ -61,6 +61,12 @@ public class RouteBean {
         em.persist(airport);
     }
 
+    public Airport getAirport(long id) throws NotFoundException {
+        Airport airport = em.find(Airport.class, id);
+        if (airport == null) throw new NotFoundException();
+        return airport;
+    }
+
     public long createCity(String name, long countryId) throws NotFoundException {
         City city = new City();
         city.setName(name);

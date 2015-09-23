@@ -24,15 +24,15 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Fleet Planning", "plane",
-                        new MenuEntry("Aircraft", null, Pages.LIST_AIRCRAFT, Pages.CREATE_AIRCRAFT, Pages.UPDATE_AIRCRAFT, Pages.UPDATE_SEATCONFIG),
+                        new MenuEntry("Aircraft", null, Pages.LIST_AIRCRAFT, Pages.CREATE_AIRCRAFT, Pages.UPDATE_AIRCRAFT),
                         new MenuEntry("Aircraft Type", null, Pages.LIST_TYPE, Pages.CREATE_TYPE, Pages.UPDATE_TYPE),
-                        new MenuEntry("Seat Configuration", null, Pages.CREATE_SEATCONFIG, Pages.UPDATE_SEATCONFIG)
+                        new MenuEntry("Seat Configuration", null, Pages.CREATE_SEATCONFIG)
                 )
         );
 
         entries.add(
                 new MenuEntry("Route Planning", "road",
-                        new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS)
+                        new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS, Pages.LIST_CITIES, Pages.CREATE_CITY, Pages.LIST_COUNTRIES, Pages.CREATE_COUNTRY)
                 )
         );
     }
