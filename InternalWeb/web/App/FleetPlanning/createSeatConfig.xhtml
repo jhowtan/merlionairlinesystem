@@ -37,7 +37,8 @@
                                     <div class="form-group col-lg-12">
                                         <label class="control-label" for="aircraftType">Aircraft Type </label>
                                         <br/>
-                                        <h:selectOneMenu  id="aircraftType" value="#{createSeatConfigManagedBean.acTypeId}">
+                                        <h:selectOneMenu styleClass="form-control"
+                                                id="aircraftType" value="#{createSeatConfigManagedBean.acTypeId}">
                                             <f:selectItems value="#{createSeatConfigManagedBean.aircraftTypes}" var="ac"
                                                            itemLabel="#{ac.name}" itemValue="#{ac.id}" />
                                         </h:selectOneMenu>

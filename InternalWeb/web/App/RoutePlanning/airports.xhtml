@@ -12,22 +12,23 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Airports</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation" class="active"><h:link outcome="/App/FleetPlanning/airports">Airports</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FleetPlanning/createAirport">Create Airport</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FleetPlanning/cities">Cities</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FleetPlanning/createCity">Create City</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FleetPlanning/countries">Countries</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FleetPlanning/createCountry">Create Country</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/airports">Airports</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createAirport">Create Airport</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/cities">Cities</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCity">Create City</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/countries">Countries</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCountry">Create Country</h:link></li>
                     </ul><br />
-                    <table class="table" id="aircraftTypes_table">
+                    <table class="table" id="airports_table">
                         <thead>
                         <tr>
-                            <th>Name </th>
+                            <th>Name</th>
                             <th>Code</th>
                             <th>City</th>
                             <th>Country</th>
                             <th>Coordinates</th>
-                            <th>Num. of Hangars</th>
+                            <th>No. of Hangars</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -35,6 +36,15 @@
                             <tr>
                                 <td>#{ap.name}</td>
                                 <td>#{ap.code}</td>
+                                <td>#{ap.city}</td>
+                                <td>#{ap.country}</td>
+                                <td>#{ap.coordinates}</td>
+                                <td>#{ap.hangars}</td>
+                                <td>
+                                    <h:form>
+                                        <!-- button group here -->
+                                    </h:form>
+                                </td>
                             </tr>
                         </ui:repeat>
                         </tbody>
@@ -42,5 +52,15 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#airports_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': null }
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>
