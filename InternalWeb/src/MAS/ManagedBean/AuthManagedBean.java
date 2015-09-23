@@ -11,6 +11,8 @@ import MAS.Exception.InvalidLoginException;
 import MAS.Exception.NotFoundException;
 import MAS.Structure.MainMenu;
 import MAS.Structure.MenuEntry;
+import MAS.Structure.Page;
+import MAS.Structure.Pages;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -18,7 +20,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 
 @ManagedBean
@@ -34,6 +38,20 @@ public class AuthManagedBean {
     private boolean authenticated = false;
     private Set<String> permissions;
     private MainMenu mainMenu;
+
+    private HashMap<String, Page> pages;
+
+    public AuthManagedBean() {
+        pages = new HashMap<>();
+        for(Field pagesField : Pages.class.getDeclaredFields()) {
+            try {
+                Page page = (Page) pagesField.get(null);
+                pages.put(page.getPath(), page);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void populatePermissions() {
         permissions = new HashSet<>();
@@ -71,9 +89,19 @@ public class AuthManagedBean {
         forwardToLogin();
     }
 
-    public void requiresAuth() {
+    public void checkPermission() {
         if (!authenticated) {
             forwardToLogin();
+        } else {
+            String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+            System.out.println(viewId.substring(viewId.length() - 6));
+            if (viewId.substring(viewId.length() - 6).equals(".xhtml")) {
+                viewId = viewId.substring(0, viewId.length() - 6);
+            }
+            Page page = pages.get(viewId);
+            if (page != null && page.getPermissions().size() != 0 && Collections.disjoint(permissions, page.getPermissions())) {
+                forwardToLogin();
+            }
         }
     }
 
@@ -129,5 +157,13 @@ public class AuthManagedBean {
 
     public MainMenu getMainMenu() {
         return mainMenu;
+    }
+
+    public HashMap<String, Page> getPages() {
+        return pages;
+    }
+
+    public void setPages(HashMap<String, Page> pages) {
+        this.pages = pages;
     }
 }

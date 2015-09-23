@@ -9,10 +9,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Stateless(name = "MessageEJB")
 @LocalBean
@@ -51,6 +48,20 @@ public class MessageBean {
         em.persist(message);
         em.flush();
         return message.getId();
+    }
+
+    public List<Message> getUserMessages(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        List<Message> messages = user.getMessages();
+        Collections.reverse(messages);
+        return messages;
+    }
+
+    public Message getMessage(long id) throws NotFoundException {
+        Message message = em.find(Message.class, id);
+        if (message == null) throw new NotFoundException();
+        return message;
     }
 
 }

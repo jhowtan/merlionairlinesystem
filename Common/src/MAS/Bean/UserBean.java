@@ -217,4 +217,10 @@ public class UserBean {
         return user;
     }
 
+    public List<User> searchForUser(String query) {
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted AND (u.username LIKE :query OR CONCAT(u.firstName, ' ', u.lastName) LIKE :query)", User.class)
+                .setParameter("query", "%" + query + "%")
+                .getResultList();
+    }
+
 }

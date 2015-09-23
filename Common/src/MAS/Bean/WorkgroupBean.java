@@ -130,9 +130,16 @@ public class WorkgroupBean {
         return userWorkgroups;
     }
 
-    public Workgroup getWorkgroup(long wgId) throws NotFoundException {
-        Workgroup workgroup = em.find(Workgroup.class, wgId);
+    public List<Workgroup> searchForWorkgroup(String query) {
+        return em.createQuery("SELECT w from Workgroup w WHERE w.name LIKE :query", Workgroup.class)
+                .setParameter("query", "%" + query + "%")
+                .getResultList();
+    }
+
+    public Workgroup getWorkgroup(long id) throws NotFoundException {
+        Workgroup workgroup = em.find(Workgroup.class, id);
         if (workgroup == null) throw new NotFoundException();
         return workgroup;
     }
+
 }

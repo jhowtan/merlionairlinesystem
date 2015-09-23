@@ -162,16 +162,19 @@ public class User {
         this.manyToMany = manyToMany;
     }
 
+    private List<Message> messages;
+
+    @ManyToMany(mappedBy = "recipients")
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof User)) {
-            return false;
-        }
-        else if (this.id.equals(((User) obj).id)
-                && this.username.equals(((User) obj).username)
-                && this.email.equals(((User) obj).email)) {
-            return true;
-        }
-        return false;
-    }
+        return obj instanceof User && this.id.equals(((User) obj).id);
+	}
 }
