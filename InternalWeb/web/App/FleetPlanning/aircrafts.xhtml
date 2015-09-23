@@ -27,11 +27,13 @@
                         <ui:repeat value="#{aircraftManagedBean.getAllAircraft()}" var="ac">
                             <tr>
                                 <td>#{ac.tailNumber}</td>
-                                <td>#{ac.manufacturedDate}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMMM yyyy", ac.manufacturedDate)}</td>
                                 <td>
                                     <h:form>
-                                        <h:link outcome="/App/FleetPlanning/updateAircraft" styleClass="btn btn-default btn-xs btn-info"><f:param name="acId" value="#{ac.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
-                                        <h:commandLink action="#{aircraftManagedBean.delete(ac.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft: #{ac.tailNumber}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/FleetPlanning/updateAircraft" styleClass="btn btn-default btn-xs btn-info"><f:param name="acId" value="#{ac.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{aircraftManagedBean.delete(ac.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft: #{ac.tailNumber}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        </div>
                                     </h:form>
                                 </td>
                             </tr>
