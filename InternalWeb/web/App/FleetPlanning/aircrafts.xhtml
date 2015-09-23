@@ -19,6 +19,7 @@
                         <thead>
                         <tr>
                             <th>Tail Number</th>
+                            <th>Aircraft Type</th>
                             <th>Manufactured Date</th>
                             <th>Action</th>
                         </tr>
@@ -27,6 +28,7 @@
                         <ui:repeat value="#{aircraftManagedBean.getAllAircraft()}" var="ac">
                             <tr>
                                 <td>#{ac.tailNumber}</td>
+                                <td>#{ac.seatConfig.aircraftType.name}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMMM yyyy", ac.manufacturedDate)}</td>
                                 <td>
                                     <h:form>
@@ -49,7 +51,7 @@
             $('#aircraft_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
         </script>
