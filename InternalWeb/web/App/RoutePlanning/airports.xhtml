@@ -14,10 +14,6 @@
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/airports">Airports</h:link></li>
                         <li role="presentation"><h:link outcome="/App/RoutePlanning/createAirport">Create Airport</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/RoutePlanning/cities">Cities</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCity">Create City</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/RoutePlanning/countries">Countries</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCountry">Create Country</h:link></li>
                     </ul><br />
                     <table class="table" id="airports_table">
                         <thead>
@@ -37,8 +33,8 @@
                                 <td>#{ap.name}</td>
                                 <td>#{ap.code}</td>
                                 <td>#{ap.city}</td>
-                                <td>#{ap.country}</td>
-                                <td>#{ap.coordinates}</td>
+                                <td>#{ap.city.country}</td>
+                                <td>#{ap.latitude}, #{ap.longtitude}</td>
                                 <td>#{ap.hangars}</td>
                                 <td>
                                     <h:form>

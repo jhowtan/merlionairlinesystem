@@ -38,15 +38,15 @@ public class Airport {
         this.latitude = latitude;
     }
 
-    private double longtitude;
+    private double longitude;
 
     @Basic
-    public double getLongtitude() {
-        return longtitude;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(double longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     private String code;
