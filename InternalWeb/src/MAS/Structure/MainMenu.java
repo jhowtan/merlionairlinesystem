@@ -32,7 +32,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Route Planning", "road",
-                        new MenuEntry("Routes", null, Pages.LIST_ROUTES, Pages.CREATE_ROUTE, Pages.UPDATE_ROUTE)
+                        new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS)
                 )
         );
     }
