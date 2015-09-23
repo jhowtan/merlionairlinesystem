@@ -40,7 +40,13 @@ public class AuditLogBean {
     }
 
     public List<AuditLog> getAllAuditLogs() {
-        return em.createQuery("SELECT a from AuditLog a", AuditLog.class).getResultList();
+        return em.createQuery("SELECT a FROM AuditLog a", AuditLog.class).getResultList();
+    }
+
+    public List<AuditLog> getAuditLogForUser(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        return em.createQuery("SELECT a FROM AuditLog a WHERE a.user = :user").setParameter("user", user).getResultList();
     }
 
 }

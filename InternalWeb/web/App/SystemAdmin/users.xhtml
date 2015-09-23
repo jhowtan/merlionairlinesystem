@@ -33,7 +33,8 @@
                                     <td>
                                         <h:form>
                                             <div class="btn-group">
-                                                <h:link outcome="/App/SystemAdmin/updateUser" styleClass="btn btn-default btn-xs btn-info"><f:param name="userId" value="#{user.id}" /><i class="fa fa-pencil"></i> Edit</h:link>
+                                                <h:link outcome="/App/SystemAdmin/updateUser" styleClass="btn btn-default btn-xs btn-primary"><f:param name="userId" value="#{user.id}" /><i class="fa fa-pencil"></i> Edit</h:link>
+                                                <h:link outcome="/App/SystemAdmin/auditLog" styleClass="btn btn-default btn-xs btn-info"><f:param name="userId" value="#{user.id}" /><i class="fa fa-list-ul"></i> Audit</h:link>
                                                 <h:commandLink action="#{userManagedBean.setLocked(user.id, true)}" styleClass="btn btn-default btn-xs btn-warning" rendered="#{!user.locked}"><i class="fa fa-lock"></i> Lock</h:commandLink>
                                                 <h:commandLink action="#{userManagedBean.setLocked(user.id, false)}" styleClass="btn btn-default btn-xs btn-success" rendered="#{user.locked}"><i class="fa fa-unlock"></i> Unlock</h:commandLink>
                                                 <h:commandLink action="#{userManagedBean.delete(user.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete user #{user.username}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>

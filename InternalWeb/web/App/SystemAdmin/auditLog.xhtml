@@ -4,13 +4,14 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:define name="title">Users - Merlion Airline System</ui:define>
+    <ui:define name="title">Audit Log - Merlion Airline System</ui:define>
 
     <ui:define name="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Audit Log</h1>
+                    <h1 class="page-header">Audit Log<ui:fragment rendered="#{not empty auditLogManagedBean.user}"> for #{auditLogManagedBean.user.firstName} #{auditLogManagedBean.user.lastName}</ui:fragment></h1>
+
                     <table class="table" id="auditLog_table">
                         <thead>
                             <tr>
@@ -21,10 +22,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ui:repeat value="#{auditLogManagedBean.getAllAuditLogs()}" var="auditLog">
+                            <ui:repeat value="#{auditLogManagedBean.auditLogs}" var="auditLog">
                                 <tr>
                                     <td>#{auditLog.description}</td>
-                                    <td>#{auditLog.user.username}</td>
+                                    <td>
+                                        <h:link outcome="/App/SystemAdmin/auditLog">
+                                            #{auditLog.user.username}
+                                            <f:param name="userId" value="#{auditLog.user.id}" />
+                                        </h:link>
+                                    </td>
                                     <td>#{auditLog.category}</td>
                                     <td>#{auditLog.timestamp}</td>
                                 </tr>
@@ -32,7 +38,17 @@
                         </tbody>
                     </table>
 
-                    <h:form><p class="text-right"><h:commandButton action="#{auditLogManagedBean.exportToCSV}" styleClass="btn btn-default" value="Export to CSV" /></p></h:form>
+                    <hr />
+
+                    <h:form>
+                        <div class="pull-right #{not empty auditLogManagedBean.user ? 'btn-group' : ''}">
+                            <h:link rendered="#{not empty auditLogManagedBean.user}" outcome="/App/SystemAdmin/auditLog" styleClass="btn btn-default" value="Clear Filter" />
+                            <h:commandButton action="#{auditLogManagedBean.exportToCSV}" styleClass="btn btn-success" value="Export to CSV">
+                                <f:param name="userId" value="#{auditLogManagedBean.user.id}" rendered="#{not empty auditLogManagedBean.user}" />
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+
                 </div>
             </div>
         </div>
@@ -41,7 +57,7 @@
     <ui:define name="javascript">
         <script type="text/javascript">
             $('#auditLog_table').DataTable({
-                "stateSave": true
+                "order": [[ 3, "desc" ]]
             });
         </script>
     </ui:define>
