@@ -35,10 +35,10 @@
                                     </div>
                                     <div class="form-group col-lg-12 #{!manDate.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="manDate">Manufactured Date</label>
-                                        <h:inputText id="manDate" value="#{createAircraftManagedBean.manDate}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 28-02-1992"
+                                        <h:inputText binding="#{manDate}" id="manDate" value="#{createAircraftManagedBean.manDate}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:max="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                      size="20" required="true" requiredMessage="Manufactured Date of the aircraft is required.">
-                                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
                                         </h:inputText>
                                         <h:message for="manDate" styleClass="help-block" />
                                     </div>

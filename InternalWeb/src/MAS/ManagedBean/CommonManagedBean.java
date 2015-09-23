@@ -21,6 +21,9 @@ public class CommonManagedBean {
     }
 
     public String formatDate(String format, Date date) {
+        if (date == null) {
+            date = new Date();
+        }
         try {
             return new SimpleDateFormat(format).format(date);
         } catch (Exception e) {
