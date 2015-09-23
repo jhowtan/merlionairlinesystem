@@ -57,37 +57,45 @@
                                 <div class="row">
                                     <!-- Insert design for Seat Configuration here -->
                                     <h:dataTable value="#{createSeatConfigManagedBean.cabins}" var="cabin">
-                                        <h:column><h:inputText value="#{cabin.toString()}" /></h:column>
-                                    </h:dataTable>
-
-                                    <div class="col-lg-10">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">Cabin</div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="form-group col-lg-12 #{!numRows.valid ? 'has-error' : ''}">
-                                                        <label class="control-label" for="numRows">Number of Rows</label>
-                                                        <h:inputText id="numRows" styleClass="form-control" pt:placeholder="Please indicate at least 1 row to proceed"/>
-                                                        <h:message for="numRows" styleClass="help-block" />
-                                                    </div>
-                                                    <div class="form-group col-lg-6 #{!rowConfig.valid ? 'has-error' : ''}">
-                                                        <label class="control-label" for="rowConfig">Row Seating Configuration</label>
-                                                        <h:inputText id="rowConfig" readonly="true" styleClass="form-control" value="#{createSeatConfigManagedBean.seatConfig}" pt:placeholder="ss|sss|ss, s = Seat, | = Corridor"/>
-                                                        <div class="btn-group">
-                                                            <h:commandButton action="#{createSeatConfigManagedBean.addSeat()}" value="+S" styleClass="btn btn-success"/>
-                                                            <h:commandButton action="#{createSeatConfigManagedBean.addCorridor()}" value="+C" styleClass="btn btn-info"/>
-                                                            <h:commandButton action="#{createSeatConfigManagedBean.removeSeat()}" value="X" styleClass="btn btn-danger"/>
+                                        <!-- <h:column><h:inputText value="#{cabin.representation}" /></h:column> -->
+                                        <h:column>
+                                            <div class="col-lg-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">Cabin #{createSeatConfigManagedBean.getIndexOf(cabin) + 1}</div>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-12 #{!numRows.valid ? 'has-error' : ''}">
+                                                                <label class="control-label" for="numRows">Number of Rows</label>
+                                                                <h:inputText id="numRows" value="#{cabin.numRows}" styleClass="form-control" pt:placeholder="Please indicate at least 1 row to proceed"/>
+                                                                <h:message for="numRows" styleClass="help-block" />
+                                                            </div>
+                                                            <div class="form-group col-lg-12 #{!rowConfig.valid ? 'has-error' : ''}">
+                                                                <label class="control-label" for="rowConfig">Row Seating Configuration</label>
+                                                                <h:inputText id="rowConfig" readonly="true" styleClass="form-control" value="#{cabin.representation}" pt:placeholder="ss|sss|ss, s = Seat, | = Corridor"/>
+                                                                <div class="btn-group">
+                                                                    <h:commandButton action="#{createSeatConfigManagedBean.addSeat(createSeatConfigManagedBean.getIndexOf(cabin))}" value="+S" styleClass="btn btn-success">
+                                                                        <f:ajax execute="@form" render="@form" />
+                                                                    </h:commandButton>
+                                                                    <h:commandButton action="#{createSeatConfigManagedBean.addCorridor(createSeatConfigManagedBean.getIndexOf(cabin))}" value="+C" styleClass="btn btn-info">
+                                                                        <f:ajax execute="@form" render="@form" />
+                                                                    </h:commandButton>
+                                                                    <h:commandButton action="#{createSeatConfigManagedBean.removeSeat(createSeatConfigManagedBean.getIndexOf(cabin))}" value="X" styleClass="btn btn-danger">
+                                                                        <f:ajax execute="@form" render="@form" />
+                                                                    </h:commandButton>
+                                                                </div>
+                                                                <h:message for="rowConfig" styleClass="help-block" />
+                                                            </div>
                                                         </div>
-                                                        <h:message for="rowConfig" styleClass="help-block" />
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </h:column>
+                                    </h:dataTable>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-12 text-right">
                                         <div class="btn-group">
-                                            <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
-                                            <h:commandButton action="#{createSeatConfigManagedBean.createConfig()}" value="Create Configuration" styleClass="btn btn-success"/>
+                                            <h:commandButton action="#{createSeatConfigManagedBean.addCabin()}" value="Add Cabin" styleClass="btn btn-success"/>
                                         </div>
                                     </div>
                                 </div>

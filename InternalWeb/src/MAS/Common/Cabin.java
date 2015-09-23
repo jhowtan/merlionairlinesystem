@@ -18,6 +18,9 @@ public class Cabin {
         row = row.concat("|");
     }
 
+    public int getNumRows() {
+        return numRows;
+    }
     public void setNumRows(int val) {
         numRows = val;
     }
@@ -46,5 +49,13 @@ public class Cabin {
             result = result.concat("/");
         }
         return  result;
+    }
+
+    public String getRepresentation() {
+        return row;
+    }
+
+    public void setRepresentation(String val) {
+        return;
     }
 }
