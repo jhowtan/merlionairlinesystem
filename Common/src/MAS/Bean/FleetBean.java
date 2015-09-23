@@ -124,6 +124,10 @@ public class FleetBean {
         em.persist(aircraftType);
     }
 
+    public boolean isAircraftTypeNameUnique(String name) {
+        return (Long) em.createQuery("SELECT COUNT(at) FROM AircraftType at WHERE at.name = :name").setParameter("name", name).getSingleResult() == 0;
+    }
+
     public List<AircraftType> getAllAircraftTypes() {
         return em.createQuery("SELECT a from AircraftType a", AircraftType.class).getResultList();
     }
