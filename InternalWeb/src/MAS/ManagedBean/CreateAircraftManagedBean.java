@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.util.Date;
 import java.util.List;
 
@@ -23,14 +24,15 @@ public class CreateAircraftManagedBean {
 
     private String tailNum;
     private Date manDate;
-    private AircraftType acType;
-    private AircraftSeatConfig seatConfig;
-    private List<AircraftSeatConfig> updatedSeatConfig;
+
+    private long acType;
+    private long seatConfig;
+    private List<AircraftSeatConfig> seatConfigList;
 
     public void createAircraft() {
         long aircraftId = fleetBean.createAircraft(tailNum, manDate);
         try {
-            fleetBean.changeAircraftConfig(aircraftId, seatConfig.getId());
+            fleetBean.changeAircraftConfig(aircraftId, seatConfig);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -42,12 +44,8 @@ public class CreateAircraftManagedBean {
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
-    public List<AircraftSeatConfig> getAllSeatConfig() {
-        return fleetBean.getAllAircraftSeatConfigs();
-    }
-
-    public void updateSeatConfigOnTypeSelect(long id) {
-        updatedSeatConfig = fleetBean.findSeatConfigByType(id);
+    public void acTypeChangeListener(AjaxBehaviorEvent event) {
+        seatConfigList = fleetBean.findSeatConfigByType(acType);
     }
 
     public List<AircraftType> getAllAircraftTypes() {
@@ -74,19 +72,27 @@ public class CreateAircraftManagedBean {
         this.manDate = manDate;
     }
 
-    public AircraftType getAcType() {
-        return acType;
-    }
-
-    public void setAcType(AircraftType acType) {
-        this.acType = acType;
-    }
-
-    public AircraftSeatConfig getSeatConfig() {
+    public long getSeatConfig() {
         return seatConfig;
     }
 
-    public void setSeatConfig(AircraftSeatConfig seatConfig) {
+    public void setSeatConfig(long seatConfig) {
         this.seatConfig = seatConfig;
+    }
+
+    public long getAcType() {
+        return acType;
+    }
+
+    public void setAcType(long acType) {
+        this.acType = acType;
+    }
+
+    public List<AircraftSeatConfig> getSeatConfigList() {
+        return seatConfigList;
+    }
+
+    public void setSeatConfigList(List<AircraftSeatConfig> seatConfigList) {
+        this.seatConfigList = seatConfigList;
     }
 }

@@ -48,7 +48,7 @@
                                         <h:selectOneMenu id="acType" value="#{createAircraftManagedBean.acType}" required="true" styleClass="form-control">
                                             <f:selectItems value="#{createAircraftManagedBean.getAllAircraftTypes()}" var="acType"
                                                            itemLabel="#{acType.name}" itemValue="#{acType.id}" />
-                                            <f:ajax listener="#{createAircraftManagedBean.updateSeatConfigOnTypeSelect(acType.id)}" render="seatConfig" />
+                                            <f:ajax listener="#{createAircraftManagedBean.acTypeChangeListener}" render="seatConfig" />
                                         </h:selectOneMenu>
                                         <h:message for="acType" styleClass="help-block" />
                                     </div>
@@ -56,7 +56,7 @@
                                         <!-- Select Seat Configuration -->
                                         <label class="control-label" for="seatConfig">Choose Seat Configuration</label>
                                         <h:selectOneMenu id="seatConfig" value="#{createAircraftManagedBean.seatConfig}" required="true" styleClass="form-control">
-                                            <f:selectItems value="#{createAircraftManagedBean.getAllSeatConfig()}" var="seatConfig"
+                                            <f:selectItems value="#{createAircraftManagedBean.seatConfigList}" var="seatConfig"
                                                            itemLabel="#{seatConfig.name}" itemValue="#{seatConfig.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="seatConfig" styleClass="help-block" />
