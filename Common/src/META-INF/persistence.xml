@@ -18,6 +18,7 @@
         <class>MAS.Entity.Workgroup</class>
         <class>MAS.Entity.Message</class>
         <class>MAS.Entity.Flight</class>
+        <class>MAS.Entity.FareRule</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

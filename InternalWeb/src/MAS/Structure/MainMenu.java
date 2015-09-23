@@ -35,6 +35,12 @@ public class MainMenu {
                         new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS)
                 )
         );
+
+        entries.add(
+                new MenuEntry("Price Management", "usd",
+                        new MenuEntry("Fare Rules", null, Pages.LIST_FARE_RULES, Pages.CREATE_FARE_RULE)
+                )
+        );
     }
 
     public List<MenuEntry> getEntries() {
