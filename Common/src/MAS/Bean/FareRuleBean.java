@@ -32,7 +32,7 @@ public class FareRuleBean {
 
     public long createFareRule(String name, int minimumStay, int maximumStay, int advancePurchase, int minimumPassengers, int milesAccrual, boolean freeCancellation) {
         FareRule fareRule = new FareRule();
-        fareRule.setName(name);
+        fareRule.setName(name.toUpperCase());
         fareRule.setMinimumStay(minimumStay);
         fareRule.setMaximumStay(maximumStay);
         fareRule.setAdvancePurchase(advancePurchase);
@@ -46,6 +46,10 @@ public class FareRuleBean {
 
     public List<FareRule> getAllFareRules() {
         return em.createQuery("SELECT f FROM FareRule f", FareRule.class).getResultList();
+    }
+
+    public boolean isFareRuleNameUnique(String name) {
+        return (Long) em.createQuery("SELECT COUNT(f) FROM FareRule f WHERE f.name = :name").setParameter("name", name.toLowerCase()).getSingleResult() == 0;
     }
 
 }
