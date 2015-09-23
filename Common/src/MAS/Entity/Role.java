@@ -41,7 +41,7 @@ public class Role {
 
     private List<User> users;
 
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "roles")
     public List<User> getUsers() {
         return users;
     }
