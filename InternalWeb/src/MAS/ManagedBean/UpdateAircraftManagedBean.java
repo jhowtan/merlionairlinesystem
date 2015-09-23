@@ -23,17 +23,13 @@ public class UpdateAircraftManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
-    private String tailNum;
-    private Date manDate;
     private Aircraft aircraft;
-    private AircraftType acType;
-    private AircraftSeatConfig seatConfig;
-    private List<AircraftSeatConfig> updatedSeatConfig;
-    private Map<String,String> params;
+    private long seatConfig;
+    private List<AircraftSeatConfig> seatConfigList;
 
     @PostConstruct
     public void init() {
-        params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         long acId = Long.parseLong(params.get("acId"));
         getAircraft(acId);
     }
@@ -44,24 +40,20 @@ public class UpdateAircraftManagedBean {
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-        tailNum = aircraft.getTailNumber();
-        manDate = aircraft.getManufacturedDate();
-        seatConfig = aircraft.getSeatConfig();
-        acType = seatConfig.getAircraftType();
+        seatConfig = aircraft.getSeatConfig().getId();
+        seatConfigList = fleetBean.findSeatConfigByType(aircraft.getSeatConfig().getAircraftType().getId());
     }
 
     public void save() throws NotFoundException {
         try {
-            fleetBean.changeAircraftConfig(aircraft.getId(), seatConfig.getId());
+            fleetBean.changeAircraftConfig(aircraft.getId(), seatConfig);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
 
-        authManagedBean.createAuditLog("Updated aircraft information: " + tailNum, "update_aircraft");
+        authManagedBean.createAuditLog("Updated aircraft information: " + aircraft.getTailNumber(), "update_aircraft");
 
-        init();
-
-        FacesMessage m = new FacesMessage("Aircraft configurations are updated successfully.");
+        FacesMessage m = new FacesMessage("Aircraft has been successfully updated.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
@@ -70,28 +62,8 @@ public class UpdateAircraftManagedBean {
         return fleetBean.getAllAircraftSeatConfigs();
     }
 
-    public void updateSeatConfigOnTypeSelect(long id) {
-        updatedSeatConfig = fleetBean.findSeatConfigByType(id);
-    }
-
     public List<AircraftType> getAllAircraftTypes() {
         return fleetBean.getAllAircraftTypes();
-    }
-
-    public String getTailNum() {
-        return tailNum;
-    }
-
-    public void setTailNum(String tailNum) {
-        this.tailNum = tailNum;
-    }
-
-    public Date getManDate() {
-        return manDate;
-    }
-
-    public void setManDate(Date manDate) {
-        this.manDate = manDate;
     }
 
     public Aircraft getAircraft() {
@@ -102,31 +74,23 @@ public class UpdateAircraftManagedBean {
         this.aircraft = aircraft;
     }
 
-    public AircraftType getAcType() {
-        return acType;
-    }
-
-    public void setAcType(AircraftType acType) {
-        this.acType = acType;
-    }
-
-    public AircraftSeatConfig getSeatConfig() {
+    public long getSeatConfig() {
         return seatConfig;
     }
 
-    public void setSeatConfig(AircraftSeatConfig seatConfig) {
+    public void setSeatConfig(long seatConfig) {
         this.seatConfig = seatConfig;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public List<AircraftSeatConfig> getSeatConfigList() {
+        return seatConfigList;
+    }
+
+    public void setSeatConfigList(List<AircraftSeatConfig> seatConfigList) {
+        this.seatConfigList = seatConfigList;
     }
 }
