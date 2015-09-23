@@ -20,7 +20,7 @@ public class AircraftTypeManagedBean {
         return fleetBean.getAllAircraftTypes();
     }
 
-    public Long getAircraftCount(long typeId) {
+    public long getAircraftCount(long typeId) {
         return fleetBean.getAircraftCountByType(typeId);
     }
 

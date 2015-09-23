@@ -149,8 +149,7 @@ public class FleetBean {
 
     public Long getAircraftCountByType(long typeId) {
         AircraftType aircraftType = em.find(AircraftType.class, typeId);
-        return (Long) em.createQuery("SELECT COUNT(ac) from AircraftSeatConfig sc, Aircraft ac WHERE sc.aircraftType = :typeId AND ac.seatConfig = :aircraftType")
-                .setParameter("typeId", typeId)
+        return (Long) em.createQuery("SELECT COUNT(ac) from AircraftSeatConfig sc, Aircraft ac WHERE sc.aircraftType = :aircraftType AND ac.seatConfig = sc")
                 .setParameter("aircraftType", aircraftType)
                 .getSingleResult();
     }
