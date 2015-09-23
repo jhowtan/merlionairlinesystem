@@ -24,9 +24,9 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Fleet Planning", "plane",
-                        new MenuEntry("Aircraft", null, Pages.LIST_AIRCRAFT, Pages.CREATE_AIRCRAFT, Pages.UPDATE_AIRCRAFT, Pages.UPDATE_SEATCONFIG),
                         new MenuEntry("Aircraft Type", null, Pages.LIST_TYPE, Pages.CREATE_TYPE, Pages.UPDATE_TYPE),
-                        new MenuEntry("Seat Configuration", null, Pages.CREATE_SEATCONFIG, Pages.UPDATE_SEATCONFIG)
+                        new MenuEntry("Seat Configuration", null, Pages.CREATE_SEATCONFIG, Pages.UPDATE_SEATCONFIG),
+                        new MenuEntry("Aircraft", null, Pages.LIST_AIRCRAFT, Pages.CREATE_AIRCRAFT, Pages.UPDATE_AIRCRAFT, Pages.UPDATE_SEATCONFIG)
                 )
         );
 
