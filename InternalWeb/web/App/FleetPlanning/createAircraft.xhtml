@@ -28,8 +28,8 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!tailNum.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="tailNum">Aircraft Tail Number</label>
-                                        <h:inputText id="tailNum" binding="#{tailNum}" value="#{createAircraftManagedBean.tailNum}" styleClass="form-control" pt:placeholder="e.g. ML120" required="true" requiredMessage="Aircraft Tail Number is required.">
-                                            <f:validator validatorId="aircraftTypeValidator" />
+                                        <h:inputText id="tailNum" binding="#{tailNum}" value="#{createAircraftManagedBean.tailNum}" styleClass="form-control" pt:placeholder="e.g. 9V-AAA" required="true" requiredMessage="Aircraft Tail Number is required.">
+                                            <f:validator validatorId="tailNumberValidator" />
                                         </h:inputText>
                                         <h:message for="tailNum" styleClass="help-block" />
                                     </div>

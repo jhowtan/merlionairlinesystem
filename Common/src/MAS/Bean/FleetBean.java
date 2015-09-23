@@ -138,6 +138,10 @@ public class FleetBean {
         em.persist(aircraftType);
     }
 
+    public boolean isTailNumberUnique(String tailNum) {
+        return (Long) em.createQuery("SELECT COUNT(a) FROM Aircraft a WHERE a.tailNumber = :tailNum").setParameter("tailNum", tailNum).getSingleResult() == 0;
+    }
+
     public boolean isAircraftTypeNameUnique(String name) {
         return (Long) em.createQuery("SELECT COUNT(at) FROM AircraftType at WHERE at.name = :name").setParameter("name", name).getSingleResult() == 0;
     }
