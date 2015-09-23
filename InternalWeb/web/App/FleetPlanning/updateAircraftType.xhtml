@@ -69,10 +69,10 @@
                                                     </td>
                                                     <td>#{seatConfig.weight}</td>
                                                     <td>
-                                                        <h:link outcome="/App/FleetPlanning/updateSeatConfig"
+                                                        <!-- <h:link outcome="/App/FleetPlanning/updateSeatConfig"
                                                                 styleClass="btn btn-default btn-xs btn-info">
                                                             <f:param name="seatConfigId" value="#{seatConfig.id}"><i class="fa fa-pencil"></i> Edit</f:param>
-                                                        </h:link>
+                                                        </h:link> -->
                                                         <h:commandLink action="#{updateAircraftTypeManagedBean.deleteSeatConfig(seatConfig.id)}"
                                                                        styleClass="btn btn-default btn-xs btn-danger"
                                                                        onclick="return confirm('Are you sure you wish to delete seat configuration \'#{seatConfig.name}\'?');">
