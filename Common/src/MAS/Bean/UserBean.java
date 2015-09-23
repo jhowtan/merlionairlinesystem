@@ -5,6 +5,7 @@ import MAS.Common.Utils;
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
 import MAS.Entity.User;
+import MAS.Entity.Workgroup;
 import MAS.Exception.InvalidLoginException;
 import MAS.Exception.InvalidResetHashException;
 import MAS.Exception.NotFoundException;
@@ -126,6 +127,9 @@ public class UserBean {
         user.setDeleted(true);
         user.setLocked(true);
         user.setRoles(new ArrayList<>());
+        for(Workgroup workgroup : user.getWorkgroups()) {
+            workgroup.getUsers().remove(user);
+        }
         em.persist(user);
     }
 

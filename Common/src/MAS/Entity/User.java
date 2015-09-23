@@ -173,6 +173,17 @@ public class User {
         this.messages = messages;
     }
 
+    private List<Workgroup> workgroups;
+
+    @ManyToMany(mappedBy = "users")
+    public List<Workgroup> getWorkgroups() {
+        return workgroups;
+    }
+
+    public void setWorkgroups(List<Workgroup> workgroups) {
+        this.workgroups = workgroups;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof User && this.id.equals(((User) obj).id);
