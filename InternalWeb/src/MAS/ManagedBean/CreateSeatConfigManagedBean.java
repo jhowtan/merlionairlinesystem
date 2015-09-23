@@ -1,9 +1,9 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.FleetBean;
-import MAS.Bean.UserBean;
+import MAS.Common.Cabin;
+import MAS.Common.SeatConfigObject;
 import MAS.Entity.AircraftType;
-import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -11,13 +11,13 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class CreateSeatConfigManagedBean {
 
     @EJB
@@ -29,35 +29,26 @@ public class CreateSeatConfigManagedBean {
     private String configName;
     private String weight;
     private String seatConfig;
+    private long acTypeId;
 
+    private SeatConfigObject seatConfObj;
     private List<AircraftType> aircraftTypes;
-    private Map<Long, Boolean> aircraftTypesMap;
 
     @PostConstruct
     public void init() {
         populateAcType();
+        seatConfObj = new SeatConfigObject();
+        seatConfig = "";
     }
 
     private void populateAcType() {
         aircraftTypes = fleetBean.getAllAircraftTypes();
-        aircraftTypesMap = new HashMap<>();
-        for (AircraftType acType : aircraftTypes) {
-            aircraftTypesMap.put(acType.getId(), Boolean.FALSE);
-        }
     }
 
     public void createConfig() throws NotFoundException {
-        ArrayList<Long> acTypeIds = new ArrayList<>();
-        for (Object o : aircraftTypesMap.entrySet()) {
-            Map.Entry pair = (Map.Entry) o;
-            if ((Boolean) pair.getValue()) {
-                acTypeIds.add((Long) pair.getKey());
-            }
-        }
         // Decide on whether to have multiple aircraft types with the same seat configuration
-        fleetBean.createAircraftSeatConfig(seatConfig, configName, Integer.parseInt(weight), acTypeIds);
+        fleetBean.createAircraftSeatConfig(seatConfig, configName, Integer.parseInt(weight), acTypeId);
 
-        populateAcType();
         setConfigName(null);
         setWeight(null);
         setSeatConfig(null);
@@ -94,20 +85,32 @@ public class CreateSeatConfigManagedBean {
         this.seatConfig = seatConfig;
     }
 
+    public long getAcTypeId() {
+        return acTypeId;
+    }
+
+    public void setAcTypeId(long acTypeId) {
+        this.acTypeId = acTypeId;
+    }
+
     public List<AircraftType> getAircraftTypes() {
         return aircraftTypes;
     }
 
-    public void setAircraftTypes(List<AircraftType> aircraftTypes) {
-        this.aircraftTypes = aircraftTypes;
+    public void addSeat() {
+        seatConfObj.addSeat();
     }
 
-    public Map<Long, Boolean> getAircraftTypesMap() {
-        return aircraftTypesMap;
+    public void addCorridor() {
+        seatConfObj.addCorridor();
     }
 
-    public void setAircraftTypesMap(Map<Long, Boolean> aircraftTypesMap) {
-        this.aircraftTypesMap = aircraftTypesMap;
+    public void removeSeat() {
+        seatConfObj.removeLast();
+    }
+
+    public ArrayList<Cabin> getCabins() {
+        return seatConfObj.getCabins();
     }
 }
 

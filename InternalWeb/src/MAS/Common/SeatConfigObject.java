@@ -18,6 +18,8 @@ public class SeatConfigObject {
 
     public SeatConfigObject() {
         cabins = new ArrayList<Cabin>();
+        addCabin();
+        selectCabin(0);
     }
 
     public void parse(String seatConfigString) {
@@ -75,6 +77,13 @@ public class SeatConfigObject {
     public void setNumRows(int val) {
         cabins.get(selection).setNumRows(val);
     }
+    public String rowString() {
+        return cabins.get(selection).toString();
+    }
+
+    public ArrayList<Cabin> getCabins() {
+        return cabins;
+    }
 
     public String toString() {
         String result = "";
@@ -85,60 +94,5 @@ public class SeatConfigObject {
             result = result.concat("_");
         }
         return  result.concat("e");
-    }
-}
-
-class Cabin {
-
-    private ArrayList<Character> row;
-    private int numRows;
-
-    public Cabin() {
-        row = new ArrayList<Character>();
-    }
-
-    public void addSeat() {
-        row.add('s');
-    }
-
-    public void addCorridor() {
-        row.add('|');
-    }
-
-    public void setNumRows(int val) {
-        numRows = val;
-    }
-
-    public void addRow() {
-        numRows++;
-    }
-
-    public void removeLast() {
-        row.remove(row.size() - 1);
-    }
-
-    public void removeRow() {
-        if (numRows > 0)
-            numRows--;
-    }
-
-    public String toString() {
-        String result = "";
-        String oneRow;
-
-        if (row.size() == 0)
-            return result;
-
-        StringBuilder builder = new StringBuilder(row.size());
-        for(Character ch: row)
-        {
-            builder.append(ch);
-        }
-        oneRow = builder.toString();
-        for (int i = 0; i < numRows; i ++) {
-            result = result.concat(oneRow);
-            result = result.concat("/");
-        }
-        return  result;
     }
 }
