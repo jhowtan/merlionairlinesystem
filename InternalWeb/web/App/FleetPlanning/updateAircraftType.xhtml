@@ -1,0 +1,112 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Update Aircraft Type - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Update Aircraft Type</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/FleetPlanning/aircraftTypes">Summary</h:link></li>
+                        <li role="presentation" class="active">
+                            <h:link outcome="/App/FleetPlanning/updateAircraftType">
+                                <f:param name="typeId" value="#{updateAircraftTypeManagedBean.type.id}">Update Type</f:param>
+                            </h:link>
+                        </li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <!-- BEGIN FORM PANEL BODY -->
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Aircraft Type Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!typeName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="typeName">Aircraft Type Name</label>
+                                        <h:inputText id="typeName" binding="#{typeName}" value="#{updateAircraftTypeManagedBean.typeName}" styleClass="form-control" pt:placeholder="e.g. Airbus A380" required="true" requiredMessage="Aircraft type name is required.">
+                                        </h:inputText>
+                                        <h:message for="typeName" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!fuelCapacity.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="fuelCapacity">Fuel Capacity (in Litres)</label>
+                                        <h:inputText id="fuelCapacity" binding="#{fuelCapacity}" value="#{updateAircraftTypeManagedBean.fuelCapacity}" styleClass="form-control" required="true" requiredMessage="Fuel capacity of aircraft type is required.">
+                                        </h:inputText>
+                                        <h:message for="fuelCapacity" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Aircraft Type - Seat Configuration</div>
+                            <div class="panel-body">
+                            <!-- INSERT LIST OF SEAT CONFIGS HERE -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table class="table" id="seatConfig_table">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Weight</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <ui:repeat value="#{updateAircraftTypeManagedBean.seatConfigs}" var="seatConfig">
+                                                <tr>
+                                                    <td>#{seatConfig.id}</td>
+                                                    <td>
+                                                        #{seatConfig.name}
+                                                    </td>
+                                                    <td>#{seatConfig.weight}</td>
+                                                    <td>
+                                                        <h:link outcome="/App/FleetPlanning/updateSeatConfig">
+                                                            <f:param name="seatConfigId" value="#{seatConfig.id}"><i class="fa fa-pencil"></i> Edit</f:param>
+                                                        </h:link>
+                                                        <h:commandLink action="#{updateAircraftTypeManagedBean.deleteSeatConfig(seatConfig.id, seatConfig.name)}"
+                                                                       styleClass="btn btn-default btn-xs btn-danger"
+                                                                       onclick="return confirm('Are you sure you wish to delete seat configuration \'#{seatConfig.name}\'?');">
+                                                            <i class="fa fa-trash"></i> Delete
+                                                        </h:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createAircraftTypeManagedBean.save()}" value="Update Aircraft Type" styleClass="btn btn-success">
+                                    <f:param name="typeId" value="#{updateAircraftTypeManagedBean.type.id}"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#seatConfig_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>

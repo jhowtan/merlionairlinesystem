@@ -1,0 +1,124 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Create Seat Configuration - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Create Seat Configuration</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/FleetPlanning/aircraftTypes">Aircraft Types</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/FleetPlanning/createSeatConfig">Create Configuration</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <!-- BEGIN FORM PANEL BODY -->
+                    <h:form>
+                        <!-- SEAT CONFIG DETAILS PANEL -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Seat Configuration Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!configName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="configName">Seat Configuration Name</label>
+                                        <h:inputText id="configName" binding="#{configName}" value="#{createSeatConfigManagedBean.configName}" styleClass="form-control" pt:placeholder="e.g. A380-UPPER-DECK 38BUSINESS" required="true" requiredMessage="Seat configuration name is required.">
+                                        </h:inputText>
+                                        <h:message for="configName" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!weight.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="weight">Base Weight (in kg)</label>
+                                        <h:inputText id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" >
+                                        </h:inputText>
+                                        <h:message for="weight" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- SEAT CONFIGURATION INTERACTIVE PANEL -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Seat Configuration</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <!-- Insert design for Seat Configuration here -->
+                                    <div class="form-group col-lg-12 #{!numRows.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="numRows">Number of Rows</label>
+                                        <h:inputText id="numRows" styleClass="form-control" pt:placeholder="Please indicate at least 1 row to proceed"/>
+                                        <h:message for="numRows" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!rowConfig.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="rowConfig">Row Seating Configuration</label>
+                                        <h:inputText id="rowConfig" styleClass="form-control" pt:placeholder="SSCSS, S = Seat, C = Corridor"/>
+                                        <h:message for="rowConfig" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AIRCRAFT TYPE ASSIGNMENT PANEL -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Aircraft Type Assigned</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table class="table" id="aircraftType_table">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Fuel Capacity</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <ui:repeat value="#{createSeatConfigManagedBean.aircraftTypes}" var="acType">
+                                                <tr>
+                                                    <td>#{acType.id}</td>
+                                                    <td>#{acType.name}</td>
+                                                    <td>#{acType.fuelCapacity}</td>
+                                                    <td>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <h:selectBooleanCheckbox value="#{createSeatConfigManagedBean.acMap[acType.id]}"/>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BUTTON GROUPS-->
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createSeatConfigManagedBean.createConfig()}" value="Create Configuration" styleClass="btn btn-success"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#aircraftType_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
