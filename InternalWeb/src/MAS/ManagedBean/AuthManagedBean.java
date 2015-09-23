@@ -93,6 +93,20 @@ public class AuthManagedBean {
         if (!authenticated) {
             forwardToLogin();
         } else {
+            // Refresh permission on each page load
+            populatePermissions();
+            generateMenu(permissions);
+
+            // Check if user is locked
+            try {
+                if(userBean.getUser(userId).isLocked()) {
+                    logout();
+                }
+            } catch (NotFoundException e) {
+                logout();
+                e.printStackTrace();
+            }
+
             String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
             System.out.println(viewId.substring(viewId.length() - 6));
             if (viewId.substring(viewId.length() - 6).equals(".xhtml")) {

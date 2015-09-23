@@ -124,6 +124,7 @@ public class UserBean {
         User user = em.find(User.class, id);
         if (user == null) throw new NotFoundException();
         user.setDeleted(true);
+        user.setLocked(true);
         user.setRoles(new ArrayList<>());
         em.persist(user);
     }
