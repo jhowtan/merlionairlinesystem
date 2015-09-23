@@ -21,10 +21,10 @@
                         </h:panelGroup>
                     </ui:repeat>
                     <!-- BEGIN FORM PANEL BODY -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Aircraft Type Details</div>
-                        <div class="panel-body">
-                            <h:form>
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Aircraft Type Details</div>
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!typeName.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="typeName">Aircraft Type Name</label>
@@ -39,16 +39,16 @@
                                         </h:inputText>
                                         <h:message for="fuelCapacity" styleClass="help-block" />
                                     </div>
-                                    <div class="col-lg-12 text-right">
-                                        <div class="btn-group">
-                                            <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
-                                            <h:commandButton action="#{createAircraftTypeManagedBean.createType()}" value="Create Aircraft Type" styleClass="btn btn-success"/>
-                                        </div>
-                                    </div>
                                 </div>
-                            </h:form>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createAircraftTypeManagedBean.createType()}" value="Create Aircraft Type" styleClass="btn btn-success"/>
+                            </div>
+                        </div>
+                    </h:form>
                 </div>
             </div>
         </div>

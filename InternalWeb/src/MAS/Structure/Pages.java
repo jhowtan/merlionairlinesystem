@@ -1,10 +1,11 @@
 package MAS.Structure;
 
-        import MAS.Common.Permissions;
+import MAS.Common.Permissions;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
-    // Common Infrastructure: System Admin
+    
+	// Common Infrastructure: System Admin
     public static final Page LIST_USERS = new Page("/App/SystemAdmin/users", Permissions.MANAGE_USERS);
     public static final Page CREATE_USER = new Page("/App/SystemAdmin/createUser", Permissions.MANAGE_USERS);
     public static final Page UPDATE_USER = new Page("/App/SystemAdmin/updateUser", Permissions.MANAGE_USERS);
@@ -16,6 +17,8 @@ public class Pages {
     public static final Page LIST_WORKGROUPS = new Page("/App/SystemAdmin/workgroups", Permissions.MANAGE_WORKGROUPS);
     public static final Page CREATE_WORKGROUP = new Page("/App/SystemAdmin/createWorkgroup", Permissions.MANAGE_WORKGROUPS);
     public static final Page UPDATE_WORKGROUP = new Page("/App/SystemAdmin/updateWorkgroup", Permissions.MANAGE_WORKGROUPS);
+	
+    public static final Page VIEW_AUDIT_LOG = new Page("/App/SystemAdmin/auditLog", Permissions.ACCESS_AUDIT_LOGS);
 
     // Airline Planning System: Fleet Planning Pages
     public static final Page LIST_TYPE = new Page("/App/FleetPlanning/aircraftTypes.xhtml", Permissions.MANAGE_FLEET);
@@ -36,6 +39,4 @@ public class Pages {
 
     // Airline Planning System: Schedule Planning Pages
 
-
-    public static final Page VIEW_AUDIT_LOG = new Page("/App/SystemAdmin/auditLog", Permissions.ACCESS_AUDIT_LOGS);
 }

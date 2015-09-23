@@ -34,9 +34,8 @@
                                         <label class="control-label" for="workgroupName">Workgroup Name</label>
                                         <h:inputText id="workgroupName" binding="#{workgroupName}" value="#{updateWorkgroupManagedBean.workgroupName}"
                                                      styleClass="form-control" pt:placeholder="e.g. Planning Team"
-                                                     required="true" requiredMessage="Workgroup name is required.">
-                                            <!--<f:validator validatorId="workgroupValidator" />-->
-                                        </h:inputText>
+                                                     required="true" requiredMessage="Workgroup name is required."
+                                                     disabled="true" />
                                         <h:message for="workgroupName" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!workgroupDesc.valid ? 'has-error' : ''}">
@@ -79,10 +78,12 @@
                             </div>
                         </div>
                         <div class="col-lg-12 text-right">
+                            <div class="btn-group">
                             <h:link outcome="/App/SystemAdmin/workgroups" class="btn btn-default" value="Cancel" />
-                            <h:commandButton action="#{updateWorkgroupManagedBean.save}" value="Create Workgroup" styleClass="btn btn-success">
-                                <f:param name="workgroupId" value="#{updateWorkgroupManagedBean.workgroup.id}"/>
-                            </h:commandButton>
+                                <h:commandButton action="#{updateWorkgroupManagedBean.save}" value="Update Workgroup" styleClass="btn btn-success">
+                                    <f:param name="workgroupId" value="#{updateWorkgroupManagedBean.workgroup.id}"/>
+                                </h:commandButton>
+                            </div>
                         </div>
                     </h:form>
                 </div>

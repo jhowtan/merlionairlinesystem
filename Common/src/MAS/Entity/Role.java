@@ -52,13 +52,6 @@ public class Role {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Role)) {
-            return false;
-        }
-        else if (this.id.equals(((Role) obj).id)
-                && this.name.equals(((Role) obj).name)) {
-            return true;
-        }
-        return false;
+        return obj instanceof Role && this.id.equals(((Role) obj).id);
     }
 }

@@ -42,6 +42,12 @@ public class FleetBean {
         return em.createQuery("SELECT a from Aircraft a", Aircraft.class).getResultList();
     }
 
+    public Aircraft getAircraft(long id) throws NotFoundException {
+        Aircraft aircraft = em.find(Aircraft.class, id);
+        if (aircraft == null) throw new NotFoundException();
+        return aircraft;
+    }
+
     public void changeAircraftConfig(long id, long seatConfigId) throws NotFoundException {
         Aircraft aircraft = em.find(Aircraft.class, id);
         if (aircraft == null) throw new NotFoundException();

@@ -61,4 +61,9 @@ public class Workgroup {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Workgroup && this.id.equals(((Workgroup) obj).id);
+    }
 }

@@ -32,8 +32,10 @@
                                 <td>#{role.users.size()}</td>
                                 <td>
                                     <h:form>
-                                        <h:link outcome="/App/SystemAdmin/updateRole" styleClass="btn btn-default btn-xs btn-info"><f:param name="roleId" value="#{role.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
-                                        <h:commandLink action="#{roleManagedBean.delete(role.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete role #{role.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/SystemAdmin/updateRole" styleClass="btn btn-default btn-xs btn-info"><f:param name="roleId" value="#{role.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{roleManagedBean.delete(role.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete role #{role.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        </div>
                                     </h:form>
                                 </td>
                             </tr>

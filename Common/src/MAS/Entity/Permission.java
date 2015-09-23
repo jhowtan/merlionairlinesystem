@@ -32,13 +32,6 @@ public class Permission {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Permission)) {
-            return false;
-        }
-        else if (this.id.equals(((Permission) obj).id)
-                && this.name.equals(((Permission) obj).name)) {
-            return true;
-        }
-        return false;
+        return obj instanceof Permission && this.id.equals(((Permission) obj).id);
     }
 }

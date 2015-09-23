@@ -1,5 +1,7 @@
 package MAS.Entity;
 
+import com.sun.deploy.util.StringUtils;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ public class Message {
 
     private String body;
 
-    @Basic
+    @Lob
     public String getBody() {
         return body;
     }
@@ -72,5 +74,10 @@ public class Message {
 
     public void setRecipients(List<User> recipients) {
         this.recipients = recipients;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Message && this.id.equals(((Message) obj).id);
     }
 }
