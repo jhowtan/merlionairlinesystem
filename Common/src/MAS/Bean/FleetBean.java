@@ -41,8 +41,8 @@ public class FleetBean {
     public List<Aircraft> getAllAircraft() {
         return em.createQuery("SELECT a from Aircraft a", Aircraft.class).getResultList();
     }
-    //-----------------SEAT CONFIG---------------------------
-    public void setAircraftConfig(long id, long seatConfigId) throws NotFoundException {
+
+    public void changeAircraftConfig(long id, long seatConfigId) throws NotFoundException {
         Aircraft aircraft = em.find(Aircraft.class, id);
         if (aircraft == null) throw new NotFoundException();
         AircraftSeatConfig seatConfig;
@@ -54,10 +54,12 @@ public class FleetBean {
         em.persist(aircraft);
     }
 
-    public long createAircraftSeatConfig(String seatConfig, int weight, long typeId) throws NotFoundException {
+    //-----------------SEAT CONFIG---------------------------
+    public long createAircraftSeatConfig(String seatConfig, String name, int weight, long typeId) throws NotFoundException {
         AircraftSeatConfig aircraftSeatConfig = new AircraftSeatConfig();
         aircraftSeatConfig.setSeatConfig(seatConfig);
         aircraftSeatConfig.setWeight(weight);
+        aircraftSeatConfig.setName(name);
         AircraftType aircraftType = em.find(AircraftType.class, typeId);
         if (aircraftType == null) throw new NotFoundException();
         aircraftSeatConfig.setAircraftType(aircraftType);
@@ -78,6 +80,13 @@ public class FleetBean {
         AircraftSeatConfig aircraftSeatConfig = em.find(AircraftSeatConfig.class, id);
         if (aircraftSeatConfig == null) throw new NotFoundException();
         aircraftSeatConfig.setWeight(weight);
+        em.persist(aircraftSeatConfig);
+    }
+
+    public void changeName(long id, String newName) throws NotFoundException {
+        AircraftSeatConfig aircraftSeatConfig = em.find(AircraftSeatConfig.class, id);
+        if (aircraftSeatConfig == null) throw new NotFoundException();
+        aircraftSeatConfig.setName(newName);
         em.persist(aircraftSeatConfig);
     }
 

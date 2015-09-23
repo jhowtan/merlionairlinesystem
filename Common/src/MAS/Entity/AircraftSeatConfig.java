@@ -48,4 +48,15 @@ public class AircraftSeatConfig {
     public void setAircraftType(AircraftType aircraftType) {
         this.aircraftType = aircraftType;
     }
+
+    private String name;
+
+    @Basic
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

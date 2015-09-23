@@ -47,6 +47,20 @@ public class RouteBean {
         em.remove(airport);
     }
 
+    public void changeAirportCode(long id, String code) throws NotFoundException {
+        Airport airport = em.find(Airport.class, id);
+        if (airport == null) throw new NotFoundException();
+        airport.setCode(code);
+        em.persist(airport);
+    }
+
+    public void changeAirportName(long id, String newName) throws NotFoundException {
+        Airport airport = em.find(Airport.class, id);
+        if (airport == null) throw new NotFoundException();
+        airport.setName(newName);
+        em.persist(airport);
+    }
+
     public long createCity(String name, long countryId) throws NotFoundException {
         City city = new City();
         city.setName(name);
