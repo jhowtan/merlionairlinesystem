@@ -38,7 +38,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Price Management", "usd",
-                        new MenuEntry("Fare Rules", null, Pages.CREATE_FARE_RULE)
+                        new MenuEntry("Fare Rules", null, Pages.LIST_FARE_RULES, Pages.CREATE_FARE_RULE)
                 )
         );
     }

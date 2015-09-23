@@ -31,4 +31,8 @@ public class FareRuleBean {
         return fareRule.getId();
     }
 
+    public List<FareRule> getAllFareRules() {
+        return em.createQuery("SELECT f FROM FareRule f", FareRule.class).getResultList();
+    }
+
 }
