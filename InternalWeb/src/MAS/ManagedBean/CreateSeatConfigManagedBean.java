@@ -28,7 +28,6 @@ public class CreateSeatConfigManagedBean {
 
     private String configName;
     private String weight;
-    private String seatConfig;
     private long acTypeId;
 
     private SeatConfigObject seatConfObj;
@@ -38,7 +37,6 @@ public class CreateSeatConfigManagedBean {
     public void init() {
         populateAcType();
         seatConfObj = new SeatConfigObject();
-        seatConfig = "";
     }
 
     private void populateAcType() {
@@ -47,11 +45,11 @@ public class CreateSeatConfigManagedBean {
 
     public void createConfig() throws NotFoundException {
         // Decide on whether to have multiple aircraft types with the same seat configuration
-        fleetBean.createAircraftSeatConfig(seatConfig, configName, Integer.parseInt(weight), acTypeId);
+        fleetBean.createAircraftSeatConfig(seatConfObj.toString(), configName, Integer.parseInt(weight), acTypeId);
 
         setConfigName(null);
         setWeight(null);
-        setSeatConfig(null);
+        seatConfObj = new SeatConfigObject();
         FacesMessage m = new FacesMessage("Seat Configuration created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -77,14 +75,6 @@ public class CreateSeatConfigManagedBean {
         this.weight = weight;
     }
 
-    public String getSeatConfig() {
-        return seatConfig;
-    }
-
-    public void setSeatConfig(String seatConfig) {
-        this.seatConfig = seatConfig;
-    }
-
     public long getAcTypeId() {
         return acTypeId;
     }
@@ -97,20 +87,31 @@ public class CreateSeatConfigManagedBean {
         return aircraftTypes;
     }
 
-    public void addSeat() {
-        seatConfObj.addSeat();
+    public void addSeat(int cabin) {
+        if (seatConfObj.selectCabin(cabin))
+            seatConfObj.addSeat();
     }
 
-    public void addCorridor() {
-        seatConfObj.addCorridor();
+    public void addCorridor(int cabin) {
+        if (seatConfObj.selectCabin(cabin))
+            seatConfObj.addCorridor();
     }
 
-    public void removeSeat() {
-        seatConfObj.removeLast();
+    public void removeSeat(int cabin) {
+        if (seatConfObj.selectCabin(cabin))
+            seatConfObj.removeLast();
     }
 
     public ArrayList<Cabin> getCabins() {
         return seatConfObj.getCabins();
+    }
+
+    public void addCabin() {
+        seatConfObj.addCabin();
+    }
+
+    public int getIndexOf(Cabin cabin) {
+        return seatConfObj.getCabins().indexOf(cabin);
     }
 }
 

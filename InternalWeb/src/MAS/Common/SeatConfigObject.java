@@ -60,9 +60,12 @@ public class SeatConfigObject {
         cabins.add(new Cabin());
     }
 
-    public void selectCabin(int val) {
-        if (val < cabins.size())
+    public boolean selectCabin(int val) {
+        if (val < cabins.size()) {
             selection = val;
+            return true;
+        }
+        return false;
     }
 
     public void addSeat() {
