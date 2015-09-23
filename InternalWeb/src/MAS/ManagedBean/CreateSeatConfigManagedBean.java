@@ -55,7 +55,7 @@ public class CreateSeatConfigManagedBean {
             }
         }
         // Decide on whether to have multiple aircraft types with the same seat configuration
-        fleetBean.createAircraftSeatConfig(seatConfig, configName, Integer.parseInt(weight), acTypeIds);
+        fleetBean.createAircraftSeatConfig(seatConfig, configName, Integer.parseInt(weight), acTypeIds.get(0));
 
         populateAcType();
         setConfigName(null);
