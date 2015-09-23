@@ -66,14 +66,14 @@ public class UpdateAircraftTypeManagedBean {
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
-    public void deleteSeatConfig(long id, String name) throws NotFoundException{
+    public void deleteSeatConfig(long id) throws NotFoundException{
         try {
             fleetBean.removeAircraftSeatConfig(id);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
 
-        authManagedBean.createAuditLog("Deleted Aircraft Seat Configuration: " + name, "delete_seat_config");
+        authManagedBean.createAuditLog("Deleted Aircraft Seat Configuration: " + id, "delete_seat_config");
 
         FacesMessage m = new FacesMessage("The aircraft seat configuration has been deleted successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);

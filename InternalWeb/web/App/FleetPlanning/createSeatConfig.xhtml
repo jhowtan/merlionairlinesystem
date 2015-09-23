@@ -71,7 +71,6 @@
                                         <table class="table" id="aircraftType_table">
                                             <thead>
                                             <tr>
-                                                <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Fuel Capacity</th>
                                                 <th>Action</th>
@@ -80,13 +79,12 @@
                                             <tbody>
                                             <ui:repeat value="#{createSeatConfigManagedBean.aircraftTypes}" var="acType">
                                                 <tr>
-                                                    <td>#{acType.id}</td>
                                                     <td>#{acType.name}</td>
                                                     <td>#{acType.fuelCapacity}</td>
                                                     <td>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <h:selectBooleanCheckbox value="#{createSeatConfigManagedBean.acMap[acType.id]}"/>
+                                                                <h:selectBooleanCheckbox value="#{createSeatConfigManagedBean.aircraftTypesMap[acType.id]}"/>
                                                             </label>
                                                         </div>
                                                     </td>
@@ -116,7 +114,7 @@
             $('#aircraftType_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
                 ]
             });
         </script>
