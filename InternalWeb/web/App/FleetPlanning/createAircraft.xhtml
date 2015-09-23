@@ -42,22 +42,24 @@
                                         </h:inputText>
                                         <h:message for="manDate" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-12">
+                                    <div class="form-group col-lg-6">
                                         <!-- Select Aircraft Type -->
                                         <label class="control-label" for="acType">Choose Aircraft Type</label>
-                                        <h:selectOneMenu id="acType" value="#{createAircraftManagedBean.acType}" required="true" styleClass="form-control">
-                                            <f:selectItems value="#{createAircraftManagedBean.getAllAircraftTypes()}" var="acType"
-                                                           itemLabel="#{acType.name}" itemValue="#{acType.id}" />
+                                        <h:selectOneMenu id="acType" binding="#{acType}" value="#{createAircraftManagedBean.acType}" styleClass="form-control">
+                                            <f:selectItem itemLabel="---" itemValue="-1" />
+                                            <f:selectItems value="#{createAircraftManagedBean.acTypeList}" var="acTypeItem"
+                                                           itemLabel="#{acTypeItem.name}" itemValue="#{acTypeItem.id}" />
                                             <f:ajax listener="#{createAircraftManagedBean.acTypeChangeListener}" render="seatConfig" />
                                         </h:selectOneMenu>
-                                        <h:message for="acType" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-12">
+                                    <div class="form-group col-lg-6 #{!seatConfig.valid ? 'has-error' : ''}">
                                         <!-- Select Seat Configuration -->
                                         <label class="control-label" for="seatConfig">Choose Seat Configuration</label>
-                                        <h:selectOneMenu id="seatConfig" value="#{createAircraftManagedBean.seatConfig}" required="true" styleClass="form-control">
-                                            <f:selectItems value="#{createAircraftManagedBean.seatConfigList}" var="seatConfig"
-                                                           itemLabel="#{seatConfig.name}" itemValue="#{seatConfig.id}" />
+                                        <h:selectOneMenu id="seatConfig" binding="#{seatConfig}" value="#{createAircraftManagedBean.seatConfig}" styleClass="form-control">
+                                            <f:validator validatorId="selectInputRequiredValidator" />
+                                            <f:selectItem itemLabel="---" itemValue="-1" />
+                                            <f:selectItems value="#{createAircraftManagedBean.seatConfigList}" var="seatConfigItem"
+                                                           itemLabel="#{seatConfigItem.name}" itemValue="#{seatConfigItem.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="seatConfig" styleClass="help-block" />
                                     </div>
@@ -67,7 +69,7 @@
                         <div class="text-right">
                             <div class="btn-group">
                                 <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
-                                <h:commandButton action="#{createAircraftTypeManagedBean.createAircraft()}" value="Create Aircraft Type" styleClass="btn btn-success"/>
+                                <h:commandButton action="#{createAircraftManagedBean.createAircraft}" value="Create Aircraft Type" styleClass="btn btn-success"/>
                             </div>
                         </div>
                     </h:form>

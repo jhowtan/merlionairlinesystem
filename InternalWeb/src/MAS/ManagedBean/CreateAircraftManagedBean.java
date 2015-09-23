@@ -5,16 +5,20 @@ import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
 import MAS.Exception.NotFoundException;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import java.util.Date;
 import java.util.List;
 
 @ManagedBean
+@ViewScoped
 public class CreateAircraftManagedBean {
     @EJB
     FleetBean fleetBean;
@@ -24,10 +28,15 @@ public class CreateAircraftManagedBean {
 
     private String tailNum;
     private Date manDate;
-
     private long acType;
     private long seatConfig;
+    private List<AircraftType> acTypeList;
     private List<AircraftSeatConfig> seatConfigList;
+
+    @PostConstruct
+    public void init() {
+        acTypeList = fleetBean.getAllAircraftTypes();
+    }
 
     public void createAircraft() {
         long aircraftId = fleetBean.createAircraft(tailNum, manDate);
@@ -46,10 +55,6 @@ public class CreateAircraftManagedBean {
 
     public void acTypeChangeListener(AjaxBehaviorEvent event) {
         seatConfigList = fleetBean.findSeatConfigByType(acType);
-    }
-
-    public List<AircraftType> getAllAircraftTypes() {
-        return fleetBean.getAllAircraftTypes();
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
@@ -94,5 +99,13 @@ public class CreateAircraftManagedBean {
 
     public void setSeatConfigList(List<AircraftSeatConfig> seatConfigList) {
         this.seatConfigList = seatConfigList;
+    }
+
+    public List<AircraftType> getAcTypeList() {
+        return acTypeList;
+    }
+
+    public void setAcTypeList(List<AircraftType> acTypeList) {
+        this.acTypeList = acTypeList;
     }
 }
