@@ -49,6 +49,32 @@
                             <div class="panel-heading">Aircraft Type - Seat Configuration</div>
                             <div class="panel-body">
                             <!-- INSERT LIST OF SEAT CONFIGS HERE -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table class="table" id="seatConfig_table">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Weight</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <ui:repeat value="#{updateAircraftTypeManagedBean.seatConfigs}" var="seatConfig">
+                                                <tr>
+                                                    <td>#{seatConfig.id}</td>
+                                                    <td>
+                                                        <h:link outcome="/App/FleetPlanning/updateSeatConfig">
+                                                            <f:param name="seatConfigId" value="#{seatConfig.id}">#{seatConfig.name}</f:param>
+                                                        </h:link>
+                                                    </td>
+                                                    <td>#{seatConfig.weight}</td>
+                                                </tr>
+                                            </ui:repeat>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12 text-right">
@@ -63,5 +89,15 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#seatConfig_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>
