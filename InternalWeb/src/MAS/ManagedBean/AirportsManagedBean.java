@@ -1,13 +1,14 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
 import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -27,7 +28,10 @@ public class AirportsManagedBean {
             routeBean.removeAirport(id);
             authManagedBean.createAuditLog("Deleted airport: " + routeBean.getAirport(id).getName(), "delete_airport");
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The airport cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 

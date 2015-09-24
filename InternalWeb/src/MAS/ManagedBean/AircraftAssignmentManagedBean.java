@@ -1,14 +1,14 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
 import MAS.Entity.AircraftAssignment;
-import MAS.Entity.City;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -32,7 +32,10 @@ public class AircraftAssignmentManagedBean {
             authManagedBean.createAuditLog("Deleted aircraft assignment: " + tailNum
                     + " : " + origin + " - " + destination, "delete_aircraft_assignment");
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The aircraft assignment cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 

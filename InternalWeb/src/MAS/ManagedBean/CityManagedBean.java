@@ -2,8 +2,10 @@ package MAS.ManagedBean;
 
 import MAS.Bean.RouteBean;
 import MAS.Entity.City;
+import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -30,9 +32,14 @@ public class CityManagedBean {
             FacesMessage m = new FacesMessage("Successfully deleted the city: " + cityName);
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (EJBException e) {
+            e.getMessage();
             FacesMessage m = new FacesMessage("Unable to delete city, please check if there are existing airports created for this city.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The city cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
