@@ -35,8 +35,9 @@ public class UserManagedBean {
 
     public void delete(long id) {
         try {
+            String username = userBean.getUser(id).getUsername();
             userBean.removeUser(id);
-            authManagedBean.createAuditLog("Deleted user: " + userBean.getUser(id).getUsername(), "delete_user");
+            authManagedBean.createAuditLog("Deleted user: " + username, "delete_user");
         } catch (NotFoundException e) {
         }
     }

@@ -23,8 +23,9 @@ public class AircraftManagedBean {
 
     public void delete(long id) {
         try {
+            String tailNumber = fleetBean.getAircraft(id).getTailNumber();
             fleetBean.removeAircraft(id);
-            authManagedBean.createAuditLog("Deleted aircraft: " + fleetBean.getAircraft(id).getTailNumber(), "delete_aircraft");
+            authManagedBean.createAuditLog("Deleted aircraft: " + tailNumber, "delete_aircraft");
         } catch (NotFoundException e) {
             e.printStackTrace();
         }

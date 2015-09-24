@@ -23,7 +23,9 @@ public class WorkgroupManagedBean {
 
     public void delete(long id) {
         try {
+            String workgroupName = workgroupBean.getWorkgroup(id).getName();
             workgroupBean.removeWorkgroup(id);
+            authManagedBean.createAuditLog("Deleted workgroup: " + workgroupName, "delete_workgroup");
         } catch (NotFoundException e) {
         }
     }
