@@ -2,7 +2,6 @@ package MAS.Bean;
 
 import MAS.Common.Utils;
 import MAS.Entity.*;
-import MAS.Exception.AlreadyExistsException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -10,8 +9,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-
-import static java.lang.Math.*;
 
 @Stateless(name = "RouteEJB")
 @LocalBean
@@ -146,7 +143,6 @@ public class RouteBean {
         Airport origin = em.find(Airport.class, originId);
         Airport destination = em.find(Airport.class, destinationId);
         if (origin == null || destination == null) throw new NotFoundException();
-        //if (origin == destination) throw new AlreadyExistsException();
         route.setOrigin(origin);
         route.setDestination(destination);
         route.setDistance(Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
