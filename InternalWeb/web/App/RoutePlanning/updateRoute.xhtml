@@ -57,7 +57,7 @@
                             <div class="btn-group">
                                 <h:link outcome="/App/RoutePlanning/routes" class="btn btn-default" value="Cancel" />
                                 <h:commandButton action="#{updateRouteManagedBean.save()}" value="Update Route" styleClass="btn btn-success">
-                                    <f:param name="rtId" value="updateRouteManagedBean.route.id"/>
+                                    <f:param name="rtId" value="#{updateRouteManagedBean.route.id}"/>
                                 </h:commandButton>
                             </div>
                         </div>
