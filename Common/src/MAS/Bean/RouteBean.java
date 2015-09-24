@@ -164,6 +164,16 @@ public class RouteBean {
         return em.createQuery("SELECT r from Route r WHERE r.destination = :airportId", Route.class).setParameter("airportId", airportId).getResultList();
     }
 
+    public List<Route> getAllRoutes() {
+        return em.createQuery("SELECT r from Route r", Route.class).getResultList();
+    }
+
+    public Route getRoute(long id) throws NotFoundException {
+        Route route = em.find(Route.class, id);
+        if (route == null) throw new NotFoundException();
+        return route;
+    }
+
     //-----------------AIRCRAFT ASSIGNMENTS---------------------------
     public long createAircraftAssignment (long aircraftId, long routeId) throws NotFoundException {
         AircraftAssignment aircraftAssignment = new AircraftAssignment();
@@ -191,7 +201,7 @@ public class RouteBean {
         return em.createQuery("SELECT a from AircraftAssignment a WHERE a.route = :routeId", AircraftAssignment.class).setParameter("routeId", routeId).getResultList();
     }
     //-----------------OTHERS---------------------------
-    private double calcDist(double oriLat, double oriLong, double destLat, double destLong) {
+    public double calcDist(double oriLat, double oriLong, double destLat, double destLong) {
         double dLong = destLong - oriLong;
         double dLat = destLat - oriLat;
         double a = pow(sin(dLat / 2), 2) + cos(oriLat) * cos(destLat) * pow(sin(dLong / 2), 2);
