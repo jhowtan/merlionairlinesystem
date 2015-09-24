@@ -5,8 +5,10 @@ import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -38,7 +40,13 @@ public class UserManagedBean {
             String username = userBean.getUser(id).getUsername();
             userBean.removeUser(id);
             authManagedBean.createAuditLog("Deleted user: " + username, "delete_user");
+            FacesMessage m = new FacesMessage("Successfully deleted user: " + username);
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Unable to delete this user.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 

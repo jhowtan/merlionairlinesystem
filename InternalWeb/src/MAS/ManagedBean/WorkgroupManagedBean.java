@@ -5,8 +5,10 @@ import MAS.Entity.Workgroup;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -26,7 +28,14 @@ public class WorkgroupManagedBean {
             String workgroupName = workgroupBean.getWorkgroup(id).getName();
             workgroupBean.removeWorkgroup(id);
             authManagedBean.createAuditLog("Deleted workgroup: " + workgroupName, "delete_workgroup");
-        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Successfully deleted workgroup: " + workgroupName);
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Unable to delete workgroup, please check" +
+                    " if there are existing users in the workgroup");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
