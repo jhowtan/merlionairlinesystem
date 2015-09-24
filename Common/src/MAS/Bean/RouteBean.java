@@ -155,6 +155,21 @@ public class RouteBean {
         return route.getId();
     }
 
+    public long updateRoute(long routeId, long originId, long destinationId) throws NotFoundException {
+        Route route = em.find(Route.class, routeId);
+        if (route == null) throw new NotFoundException();
+        Airport origin = em.find(Airport.class, originId);
+        Airport destination = em.find(Airport.class, destinationId);
+        if (origin == null || destination == null) throw new NotFoundException();
+        route.setOrigin(origin);
+        route.setDestination(destination);
+        route.setDistance(calcDist(origin.getLatitude(), origin.getLongitude(),
+                destination.getLatitude(), destination.getLongitude()));
+        em.persist(route);
+        em.flush();
+        return route.getId();
+    }
+
     public void removeRoute(long id) throws NotFoundException {
         Route route = em.find(Route.class, id);
         if (route == null) throw new NotFoundException();
@@ -204,7 +219,9 @@ public class RouteBean {
     }
 
     public List<AircraftAssignment> findAAByRoute(long routeId) throws NotFoundException {
-        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.route = :routeId", AircraftAssignment.class).setParameter("routeId", routeId).getResultList();
+        Route route = em.find(Route.class, routeId);
+        if (route == null) throw new NotFoundException();
+        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.route = :route", AircraftAssignment.class).setParameter("route", route).getResultList();
     }
 
     public List<AircraftAssignment> getAllAircraftAssignments() {

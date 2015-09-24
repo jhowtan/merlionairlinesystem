@@ -5,8 +5,10 @@ import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -30,9 +32,14 @@ public class RoutesManagedBean {
             routeBean.removeRoute(id);
             authManagedBean.createAuditLog("Deleted route: " + originName + " - " +
                     destName, "delete_route");
+            FacesMessage m = new FacesMessage("Successfully deleted route: " + originName + " - " + destName);
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.printStackTrace();
-
+            FacesMessage m = new FacesMessage("Unable to delete route, please check if there are existing aircraft assignments created for this route.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
