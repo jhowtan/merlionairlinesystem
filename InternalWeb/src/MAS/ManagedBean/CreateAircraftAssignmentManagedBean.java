@@ -46,6 +46,10 @@ public class CreateAircraftAssignmentManagedBean {
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
+    public String formatRoute(Route route) {
+        return route.getOrigin().getName() + " - " + route.getDestination().getName();
+    }
+
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
     }
