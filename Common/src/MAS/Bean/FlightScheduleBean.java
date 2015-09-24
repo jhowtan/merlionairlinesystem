@@ -2,7 +2,6 @@ package MAS.Bean;
 
 import MAS.Entity.AircraftAssignment;
 import MAS.Entity.Flight;
-import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.Stateless;

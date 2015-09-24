@@ -27,25 +27,24 @@
                             <div class="panel-heading">Route Details</div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="form-group col-lg-12">
+                                    <div class="form-group col-lg-12 #{!origin.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="origin">Origin Airport</label>
                                         <br/>
-                                        <h:selectOneMenu styleClass="form-control"
-                                                         id="origin" value="#{createRouteManagedBean.originId}">
+                                        <h:selectOneMenu styleClass="form-control" id="origin" value="#{createRouteManagedBean.originId}" binding="#{origin}">
+                                            <f:selectItems value="#{createRouteManagedBean.airports}" var="ap"
+                                                           itemLabel="#{ap.name}" itemValue="#{ap.id}" />
+                                            <f:validator validatorId="routeValidator" />
+                                            <f:attribute name="destination" value="#{destination}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!origin.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="destination">Destination Airport</label>
+                                        <br/>
+                                        <h:selectOneMenu styleClass="form-control" id="destination" value="#{createRouteManagedBean.destinationId}" binding="#{destination}">
                                             <f:selectItems value="#{createRouteManagedBean.airports}" var="ap"
                                                            itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="origin" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12">
-                                        <label class="control-label" for="destination">Destination Airport</label>
-                                        <br/>
-                                        <h:selectOneMenu styleClass="form-control"
-                                                         id="destination" value="#{createRouteManagedBean.destinationId}">
-                                            <f:selectItems value="#{createRouteManagedBean.airports}" var="ap"
-                                                           itemLabel="#{ap.name}" itemValue="#{ap.id}" />
-                                        </h:selectOneMenu>
-                                        <h:message for="destination" styleClass="help-block" />
                                     </div>
                                 </div>
                             </div>

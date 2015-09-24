@@ -195,9 +195,13 @@ public class RouteBean {
         Airport origin = em.find(Airport.class, originId);
         Airport destination = em.find(Airport.class, destinationId);
         if (origin == null || destination == null) throw new NotFoundException();
-        return em.createQuery("SELECT r from Route r WHERE r.origin = :origin AND r.destination = :destination", Route.class)
-                .setParameter("origin", origin)
-                .setParameter("destination", destination).getSingleResult();
+        try {
+            return em.createQuery("SELECT r from Route r WHERE r.origin = :origin AND r.destination = :destination", Route.class)
+                    .setParameter("origin", origin)
+                    .setParameter("destination", destination).getSingleResult();
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
     }
 
     public List<Route> getAllRoutes() {
