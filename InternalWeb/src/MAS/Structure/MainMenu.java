@@ -42,6 +42,13 @@ public class MainMenu {
         );
 
         entries.add(
+                new MenuEntry("Flight Planning", "plane",
+                        new MenuEntry("Flights", null, Pages.LIST_FLIGHTS, Pages.CREATE_FLIGHT, Pages.UPDATE_FLIGHT)
+
+                )
+        );
+
+        entries.add(
                 new MenuEntry("Price Management", "usd",
                         new MenuEntry("Fare Rules", null, Pages.LIST_FARE_RULES, Pages.CREATE_FARE_RULE)
                 )

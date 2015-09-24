@@ -24,8 +24,8 @@ public class Flight {
         return code;
     }
 
-    public void setCode(String name) {
-        this.code = name;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     private Date departureTime;
@@ -49,5 +49,17 @@ public class Flight {
 
     public void setAircraftAssignment(AircraftAssignment aircraftAssignment) {
         this.aircraftAssignment = aircraftAssignment;
+    }
+
+    private Date arrivalTime;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(Date arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 }

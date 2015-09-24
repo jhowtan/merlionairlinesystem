@@ -48,7 +48,11 @@ public class Pages {
     public static final Page LIST_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/aircraftAssignment", Permissions.MANAGE_ROUTES);
     public static final Page CREATE_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/createAircraftAssignment", Permissions.MANAGE_ROUTES);
     public static final Page UPDATE_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/updateAircraftAssignment", Permissions.MANAGE_ROUTES);
+
     // Airline Planning System: Schedule Planning Pages
+    public static final Page LIST_FLIGHTS = new Page("/App/FlightPlanning/flights", Permissions.MANAGE_FLIGHT);
+    public static final Page CREATE_FLIGHT = new Page("/App/FlightPlanning/createFlight", Permissions.MANAGE_FLIGHT);
+    public static final Page UPDATE_FLIGHT = new Page("/App/FlightPlanning/updateFlight", Permissions.MANAGE_FLIGHT);
 
     // Airline Inventory Subsystem: Price Management Module
     public static final Page LIST_FARE_RULES = new Page("/App/PriceManagement/fareRules", Permissions.MANAGE_FARE_RULES);
