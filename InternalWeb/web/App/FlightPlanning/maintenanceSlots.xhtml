@@ -13,7 +13,7 @@
                     <h1 class="page-header">Maintenance Slots</h1>
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/maintenanceSlots">Maintenance Slots</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createMaintenanceSlots">Create Maintenance Slots</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createMaintenanceSlot">Create Maintenance Slots</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert alert-info">
@@ -35,9 +35,15 @@
                             <tr>
                                 <td>#{ms.aircraft.getTailNumber()}</td>
                                 <td>#{ms.airport.getName()}</td>
-                                <td>#{ms.airport.startTime}</td>
-                                <td>#{ms.duration}</td>
+                                <td>#{ms.getStartTime()}</td>
+                                <td>#{ms.duration} hours</td>
                                 <td>
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/FlightPlanning/updateMaintenanceSlot" styleClass="btn btn-default btn-xs btn-info"><f:param name="msId" value="#{ms.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{maintenanceSlotManagedBean.delete(ms.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete this maintenance slot for #{ms.aircraft.getTailNumber()}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                        </div>
+                                    </h:form>
                                 </td>
                             </tr>
                         </ui:repeat>
@@ -52,7 +58,7 @@
             $('#maintenance_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
                 ]
             });
         </script>
