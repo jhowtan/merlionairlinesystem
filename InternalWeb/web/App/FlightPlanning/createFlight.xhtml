@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-lg-4 #{!departure.valid ? 'has-error' : ''}">
+                                    <div class="form-group col-lg-6 #{!departure.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="departure">Departure Date</label>
                                         <h:inputText binding="#{departure}" id="departure" value="#{createFlightManagedBean.departureDate}" styleClass="form-control"
                                                      pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
@@ -53,17 +53,16 @@
                                         </h:inputText>
                                         <h:message for="departure" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-4 #{!departureTime.valid ? 'has-error' : ''}">
+                                    <div class="form-group col-lg-6 #{!departureTime.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="departureTime">Departure Time</label>
                                         <h:inputText binding="#{departureTime}" id="departureTime" value="#{createFlightManagedBean.departureTime}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 01:00 AM" pt:type="time"
-                                                     size="20" required="true" requiredMessage="Departure Time of the flight is required.">
+                                                     pt:placeholder="e.g. 00:00" size="20" required="true" requiredMessage="Departure Time of the flight is required.">
                                         </h:inputText>
                                         <h:message for="departureTime" styleClass="help-block" />
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-lg-4 #{!arrival.valid ? 'has-error' : ''}">
+                                    <div class="form-group col-lg-6 #{!arrival.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="arrival">Arrival Date</label>
                                         <h:inputText binding="#{arrival}" id="arrival" value="#{createFlightManagedBean.arrivalDate}" styleClass="form-control"
                                                      pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
@@ -72,11 +71,10 @@
                                         </h:inputText>
                                         <h:message for="arrival" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-4 #{!arrivalTime.valid ? 'has-error' : ''}">
+                                    <div class="form-group col-lg-6 #{!arrivalTime.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="arrivalTime">Arrival Time</label>
                                         <h:inputText binding="#{arrivalTime}" id="arrivalTime" value="#{createFlightManagedBean.arrivalTime}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 01:00 AM" pt:type="time"
-                                                     size="20" required="true" requiredMessage="Arrival Time of the flight is required.">
+                                                     pt:placeholder="e.g. 23:59" size="20" required="true" requiredMessage="Arrival Time of the flight is required.">
                                         </h:inputText>
                                         <h:message for="arrivalTime" styleClass="help-block" />
                                     </div>
