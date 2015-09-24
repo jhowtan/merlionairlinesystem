@@ -200,6 +200,16 @@ public class RouteBean {
     public List<AircraftAssignment> findAAByRoute(long routeId) throws NotFoundException {
         return em.createQuery("SELECT a from AircraftAssignment a WHERE a.route = :routeId", AircraftAssignment.class).setParameter("routeId", routeId).getResultList();
     }
+
+    public List<AircraftAssignment> getAllAircraftAssignments() {
+        return em.createQuery("SELECT a from AircraftAssignment a", AircraftAssignment.class).getResultList();
+    }
+
+    public AircraftAssignment getAircraftAssignment(long id) throws NotFoundException {
+        AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, id);
+        if (aircraftAssignment == null) throw new NotFoundException();
+        return aircraftAssignment;
+    }
     //-----------------OTHERS---------------------------
     public double calcDist(double oriLat, double oriLong, double destLat, double destLong) {
         double dLong = destLong - oriLong;

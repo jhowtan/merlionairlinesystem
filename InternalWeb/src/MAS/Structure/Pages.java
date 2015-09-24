@@ -45,7 +45,9 @@ public class Pages {
     public static final Page CREATE_ROUTES = new Page("/App/RoutePlanning/createRoute", Permissions.MANAGE_ROUTES);
     public static final Page UPDATE_ROUTES = new Page("/App/RoutePlanning/updateRoute", Permissions.MANAGE_ROUTES);
 
-    public static final Page AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/aircraftAssignment", Permissions.MANAGE_ROUTES);
+    public static final Page LIST_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/aircraftAssignment", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/createAircraftAssignment", Permissions.MANAGE_ROUTES);
+    public static final Page UPDATE_AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/updateAircraftAssignment", Permissions.MANAGE_ROUTES);
     // Airline Planning System: Schedule Planning Pages
 
     // Airline Inventory Subsystem: Price Management Module
