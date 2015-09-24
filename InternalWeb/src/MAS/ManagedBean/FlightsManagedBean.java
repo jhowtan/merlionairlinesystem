@@ -1,15 +1,15 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.FleetBean;
 import MAS.Bean.FlightScheduleBean;
-import MAS.Bean.RouteBean;
-import MAS.Entity.Airport;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
@@ -29,8 +29,16 @@ public class FlightsManagedBean {
             String code = flightScheduleBean.getFlight(id).getCode();
             flightScheduleBean.removeFlight(id);
             authManagedBean.createAuditLog("Deleted flight: " + code, "delete_flight");
+        } catch (EJBException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("Unable to delete flight, please check if there are existing booking classes created for this flight.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The flight cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
