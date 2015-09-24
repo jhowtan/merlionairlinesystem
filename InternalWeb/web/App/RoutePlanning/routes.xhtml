@@ -32,7 +32,8 @@
                                 <td>#{routesManagedBean.round(rt.distance, 2)}</td>
                                 <td>
                                     <h:form>
-                                        <!-- button group here -->
+                                        <h:link outcome="/App/RoutePlanning/updateRoute" styleClass="btn btn-default btn-xs btn-info"><f:param name="acId" value="#{rt.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                        <h:commandLink action="#{routesManagedBean.delete(rt.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete route: #{rt.getOrigin().getName()} - #{rt.getDestination().getName()}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                     </h:form>
                                 </td>
                             </tr>

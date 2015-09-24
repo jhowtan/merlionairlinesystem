@@ -1,8 +1,6 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
-import MAS.Entity.Aircraft;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
 
@@ -27,11 +25,14 @@ public class RoutesManagedBean {
 
     public void delete(long id) {
         try {
+            String originName = routeBean.getRoute(id).getOrigin().getName();
+            String destName = routeBean.getRoute(id).getDestination().getName();
             routeBean.removeRoute(id);
-            authManagedBean.createAuditLog("Deleted route: " + routeBean.getRoute(id).getOrigin().getName() + " - " +
-                    routeBean.getRoute(id).getDestination().getName(), "delete_route");
+            authManagedBean.createAuditLog("Deleted route: " + originName + " - " +
+                    destName, "delete_route");
         } catch (NotFoundException e) {
             e.printStackTrace();
+
         }
     }
 

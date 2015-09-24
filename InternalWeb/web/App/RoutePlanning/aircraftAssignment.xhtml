@@ -32,7 +32,8 @@
                                 <td>#{aa.route.getDestination().getName()}</td>
                                 <td>
                                     <h:form>
-                                        <!-- button group here -->
+                                        <h:link outcome="/App/RoutePlanning/updateAircraftAssignment" styleClass="btn btn-default btn-xs btn-info"><f:param name="acId" value="#{aa.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                        <h:commandLink action="#{aircraftAssignmentManagedBean.delete(aa.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft assignment for: #{aa.route.getOrigin().getName()} - #{aa.route.getDestination().getName()}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
                                     </h:form>
                                 </td>
                             </tr>
