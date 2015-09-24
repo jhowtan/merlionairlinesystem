@@ -111,7 +111,6 @@ public class AuthManagedBean {
             }
 
             String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-            System.out.println(viewId.substring(viewId.length() - 6));
             if (viewId.substring(viewId.length() - 6).equals(".xhtml")) {
                 viewId = viewId.substring(0, viewId.length() - 6);
             }
