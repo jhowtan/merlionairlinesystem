@@ -15,6 +15,11 @@
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/countries">Countries</h:link></li>
                         <li role="presentation"><h:link outcome="/App/RoutePlanning/createCountry">Create Country</h:link></li>
                     </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
                     <table class="table" id="countries_table">
                         <thead>
                         <tr>
@@ -30,7 +35,7 @@
                                 <td>#{ct.code}</td>
                                 <td>
                                     <h:form>
-                                        <!-- button group here -->
+                                        <h:commandLink action="#{countryManagedBean.delete(ct.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete country: #{ct.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
                                     </h:form>
                                 </td>
                             </tr>
