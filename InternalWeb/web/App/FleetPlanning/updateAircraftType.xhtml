@@ -32,7 +32,7 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!typeName.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="typeName">Aircraft Type Name</label>
-                                        <h:inputText id="typeName" binding="#{typeName}" value="#{updateAircraftTypeManagedBean.typeName}" styleClass="form-control" pt:placeholder="e.g. Airbus A380" required="true" requiredMessage="Aircraft type name is required.">
+                                        <h:inputText id="typeName" binding="#{typeName}" readonly="true" value="#{updateAircraftTypeManagedBean.typeName}" styleClass="form-control" pt:placeholder="e.g. Airbus A380" required="true" requiredMessage="Aircraft type name is required.">
                                         </h:inputText>
                                         <h:message for="typeName" styleClass="help-block" />
                                     </div>
