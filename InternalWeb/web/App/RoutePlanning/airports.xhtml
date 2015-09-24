@@ -38,7 +38,10 @@
                                 <td>#{ap.hangars}</td>
                                 <td>
                                     <h:form>
-                                        <!-- button group here -->
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/RoutePlanning/updateAirport" styleClass="btn btn-default btn-xs btn-info"><f:param name="apId" value="#{ap.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{airportsManagedBean.delete(ap.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete airport: #{ap.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        </div>
                                     </h:form>
                                 </td>
                             </tr>

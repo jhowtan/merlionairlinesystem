@@ -7,7 +7,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.List;
 
 import static java.lang.Math.*;
@@ -58,6 +57,13 @@ public class RouteBean {
         Airport airport = em.find(Airport.class, id);
         if (airport == null) throw new NotFoundException();
         airport.setName(newName);
+        em.persist(airport);
+    }
+
+    public void changeHangarCount(long id, int numHangars) throws NotFoundException {
+        Airport airport = em.find(Airport.class, id);
+        if (airport == null) throw new NotFoundException();
+        airport.setHangars(numHangars);
         em.persist(airport);
     }
 
