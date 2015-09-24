@@ -60,4 +60,5 @@ public class AircraftSeatConfig {
     public void setName(String name) {
         this.name = name;
     }
+
 }

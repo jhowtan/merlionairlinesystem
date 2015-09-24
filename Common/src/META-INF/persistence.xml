@@ -19,6 +19,7 @@
         <class>MAS.Entity.Message</class>
         <class>MAS.Entity.Flight</class>
         <class>MAS.Entity.FareRule</class>
+        <class>MAS.Entity.AircraftMaintenanceSlot</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />
