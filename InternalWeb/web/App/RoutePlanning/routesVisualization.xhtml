@@ -1,0 +1,74 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Routes - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Routes</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/routes">Routes</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/routesVisualization">Route Map</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createRoute">Create Route</h:link></li>
+                    </ul><br />
+                    <div id="map" style="width: 100%; height: calc(100vh - 280px);"></div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            function initGoogleMaps() {
+                var styleArray = [
+                    {
+                        featureType: "all",
+                        stylers: [
+                            { hue: "#00ffee" },
+                            { saturation: -80 }
+                        ]
+                    }
+                ];
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 1.3, lng: 103.8},
+                    zoom: 2,
+                    scrollwheel: false,
+                    styles: styleArray
+                });
+                $.get('routesVisualizationData.xhtml', function(data) {
+                    $.each(data, function(i, route) {
+                        var routePath = new google.maps.Polyline({
+                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
+                            geodesic: true,
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.5,
+                            strokeWeight: 4
+                        });
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: route.origin + " - " + route.destination
+                        });
+                        google.maps.event.addListener(routePath, 'mouseover', function(event) {
+                            infoWindow.open(map);
+                            infoWindow.setPosition(event.latLng);
+                            routePath.setOptions({
+                                strokeOpacity: 1
+                            });
+                        });
+                        google.maps.event.addListener(routePath, 'mouseout', function(event) {
+                            infoWindow.close();
+                            routePath.setOptions({
+                                strokeOpacity: 0.5
+                            });
+                        });
+                        routePath.setMap(map);
+                    });
+                });
+            }
+        </script>
+        <script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrKb_EsV_w8b53gWpo72CJ8zCVuk5NeEw&amp;callback=initGoogleMaps" />
+    </ui:define>
+</ui:composition>
