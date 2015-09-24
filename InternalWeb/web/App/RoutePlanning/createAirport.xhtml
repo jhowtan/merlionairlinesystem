@@ -27,19 +27,6 @@
                             <div class="panel-heading">Airport Details</div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="form-group col-lg-12 #{!airportName.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="airportName">Airport Name</label>
-                                        <h:inputText id="airportName" binding="#{airportName}" value="#{createAirportManagedBean.airportName}" styleClass="form-control" pt:placeholder="e.g. Changi Airport" required="true" requiredMessage="Airport name is required.">
-                                        </h:inputText>
-                                        <h:message for="airportName" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12 #{!airportCode.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="airportCode">Airport Code</label>
-                                        <h:inputText id="airportCode" binding="#{airportCode}" value="#{createAirportManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. SIN" required="true" requiredMessage="Airport code is required.">
-                                            <!-- Validation: 3 letters long -->
-                                        </h:inputText>
-                                        <h:message for="airportCode" styleClass="help-block" />
-                                    </div>
                                     <div class="form-group col-lg-12">
                                         <label class="control-label" for="city">City</label>
                                         <br/>
@@ -50,19 +37,18 @@
                                         </h:selectOneMenu>
                                         <h:message for="city" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-12 #{!latitude.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="latitude">Latitude</label>
-                                        <h:inputText id="latitude" binding="#{latitude}" value="#{createAirportManagedBean.latitude}" styleClass="form-control" pt:placeholder="e.g. 1.2345" required="true" requiredMessage="Latitude is required.">
-                                            <!-- Validation-->
+                                    <div class="form-group col-lg-12 #{!airportCode.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="airportCode">Airport Code</label>
+                                        <h:inputText id="airportCode" binding="#{airportCode}" value="#{createAirportManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. SIN" required="true" requiredMessage="Airport code is required.">
+                                            <!-- Validation: 3 letters long -->
                                         </h:inputText>
-                                        <h:message for="latitude" styleClass="help-block" />
+                                        <h:message for="airportCode" styleClass="help-block" />
                                     </div>
-                                    <div class="form-group col-lg-12 #{!longitude.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="longitude">Longitude</label>
-                                        <h:inputText id="longitude" binding="#{longitude}" value="#{createAirportManagedBean.longitude}" styleClass="form-control" pt:placeholder="e.g. 1.2345" required="true" requiredMessage="Longitude is required.">
-                                            <!-- Validation-->
+                                    <div class="form-group col-lg-12 #{!airportName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="airportName">Airport Name</label>
+                                        <h:inputText id="airportName" binding="#{airportName}" value="#{createAirportManagedBean.airportName}" styleClass="form-control" pt:placeholder="e.g. Changi Airport" required="true" requiredMessage="Airport name is required.">
                                         </h:inputText>
-                                        <h:message for="longitude" styleClass="help-block" />
+                                        <h:message for="airportName" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!hangars.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="hangars">Hangars</label>
@@ -70,6 +56,20 @@
                                             <!-- Validation or set inputText type as number-->
                                         </h:inputText>
                                         <h:message for="hangars" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!latitude.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="latitude">Latitude</label>
+                                        <h:inputText id="latitude" binding="#{latitude}" value="#{createAirportManagedBean.latitude}" styleClass="form-control" pt:placeholder="e.g. 1.2345" required="true" requiredMessage="Latitude is required.">
+                                            <!-- Validation-->
+                                        </h:inputText>
+                                        <h:message for="latitude" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!longitude.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="longitude">Longitude</label>
+                                        <h:inputText id="longitude" binding="#{longitude}" value="#{createAirportManagedBean.longitude}" styleClass="form-control" pt:placeholder="e.g. 1.2345" required="true" requiredMessage="Longitude is required.">
+                                            <!-- Validation-->
+                                        </h:inputText>
+                                        <h:message for="longitude" styleClass="help-block" />
                                     </div>
                                 </div>
                             </div>
@@ -84,5 +84,38 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+            <script type="text/javascript">
+                var airportCodeInput = $("[id='#{airportCode.clientId}']");
+                var airportNameInput = $("[id='#{airportName.clientId}']");
+                var latitudeInput = $("[id='#{latitude.clientId}']");
+                var longitudeInput = $("[id='#{longitude.clientId}']");
+                var geocoder;
+                function initGoogleMaps() {
+                    geocoder = new google.maps.Geocoder();
+                    airportCodeInput.on("change", airportCodeChangeListener);
+                }
+                function airportCodeChangeListener(event) {
+                    var airportCode = airportCodeInput.val().toUpperCase().replace(/[^A-Z]/g, '');
+                    airportCodeInput.val(airportCode);
+                    var found = false;
+                    airportNameInput.val('');
+                    latitudeInput.val('');
+                    longitudeInput.val('');
+                    geocoder.geocode({'address': airportCode + ' Airport'}, function(results, status) {
+                        if (status == 'OK') {
+                            var result = results[0];
+                            if (!result.partial_match) {
+                                airportNameInput.val(result.address_components[0].long_name);
+                                latitudeInput.val(result.geometry.location.lat());
+                                longitudeInput.val(result.geometry.location.lng());
+                            }
+                        }
+                    });
+                }
+            </script>
+            <script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrKb_EsV_w8b53gWpo72CJ8zCVuk5NeEw&amp;callback=initGoogleMaps" />
     </ui:define>
 </ui:composition>
