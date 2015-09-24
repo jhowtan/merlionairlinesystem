@@ -96,6 +96,12 @@ public class FleetBean {
         em.persist(aircraftSeatConfig);
     }
 
+    public AircraftSeatConfig getAircraftSeatConfig(long id) throws NotFoundException {
+        AircraftSeatConfig aircraftSeatConfig = em.find(AircraftSeatConfig.class, id);
+        if (aircraftSeatConfig == null) throw new NotFoundException();
+        return aircraftSeatConfig;
+    }
+
     public List<AircraftSeatConfig> getAllAircraftSeatConfigs() {
         return em.createQuery("SELECT a from AircraftSeatConfig a", AircraftSeatConfig.class).getResultList();
     }
