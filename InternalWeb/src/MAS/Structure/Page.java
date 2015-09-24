@@ -1,8 +1,6 @@
 package MAS.Structure;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Page implements MenuChild {
     private String path;
@@ -23,5 +21,9 @@ public class Page implements MenuChild {
 
     public Set<String> getPermissions() {
         return permissions;
+    }
+
+    public List<String> getPagesList() {
+        return new ArrayList<String>(Arrays.asList(path));
     }
 }

@@ -231,7 +231,7 @@
                             </div>
                         </li>
                         <ui:repeat value="#{authManagedBean.mainMenu.entries}" var="menuEntry">
-                            <li>
+                            <li class="#{menuManagedBean.isActive(menuEntry) ? 'active' : ''}">
                                 <h:link rendered="#{not empty menuManagedBean.getPath(menuEntry)}" outcome="#{menuManagedBean.getPath(menuEntry)}">
                                     <i class="fa fa-#{menuEntry.icon} fa-fw"></i>
                                     #{menuEntry.name}
@@ -244,7 +244,7 @@
                                     </a>
                                     <ul class="nav nav-second-level">
                                         <ui:repeat value="#{menuEntry.children}" var="submenuEntry">
-                                              <li><h:link outcome="#{menuManagedBean.getPath(submenuEntry)}">#{submenuEntry.name}</h:link></li>
+                                              <li><h:link outcome="#{menuManagedBean.getPath(submenuEntry)}" styleClass="#{menuManagedBean.isActive(submenuEntry) ? 'active' : ''}">#{submenuEntry.name}</h:link></li>
                                         </ui:repeat>
                                     </ul>
                                 </ui:fragment>

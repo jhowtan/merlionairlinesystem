@@ -42,6 +42,7 @@ public class Pages {
     public static final Page CREATE_COUNTRY = new Page("/App/RoutePlanning/createCountry", Permissions.MANAGE_ROUTES);
 
     public static final Page LIST_ROUTES = new Page("/App/RoutePlanning/routes", Permissions.MANAGE_ROUTES);
+    public static final Page VISUALIZE_ROUTES = new Page("/App/RoutePlanning/routesVisualization", Permissions.MANAGE_ROUTES);
     public static final Page CREATE_ROUTES = new Page("/App/RoutePlanning/createRoute", Permissions.MANAGE_ROUTES);
     public static final Page UPDATE_ROUTES = new Page("/App/RoutePlanning/updateRoute", Permissions.MANAGE_ROUTES);
 

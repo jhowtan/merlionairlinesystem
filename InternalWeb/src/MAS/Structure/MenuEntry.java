@@ -67,4 +67,12 @@ public class MenuEntry implements MenuChild {
         return permissions;
     }
 
+    public List<String> getPagesList() {
+        ArrayList<String> pagesList = new ArrayList<>();
+        for (MenuChild child : children) {
+            pagesList.addAll(child.getPagesList());
+        }
+        return pagesList;
+    }
+
 }
