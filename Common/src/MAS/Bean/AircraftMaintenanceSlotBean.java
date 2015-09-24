@@ -1,6 +1,5 @@
 package MAS.Bean;
 
-import MAS.Common.Utils;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftMaintenanceSlot;
 import MAS.Entity.Airport;
@@ -33,6 +32,20 @@ public class AircraftMaintenanceSlotBean {
         em.persist(slot);
         em.flush();
         return slot.getId();
+    }
+
+    public void changeSlotStartTime(long id, Date startTime) throws NotFoundException {
+        AircraftMaintenanceSlot slot = em.find(AircraftMaintenanceSlot.class, id);
+        if (slot == null) throw new NotFoundException();
+        slot.setStartTime(startTime);
+        em.persist(slot);
+    }
+
+    public void changeSlotDuration(long id, double duration) throws NotFoundException {
+        AircraftMaintenanceSlot slot = em.find(AircraftMaintenanceSlot.class, id);
+        if (slot == null) throw new NotFoundException();
+        slot.setDuration(duration);
+        em.persist(slot);
     }
 
     public void removeSlot(long id) throws NotFoundException {
