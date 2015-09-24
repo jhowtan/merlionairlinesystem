@@ -25,7 +25,7 @@
                         <tr>
                             <th>Origin</th>
                             <th>Destination</th>
-                            <th>Distance (Km)</th>
+                            <th>Distance</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -34,7 +34,7 @@
                             <tr>
                                 <td>#{rt.origin.getName()}</td>
                                 <td>#{rt.destination.getName()}</td>
-                                <td>#{routesManagedBean.round(rt.distance, 2)}</td>
+                                <td>#{commonManagedBean.displayDouble(rt.distance, "#")} miles</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">

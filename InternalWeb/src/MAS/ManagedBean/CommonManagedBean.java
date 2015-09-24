@@ -5,6 +5,9 @@ import MAS.Common.Utils;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +48,12 @@ public class CommonManagedBean {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String displayDouble(double value, String format) {
+        DecimalFormat formatter = new DecimalFormat(format);
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
+        return formatter.format(value);
     }
 
 }

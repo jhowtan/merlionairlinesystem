@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Math.*;
+import static java.lang.Math.sqrt;
+
 public class Utils {
 
     public static String generateSalt() {
@@ -45,6 +48,22 @@ public class Utils {
             return str.substring(0, chars) + "...";
         }
         return str;
+    }
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(lon1 - lon2));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return dist;
     }
 
 }

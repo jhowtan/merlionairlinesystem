@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.AlreadyExistsException;
 import MAS.Exception.NotFoundException;
@@ -15,8 +16,6 @@ import static java.lang.Math.*;
 @Stateless(name = "RouteEJB")
 @LocalBean
 public class RouteBean {
-
-    private static final double EarthRadius = 6373;
 
     @PersistenceContext
     private EntityManager em;
@@ -150,7 +149,7 @@ public class RouteBean {
         //if (origin == destination) throw new AlreadyExistsException();
         route.setOrigin(origin);
         route.setDestination(destination);
-        route.setDistance(calcDist(origin.getLatitude(), origin.getLongitude(),
+        route.setDistance(Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
                 destination.getLatitude(), destination.getLongitude()));
         em.persist(route);
         em.flush();
@@ -165,7 +164,7 @@ public class RouteBean {
         if (origin == null || destination == null) throw new NotFoundException();
         route.setOrigin(origin);
         route.setDestination(destination);
-        route.setDistance(calcDist(origin.getLatitude(), origin.getLongitude(),
+        route.setDistance(Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
                 destination.getLatitude(), destination.getLongitude()));
         em.persist(route);
         em.flush();
@@ -252,12 +251,5 @@ public class RouteBean {
         if (aircraftAssignment == null) throw new NotFoundException();
         return aircraftAssignment;
     }
-    //-----------------OTHERS---------------------------
-    public double calcDist(double oriLat, double oriLong, double destLat, double destLong) {
-        double dLong = destLong - oriLong;
-        double dLat = destLat - oriLat;
-        double a = pow(sin(dLat / 2), 2) + cos(oriLat) * cos(destLat) * pow(sin(dLong / 2), 2);
-        double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-        return EarthRadius * c;
-    }
+
 }
