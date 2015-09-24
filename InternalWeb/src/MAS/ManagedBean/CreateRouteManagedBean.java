@@ -4,6 +4,7 @@ import MAS.Bean.RouteBean;
 import MAS.Entity.Airport;
 import MAS.Entity.City;
 import MAS.Entity.Country;
+import MAS.Exception.AlreadyExistsException;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;

@@ -63,7 +63,7 @@ public class UpdateRouteManagedBean {
     }
 
     public void save() throws NotFoundException {
-        routeBean.createRoute(originId, destinationId);
+        routeBean.updateRoute(route.getId(), originId, destinationId);
         authManagedBean.createAuditLog("Created new route: " + routeBean.getAirport(originId).getName() + " - " +
                 routeBean.getAirport(destinationId).getName(), "create_route");
         setOriginId(0);

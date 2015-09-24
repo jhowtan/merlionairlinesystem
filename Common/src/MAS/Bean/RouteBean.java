@@ -1,6 +1,7 @@
 package MAS.Bean;
 
 import MAS.Entity.*;
+import MAS.Exception.AlreadyExistsException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -146,6 +147,7 @@ public class RouteBean {
         Airport origin = em.find(Airport.class, originId);
         Airport destination = em.find(Airport.class, destinationId);
         if (origin == null || destination == null) throw new NotFoundException();
+        //if (origin == destination) throw new AlreadyExistsException();
         route.setOrigin(origin);
         route.setDestination(destination);
         route.setDistance(calcDist(origin.getLatitude(), origin.getLongitude(),
@@ -178,11 +180,24 @@ public class RouteBean {
     }
 
     public List<Route> findRouteByOrigin(long airportId) throws NotFoundException {
-        return em.createQuery("SELECT r from Route r WHERE r.origin = :airportId", Route.class).setParameter("airportId", airportId).getResultList();
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        return em.createQuery("SELECT r from Route r WHERE r.origin = :airport", Route.class).setParameter("airport", airport).getResultList();
     }
 
     public List<Route> findRouteByDest(long airportId) throws NotFoundException {
-        return em.createQuery("SELECT r from Route r WHERE r.destination = :airportId", Route.class).setParameter("airportId", airportId).getResultList();
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        return em.createQuery("SELECT r from Route r WHERE r.destination = :airport", Route.class).setParameter("airport", airport).getResultList();
+    }
+
+    public Route findRouteByOriginAndDestination(long originId, long destinationId) throws NotFoundException {
+        Airport origin = em.find(Airport.class, originId);
+        Airport destination = em.find(Airport.class, destinationId);
+        if (origin == null || destination == null) throw new NotFoundException();
+        return em.createQuery("SELECT r from Route r WHERE r.origin = :origin AND r.destination = :destination", Route.class)
+                .setParameter("origin", origin)
+                .setParameter("destination", destination).getSingleResult();
     }
 
     public List<Route> getAllRoutes() {
