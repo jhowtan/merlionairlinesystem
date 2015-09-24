@@ -32,6 +32,10 @@ public class UserManagedBean {
                 authManagedBean.createAuditLog("Unlocked user: " + userBean.getUser(id).getUsername(), "unlock_user");
             }
         } catch (NotFoundException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The user cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
@@ -44,7 +48,8 @@ public class UserManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
-            FacesMessage m = new FacesMessage("Unable to delete this user.");
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The user cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
