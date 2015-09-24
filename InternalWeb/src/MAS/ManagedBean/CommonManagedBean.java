@@ -55,5 +55,4 @@ public class CommonManagedBean {
         formatter.setRoundingMode(RoundingMode.HALF_UP);
         return formatter.format(value);
     }
-
 }

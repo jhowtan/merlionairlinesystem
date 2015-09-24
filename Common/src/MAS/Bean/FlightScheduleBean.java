@@ -32,6 +32,12 @@ public class FlightScheduleBean {
         return flight.getId();
     }
 
+    public void removeFlight(long id) throws NotFoundException {
+        Flight flight = em.find(Flight.class, id);
+        if (flight == null) throw new NotFoundException();
+        em.remove(flight);
+    }
+
     public Flight getFlight(long id) throws NotFoundException {
         Flight flight = em.find(Flight.class, id);
         if (flight == null) throw new NotFoundException();

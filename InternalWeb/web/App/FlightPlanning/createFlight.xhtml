@@ -1,0 +1,97 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Create Flight - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Create Flight</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/FlightPlanning/flights">Flights</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/createFlight">Create Flight</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <!-- BEGIN FORM PANEL BODY -->
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Flight Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!code.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="code">Flight Code</label>
+                                        <h:inputText id="code" binding="#{code}" value="#{createFlightManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. MA11" required="true" requiredMessage="Flight code is required.">
+                                        </h:inputText>
+                                        <h:message for="code" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!aircraftAssignment.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="aircraftAssignment">Aircraft Assignment</label>
+                                        <br/>
+                                        <h:selectOneMenu styleClass="form-control" id="aircraftAssignment" value="#{createFlightManagedBean.aaId}" binding="#{aircraftAssignment}">
+                                            <f:selectItems value="#{createFlightManagedBean.aircraftAssignments}" var="aa"
+                                                           itemLabel="#{createFlightManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
+                                        </h:selectOneMenu>
+                                        <h:message for="aircraftAssignment" styleClass="help-block" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 #{!departure.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="departure">Departure Date</label>
+                                        <h:inputText binding="#{departure}" id="departure" value="#{createFlightManagedBean.departureDate}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                     size="20" required="true" requiredMessage="Departure Date of the flight is required.">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:inputText>
+                                        <h:message for="departure" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-4 #{!departureTime.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="departureTime">Departure Time</label>
+                                        <h:inputText binding="#{departureTime}" id="departureTime" value="#{createFlightManagedBean.departureTime}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 01:00 AM" pt:type="time"
+                                                     size="20" required="true" requiredMessage="Departure Time of the flight is required.">
+                                        </h:inputText>
+                                        <h:message for="departureTime" styleClass="help-block" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 #{!arrival.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="arrival">Arrival Date</label>
+                                        <h:inputText binding="#{arrival}" id="arrival" value="#{createFlightManagedBean.arrivalDate}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                     size="20" required="true" requiredMessage="Arrival Date of the flight is required.">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:inputText>
+                                        <h:message for="arrival" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-4 #{!arrivalTime.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="arrivalTime">Arrival Time</label>
+                                        <h:inputText binding="#{arrivalTime}" id="arrivalTime" value="#{createFlightManagedBean.arrivalTime}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 01:00 AM" pt:type="time"
+                                                     size="20" required="true" requiredMessage="Arrival Time of the flight is required.">
+                                        </h:inputText>
+                                        <h:message for="arrivalTime" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/FlightPlanning/routes" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createFlightManagedBean.createFlight()}" value="Create Flight" styleClass="btn btn-success"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

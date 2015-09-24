@@ -37,10 +37,13 @@
                                 <td>#{aircraftTypeManagedBean.getAircraftCount(type.id)}</td>
                                 <td>
                                     <h:form>
-                                        <h:link outcome="/App/FleetPlanning/updateAircraftType" styleClass="btn btn-default btn-xs btn-info"><f:param name="typeId" value="#{type.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
-                                        <h:commandLink action="#{aircraftTypeManagedBean.delete(type.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft type: #{type.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/FleetPlanning/updateAircraftType" styleClass="btn btn-default btn-xs btn-info"><f:param name="typeId" value="#{type.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{aircraftTypeManagedBean.delete(type.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete aircraft type: #{type.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                        </div>
                                     </h:form>
                                 </td>
+
                             </tr>
                         </ui:repeat>
                         </tbody>
