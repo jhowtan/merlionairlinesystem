@@ -35,7 +35,7 @@ public class RouteBean {
         airport.setHangars(hangars);
         airport.setCode(code);
         airport.setLatitude(latitude);
-        airport.setLongtitude(longitude);
+        airport.setLongitude(longitude);
         em.persist(airport);
         em.flush();
         return airport.getId();
@@ -61,6 +61,12 @@ public class RouteBean {
         em.persist(airport);
     }
 
+    public Airport getAirport(long id) throws NotFoundException {
+        Airport airport = em.find(Airport.class, id);
+        if (airport == null) throw new NotFoundException();
+        return airport;
+    }
+
     public long createCity(String name, long countryId) throws NotFoundException {
         City city = new City();
         city.setName(name);
@@ -80,6 +86,16 @@ public class RouteBean {
         em.remove(city);
     }
 
+    public City getCity(long id) throws NotFoundException {
+        City city = em.find(City.class, id);
+        if (city == null) throw new NotFoundException();
+        return city;
+    }
+
+    public List<City> getAllCities() {
+        return em.createQuery("SELECT c from City c", City.class).getResultList();
+    }
+
     public long createCountry(String name, String code) {
         Country country = new Country();
         country.setName(name);
@@ -94,6 +110,16 @@ public class RouteBean {
         if (country == null) throw new NotFoundException();
         //Check for cities in this country
         em.remove(country);
+    }
+
+    public Country getCountry(long id) throws NotFoundException {
+        Country country = em.find(Country.class, id);
+        if (country == null) throw new NotFoundException();
+        return country;
+    }
+
+    public List<Country> getAllCountries() {
+        return em.createQuery("SELECT c from Country c", Country.class).getResultList();
     }
 
     public List<Airport> getAllAirports() {
@@ -116,8 +142,8 @@ public class RouteBean {
         if (origin == null || destination == null) throw new NotFoundException();
         route.setOrigin(origin);
         route.setDestination(destination);
-        route.setDistance(calcDist(origin.getLatitude(), origin.getLongtitude(),
-                destination.getLatitude(), destination.getLongtitude()));
+        route.setDistance(calcDist(origin.getLatitude(), origin.getLongitude(),
+                destination.getLatitude(), destination.getLongitude()));
         em.persist(route);
         em.flush();
         return route.getId();

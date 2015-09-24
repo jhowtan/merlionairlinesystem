@@ -30,13 +30,22 @@ public class Pages {
     public static final Page UPDATE_AIRCRAFT = new Page("/App/FleetPlanning/updateAircraft", Permissions.MANAGE_FLEET);
 
     public static final Page CREATE_SEATCONFIG = new Page("/App/FleetPlanning/createSeatConfig", Permissions.MANAGE_FLEET);
-    public static final Page UPDATE_SEATCONFIG = new Page("/App/FleetPlanning/updateSeatConfig", Permissions.MANAGE_FLEET);
 
     // Airline Planning System: Route Planning Pages
     public static final Page LIST_AIRPORTS = new Page("/App/RoutePlanning/airports", Permissions.MANAGE_ROUTES);
-    public static final Page CREATE_AIRPORTS = new Page("/App/RoutePlanning/createAirports", Permissions.MANAGE_ROUTES);
-    public static final Page UPDATE_AIRPORTS = new Page("/App/RoutePlanning/updateAirports", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_AIRPORTS = new Page("/App/RoutePlanning/createAirport", Permissions.MANAGE_ROUTES);
+    public static final Page UPDATE_AIRPORTS = new Page("/App/RoutePlanning/updateAirport", Permissions.MANAGE_ROUTES);
 
+    public static final Page LIST_CITIES = new Page("/App/RoutePlanning/cities", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_CITY = new Page("/App/RoutePlanning/createCity", Permissions.MANAGE_ROUTES);
+    public static final Page LIST_COUNTRIES = new Page("/App/RoutePlanning/countries", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_COUNTRY = new Page("/App/RoutePlanning/createCountry", Permissions.MANAGE_ROUTES);
+
+    public static final Page LIST_ROUTES = new Page("/App/RoutePlanning/routes", Permissions.MANAGE_ROUTES);
+    public static final Page CREATE_ROUTES = new Page("/App/RoutePlanning/createRoute", Permissions.MANAGE_ROUTES);
+    public static final Page UPDATE_ROUTES = new Page("/App/RoutePlanning/updateRoute", Permissions.MANAGE_ROUTES);
+
+    public static final Page AIRCRAFT_ASSIGNMENT = new Page("/App/RoutePlanning/aircraftAssignment", Permissions.MANAGE_ROUTES);
     // Airline Planning System: Schedule Planning Pages
 
     // Airline Inventory Subsystem: Price Management Module

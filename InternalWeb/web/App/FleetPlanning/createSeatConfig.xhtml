@@ -59,12 +59,12 @@
                                                     <div class="panel-heading">Cabin #{createSeatConfigManagedBean.getIndexOf(cabin) + 1}</div>
                                                     <div class="panel-body">
                                                         <div class="row">
-                                                            <div class="form-group col-lg-12 #{!numRows.valid ? 'has-error' : ''}">
+                                                            <div class="form-group col-lg-12">
                                                                 <label class="control-label" for="numRows">Number of Rows</label>
                                                                 <h:inputText id="numRows" value="#{cabin.numRows}" styleClass="form-control" pt:placeholder="Please indicate at least 1 row to proceed"/>
                                                                 <h:message for="numRows" styleClass="help-block" />
                                                             </div>
-                                                            <div class="form-group col-lg-12 #{!rowConfig.valid ? 'has-error' : ''}">
+                                                            <div class="form-group col-lg-12">
                                                                 <label class="control-label" for="rowConfig">Row Seating Configuration</label>
                                                                 <h:inputText id="rowConfig" readonly="true" styleClass="form-control" value="#{cabin.representation}" pt:placeholder="ss|sss|ss, s = Seat, | = Corridor"/>
                                                                 <br/>
