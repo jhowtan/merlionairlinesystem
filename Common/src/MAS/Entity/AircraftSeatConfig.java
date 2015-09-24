@@ -19,6 +19,7 @@ public class AircraftSeatConfig {
     private String seatConfig;
 
     @Basic
+    @Column(length = 10000)
     public String getSeatConfig() {
         return seatConfig;
     }
