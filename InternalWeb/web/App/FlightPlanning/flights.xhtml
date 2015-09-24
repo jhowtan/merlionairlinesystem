@@ -1,11 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
-</html>
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Flights - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Flight Schedule</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/flights">Flights</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createFlight">Create Flight</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <table class="table" id="flights_table">
+                        <thead>
+                        <tr>
+                            <th>Flight Code</th>
+                            <th>Aircraft Tail Number</th>
+                            <th>Route Origin</th>
+                            <th>Route Destination</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{flightsManagedBean.getAllFlights()}" var="fl">
+                            <tr>
+                                <td>#{fl.code}</td>
+                                <td>#{fl.aircraftAssignment.getAircraft().getTailNumber()}</td>
+                                <td>#{fl.aircraftAssignment.getRoute().getOrigin().getName()}</td>
+                                <td>#{fl.aircraftAssignment.getRoute().getDestination().getName()}</td>
+                                <td>#{fl.departureTime}</td>
+                                <td>#{fl.arrivalTime}</td>
+                                <td>
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{flightsManagedBean.delete(fl.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete flight: #{fl.code}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                        </div>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#flights_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>

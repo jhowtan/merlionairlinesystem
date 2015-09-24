@@ -29,5 +29,11 @@
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>
+        <session>
+            <ejb-name>AircraftMaintenanceSlotEJB</ejb-name>
+            <ejb-class>MAS.Bean.AircraftMaintenanceSlotBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
     </enterprise-beans>
 </ejb-jar>
