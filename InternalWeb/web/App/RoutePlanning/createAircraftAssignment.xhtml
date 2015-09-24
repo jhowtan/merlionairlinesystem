@@ -2,7 +2,6 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Create Aircraft Assignment - Merlion Airline System</ui:define>
 
@@ -42,8 +41,8 @@
                                         <br/>
                                         <h:selectOneMenu styleClass="form-control"
                                                          id="route" value="#{createAircraftAssignmentManagedBean.routeId}">
-                                            <f:selectItems value="#{createAircraftAssignmentManagedBean.routes}" var="aa"
-                                                           itemLabel="#{aa.origin.name + ' ' + aa.destination.name}" itemValue="#{aa.id}" />
+                                            <f:selectItems value="#{createAircraftAssignmentManagedBean.routes}" var="rt"
+                                                           itemLabel="#{createAircraftAssignmentManagedBean.formatRoute(rt)}" itemValue="#{rt.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="route" styleClass="help-block" />
                                     </div>
