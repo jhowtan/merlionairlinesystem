@@ -31,6 +31,7 @@ public class AircraftMaintenanceSlot {
     private Date startTime;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getStartTime() {
         return startTime;
     }
