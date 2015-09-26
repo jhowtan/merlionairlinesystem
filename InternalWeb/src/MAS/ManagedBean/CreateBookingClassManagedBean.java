@@ -3,6 +3,7 @@ package MAS.ManagedBean;
 import MAS.Bean.BookingClassBean;
 import MAS.Bean.FareRuleBean;
 import MAS.Bean.FlightScheduleBean;
+import MAS.Common.Cabin;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
 
@@ -12,6 +13,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import java.util.Arrays;
 import java.util.List;
 
 @ManagedBean
@@ -29,11 +31,14 @@ public class CreateBookingClassManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
+    private String[] travelClasses = Cabin.TRAVEL_CLASSES;
     private String name;
     private long fareRuleId;
     private long flightId;
+    private int occupied;
     private int allocation;
     private int travelClass;
+    private boolean openStatus;
 
     public CreateBookingClassManagedBean() {
         resetFields();
@@ -116,6 +121,22 @@ public class CreateBookingClassManagedBean {
         this.flightId = flightId;
     }
 
+    public int getOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(int occupied) {
+        this.occupied = occupied;
+    }
+
+    public boolean isOpenStatus() {
+        return openStatus;
+    }
+
+    public void setOpenStatus(boolean openStatus) {
+        this.openStatus = openStatus;
+    }
+
     public int getAllocation() {
         return allocation;
     }
@@ -130,5 +151,17 @@ public class CreateBookingClassManagedBean {
 
     public void setTravelClass(int travelClass) {
         this.travelClass = travelClass;
+    }
+
+    public int getClassIndex(String travelClass) {
+        return Arrays.asList(Cabin.TRAVEL_CLASSES).indexOf(travelClass);
+    }
+
+    public String[] getTravelClasses() {
+        return travelClasses;
+    }
+
+    public void setTravelClasses(String[] travelClasses) {
+        this.travelClasses = travelClasses;
     }
 }

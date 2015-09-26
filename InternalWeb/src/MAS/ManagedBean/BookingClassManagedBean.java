@@ -1,9 +1,7 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.BookingClassBean;
-import MAS.Bean.FareRuleBean;
 import MAS.Entity.BookingClass;
-import MAS.Entity.FareRule;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -37,6 +35,7 @@ public class BookingClassManagedBean {
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
+
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
