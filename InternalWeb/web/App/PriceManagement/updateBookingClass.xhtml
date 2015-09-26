@@ -39,17 +39,17 @@
                                     </div>
                                     <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="flight">Flight Code</label>
-                                        <h:inputText styleClass="form-control" id="flight" readonly="true" value="#{updateBookingClassManagedBean.flight}" binding="#{flight}"/>
+                                        <h:inputText styleClass="form-control" id="flight" readonly="true" value="#{updateBookingClassManagedBean.flight.code}" binding="#{flight}"/>
                                         <h:message for="flight" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="flight">Fare Rule</label>
-                                        <h:inputText styleClass="form-control" id="fareRule" readonly="true" value="#{updateBookingClassManagedBean.fareRule}" binding="#{fareRule}"/>
+                                        <h:inputText styleClass="form-control" id="fareRule" readonly="true" value="#{updateBookingClassManagedBean.fareRule.name}" binding="#{fareRule}"/>
                                         <h:message for="fareRule" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <label class="control-label" for="travelClass">Travel Class</label>
-                                        <h:inputText id="travelClass" value="#{updateBookingClassManagedBean.travelClasses[updateBookingClassManagedBean.bookingClass.travelClass]}" readonly="true" styleClass="form-control"/>
+                                        <h:inputText id="travelClass" binding="#{travelClass}" value="#{updateBookingClassManagedBean.travelClasses[updateBookingClassManagedBean.bookingClass.travelClass]}" readonly="true" styleClass="form-control"/>
                                     </div>
                                     <div class="form-group col-lg-4 #{!occupied.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="occupied">Seats Occupied</label>
@@ -57,7 +57,14 @@
                                     </div>
                                     <div class="form-group col-lg-4 #{!allocation.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="allocation">Seats to Allocate</label>
-                                        <h:inputText id="allocation" styleClass="form-control form-inline" value="#{updateBookingClassManagedBean.allocation}" binding="#{allocation}" required="true"/>
+                                        <h:inputHidden value="#{updateBookingClassManagedBean.flight.id}" binding="#{flightHidden}" />
+                                        <h:inputHidden value="#{updateBookingClassManagedBean.bookingClass.travelClass}" binding="#{travelClassHidden}" />
+                                        <h:inputText id="allocation" styleClass="form-control form-inline" value="#{updateBookingClassManagedBean.allocation}" binding="#{allocation}" required="true">
+                                            <f:validator validatorId="seatAllocationValidator" />
+                                            <f:attribute name="bookingClass" value="#{updateBookingClassManagedBean.bookingClass.id}" />
+                                            <f:attribute name="travelClass" value="#{travelClassHidden}" />
+                                            <f:attribute name="flight" value="#{flightHidden}" />
+                                        </h:inputText>
                                         <h:message for="allocation" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-4 #{!open.valid ? 'has-error' : ''}">

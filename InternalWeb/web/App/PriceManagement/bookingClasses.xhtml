@@ -35,7 +35,7 @@
                                 <td>#{bkClass.fareRule.getName()}</td>
                                 <td>#{bookingClassManagedBean.getTravelClassName(bkClass.travelClass)}</td>
                                 <td>#{bkClass.occupied}/#{bkClass.allocation}</td>
-                                <td>#{bkClass.open}</td>
+                                <td>#{bkClass.open ? "Open" : "Closed"}</td>
                                 <td>
                                     <h:form>
                                         <h:commandLink action="#{bookingClassManagedBean.setOpen(bkClass.id, false)}" styleClass="btn btn-default btn-xs btn-warning #{!bkClass.open ? 'disabled' : ''}" rendered="#{bkClass.open}"><i class="fa fa-lock"></i> Close</h:commandLink>

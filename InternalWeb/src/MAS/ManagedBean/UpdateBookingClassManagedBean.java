@@ -3,6 +3,8 @@ package MAS.ManagedBean;
 import MAS.Bean.BookingClassBean;
 import MAS.Common.Cabin;
 import MAS.Entity.BookingClass;
+import MAS.Entity.FareRule;
+import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -27,8 +29,8 @@ public class UpdateBookingClassManagedBean {
     private BookingClass bookingClass;
     private String name;
     private int allocation;
-    private String flight;
-    private String fareRule;
+    private Flight flight;
+    private FareRule fareRule;
 
     @PostConstruct
     public void init() {
@@ -45,8 +47,8 @@ public class UpdateBookingClassManagedBean {
         }
         name = bookingClass.getName();
         allocation = bookingClass.getAllocation();
-        flight = bookingClass.getFlight().getCode();
-        fareRule = bookingClass.getFareRule().getName();
+        flight = bookingClass.getFlight();
+        fareRule = bookingClass.getFareRule();
     }
 
     public void save() throws NotFoundException {
@@ -94,12 +96,20 @@ public class UpdateBookingClassManagedBean {
         this.allocation = allocation;
     }
 
-    public String getFareRule() {
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public FareRule getFareRule() {
         return fareRule;
     }
 
-    public String getFlight() {
-        return flight;
+    public void setFareRule(FareRule fareRule) {
+        this.fareRule = fareRule;
     }
 
     public String[] getTravelClasses() {
