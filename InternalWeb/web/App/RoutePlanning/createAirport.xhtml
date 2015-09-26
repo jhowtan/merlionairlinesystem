@@ -104,6 +104,7 @@
                     airportNameInput.val('');
                     latitudeInput.val('');
                     longitudeInput.val('');
+                    if (airportCode == "") return;
                     geocoder.geocode({'address': airportCode + ' Airport'}, function(results, status) {
                         if (status == 'OK') {
                             var result = results[0];
