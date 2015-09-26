@@ -6,6 +6,7 @@ import MAS.Bean.FlightScheduleBean;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -36,6 +37,12 @@ public class CreateBookingClassManagedBean {
 
     public CreateBookingClassManagedBean() {
         resetFields();
+    }
+
+    @PostConstruct
+    private void init() {
+        flights = flightScheduleBean.getAllFlights();
+        fareRules = fareRuleBean.getAllFareRules();
     }
 
     public void resetFields() {
