@@ -4,6 +4,8 @@ import MAS.Bean.BookingClassBean;
 import MAS.Bean.FareRuleBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Common.Cabin;
+import MAS.Common.SeatConfigObject;
+import MAS.Entity.BookingClass;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
 
@@ -59,6 +61,20 @@ public class CreateBookingClassManagedBean {
 
     public void createBookingClass() {
         try {
+            /*SeatConfigObject seatConfigObject = new SeatConfigObject();
+            seatConfigObject.parse(flightScheduleBean.findSeatConfigOfFlight(flightId));
+            int totalSeats = seatConfigObject.getSeatsInClass(travelClass);
+            List<BookingClass> sameFlightAndClass = bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
+            int allocatedSeats = 0;
+            for (int i = 0;i < sameFlightAndClass.size(); i++) {
+                allocatedSeats += sameFlightAndClass.get(i).getAllocation();
+            }
+            if (allocatedSeats + allocation > totalSeats) {
+                FacesMessage m = new FacesMessage("There are too many seats allocated to this travel class of the flight.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+                return;
+            }*/
             bookingClassBean.createBookingClass(name, allocation, getTravelClass(), fareRuleId, flightId);
 
             getAuthManagedBean().createAuditLog("Created new booking class: " + getName(), "create_booking_class");

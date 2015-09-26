@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.BookingClass;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
@@ -78,5 +79,14 @@ public class BookingClassBean {
         Flight flight = em.find(Flight.class, flightId);
         if (flight == null) throw new NotFoundException();
         return em.createQuery("SELECT b from BookingClass b WHERE b.flight = :flight", BookingClass.class).setParameter("flight", flight).getResultList();
+    }
+
+    public List<BookingClass> findBookingClassByFlightAndClass(long flightId, int travelClass) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        return em.createQuery("SELECT b from BookingClass b WHERE b.flight = :flight AND b.travelClass = :travelClass", BookingClass.class)
+                .setParameter("flight", flight)
+                .setParameter("travelClass", travelClass)
+                .getResultList();
     }
 }
