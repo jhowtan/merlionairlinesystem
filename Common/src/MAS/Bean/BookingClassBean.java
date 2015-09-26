@@ -38,6 +38,26 @@ public class BookingClassBean {
         return bookingClass.getId();
     }
 
+    public void changeName(long id, String name) throws NotFoundException {
+        BookingClass bookingClass = em.find(BookingClass.class, id);
+        if (bookingClass == null) throw new NotFoundException();
+        bookingClass.setName(name);
+        em.persist(bookingClass);
+    }
+
+    public void changeOpenStatus(long id, boolean status) throws NotFoundException {
+        BookingClass bookingClass = em.find(BookingClass.class, id);
+        if (bookingClass == null) throw new NotFoundException();
+        bookingClass.setOpen(status);
+        em.persist(bookingClass);
+    }
+    public void changeAllocation(long id, int allocation) throws NotFoundException {
+        BookingClass bookingClass = em.find(BookingClass.class, id);
+        if (bookingClass == null) throw new NotFoundException();
+        bookingClass.setAllocation(allocation);
+        em.persist(bookingClass);
+    }
+
     public void removeBookingClass(long id) throws NotFoundException {
         BookingClass bookingClass = em.find(BookingClass.class, id);
         if (bookingClass == null) throw new NotFoundException();

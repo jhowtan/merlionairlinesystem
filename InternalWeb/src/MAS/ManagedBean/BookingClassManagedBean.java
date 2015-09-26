@@ -1,10 +1,8 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.BookingClassBean;
-import MAS.Bean.FareRuleBean;
 import MAS.Common.Cabin;
 import MAS.Entity.BookingClass;
-import MAS.Entity.FareRule;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
