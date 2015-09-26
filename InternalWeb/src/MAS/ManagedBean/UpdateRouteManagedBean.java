@@ -64,11 +64,11 @@ public class UpdateRouteManagedBean {
 
     public void save() throws NotFoundException {
         routeBean.updateRoute(route.getId(), originId, destinationId);
-        authManagedBean.createAuditLog("Created new route: " + routeBean.getAirport(originId).getName() + " - " +
-                routeBean.getAirport(destinationId).getName(), "create_route");
+        authManagedBean.createAuditLog("Updated route: " + routeBean.getAirport(originId).getName() + " - " +
+                routeBean.getAirport(destinationId).getName(), "update_route");
         setOriginId(0);
         setDestinationId(0);
-        FacesMessage m = new FacesMessage("Route created successfully.");
+        FacesMessage m = new FacesMessage("Route updated successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
