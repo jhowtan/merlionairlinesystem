@@ -11,13 +11,18 @@ public class SeatConfigObject {
         / : new row
         _ : new cabin
         e : end
-     */
 
+        Travel Classes:
+        0 : First
+        1 : Business
+        2 : Premium Economy
+        3 : Economy
+     */
     private ArrayList<Cabin> cabins;
     private int selection;
 
     public SeatConfigObject() {
-        cabins = new ArrayList<Cabin>();
+        cabins = new ArrayList<>();
         addCabin();
         selectCabin(0);
     }
@@ -25,7 +30,7 @@ public class SeatConfigObject {
     public void parse(String seatConfigString) {
         if (seatConfigString.length() == 0)
             return;
-        cabins = new ArrayList<Cabin>();
+        cabins = new ArrayList<>();
         addCabin();
         selectCabin(0);
         int numRow = 0;
@@ -46,7 +51,8 @@ public class SeatConfigObject {
                     numRow++;
                     setNumRows(numRow);
                 }
-                else if (c == '_' && seatConfigString.charAt(i+1) != 'e') {
+                else if (c == '_' && seatConfigString.charAt(i+2) != 'e') {
+                    cabins.get(selection).setTravelClass(seatConfigString.charAt(i+1));
                     addCabin();
                     selection++;
                     numRow = 0;
@@ -80,9 +86,6 @@ public class SeatConfigObject {
     public void setNumRows(int val) {
         cabins.get(selection).setNumRows(val);
     }
-    public String rowString() {
-        return cabins.get(selection).toString();
-    }
 
     public ArrayList<Cabin> getCabins() {
         return cabins;
@@ -95,7 +98,18 @@ public class SeatConfigObject {
         for (int i = 0; i < cabins.size(); i++) {
             result = result.concat(cabins.get(i).toString());
             result = result.concat("_");
+            result = result.concat(Integer.toString(cabins.get(i).getTravelClass()));
         }
         return  result.concat("e");
+    }
+
+    public int getSeatsInClass(int travelClass) {
+        int result = 0;
+        for (int i = 0; i < cabins.size(); i++) {
+            if (cabins.get(i).getTravelClass() == travelClass) {
+                result += cabins.get(i).seatCount();
+            }
+        }
+        return result;
     }
 }

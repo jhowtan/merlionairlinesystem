@@ -45,6 +45,7 @@ public class CreateSeatConfigManagedBean {
 
     public void createConfig() throws NotFoundException {
         // Decide on whether to have multiple aircraft types with the same seat configuration
+        System.out.println(seatConfObj.toString());
         fleetBean.createAircraftSeatConfig(seatConfObj.toString(), configName, Integer.parseInt(weight), acTypeId);
 
         setConfigName(null);

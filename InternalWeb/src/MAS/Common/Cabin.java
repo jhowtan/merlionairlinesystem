@@ -1,11 +1,20 @@
 package MAS.Common;
 
+import java.util.Arrays;
+
 public class Cabin {
 
+    private final String[] travelClasses = new String[4];
     private String row;
     private int numRows;
+    private int travelClass;
 
     public Cabin() {
+        getTravelClasses()[0] = "First";
+        getTravelClasses()[1] = "Business";
+        getTravelClasses()[2] = "Premium Economy";
+        getTravelClasses()[3] = "Economy";
+        travelClass = 3;
         row = "";
         numRows = 1;
     }
@@ -39,6 +48,16 @@ public class Cabin {
             numRows--;
     }
 
+    public int seatCount() {
+        int result = 0;
+        for (int i = 0; i < row.length(); i++){
+            char c = row.charAt(i);
+            if (c == 's')
+                result++;
+        }
+        return result;
+    }
+
     public String toString() {
         String result = "";
         if (row.length() == 0)
@@ -55,7 +74,21 @@ public class Cabin {
         return row;
     }
 
-    public void setRepresentation(String val) {
-        return;
+    //TODO: Check whether removing this function breaks createSeatConfig page
+    public void setRepresentation(String val) { }
+
+    public int getTravelClass() {
+        return travelClass;
+    }
+
+    public void setTravelClass(int travelClass) {
+        this.travelClass = travelClass;
+    }
+    public int getClassIndex(String travelClass) {
+        return Arrays.asList(travelClasses).indexOf(travelClass);
+    }
+
+    public String[] getTravelClasses() {
+        return travelClasses;
     }
 }
