@@ -50,8 +50,6 @@ public class UpdateSeatConfigManagedBean {
             setAcTypeName(getAircraftSeatConfig().getAircraftType().getName());
             seatConfObj = new SeatConfigObject();
             seatConfObj.parse(seatConfigString);
-            System.out.println(seatConfigString);
-            System.out.println(seatConfObj.toString());
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -147,6 +145,10 @@ public class UpdateSeatConfigManagedBean {
 
     public void setAircraftSeatConfig(AircraftSeatConfig aircraftSeatConfig) {
         this.aircraftSeatConfig = aircraftSeatConfig;
+    }
+
+    public int seatsInClass(int travelClass) {
+        return seatConfObj.getSeatsInClass(travelClass);
     }
 }
 

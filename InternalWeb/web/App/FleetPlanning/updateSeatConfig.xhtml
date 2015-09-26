@@ -49,9 +49,25 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="form-group col-lg-12">
+                                        <label class="control-label" for="classSeats1">Number of First Class Seats: </label>
+                                        <h:inputText readonly="true" id="classSeats1" value="#{updateSeatConfigManagedBean.seatsInClass(0)}" styleClass="form-control" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="classSeats2">Number of Business Class Seats: </label>
+                                        <h:inputText readonly="true" id="classSeats2" value="#{updateSeatConfigManagedBean.seatsInClass(1)}" styleClass="form-control" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="classSeats3">Number of Premium Economy Class Seats: </label>
+                                        <h:inputText readonly="true" id="classSeats3" value="#{updateSeatConfigManagedBean.seatsInClass(2)}" styleClass="form-control" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="classSeats4">Number of Economy Class Seats: </label>
+                                        <h:inputText readonly="true" id="classSeats4" value="#{updateSeatConfigManagedBean.seatsInClass(3)}" styleClass="form-control" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
                                         <label class="control-label" for="seatConf">Seat Configuration String</label>
-                                        <h:inputText readonly="true" id="seatConf" value="#{updateSeatConfigManagedBean.seatConfigString}" styleClass="form-control" >
-                                        </h:inputText>
+                                        <h:inputTextarea cols="30" rows="10" readonly="true" id="seatConf" value="#{updateSeatConfigManagedBean.seatConfigString}" styleClass="form-control" >
+                                        </h:inputTextarea>
                                         <h:message for="seatConf" styleClass="help-block" />
                                     </div>
                                 </div>
