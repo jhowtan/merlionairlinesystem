@@ -144,7 +144,7 @@
         var checkSession = function() {
             $.get("#{commonManagedBean.getRoot()}/Common/sessionTimeoutAjax.xhtml", function(data) {
                 if (!data.authenticated) {
-                    window.location.href = "#{commonManagedBean.getRoot()}/Auth/index.xhtml";
+                    window.location.href = "#{commonManagedBean.getRoot()}/Auth/sessionTimeout.xhtml";
                 } else {
                     setTimeout(checkSession, data.timeout + timeout_check_delay);
                 }
