@@ -1,7 +1,6 @@
 package MAS.Bean;
 
 import MAS.Common.Permissions;
-import MAS.Entity.Permission;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -50,7 +49,7 @@ public class InitBean {
         if (fleetBean.getAllAircraftTypes().size() == 0) {
             try {
                 long acTypeId = fleetBean.createAircraftType("A380 ABC", 4000);
-                long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_e", "A3180 ABC test", 5800, acTypeId);
+                long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_3e", "A3180 ABC test", 5800, acTypeId);
                 long acId = fleetBean.createAircraft("9V-ABC", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
             } catch (Exception e) {

@@ -14,7 +14,6 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @FacesValidator
 public class SeatAllocationValidator implements Validator {
@@ -33,7 +32,7 @@ public class SeatAllocationValidator implements Validator {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
-        if (seats < 0) {
+        if (seats <= 0) {
             FacesMessage m = new FacesMessage("Invalid number of seats.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
@@ -47,19 +46,35 @@ public class SeatAllocationValidator implements Validator {
 
         try {
             seatConfigObject.parse(flightScheduleBean.findSeatConfigOfFlight(flightId));
-            bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
+            totalSeats = seatConfigObject.getSeatsInClass(travelClass);
+            sameFlightAndClass = bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
         } catch (Exception e) {
             e.printStackTrace();
             FacesMessage m = new FacesMessage("No seats available on this flight.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
+
+        int currSeats = 0;
+
+        try {
+            long bookingClassId = (long) uiComponent.getAttributes().get("bookingClass");
+            currSeats = bookingClassBean.getBookingClass(bookingClassId).getAllocation();
+        } catch (Exception e) {
+        }
+
         int allocatedSeats = 0;
-        for (int i = 0;i < sameFlightAndClass.size(); i++) {
+        for (int i = 0; i < sameFlightAndClass.size(); i++) {
             allocatedSeats += sameFlightAndClass.get(i).getAllocation();
         }
-        if (allocatedSeats + seats > totalSeats) {
-            FacesMessage m = new FacesMessage("Only " + (totalSeats - allocatedSeats - seats) + " seats left.");
+        int seatsLeft = totalSeats - allocatedSeats + currSeats;
+        if (seatsLeft < 0) {
+            FacesMessage m = new FacesMessage("There are no seats left on this flight.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(m);
+        }
+        if ((allocatedSeats - currSeats + seats) > totalSeats) {
+            FacesMessage m = new FacesMessage("There are only " + seatsLeft + " seats left.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
