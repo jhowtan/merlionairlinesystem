@@ -38,6 +38,22 @@ public class BookingClassManagedBean {
         }
     }
 
+    public void setOpen(long id, boolean isOpen) {
+        try {
+            bookingClassBean.changeOpenStatus(id, isOpen);
+            if(isOpen) {
+                authManagedBean.createAuditLog("Closed booking class: " + bookingClassBean.getBookingClass(id).getName(), "close_booking_class");
+            } else {
+                authManagedBean.createAuditLog("Opened booking class: " + bookingClassBean.getBookingClass(id).getName(), "open_booking_class");
+            }
+        } catch (NotFoundException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
     }
