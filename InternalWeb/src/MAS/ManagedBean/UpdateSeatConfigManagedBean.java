@@ -38,7 +38,6 @@ public class UpdateSeatConfigManagedBean {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         long seatConfigId = Long.parseLong(params.get("seatConfigId"));
         getSeatConfig(seatConfigId);
-        seatConfObj = new SeatConfigObject();
     }
 
     private void getSeatConfig(long id) {
@@ -47,9 +46,12 @@ public class UpdateSeatConfigManagedBean {
             configName = getAircraftSeatConfig().getName();
             weight = getAircraftSeatConfig().getWeight();
             seatConfigString = getAircraftSeatConfig().getSeatConfig();
-            System.out.println(seatConfigString);
             acTypeId = getAircraftSeatConfig().getAircraftType().getId();
             setAcTypeName(getAircraftSeatConfig().getAircraftType().getName());
+            seatConfObj = new SeatConfigObject();
+            seatConfObj.parse(seatConfigString);
+            System.out.println(seatConfigString);
+            System.out.println(seatConfObj.toString());
         } catch (NotFoundException e) {
             e.printStackTrace();
         }

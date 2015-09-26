@@ -52,10 +52,14 @@ public class SeatConfigObject {
                     setNumRows(numRow);
                 }
                 else if (c == '_' && seatConfigString.charAt(i+2) != 'e') {
-                    cabins.get(selection).setTravelClass(seatConfigString.charAt(i+1));
+                    cabins.get(selection).setTravelClass(Character.getNumericValue(seatConfigString.charAt(i+1)));
                     addCabin();
                     selection++;
                     numRow = 0;
+                    i++;
+                }
+                else if (c == '_') {
+                    cabins.get(selection).setTravelClass(Character.getNumericValue(seatConfigString.charAt(i+1)));
                 }
             }
         }
