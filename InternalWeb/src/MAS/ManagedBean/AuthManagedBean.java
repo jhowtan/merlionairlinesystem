@@ -81,6 +81,7 @@ public class AuthManagedBean {
             User user = userBean.getUser(userId);
             userDisplayName = user.getFirstName() + " " + user.getLastName();
             authenticated = true;
+            lastActive = new Date();
             populatePermissions();
             generateMenu(permissions);
 
@@ -201,13 +202,17 @@ public class AuthManagedBean {
         this.userDisplayName = userDisplayName;
     }
 
+    public long getTimeout() {
+        return Constants.INACTIVITY_TIMEOUT * 60 * 1000 - (new Date()).getTime() + lastActive.getTime();
+    }
+
     public void sessionTimeoutAjax() {
         inactivityTimeout();
         String json;
         if(!isAuthenticated()) {
             json = "{\"authenticated\": false}";
         } else {
-            json = "{\"authenticated\": true}";
+            json = "{\"authenticated\": true, \"timeout\": " + getTimeout() + "}";
         }
 
         FacesContext ctx = FacesContext.getCurrentInstance();
