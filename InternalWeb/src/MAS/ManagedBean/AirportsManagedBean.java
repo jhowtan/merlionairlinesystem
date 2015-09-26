@@ -5,6 +5,7 @@ import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -27,7 +28,12 @@ public class AirportsManagedBean {
         try {
             routeBean.removeAirport(id);
             authManagedBean.createAuditLog("Deleted airport: " + routeBean.getAirport(id).getName(), "delete_airport");
-        } catch (NotFoundException e) {
+        } catch (EJBException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("Unable to delete the airport. There is an existing route that utilizes this airport.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The airport cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
