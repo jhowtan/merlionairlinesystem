@@ -4,16 +4,17 @@ import java.util.Arrays;
 
 public class Cabin {
 
-    private final String[] travelClasses = new String[4];
+    public static String[] TRAVEL_CLASSES = {
+            "First",
+            "Business",
+            "Premium Economy",
+            "Economy"
+    };
     private String row;
     private int numRows;
     private int travelClass;
 
     public Cabin() {
-        getTravelClasses()[0] = "First";
-        getTravelClasses()[1] = "Business";
-        getTravelClasses()[2] = "Premium Economy";
-        getTravelClasses()[3] = "Economy";
         travelClass = 3;
         row = "";
         numRows = 1;
@@ -85,10 +86,10 @@ public class Cabin {
         this.travelClass = travelClass;
     }
     public int getClassIndex(String travelClass) {
-        return Arrays.asList(travelClasses).indexOf(travelClass);
+        return Arrays.asList(Cabin.TRAVEL_CLASSES).indexOf(travelClass);
     }
 
     public String[] getTravelClasses() {
-        return travelClasses;
+        return TRAVEL_CLASSES;
     }
 }
