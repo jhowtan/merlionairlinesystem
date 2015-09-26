@@ -1,0 +1,84 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Update Booking Class - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Update Booking Class</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/PriceManagement/bookingClasses">Booking Classes</h:link></li>
+                        <li role="presentation" class="active">
+                            <h:link outcome="/App/PriceManagement/updateBookingClass">
+                                <f:param name="bcId" value="#{updateBookingClassManagedBean.bookingClass.id}">Update Booking Class</f:param>
+                            </h:link>
+                        </li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Booking Class</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!name.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="name">Booking Class Name</label>
+                                        <h:inputText id="name" binding="#{name}" value="#{updateBookingClassManagedBean.name}" styleClass="form-control" pt:placeholder="e.g. Y" required="true" requiredMessage="Please enter a name for your booking class.">
+                                            <!--<f:validator validatorId="fareRuleValidator" />-->
+                                        </h:inputText>
+                                        <h:message for="name" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="flight">Flight Code</label>
+                                        <h:inputText styleClass="form-control" id="flight" readonly="true" value="#{updateBookingClassManagedBean.flight}" binding="#{flight}"/>
+                                        <h:message for="flight" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="flight">Fare Rule</label>
+                                        <h:inputText styleClass="form-control" id="fareRule" readonly="true" value="#{updateBookingClassManagedBean.fareRule}" binding="#{fareRule}"/>
+                                        <h:message for="fareRule" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="travelClass">Travel Class</label>
+                                        <h:inputText id="travelClass" value="#{updateBookingClassManagedBean.travelClasses[updateBookingClassManagedBean.bookingClass.travelClass]}" readonly="true" styleClass="form-control"/>
+                                    </div>
+                                    <div class="form-group col-lg-4 #{!occupied.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="occupied">Seats Occupied</label>
+                                        <h:inputText id="occupied" styleClass="form-control form-inline" readonly="true" value="#{updateBookingClassManagedBean.bookingClass.occupied}" binding="#{occupied}"/>
+                                    </div>
+                                    <div class="form-group col-lg-4 #{!allocation.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="allocation">Seats to Allocate</label>
+                                        <h:inputText id="allocation" styleClass="form-control form-inline" value="#{updateBookingClassManagedBean.allocation}" binding="#{allocation}" required="true"/>
+                                        <h:message for="allocation" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-4 #{!open.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="open">Status</label>
+                                        <h:inputText id="open" styleClass="form-control form-inline" disabled="true" value="#{updateBookingClassManagedBean.bookingClass.open ? 'Open' : 'Closed'}" binding="#{open}"/>
+                                        <h:message for="open" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/PriceManagement/bookingClasses" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{updateBookingClassManagedBean.save()}" value="Update Booking Class" styleClass="btn btn-default btn-success">
+                                    <f:param name="bcId" value="#{updateBookingClassManagedBean.bookingClass.id}"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
