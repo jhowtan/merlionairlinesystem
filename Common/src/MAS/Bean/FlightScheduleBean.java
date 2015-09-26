@@ -69,4 +69,10 @@ public class FlightScheduleBean {
         if (aa == null) throw new NotFoundException();
         return em.createQuery("SELECT f from Flight f WHERE f.aircraftAssignment = :aa", Flight.class).setParameter("aa", aa).getResultList();
     }
+
+    public String findSeatConfigOfFlight(long flightId) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        return flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig();
+    }
 }
