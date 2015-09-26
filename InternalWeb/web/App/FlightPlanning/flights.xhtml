@@ -39,8 +39,9 @@
                                 <td>#{fl.aircraftAssignment.getAircraft().getTailNumber()}</td>
                                 <td>#{fl.aircraftAssignment.getRoute().getOrigin().getName()}</td>
                                 <td>#{fl.aircraftAssignment.getRoute().getDestination().getName()}</td>
-                                <td>#{fl.departureTime}</td>
-                                <td>#{fl.arrivalTime}</td>
+
+                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.departureTime)}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.arrivalTime)}</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
