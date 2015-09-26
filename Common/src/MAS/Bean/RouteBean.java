@@ -2,6 +2,7 @@ package MAS.Bean;
 
 import MAS.Common.Utils;
 import MAS.Entity.*;
+import MAS.Exception.IntegrityConstraintViolationException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -222,10 +223,15 @@ public class RouteBean {
         return aircraftAssignment.getId();
     }
 
-    public void removeAircraftAssignment(long id) throws NotFoundException {
+    public void removeAircraftAssignment(long id) throws NotFoundException, IntegrityConstraintViolationException {
         AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, id);
         if (aircraftAssignment == null) throw new NotFoundException();
-        em.remove(aircraftAssignment);
+        try {
+            em.remove(aircraftAssignment);
+            em.flush();
+        } catch (Exception e) {
+            throw new IntegrityConstraintViolationException();
+        }
     }
 
     public List<AircraftAssignment> findAAByAircraft(long aircraftId) throws NotFoundException {

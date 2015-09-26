@@ -57,6 +57,7 @@
                                         <label class="control-label" for="departureTime">Departure Time</label>
                                         <h:inputText binding="#{departureTime}" id="departureTime" value="#{createFlightManagedBean.departureTime}" styleClass="form-control"
                                                      pt:placeholder="e.g. 00:00" size="20" required="true" requiredMessage="Departure Time of the flight is required.">
+                                            <f:validator validatorId="timeValidator" />
                                         </h:inputText>
                                         <h:message for="departureTime" styleClass="help-block" />
                                     </div>
@@ -75,6 +76,7 @@
                                         <label class="control-label" for="arrivalTime">Arrival Time</label>
                                         <h:inputText binding="#{arrivalTime}" id="arrivalTime" value="#{createFlightManagedBean.arrivalTime}" styleClass="form-control"
                                                      pt:placeholder="e.g. 23:59" size="20" required="true" requiredMessage="Arrival Time of the flight is required.">
+                                            <f:validator validatorId="timeValidator" />
                                         </h:inputText>
                                         <h:message for="arrivalTime" styleClass="help-block" />
                                     </div>

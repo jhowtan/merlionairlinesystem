@@ -15,6 +15,13 @@
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/aircraftAssignment">Aircraft Assignments Summary</h:link></li>
                         <li role="presentation"><h:link outcome="/App/RoutePlanning/createAircraftAssignment">Assign Aircraft</h:link></li>
                     </ul><br />
+
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
                     <table class="table" id="aircraftAssignments_table">
                         <thead>
                         <tr>

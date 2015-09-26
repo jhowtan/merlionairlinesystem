@@ -2,6 +2,7 @@ package MAS.ManagedBean;
 
 import MAS.Bean.RouteBean;
 import MAS.Entity.AircraftAssignment;
+import MAS.Exception.IntegrityConstraintViolationException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -32,8 +33,11 @@ public class AircraftAssignmentManagedBean {
             authManagedBean.createAuditLog("Deleted aircraft assignment: " + tailNum
                     + " : " + origin + " - " + destination, "delete_aircraft_assignment");
         } catch (NotFoundException e) {
-            e.getMessage();
             FacesMessage m = new FacesMessage("The aircraft assignment cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (IntegrityConstraintViolationException e) {
+            FacesMessage m = new FacesMessage("The aircraft cannot be unassigned because a flight already exists.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
