@@ -24,13 +24,14 @@
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!configName.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="configName">Seat Configuration Name</label>
-                                        <h:inputText id="configName" binding="#{configName}" value="#{createSeatConfigManagedBean.configName}" styleClass="form-control" pt:placeholder="e.g. A380 38BUSINESS" required="true" requiredMessage="Seat configuration name is required.">
+                                        <h:inputText id="configName" binding="#{configName}" value="#{createSeatConfigManagedBean.configName}" styleClass="form-control" pt:placeholder="e.g. A380-38BUSINESS" required="true" requiredMessage="Seat configuration name is required.">
                                         </h:inputText>
                                         <h:message for="configName" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!weight.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="weight">Base Weight (in kg)</label>
-                                        <h:inputText pt:type="number" id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" >
+                                        <h:inputText pt:type="number" id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" validatorMessage="Base weight must be greater than 0." converterMessage="Base weight must be greater than 0.">
+                                            <f:validateLongRange minimum="1" />
                                         </h:inputText>
                                         <h:message for="weight" styleClass="help-block" />
                                     </div>
@@ -59,10 +60,12 @@
                                                     <div class="panel-heading">Cabin #{createSeatConfigManagedBean.getIndexOf(cabin) + 1}</div>
                                                     <div class="panel-body">
                                                         <div class="row">
-                                                            <div class="form-group col-lg-12">
+                                                            <div class="form-group col-lg-12 #{!numRows.valid ? 'has-error' : ''}">
                                                                 <label class="control-label" for="numRows">Number of Rows</label>
                                                                 <!-- Do I need to bind this to cabin.numRows as well? -->
-                                                                <h:inputText pt:type="number" id="numRows" value="#{cabin.numRows}" styleClass="form-control" pt:placeholder="Please indicate at least 1 row to proceed"/>
+                                                                <h:inputText pt:type="number" pt:min="1" pt:max="100" id="numRows" value="#{cabin.numRows}" styleClass="form-control" binding="#{numRows}" requiredMessage="Number of rows is required." validatorMessage="The number of rows must be between 1 and 100." converterMessage="The number of rows must be between 1 and 100.">
+                                                                    <f:validateLongRange minimum="1" maximum="100" />
+                                                                </h:inputText>
                                                                 <h:message for="numRows" styleClass="help-block" />
                                                             </div>
                                                             <div class="form-group col-lg-12">
