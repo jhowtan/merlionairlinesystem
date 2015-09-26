@@ -35,7 +35,8 @@
                                     </div>
                                     <div class="form-group col-lg-12 #{!fuelCapacity.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="fuelCapacity">Fuel Capacity (in Litres)</label>
-                                        <h:inputText id="fuelCapacity" binding="#{fuelCapacity}" value="#{createAircraftTypeManagedBean.fuelCapacity}" styleClass="form-control" required="true" requiredMessage="Fuel capacity of aircraft type is required.">
+                                        <h:inputText pt:type="number" pt:min="1" id="fuelCapacity" binding="#{fuelCapacity}" value="#{createAircraftTypeManagedBean.fuelCapacity}" styleClass="form-control" required="true" requiredMessage="Fuel capacity of aircraft type is required." validatorMessage="A valid fuel capacity is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
                                         </h:inputText>
                                         <h:message for="fuelCapacity" styleClass="help-block" />
                                     </div>
