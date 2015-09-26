@@ -1,6 +1,7 @@
 package MAS.Bean;
 
 import MAS.Common.Permissions;
+import MAS.Entity.Permission;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,7 @@ public class InitBean {
     @EJB
     RouteBean routeBean;
 
+
     @PostConstruct
     public void init() {
         List<Long> permissionIds = new ArrayList<>();
@@ -36,12 +38,29 @@ public class InitBean {
                     e.printStackTrace();
                 }
             }
-            Long roleId = roleBean.createRole("Super Admin", permissionIds);
-            Long userId = userBean.createUser("admin", "John", "Smith", "nobody@example.com", "1234567");
             try {
+                Long roleId = roleBean.createRole("Super Admin", permissionIds);
+                Long userId = userBean.createUser("admin", "Jonathan", "Lau", "admin@jon.sg", "+65 6555-7777");
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
-            } catch (NotFoundException e) {
+
+                ArrayList<Long> airlinePlannerPermissions = new ArrayList<>();
+                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FLEET).getId());
+                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_ROUTES).getId());
+                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FLIGHT).getId());
+                roleId = roleBean.createRole("Airline Planner", airlinePlannerPermissions);
+                userId = userBean.createUser("daryl", "Daryl", "Ho", "daryl@jon.sg", "+65 6555-8888");
+                userBean.setPassword(userId, "password");
+                userBean.setRoles(userId, Arrays.asList(roleId));
+
+                ArrayList<Long> revenueManagerPermissions = new ArrayList<>();
+                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FARE_RULES).getId());
+                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_BOOKING_CLASSES).getId());
+                roleId = roleBean.createRole("Revenue Manager", revenueManagerPermissions);
+                userId = userBean.createUser("thad", "Thaddeus", "Loh", "thad@jon.sg", "+65 6555-9999");
+                userBean.setPassword(userId, "password");
+                userBean.setRoles(userId, Arrays.asList(roleId));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

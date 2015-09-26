@@ -94,4 +94,14 @@ public class RoleBean {
         return em.createQuery("SELECT r from Role r", Role.class).getResultList();
     }
 
+    public Permission findPermission(String name) throws NotFoundException {
+        try {
+            return em.createQuery("SELECT p from Permission p WHERE p.name = :name", Permission.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
+    }
+
 }
