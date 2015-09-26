@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="form-group col-lg-12 #{!weight.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="weight">Base Weight (in kg)</label>
-                                        <h:inputText id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" >
+                                        <h:inputText pt:type="number" id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" >
                                         </h:inputText>
                                         <h:message for="weight" styleClass="help-block" />
                                     </div>
