@@ -1,6 +1,7 @@
 package MAS.ManagedBean;
 
 import MAS.Bean.BookingClassBean;
+import MAS.Common.Cabin;
 import MAS.Entity.BookingClass;
 import MAS.Exception.NotFoundException;
 
@@ -9,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import java.util.Arrays;
 import java.util.List;
 
 @ManagedBean
@@ -52,8 +54,11 @@ public class BookingClassManagedBean {
         }
     }
 
-
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public String getTravelClassName(int travelClass) {
+        return Cabin.TRAVEL_CLASSES[travelClass];
     }
 }
