@@ -1,6 +1,8 @@
 package MAS.ManagedBean;
 
+import MAS.Bean.BookingClassBean;
 import MAS.Bean.FareRuleBean;
+import MAS.Entity.BookingClass;
 import MAS.Entity.FareRule;
 import MAS.Exception.NotFoundException;
 
@@ -12,25 +14,25 @@ import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
-public class FareRuleManagedBean {
+public class BookingClassManagedBean {
     @EJB
-    private FareRuleBean fareRuleBean;
+    private BookingClassBean bookingClassBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
-    public List<FareRule> getAllFareRules() {
-        return fareRuleBean.getAllFareRules();
+    public List<BookingClass> getAllBookingClasses() {
+        return bookingClassBean.getAllBookingClasses();
     }
 
     public void delete(long id) {
         try {
-            FareRule fareRule = fareRuleBean.getFareRule(id);
-            fareRuleBean.removeFareRule(id);
-            authManagedBean.createAuditLog("Deleted fare rule: " + fareRule.getName(), "delete_fare_rule");
+            BookingClass bookingClass = bookingClassBean.getBookingClass(id);
+            bookingClassBean.removeBookingClass(id);
+            authManagedBean.createAuditLog("Deleted booking class: " + bookingClass.getName(), "delete_booking_class");
         } catch (NotFoundException e) {
             e.getMessage();
-            FacesMessage m = new FacesMessage("The fare rule cannot be found, or may have already been deleted.");
+            FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }

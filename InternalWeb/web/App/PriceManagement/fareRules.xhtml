@@ -15,7 +15,7 @@
                         <li role="presentation" class="active"><h:link outcome="/App/PriceManagement/fareRules">Summary</h:link></li>
                         <li role="presentation"><h:link outcome="/App/PriceManagement/createFareRule">Create Fare Rule</h:link></li>
                     </ul><br />
-                    <table class="table" id="users_table">
+                    <table class="table" id="fareRules_table">
                         <thead>
                             <tr>
                                 <th>Fare Rule Name</th>
@@ -28,7 +28,7 @@
                                     <td>#{fareRule.name}</td>
                                     <td>
                                         <h:form>
-                                            <h:commandLink action="#{fareRuleManagedBean.delete(fareRule.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete fare rule #{user.username}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                            <h:commandLink action="#{fareRuleManagedBean.delete(fareRule.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete fare rule #{fareRule.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
                                         </h:form>
                                     </td>
                                 </tr>
@@ -42,7 +42,7 @@
 
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#users_table').DataTable({
+            $('#fareRules_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [1] }
