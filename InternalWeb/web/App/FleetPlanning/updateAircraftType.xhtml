@@ -76,9 +76,8 @@
                                                             </h:link>
                                                             <h:commandLink action="#{updateAircraftTypeManagedBean.deleteSeatConfig(seatConfig.id)}"
                                                                            styleClass="btn btn-default btn-xs btn-danger"
-                                                                           onclick="return confirm('Are you sure you wish to delete seat configuration \'#{seatConfig.name}\'?');">
-
-                                                                <i class="fa fa-trash"></i> Delete
+                                                                           onclick="return confirm('Are you sure you wish to delete seat configuration #{seatConfig.name}?');">
+                                                                <f:param name="typeId" value="#{updateAircraftTypeManagedBean.type.id}"><i class="fa fa-trash"></i> Delete</f:param>
                                                             </h:commandLink>
                                                         </div>
                                                     </td>
