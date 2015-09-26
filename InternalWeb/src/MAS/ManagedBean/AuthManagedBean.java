@@ -3,18 +3,16 @@ package MAS.ManagedBean;
 import MAS.Bean.AuditLogBean;
 import MAS.Bean.UserBean;
 import MAS.Common.Constants;
-import MAS.Common.Permissions;
+import MAS.Common.Utils;
 import MAS.Entity.Permission;
 import MAS.Entity.Role;
 import MAS.Entity.User;
-import MAS.Exception.InvalidLoginException;
 import MAS.Exception.NotFoundException;
 import MAS.Structure.MainMenu;
 import MAS.Structure.MenuEntry;
 import MAS.Structure.Page;
 import MAS.Structure.Pages;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -39,6 +37,7 @@ public class AuthManagedBean {
     private boolean authenticated = false;
     private Set<String> permissions;
     private MainMenu mainMenu;
+    private Date lastActive;
 
     private HashMap<String, Page> pages;
 
@@ -51,6 +50,15 @@ public class AuthManagedBean {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+        }
+        lastActive = new Date();
+    }
+
+    public void inactivityTimeout() {
+        if (Utils.minutesLater(lastActive, Constants.INACTIVITY_TIMEOUT).before(new Date())) {
+            userId = -1;
+            authenticated = false;
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         }
     }
 
@@ -93,6 +101,8 @@ public class AuthManagedBean {
     }
 
     public void checkPermission() {
+        inactivityTimeout();
+        lastActive = new Date();
         if (!authenticated) {
             forwardToLogin();
         } else {
@@ -189,5 +199,30 @@ public class AuthManagedBean {
 
     public void setUserDisplayName(String userDisplayName) {
         this.userDisplayName = userDisplayName;
+    }
+
+    public void sessionTimeoutAjax() {
+        inactivityTimeout();
+        String json;
+        if(!isAuthenticated()) {
+            json = "{\"authenticated\": false}";
+        } else {
+            json = "{\"authenticated\": true}";
+        }
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
+        response.setContentLength(json.length());
+        response.setContentType("application/json");
+
+        try {
+            response.getOutputStream().write(json.getBytes());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ctx.responseComplete();
     }
 }

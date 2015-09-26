@@ -139,6 +139,18 @@
 
     <ui:insert name="javascript"></ui:insert>
 
+    <script type="text/javascript">
+        var checkSession = function() {
+            $.get("#{commonManagedBean.getRoot()}/Common/sessionTimeoutAjax.xhtml", function(data) {
+                if (!data.authenticated) {
+                    window.location.href = "#{commonManagedBean.getRoot()}/Auth/index.xhtml";
+                }
+                setTimeout(checkSession, 5 * 1000);
+            });
+        }
+        checkSession();
+    </script>
+
 </h:body>
 
 </html>

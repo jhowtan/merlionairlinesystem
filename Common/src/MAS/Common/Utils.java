@@ -25,6 +25,13 @@ public class Utils {
         return calendar.getTime();
     }
 
+    public static Date minutesLater(Date date, int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
+    }
+
     public static String hash(String plaintext) {
         String hash = null;
         try {
