@@ -81,4 +81,15 @@ public class BookingClass {
     public void setOccupied(int occupied) {
         this.occupied = occupied;
     }
+
+    private boolean open;
+
+    @Basic
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
 }

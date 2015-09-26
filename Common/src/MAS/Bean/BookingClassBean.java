@@ -28,6 +28,7 @@ public class BookingClassBean {
         bookingClass.setTravelClass(travelClass);
         bookingClass.setAllocation(allocation);
         bookingClass.setOccupied(0);
+        bookingClass.setOpen(false);
         bookingClass.setFareRule(fareRule);
         bookingClass.setFlight(flight);
         em.persist(bookingClass);
