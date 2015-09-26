@@ -37,18 +37,6 @@ public class UpdateRouteManagedBean {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         long rtId = Long.parseLong(params.get("rtId"));
         getRoute(rtId);
-        try {
-            List<AircraftAssignment> aircraftAssignments = routeBean.findAAByRoute(rtId);
-            if (aircraftAssignments.size() > 0) {
-                editable = false;
-                FacesMessage m = new FacesMessage("Route cannot be edited due to assigned flights to this route.");
-                m.setSeverity(FacesMessage.SEVERITY_INFO);
-                FacesContext.getCurrentInstance().addMessage("status", m);
-            }
-        }
-        catch (Exception e) {
-            editable = true;
-        }
     }
 
     private void getRoute(long id) {
@@ -63,11 +51,27 @@ public class UpdateRouteManagedBean {
     }
 
     public void save() throws NotFoundException {
+        if (originId == destinationId) {
+            FacesMessage m = new FacesMessage("Origin and destination cannot be the same.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+            return;
+        }
+        try {
+            List<AircraftAssignment> aircraftAssignments = routeBean.findAAByRoute(route.getId());
+            if (aircraftAssignments.size() > 0) {
+                editable = false;
+                FacesMessage m = new FacesMessage("Route cannot be edited due to assigned flights to this route.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            }
+        }
+        catch (Exception e) {
+            editable = true;
+        }
         routeBean.updateRoute(route.getId(), originId, destinationId);
         authManagedBean.createAuditLog("Updated route: " + routeBean.getAirport(originId).getName() + " - " +
                 routeBean.getAirport(destinationId).getName(), "update_route");
-        setOriginId(0);
-        setDestinationId(0);
         FacesMessage m = new FacesMessage("Route updated successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
