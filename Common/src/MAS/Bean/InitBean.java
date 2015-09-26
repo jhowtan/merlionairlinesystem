@@ -54,8 +54,8 @@ public class InitBean {
                 userBean.setRoles(userId, Arrays.asList(roleId));
 
                 ArrayList<Long> revenueManagerPermissions = new ArrayList<>();
-                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FARE_RULES).getId());
-                airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_BOOKING_CLASSES).getId());
+                revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FARE_RULES).getId());
+                revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_BOOKING_CLASSES).getId());
                 roleId = roleBean.createRole("Revenue Manager", revenueManagerPermissions);
                 userId = userBean.createUser("thad", "Thaddeus", "Loh", "thad@jon.sg", "+65 6555-9999");
                 userBean.setPassword(userId, "password");
