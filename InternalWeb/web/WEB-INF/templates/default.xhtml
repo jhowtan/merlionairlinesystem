@@ -140,17 +140,18 @@
     <ui:insert name="javascript"></ui:insert>
 
     <script type="text/javascript">
+        var timeout_check_delay = 1000;
         var checkSession = function() {
             $.get("#{commonManagedBean.getRoot()}/Common/sessionTimeoutAjax.xhtml", function(data) {
                 if (!data.authenticated) {
                     window.location.href = "#{commonManagedBean.getRoot()}/Auth/index.xhtml";
+                } else {
+                    setTimeout(checkSession, data.timeout + timeout_check_delay);
                 }
-                setTimeout(checkSession, 5 * 1000);
             });
         }
-        checkSession();
+        setTimeout(checkSession, #{authManagedBean.getTimeout()} + timeout_check_delay);
     </script>
 
 </h:body>
-
 </html>
