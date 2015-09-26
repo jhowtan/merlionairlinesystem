@@ -56,16 +56,13 @@ public class UpdateSeatConfigManagedBean {
     }
 
     public void updateConfig() throws NotFoundException {
-        // Decide on whether to have multiple aircraft types with the same seat configuration
-        System.out.println(seatConfObj.toString());
-        fleetBean.createAircraftSeatConfig(seatConfObj.toString(), configName, weight, acTypeId);
+        fleetBean.changeWeight(aircraftSeatConfig.getId(), weight);
+        fleetBean.changeName(aircraftSeatConfig.getId(), configName);
 
-        setConfigName(null);
-        setWeight(0);
-        seatConfObj = new SeatConfigObject();
-        FacesMessage m = new FacesMessage("Seat Configuration created successfully.");
+        FacesMessage m = new FacesMessage("Seat Configuration updated successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
+        authManagedBean.createAuditLog("Updated Seat Configuration: " + configName, "update_seat_config");
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
