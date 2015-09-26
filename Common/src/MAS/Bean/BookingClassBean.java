@@ -5,12 +5,14 @@ import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless(name = "BookingClassEJB")
+@LocalBean
 public class BookingClassBean {
     @PersistenceContext
     EntityManager em;
