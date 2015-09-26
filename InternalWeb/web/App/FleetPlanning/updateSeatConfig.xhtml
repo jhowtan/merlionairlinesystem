@@ -62,7 +62,9 @@
                         <div class="col-lg-12 text-right">
                             <div class="btn-group">
                                 <h:link outcome="/App/FleetPlanning/aircraftTypes" class="btn btn-default" value="Cancel" />
-                                <h:commandButton action="#{updateSeatConfigManagedBean.updateConfig()}" value="Update Configuration" styleClass="btn btn-success"/>
+                                <h:commandButton action="#{updateSeatConfigManagedBean.updateConfig()}" value="Update Configuration" styleClass="btn btn-success">
+                                    <f:param name="seatConfigId" value="#{updateSeatConfigManagedBean.aircraftSeatConfig.id}"/>
+                                </h:commandButton>
                             </div>
                         </div>
                     </h:form>

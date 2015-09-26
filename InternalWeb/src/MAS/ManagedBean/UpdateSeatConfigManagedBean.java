@@ -36,20 +36,20 @@ public class UpdateSeatConfigManagedBean {
     @PostConstruct
     public void init() {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        long scId = Long.parseLong(params.get("seatConfigId"));
-        getSeatConfig(scId);
+        long seatConfigId = Long.parseLong(params.get("seatConfigId"));
+        getSeatConfig(seatConfigId);
         seatConfObj = new SeatConfigObject();
     }
 
     private void getSeatConfig(long id) {
         try {
-            aircraftSeatConfig = fleetBean.getAircraftSeatConfig(id);
-            configName = aircraftSeatConfig.getName();
-            weight = aircraftSeatConfig.getWeight();
-            seatConfigString = aircraftSeatConfig.getSeatConfig();
+            setAircraftSeatConfig(fleetBean.getAircraftSeatConfig(id));
+            configName = getAircraftSeatConfig().getName();
+            weight = getAircraftSeatConfig().getWeight();
+            seatConfigString = getAircraftSeatConfig().getSeatConfig();
             System.out.println(seatConfigString);
-            acTypeId = aircraftSeatConfig.getAircraftType().getId();
-            setAcTypeName(aircraftSeatConfig.getAircraftType().getName());
+            acTypeId = getAircraftSeatConfig().getAircraftType().getId();
+            setAcTypeName(getAircraftSeatConfig().getAircraftType().getName());
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -137,6 +137,14 @@ public class UpdateSeatConfigManagedBean {
 
     public void setAcTypeName(String acTypeName) {
         this.acTypeName = acTypeName;
+    }
+
+    public AircraftSeatConfig getAircraftSeatConfig() {
+        return aircraftSeatConfig;
+    }
+
+    public void setAircraftSeatConfig(AircraftSeatConfig aircraftSeatConfig) {
+        this.aircraftSeatConfig = aircraftSeatConfig;
     }
 }
 
