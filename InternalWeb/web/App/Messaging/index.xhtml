@@ -10,6 +10,11 @@
         <div class="container-fluid">
             <h1 class="page-header">Messages</h1>
             <div class="list-group">
+                <h:panelGroup rendered="#{messageManagedBean.messages.size() == 0}">
+                    <div class="centered">
+                        <em>There are currently no messages.</em>
+                    </div>
+                </h:panelGroup>
                 <ui:repeat value="#{messageManagedBean.messages}" var="message">
                     <h:link outcome="/App/Messaging/viewMessage" styleClass="list-group-item">
                         <f:param name="id" value="#{message.id}" />
