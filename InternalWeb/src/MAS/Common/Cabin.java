@@ -56,7 +56,7 @@ public class Cabin {
             if (c == 's')
                 result++;
         }
-        return result;
+        return result * numRows;
     }
 
     public String toString() {
