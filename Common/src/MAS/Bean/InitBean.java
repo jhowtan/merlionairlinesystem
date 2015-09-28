@@ -2,8 +2,6 @@ package MAS.Bean;
 
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
-import MAS.Entity.Permission;
-import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,7 +24,8 @@ public class InitBean {
     FleetBean fleetBean;
     @EJB
     RouteBean routeBean;
-
+    @EJB
+    FareRuleBean fareRuleBean;
 
     @PostConstruct
     public void init() {
@@ -129,6 +128,23 @@ public class InitBean {
 
             }
         }
+
+        if (fareRuleBean.getAllFareRules().size() == 0) {
+            try {
+                int minimumStay = 1;
+                int maximumStay = 30;
+                int advancePurchase = 60;
+                int minimumPassengers = 1;
+                int milesAccrual = 100;
+                fareRuleBean.createFareRule("SVR-2", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
+                fareRuleBean.createFareRule("SVR-3", minimumStay+9, maximumStay, advancePurchase-30, minimumPassengers, milesAccrual-25, false);
+                fareRuleBean.createFareRule("SVR-4", minimumStay, maximumStay+30, advancePurchase+30, minimumPassengers+1, milesAccrual-50, false);
+            } catch (Exception e) {
+
+            }
+        }
+
+
     }
 
 }
