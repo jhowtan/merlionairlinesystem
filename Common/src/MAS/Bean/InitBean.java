@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,7 +26,13 @@ public class InitBean {
     @EJB
     RouteBean routeBean;
     @EJB
+    FlightScheduleBean flightScheduleBean;
+    @EJB
+    AircraftMaintenanceSlotBean aircraftMaintenanceSlotBean;
+    @EJB
     FareRuleBean fareRuleBean;
+    @EJB
+    BookingClassBean bookingClassBean;
 
     @PostConstruct
     public void init() {
@@ -109,6 +116,23 @@ public class InitBean {
             }
         }
 
+
+        if (fareRuleBean.getAllFareRules().size() == 0) {
+            try {
+                int minimumStay = 1;
+                int maximumStay = 30;
+                int advancePurchase = 60;
+                int minimumPassengers = 1;
+                int milesAccrual = 100;
+                fareRuleBean.createFareRule("SVR-2", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
+                fareRuleBean.createFareRule("SVR-3", minimumStay+9, maximumStay, advancePurchase-30, minimumPassengers, milesAccrual-25, false);
+                fareRuleBean.createFareRule("SVR-4", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers + 1, milesAccrual - 50, false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (routeBean.getAllAirports().size() == 0) {
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
@@ -122,29 +146,36 @@ public class InitBean {
                 long routeId = routeBean.createRoute(apId, ap2Id);
 
                 List<Aircraft> allAircraft = fleetBean.getAllAircraft();
-                routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
-                routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
-            } catch (Exception e) {
+                long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
+                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
 
+                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
+                    String flight1Code = "MA11";
+                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-09 12:00:00");
+                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-10 08:00:00");
+                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id);
+
+                    String flight2Code = "MA12";
+                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-12 02:00:00");
+                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-12 18:00:00");
+                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id);
+
+                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
+                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
+                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival1Time, 2.0, ap2Id, ac1Id));
+                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival2Time, 2.0, ap2Id, ac2Id));
+
+                    if (bookingClassBean.getAllBookingClasses().size() == 0) {
+                        bookingClassBean.createBookingClass("Y", 40, 3, fareRuleBean.getAllFareRules().get(0).getId(), flight1Id);
+                        bookingClassBean.createBookingClass("Z", 20, 2, fareRuleBean.getAllFareRules().get(1).getId(), flight1Id);
+                        bookingClassBean.createBookingClass("C", 20, 3, fareRuleBean.getAllFareRules().get(2).getId(), flight2Id);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
-        if (fareRuleBean.getAllFareRules().size() == 0) {
-            try {
-                int minimumStay = 1;
-                int maximumStay = 30;
-                int advancePurchase = 60;
-                int minimumPassengers = 1;
-                int milesAccrual = 100;
-                fareRuleBean.createFareRule("SVR-2", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
-                fareRuleBean.createFareRule("SVR-3", minimumStay+9, maximumStay, advancePurchase-30, minimumPassengers, milesAccrual-25, false);
-                fareRuleBean.createFareRule("SVR-4", minimumStay, maximumStay+30, advancePurchase+30, minimumPassengers+1, milesAccrual-50, false);
-            } catch (Exception e) {
-
-            }
-        }
-
-
     }
 
 }
