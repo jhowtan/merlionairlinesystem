@@ -61,6 +61,15 @@ public class UpdateFlightGroupManagedBean {
         flights = flightGroup.getFlights();
     }
 
+    public void save() throws NotFoundException {
+        flightScheduleBean.updateRecurringFlight(flightGroupId, code, departureTime, flightDuration);
+        authManagedBean.createAuditLog("Updated recurring flight: " + code, "update_recurring_flight");
+        FacesMessage m = new FacesMessage("Flight group updated successfully.");
+        m.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage("status", m);
+        init();
+    }
+
     public String formatAA() {
         try {
             AircraftAssignment aa = routeBean.getAircraftAssignment(aaId);

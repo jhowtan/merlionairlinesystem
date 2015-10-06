@@ -98,7 +98,7 @@ public class FlightScheduleBean {
         Date currArrivalDate = null;
 
         try {
-            currDepartureDate = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(new SimpleDateFormat("yyyy-MM-dd").format(recurringStartDate) + " " + departureTime);
+            currDepartureDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(new SimpleDateFormat("yyyy-MM-dd").format(recurringStartDate) + " " + departureTime);
             currArrivalDate = Utils.minutesLater(currDepartureDate, flightDuration);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -144,6 +144,7 @@ public class FlightScheduleBean {
         return flightGroup.getId();
     }
 
+
     public FlightGroup getFlightGroup(long id) throws NotFoundException {
         FlightGroup flightGroup = em.find(FlightGroup.class, id);
         if (flightGroup == null) throw new NotFoundException();
@@ -155,5 +156,19 @@ public class FlightScheduleBean {
         if (flight == null) throw new NotFoundException();
         flight.setFlightGroup(null);
         em.persist(flight);
+    }
+
+    public void updateRecurringFlight(long flightGroupId, String code, String departureTime, int flightDuration) throws NotFoundException {
+        FlightGroup flightGroup = getFlightGroup(flightGroupId);
+        for (Flight flight : flightGroup.getFlights()) {
+            flight.setCode(code);
+            try {
+                flight.setDepartureTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(new SimpleDateFormat("yyyy-MM-dd").format(flight.getDepartureTime()) + " " + departureTime));
+                flight.setArrivalTime(Utils.minutesLater(flight.getDepartureTime(), flightDuration));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            em.persist(flight);
+        }
     }
 }
