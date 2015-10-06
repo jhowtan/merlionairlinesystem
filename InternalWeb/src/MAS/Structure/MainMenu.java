@@ -43,7 +43,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Flight Planning", "plane",
-                        new MenuEntry("Flights", null, Pages.LIST_FLIGHTS, Pages.CREATE_FLIGHT, Pages.UPDATE_FLIGHT),
+                        new MenuEntry("Flights", null, Pages.LIST_FLIGHTS, Pages.CREATE_FLIGHT, Pages.CREATE_FLIGHT_SINGLE, Pages.CREATE_FLIGHT_RECURRING, Pages.UPDATE_FLIGHT),
                         new MenuEntry("Maintenance", null, Pages.LIST_MAINTENANCE_SLOTS, Pages.CREATE_MAINTENANCE_SLOT, Pages.UPDATE_MAINTENANCE_SLOT)
                 )
         );

@@ -53,6 +53,8 @@ public class Pages {
     // Airline Planning System: Schedule Planning Pages
     public static final Page LIST_FLIGHTS = new Page("/App/FlightPlanning/flights", Permissions.MANAGE_FLIGHT);
     public static final Page CREATE_FLIGHT = new Page("/App/FlightPlanning/createFlight", Permissions.MANAGE_FLIGHT);
+    public static final Page CREATE_FLIGHT_SINGLE = new Page("/App/FlightPlanning/createFlightSingle", Permissions.MANAGE_FLIGHT);
+    public static final Page CREATE_FLIGHT_RECURRING = new Page("/App/FlightPlanning/createFlightRecurring", Permissions.MANAGE_FLIGHT);
     public static final Page UPDATE_FLIGHT = new Page("/App/FlightPlanning/updateFlight", Permissions.MANAGE_FLIGHT);
 
     public static final Page LIST_MAINTENANCE_SLOTS = new Page("/App/FlightPlanning/maintenanceSlots", Permissions.MANAGE_FLIGHT);
