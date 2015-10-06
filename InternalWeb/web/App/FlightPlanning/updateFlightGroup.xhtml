@@ -1,0 +1,118 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Update Flight Group - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Update Flight Group</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/FlightPlanning/flights">Flights</h:link></li>
+                        <li role="presentation" class="active">
+                            <h:link outcome="/App/FlightPlanning/updateFlightGroup">
+                                <f:param name="flightGroupId" value="#{updateFlightGroupManagedBean.flightGroupId}" />
+                                Update Flight Group
+                            </h:link>
+                        </li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Flights in Flight Group</div>
+                        <div class="panel-body">
+
+                            <table class="table" id="flights_table">
+                                <thead>
+                                <tr>
+                                    <th>Flight</th>
+                                    <th>Aircraft</th>
+                                    <th>Route</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{updateFlightGroupManagedBean.flights}" var="fl">
+                                    <tr>
+                                        <td>#{fl.code}</td>
+                                        <td>#{fl.aircraftAssignment.getAircraft().getTailNumber()}</td>
+                                        <td>#{fl.aircraftAssignment.getRoute().getOrigin().getCode()} - #{fl.aircraftAssignment.getRoute().getDestination().getCode()}</td>
+
+                                        <td>#{commonManagedBean.formatDate("dd MMM yyyy",fl.departureTime)}</td>
+                                        <td>
+                                            <h:form>
+                                                <div class="btn-group">
+                                                    <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>
+                                                    <h:commandLink action="#{flightsManagedBean.delete(fl.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete flight: #{fl.code}?');"><i class="fa fa-trash"/> Delete<f:param name="flightGroupId" value="#{updateFlightGroupManagedBean.flightGroupId}" /></h:commandLink>
+                                                </div>
+                                            </h:form>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <!-- BEGIN FORM PANEL BODY -->
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Flight Group Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!code.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="code">Flight Code</label>
+                                        <h:inputText id="code" binding="#{code}" value="#{updateFlightGroupManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. MA11" required="true" requiredMessage="Flight code is required.">
+                                        </h:inputText>
+                                        <h:message for="code" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="aircraftAssignment">Aircraft Assignment</label>
+                                        <br/>
+                                        <h:inputText readonly="true" styleClass="form-control" id="aircraftAssignment" value="#{updateFlightGroupManagedBean.formatAA()}"/>
+                                        <h:message for="aircraftAssignment" styleClass="help-block" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 #{!departureTime.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="departureTime">Departure Time</label>
+                                        <h:inputText binding="#{departureTime}" id="departureTime" value="#{updateFlightGroupManagedBean.departureTime}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 00:00" size="20" required="true" requiredMessage="Departure Time of the flight is required.">
+                                        </h:inputText>
+                                        <h:message for="departureTime" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!flightDuration.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="flightDuration">Flight Duration</label>
+                                        <h:inputText binding="#{flightDuration}" id="flightDuration" value="#{updateFlightGroupManagedBean.flightDuration}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 7:32" size="20" required="true" requiredMessage="Flight duration is required.">
+                                            <f:converter converterId="durationConverter" />
+                                        </h:inputText>
+                                        <h:message for="flightDuration" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/FlightPlanning/routes" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{updateFlightGroupManagedBean.save()}" value="Update Flights" styleClass="btn btn-success">
+                                    <f:param name="flightGroupId" value="#{updateFlightGroupManagedBean.flightGroupId}"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

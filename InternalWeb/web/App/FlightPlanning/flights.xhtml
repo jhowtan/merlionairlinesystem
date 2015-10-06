@@ -41,11 +41,13 @@
 
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.departureTime)}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.arrivalTime)}</td>
-                                <td>#{fl.flightGroup != null ? fl.flightGroup.id : "NA"}</td>
+                                <td>
+                                    <h:link outcome="/App/FlightPlanning/updateFlightGroup" styleClass="btn btn-default btn-xs btn-primary #{fl.flightGroup == null ? 'disabled' : ''}"><f:param name="flightGroupId" value="#{fl.flightGroup != null ? fl.flightGroup.id : -1}"><i class="fa fa-pencil"></i> Edit Group #{fl.flightGroup.id}</f:param></h:link>
+                                </td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
-                                            <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>
                                             <h:commandLink action="#{flightsManagedBean.delete(fl.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete flight: #{fl.code}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                         </div>
                                     </h:form>

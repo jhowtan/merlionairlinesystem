@@ -144,6 +144,12 @@ public class FlightScheduleBean {
         return flightGroup.getId();
     }
 
+    public FlightGroup getFlightGroup(long id) throws NotFoundException {
+        FlightGroup flightGroup = em.find(FlightGroup.class, id);
+        if (flightGroup == null) throw new NotFoundException();
+        return flightGroup;
+    }
+
     public void removeFlightFromFlightGroup(long id) throws NotFoundException {
         Flight flight = em.find(Flight.class, id);
         if (flight == null) throw new NotFoundException();
