@@ -12,11 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.Period;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Stateless(name = "FlightScheduleEJB")
 public class FlightScheduleBean {
@@ -141,5 +142,12 @@ public class FlightScheduleBean {
         em.flush();
 
         return flightGroup.getId();
+    }
+
+    public void removeFlightFromFlightGroup(long id) throws NotFoundException {
+        Flight flight = em.find(Flight.class, id);
+        if (flight == null) throw new NotFoundException();
+        flight.setFlightGroup(null);
+        em.persist(flight);
     }
 }

@@ -37,6 +37,7 @@ public class UpdateFlightManagedBean {
     private Date arrivalDate;
     private String departureTime;
     private String arrivalTime;
+    private Long flightGroup;
 
     @PostConstruct
     public void init() {
@@ -58,6 +59,9 @@ public class UpdateFlightManagedBean {
         departureTime = timeFormat.format(flight.getDepartureTime());
         arrivalDate = flight.getArrivalTime();
         arrivalTime = timeFormat.format(flight.getArrivalTime());
+        if (flight.getFlightGroup() != null) {
+            flightGroup = flight.getFlightGroup().getId();
+        }
     }
 
     public void save() throws NotFoundException {
@@ -66,6 +70,8 @@ public class UpdateFlightManagedBean {
         flightScheduleBean.changeFlightTimings(flight.getId(),
                 addTimeToDate(departureDate, departureTime),
                 addTimeToDate(arrivalDate, arrivalTime));
+        flightScheduleBean.removeFlightFromFlightGroup(flight.getId());
+        flightGroup = null;
         authManagedBean.createAuditLog("Updated flight: " + flight.getCode(), "update_flight");
         FacesMessage m = new FacesMessage("Flight updated successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -164,5 +170,13 @@ public class UpdateFlightManagedBean {
 
     public void setParams(Map<String, String> params) {
         this.params = params;
+    }
+
+    public long getFlightGroup() {
+        return flightGroup;
+    }
+
+    public void setFlightGroup(long flightGroup) {
+        this.flightGroup = flightGroup;
     }
 }

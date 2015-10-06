@@ -24,6 +24,11 @@
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
+
+                    <h:panelGroup layout="block" styleClass="alert alert-warning" rendered="#{! empty flightGroup}">
+                        <strong>WARNING:</strong> This flight is created and managed as part of a recurring flight group. Editing this flight directly will unlink it from the group.
+                    </h:panelGroup>
+
                     <!-- BEGIN FORM PANEL BODY -->
                     <h:form>
                         <div class="panel panel-default">
