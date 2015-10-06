@@ -70,17 +70,56 @@
                                         <h:message for="flightDuration" styleClass="help-block" />
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 #{!recurringStartDate.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="recurringStartDate">Recurring Start Date</label>
+                                        <h:inputText binding="#{recurringStartDate}" id="recurringStartDate" value="#{createFlightManagedBean.recurringStartDate}" styleClass="form-control"
+                                                     pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                     required="true" requiredMessage="Recurring flight starting date is required.">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:inputText>
+                                        <h:message for="recurringStartDate" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-6 #{!recurringEndDate.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="recurringEndDate">Recurring End Date</label>
+                                        <h:inputText binding="#{recurringEndDate}" id="recurringEndDate" value="#{createFlightManagedBean.recurringEndDate}" styleClass="form-control"
+                                                     pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                     required="true" requiredMessage="Recurring flight ending date is required.">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:inputText>
+                                        <h:message for="recurringEndDate" styleClass="help-block" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label class="control-label">Recurring Days</label>
+                                        <h:selectManyCheckbox value="#{createFlightManagedBean.recurringDays}" styleClass="recurringDaysTable">
+                                            <f:selectItems value="#{createFlightManagedBean.recurringDaysItems}" var="n" itemValue="#{n}" itemLabel="#{commonManagedBean.getDayString(n)}" />
+                                        </h:selectManyCheckbox>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12 text-right">
                             <div class="btn-group">
                                 <h:link outcome="/App/FlightPlanning/flights" class="btn btn-default" value="Cancel" />
-                                <h:commandButton action="#{createFlightManagedBean.createFlight()}" value="Create Flight" styleClass="btn btn-success"/>
+                                <h:commandButton action="#{createFlightManagedBean.createRecurringFlight()}" value="Create Flight" styleClass="btn btn-success"/>
                             </div>
                         </div>
                     </h:form>
                 </div>
             </div>
         </div>
+
+        <style type="text/css">
+            .recurringDaysTable td {
+                padding: 10px 15px;
+            }
+            .recurringDaysTable label {
+                font-weight: normal;
+                margin-left: 5px;
+            }
+        </style>
+
     </ui:define>
 </ui:composition>
