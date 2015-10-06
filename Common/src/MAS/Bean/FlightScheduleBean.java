@@ -122,8 +122,8 @@ public class FlightScheduleBean {
 
                 Flight flight = new Flight();
                 flight.setCode(code);
-                flight.setArrivalTime(currArrivalDate);
-                flight.setDepartureTime(currDepartureDate);
+                flight.setArrivalTime((Date) currArrivalDate.clone());
+                flight.setDepartureTime((Date) currDepartureDate.clone());
                 flight.setAircraftAssignment(aircraftAssignment);
                 flight.setFlightGroup(flightGroup);
                 flights.add(flight);
