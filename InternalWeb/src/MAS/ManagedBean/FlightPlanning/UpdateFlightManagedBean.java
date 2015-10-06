@@ -2,6 +2,7 @@ package MAS.ManagedBean.FlightPlanning;
 
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.RouteBean;
+import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
@@ -34,10 +35,9 @@ public class UpdateFlightManagedBean {
     private String code;
     private long aaId;
     private Date departureDate;
-    private Date arrivalDate;
     private String departureTime;
-    private String arrivalTime;
     private Long flightGroup;
+    private int flightDuration;
 
     @PostConstruct
     public void init() {
@@ -57,8 +57,7 @@ public class UpdateFlightManagedBean {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         departureDate = flight.getDepartureTime();
         departureTime = timeFormat.format(flight.getDepartureTime());
-        arrivalDate = flight.getArrivalTime();
-        arrivalTime = timeFormat.format(flight.getArrivalTime());
+        flightDuration = (int) ((flight.getArrivalTime().getTime() - flight.getDepartureTime().getTime()) / 60000);
         if (flight.getFlightGroup() != null) {
             flightGroup = flight.getFlightGroup().getId();
         }
@@ -67,9 +66,10 @@ public class UpdateFlightManagedBean {
     public void save() throws NotFoundException {
         System.out.println(addTimeToDate(departureDate, departureTime));
         flightScheduleBean.changeFlightCode(flight.getId(), code);
+        Date departureDateTime = addTimeToDate(departureDate, departureTime);
         flightScheduleBean.changeFlightTimings(flight.getId(),
-                addTimeToDate(departureDate, departureTime),
-                addTimeToDate(arrivalDate, arrivalTime));
+                departureDateTime,
+                Utils.minutesLater(departureDateTime, flightDuration));
         flightScheduleBean.removeFlightFromFlightGroup(flight.getId());
         flightGroup = null;
         authManagedBean.createAuditLog("Updated flight: " + flight.getCode(), "update_flight");
@@ -132,13 +132,6 @@ public class UpdateFlightManagedBean {
         this.departureDate = departureDate;
     }
 
-    public Date getArrivalDate() {
-        return arrivalDate;
-    }
-
-    public void setArrivalDate(Date arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
 
     public String getDepartureTime() {
         return departureTime;
@@ -148,13 +141,6 @@ public class UpdateFlightManagedBean {
         this.departureTime = departureTime;
     }
 
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
 
     public Flight getFlight() {
         return flight;
@@ -178,5 +164,13 @@ public class UpdateFlightManagedBean {
 
     public void setFlightGroup(Long flightGroup) {
         this.flightGroup = flightGroup;
+    }
+
+    public int getFlightDuration() {
+        return flightDuration;
+    }
+
+    public void setFlightDuration(int flightDuration) {
+        this.flightDuration = flightDuration;
     }
 }
