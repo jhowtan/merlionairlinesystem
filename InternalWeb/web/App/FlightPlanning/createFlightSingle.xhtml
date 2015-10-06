@@ -63,22 +63,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-lg-6 #{!arrival.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="arrival">Arrival Date</label>
-                                        <h:inputText binding="#{arrival}" id="arrival" value="#{createFlightManagedBean.arrivalDate}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
-                                                     size="20" required="true" requiredMessage="Arrival Date of the flight is required.">
-                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    <div class="form-group col-lg-12 #{!flightDuration.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="flightDuration">Flight Duration</label>
+                                        <h:inputText binding="#{flightDuration}" id="flightDuration" value="#{createFlightManagedBean.flightDuration}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 7:32" size="20" required="true" requiredMessage="Flight duration is required.">
+                                            <f:converter converterId="durationConverter" />
                                         </h:inputText>
-                                        <h:message for="arrival" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-6 #{!arrivalTime.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="arrivalTime">Arrival Time</label>
-                                        <h:inputText binding="#{arrivalTime}" id="arrivalTime" value="#{createFlightManagedBean.arrivalTime}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 23:59" size="20" required="true" requiredMessage="Arrival Time of the flight is required.">
-                                            <f:validator validatorId="timeValidator" />
-                                        </h:inputText>
-                                        <h:message for="arrivalTime" styleClass="help-block" />
+                                        <h:message for="flightDuration" styleClass="help-block" />
                                     </div>
                                 </div>
                             </div>

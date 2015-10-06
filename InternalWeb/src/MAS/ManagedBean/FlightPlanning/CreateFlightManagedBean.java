@@ -2,6 +2,7 @@ package MAS.ManagedBean.FlightPlanning;
 
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.RouteBean;
+import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
@@ -31,9 +32,7 @@ public class CreateFlightManagedBean {
     private String code;
     private long aaId;
     private Date departureDate;
-    private Date arrivalDate;
     private String departureTime;
-    private String arrivalTime;
     private int flightDuration;
     private Date recurringStartDate;
     private Date recurringEndDate;
@@ -46,14 +45,16 @@ public class CreateFlightManagedBean {
     }
 
     public void createFlight() throws NotFoundException {
+        Date departureDateTime = addTimeToDate(departureDate, departureTime);
         flightScheduleBean.createFlight(code,
                 addTimeToDate(departureDate, departureTime),
-                addTimeToDate(arrivalDate, arrivalTime), aaId);
+                Utils.minutesLater(departureDateTime, flightDuration), aaId);
         authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
         setCode(null);
         setAaId(0);
         setDepartureTime(null);
-        setArrivalTime(null);
+        setDepartureDate(null);
+        setFlightDuration(0);
         FacesMessage m = new FacesMessage("Flight created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -66,9 +67,10 @@ public class CreateFlightManagedBean {
             authManagedBean.createAuditLog("Created new recurring flight: " + code, "create_recurring_flight");
             setCode(null);
             setAaId(0);
-            setRecurringDays(new int[] {});
+            setRecurringDays(new int[]{});
             setRecurringEndDate(null);
             setDepartureTime(null);
+            setDepartureDate(null);
             setFlightDuration(0);
             FacesMessage m = new FacesMessage("Recurring flight created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -76,6 +78,8 @@ public class CreateFlightManagedBean {
         } catch (NotFoundException e) {
             e.printStackTrace();
         } catch (NoItemsCreatedException e) {
+            // This is triggered when no flights are created
+            // @TODO: Show some error message
             e.printStackTrace();
         }
     }
@@ -136,28 +140,12 @@ public class CreateFlightManagedBean {
         this.departureDate = departureDate;
     }
 
-    public Date getArrivalDate() {
-        return arrivalDate;
-    }
-
-    public void setArrivalDate(Date arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
-
     public String getDepartureTime() {
         return departureTime;
     }
 
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
-    }
-
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
     }
 
     public int getFlightDuration() {
