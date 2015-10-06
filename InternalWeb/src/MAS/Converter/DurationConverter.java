@@ -40,6 +40,9 @@ public class DurationConverter implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
         try {
             int mins = (int) o;
+            if (mins == 0) {
+                return "";
+            }
             return (mins / 60) + ":" + new DecimalFormat("00").format(mins % 60);
         } catch (Exception e) {
             return "";

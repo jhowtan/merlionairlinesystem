@@ -35,6 +35,7 @@ public class CreateFlightManagedBean {
     private Date arrivalDate;
     private String departureTime;
     private String arrivalTime;
+    private int flightDuration;
 
     @PostConstruct
     public void init() {
@@ -134,5 +135,13 @@ public class CreateFlightManagedBean {
 
     public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public int getFlightDuration() {
+        return flightDuration;
+    }
+
+    public void setFlightDuration(int flightDuration) {
+        this.flightDuration = flightDuration;
     }
 }

@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="form-group col-lg-6 #{!flightDuration.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="flightDuration">Flight Duration</label>
-                                        <h:inputText binding="#{flightDuration}" id="flightDuration" value="" styleClass="form-control"
+                                        <h:inputText binding="#{flightDuration}" id="flightDuration" value="#{createFlightManagedBean.flightDuration}" styleClass="form-control"
                                                      pt:placeholder="e.g. 7:32" size="20" required="true" requiredMessage="Flight duration is required.">
                                             <f:converter converterId="durationConverter" />
                                         </h:inputText>
