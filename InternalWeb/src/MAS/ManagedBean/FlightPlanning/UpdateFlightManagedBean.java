@@ -172,11 +172,11 @@ public class UpdateFlightManagedBean {
         this.params = params;
     }
 
-    public long getFlightGroup() {
+    public Long getFlightGroup() {
         return flightGroup;
     }
 
-    public void setFlightGroup(long flightGroup) {
+    public void setFlightGroup(Long flightGroup) {
         this.flightGroup = flightGroup;
     }
 }
