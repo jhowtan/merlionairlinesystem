@@ -47,7 +47,7 @@ public class InitBean {
             }
             try {
                 Long roleId = roleBean.createRole("Super Admin", permissionIds);
-                Long userId = userBean.createUser("admin", "Jonathan", "Lau", "admin@jon.sg", "+65 6555-7777");
+                Long userId = userBean.createUser("admin", "Jonathan", "Lau", "merlionairlines+admin@gmail.com", "+65 6555-7777");
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
 
@@ -56,7 +56,7 @@ public class InitBean {
                 airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_ROUTES).getId());
                 airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FLIGHT).getId());
                 roleId = roleBean.createRole("Airline Planner", airlinePlannerPermissions);
-                userId = userBean.createUser("daryl", "Daryl", "Ho", "daryl@jon.sg", "+65 6555-8888");
+                userId = userBean.createUser("daryl", "Daryl", "Ho", "merlionairlines+daryl@gmail.com", "+65 6555-8888");
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
 
@@ -64,7 +64,7 @@ public class InitBean {
                 revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FARE_RULES).getId());
                 revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_BOOKING_CLASSES).getId());
                 roleId = roleBean.createRole("Revenue Manager", revenueManagerPermissions);
-                userId = userBean.createUser("thad", "Thaddeus", "Loh", "thad@jon.sg", "+65 6555-9999");
+                userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999");
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
             } catch (Exception e) {
