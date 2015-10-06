@@ -23,12 +23,12 @@
                     <table class="table" id="flights_table">
                         <thead>
                         <tr>
-                            <th>Flight Code</th>
-                            <th>Aircraft Tail Number</th>
-                            <th>Route Origin</th>
-                            <th>Route Destination</th>
+                            <th>Flight</th>
+                            <th>Aircraft</th>
+                            <th>Route</th>
                             <th>Departure Time</th>
                             <th>Arrival Time</th>
+                            <th>Recurring Group</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -37,11 +37,11 @@
                             <tr>
                                 <td>#{fl.code}</td>
                                 <td>#{fl.aircraftAssignment.getAircraft().getTailNumber()}</td>
-                                <td>#{fl.aircraftAssignment.getRoute().getOrigin().getName()}</td>
-                                <td>#{fl.aircraftAssignment.getRoute().getDestination().getName()}</td>
+                                <td>#{fl.aircraftAssignment.getRoute().getOrigin().getCode()} - #{fl.aircraftAssignment.getRoute().getDestination().getCode()}</td>
 
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.departureTime)}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.arrivalTime)}</td>
+                                <td>#{fl.flightGroup != null ? fl.flightGroup.id : "NA"}</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
