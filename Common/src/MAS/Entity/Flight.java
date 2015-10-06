@@ -62,4 +62,15 @@ public class Flight {
     public void setArrivalTime(Date arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
+
+    private FlightGroup flightGroup;
+
+    @ManyToOne
+    public FlightGroup getFlightGroup() {
+        return flightGroup;
+    }
+
+    public void setFlightGroup(FlightGroup flightGroup) {
+        this.flightGroup = flightGroup;
+    }
 }
