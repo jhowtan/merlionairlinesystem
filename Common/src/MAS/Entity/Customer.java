@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@SequenceGenerator(name = "membershipNumberSeq", initialValue = 81111111, allocationSize = 10000000)
+@TableGenerator(name = "membershipNumberTable", initialValue=81111111, allocationSize = 1)
 public class Customer {
     private Long id;
 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "membershipNumberTable")
     @Id
     public Long getId() {
         return id;
@@ -16,18 +16,6 @@ public class Customer {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    private Long membershipNumber;
-
-    @Basic
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "membershipNumberSeq")
-    public Long getMembershipNumber() {
-        return membershipNumber;
-    }
-
-    public void setMembershipNumber(Long membershipNumber) {
-        this.membershipNumber = membershipNumber;
     }
 
     private String firstName;

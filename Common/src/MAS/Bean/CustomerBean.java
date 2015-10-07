@@ -36,12 +36,9 @@ public class CustomerBean {
         return customer;
     }
 
-    public Customer getCustomerByMembershipNumber(long membershipNumber) throws NotFoundException {
-        try {
-            return em.createQuery("SELECT c FROM Customer c WHERE c.membershipNumber = :membershipNumber", Customer.class).setParameter("membershipNumber", membershipNumber).getSingleResult();
-        } catch (NoResultException e) {
-            throw new NotFoundException();
-        }
+    public void updateCustomer(Customer customer) throws NotFoundException {
+        if (customer.getId() == null || em.find(Customer.class, customer.getId()) == null) throw new NotFoundException();
+        em.merge(customer);
     }
 
 }
