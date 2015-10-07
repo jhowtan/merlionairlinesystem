@@ -151,13 +151,13 @@ public class InitBean {
 
                 if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
                     String flight1Code = "MA11";
-                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-09 12:00:00");
-                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-10 08:00:00");
+                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-10-09 12:00:00");
+                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-10-10 08:00:00");
                     long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id);
 
                     String flight2Code = "MA12";
-                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-12 02:00:00");
-                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse("2015-10-12 18:00:00");
+                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-10-12 02:00:00");
+                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-10-12 18:00:00");
                     long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id);
 
                     long ac1Id = fleetBean.getAllAircraft().get(0).getId();
