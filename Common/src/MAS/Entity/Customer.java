@@ -151,4 +151,15 @@ public class Customer {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    private boolean locked;
+
+    @Basic
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
 }
