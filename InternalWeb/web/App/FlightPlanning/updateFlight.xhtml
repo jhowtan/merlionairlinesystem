@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-lg-12 text-right">
                             <div class="btn-group">
-                                <h:link outcome="/App/FlightPlanning/routes" class="btn btn-default" value="Cancel" />
+                                <h:link outcome="/App/FlightPlanning/flights" class="btn btn-default" value="Cancel" />
                                 <h:commandButton action="#{updateFlightManagedBean.save()}" value="Update Flight" styleClass="btn btn-success">
                                     <f:param name="flId" value="#{updateFlightManagedBean.flight.id}"/>
                                 </h:commandButton>
