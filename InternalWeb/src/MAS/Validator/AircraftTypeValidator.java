@@ -19,8 +19,8 @@ public class AircraftTypeValidator implements Validator {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
         String typeName = o.toString();
-        if(Pattern.compile("[^a-zA-Z0-9 ]").matcher(typeName).find()) {
-            FacesMessage m = new FacesMessage("Please choose an aircraft type name containing only alphanumeric characters and spaces.");
+        if(Pattern.compile("[^a-zA-Z0-9 -]").matcher(typeName).find()) {
+            FacesMessage m = new FacesMessage("Please choose an aircraft type name containing only alphanumeric characters, dashes and spaces.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
