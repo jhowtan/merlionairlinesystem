@@ -23,8 +23,8 @@
         <class>MAS.Entity.BookingClass</class>
         <class>MAS.Entity.FlightGroup</class>
         <class>MAS.Entity.CostAircraftSingle</class>
-        <class>MAS.Entity.CostAAOccurence</class>
-        <class>MAS.Entity.CostMaintenanceOccurence</class>
+        <class>MAS.Entity.CostAAOccurrence</class>
+        <class>MAS.Entity.CostMaintenanceOccurrence</class>
         <class>MAS.Entity.CostOverTime</class>
         <class>MAS.Entity.CostSalary</class>
         <class>MAS.Entity.CostMarketFuel</class>

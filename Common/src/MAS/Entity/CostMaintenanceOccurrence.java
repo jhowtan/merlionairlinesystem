@@ -3,7 +3,7 @@ package MAS.Entity;
 import javax.persistence.*;
 
 @Entity
-public class CostMaintenanceOccurence {
+public class CostMaintenanceOccurrence {
     private long id;
 
     @GeneratedValue
