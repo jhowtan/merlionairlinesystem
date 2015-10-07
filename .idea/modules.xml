@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Common/Common.iml" filepath="$PROJECT_DIR$/Common/Common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExternalWeb/ExternalWeb.iml" filepath="$PROJECT_DIR$/ExternalWeb/ExternalWeb.iml" />
       <module fileurl="file://$PROJECT_DIR$/InternalWeb/InternalWeb.iml" filepath="$PROJECT_DIR$/InternalWeb/InternalWeb.iml" />
     </modules>
   </component>

@@ -1,3 +1,4 @@
 /InternalWeb/web/assets/vendor/**
+/ExternalWeb/web/assets/vendor/**
 /out/**
 /.idea/workspace.xml
