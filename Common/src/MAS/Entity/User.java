@@ -151,17 +151,6 @@ public class User {
         this.deleted = deleted;
     }
 
-    private List<User> manyToMany;
-
-    @ManyToMany
-    public List<User> getManyToMany() {
-        return manyToMany;
-    }
-
-    public void setManyToMany(List<User> manyToMany) {
-        this.manyToMany = manyToMany;
-    }
-
     private List<Message> messages;
 
     @ManyToMany(mappedBy = "recipients")
