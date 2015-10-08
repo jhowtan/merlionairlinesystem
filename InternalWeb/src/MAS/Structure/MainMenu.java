@@ -54,6 +54,12 @@ public class MainMenu {
                         new MenuEntry("Booking Classes", null, Pages.LIST_BOOKING_CLASSES, Pages.CREATE_BOOKING_CLASS)
                 )
         );
+
+        entries.add(
+                new MenuEntry("Customer Relations", "user",
+                        new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER)
+                )
+        );
     }
 
     public List<MenuEntry> getEntries() {
