@@ -1,0 +1,64 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Frequent Flyer Customers - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Frequent Flyer Customers</h1>
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <table class="table" id="customers_table">
+                        <thead>
+                            <tr>
+                                <th>Membership</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{customerManagedBean.getCustomers()}" var="customer">
+                                <tr>
+                                    <td>#{customer.id}</td>
+                                    <td>#{customer.firstName} #{customer.lastName}</td>
+                                    <td>#{customer.email}</td>
+                                    <td>
+                                        <h:form>
+                                            <div class="btn-group">
+                                                <h:link outcome="/App/CustomerRelations/customer" styleClass="btn btn-default btn-xs btn-primary">
+                                                    <i class="fa fa-user"></i>
+                                                    <f:param name="id" value="#{customer.id}" />
+                                                    View
+                                                </h:link>
+                                            </div>
+                                        </h:form>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#customers_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>

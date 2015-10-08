@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless(name = "CustomerEJB")
 @LocalBean
@@ -39,6 +40,10 @@ public class CustomerBean {
     public void updateCustomer(Customer customer) throws NotFoundException {
         if (customer.getId() == null || em.find(Customer.class, customer.getId()) == null) throw new NotFoundException();
         em.merge(customer);
+    }
+
+    public List<Customer> getAllCustomers() {
+        return em.createQuery("SELECT c from Customer c", Customer.class).getResultList();
     }
 
 }
