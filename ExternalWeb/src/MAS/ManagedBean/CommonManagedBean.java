@@ -1,4 +1,4 @@
-package MAS.ManagedBeans;
+package MAS.ManagedBean;
 
 import MAS.Common.Utils;
 
