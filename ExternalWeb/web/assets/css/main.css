@@ -114,9 +114,8 @@ section.booker-section {
 }
 
 .booker-headers {
-    padding-top: 120px;
+    padding-top: 100px;
     margin: 0 auto;
-    height: 100%;
 }
 
 .booker-headers h2 {
@@ -224,12 +223,19 @@ footer {
 }
 
 /* Login Page */
-.panel-default {
-    background-color: rgba(255,255,255,0.5);
+.panel {
     border-color: transparent;
 }
 
-.panel-heading {
-    background-color: rgba(255,255,255,0.5);
+.panel-default {
+    background-color: rgba(255,255,255,0.2);
     border-color: transparent;
+    text-align: center;
+}
+
+.panel-default>.panel-heading,
+.panel-default>.panel-footer {
+    background-color: rgba(255,255,255,0.3);
+    border-color: transparent;
+    color: #FFF;
 }
