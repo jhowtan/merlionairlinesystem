@@ -1,0 +1,181 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="title">Customer Helpdesk - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Customer Helpdesk</h1>
+
+                    <h:panelGroup class="panel panel-primary" id="customerLookupPanel" layout="block" rendered="#{!helpdeskManagedBean.customerVerified}">
+                        <div class="panel-heading">
+                            <i class="fa fa-user fa-fw"></i>
+                            Customer Lookup
+                        </div>
+
+                        <h:panelGroup class="panel-body" layout="block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <blockquote>
+                                        <p>Good #{helpdeskManagedBean.timeOfDayGreeting()}, my name is #{authManagedBean.userDisplayName} and I am happy to help you today.</p>
+                                        <p>In order to better serve you, could you kindly provide me with your membership number?</p>
+                                    </blockquote>
+
+                                    <div class="form-group form-group-lg">
+                                        <h:form>
+                                            <div class="input-group">
+                                            <span class="input-group-addon">Membership Number</span>
+                                            <h:inputText styleClass="form-control" pt:placeholder="e.g. 80001234" maxlength="8">
+                                                <f:ajax event="keyup" render="customerLookupResult" listener="#{helpdeskManagedBean.customerIdAjaxListener}" />
+                                            </h:inputText>
+                                            </div>
+                                        </h:form>
+                                    </div>
+
+                                    <h:panelGroup id="customerLookupResult" layout="block">
+                                        <ui:fragment rendered="#{! empty helpdeskManagedBean.customerId}">
+                                            <ui:fragment rendered="#{empty helpdeskManagedBean.customer}">
+                                                <blockquote>
+                                                    <p>I'm sorry, I can't find anyone with the membership number #{helpdeskManagedBean.customerId}.</p>
+                                                    <p>Could you please read your membership number to me again?</p>
+                                                </blockquote>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{! empty helpdeskManagedBean.customer}">
+                                                <blockquote>
+                                                    <p>Thank you very much for the information, #{helpdeskManagedBean.customer.firstName}.</p>
+                                                    <p>Before we proceed, could I please verify your date of birth?</p>
+                                                </blockquote>
+                                                <h:form>
+                                                    <div class="form-group form-group-lg">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Date of Birth</span>
+                                                            <h:inputText pt:type="date" styleClass="form-control" value="#{commonManagedBean.formatDate('yyyy-MM-dd', helpdeskManagedBean.customer.dateOfBirth)}" readonly="true" />
+                                                            <span class="input-group-btn">
+                                                                <h:link styleClass="btn btn-lg btn-success" value="Verify" outcome="helpdesk">
+                                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                                </h:link>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </h:form>
+                                            </ui:fragment>
+                                        </ui:fragment>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup rendered="#{helpdeskManagedBean.customerVerified}">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-push-8">
+                                <h:panelGroup class="panel panel-primary" id="customerInfoPanel" layout="block">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        Customer Information
+                                    </div>
+
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Membership:</strong></td>
+                                            <td>#{helpdeskManagedBean.customer.id}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>First Name:</strong></td>
+                                            <td>#{helpdeskManagedBean.customer.firstName}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Last Name:</strong></td>
+                                            <td>#{helpdeskManagedBean.customer.lastName}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>#{helpdeskManagedBean.customer.email}</td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                            </div>
+
+
+                            <div class="col-lg-8 col-lg-pull-4">
+                                <h:panelGroup class="panel panel-primary" id="customerServiceRequestPanel" layout="block">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-comment fa-fw"></i>
+                                        Customer Service Request
+                                    </div>
+
+                                    <h:panelGroup class="panel-body" layout="block">
+
+
+                                        <blockquote>
+                                            <p>How may I help you today?</p>
+                                        </blockquote>
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <div class="panel panel-green">
+                                                    <div class="panel-heading">
+                                                        <i class="fa fa-plane fa-4x"></i>
+                                                    </div>
+                                                    <a href="#">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Book a Flight</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Retrieve Flight Bookings</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="panel panel-red">
+                                                    <div class="panel-heading">
+                                                        <i class="fa fa-user fa-4x"></i>
+                                                    </div>
+                                                    <a href="#">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Update Customer Profile</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                    <a href="#">
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">View Account History</span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
