@@ -68,7 +68,7 @@
                         <a href="#">Login</a>
                     </li>
                     <li>
-                        <a href="#">Register</a>
+                        <h:link outcome="signup.xhtml">Register</h:link>
                     </li>
                 </ul>
             </div>
@@ -79,7 +79,10 @@
 
     <!-- Travel Advisory Messages here -->
     <div class="travel-advisory">
-        <span>Traveler Alert: Test test test test</span>
+        <span>Traveler Alert: </span>
+        <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+            <span>#{message.detail}</span>
+        </ui:repeat>
     </div>
 
     <ui:insert name="content"></ui:insert>

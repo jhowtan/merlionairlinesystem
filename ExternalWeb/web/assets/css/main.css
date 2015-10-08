@@ -16,14 +16,6 @@ body {
     padding: 0 20px;
 }
 
-.img-portfolio {
-    margin-bottom: 30px;
-}
-
-.img-hover:hover {
-    opacity: 0.8;
-}
-
 .travel-advisory {
     display: block;
     top: 0;
@@ -41,11 +33,15 @@ body {
     height: 70px;
     padding: 12px 15px;
     line-height: 40px;
-    border-right: 1px solid rgba(256,256,256, 0.3);
+    /*border-right: 1px solid rgba(256,256,256, 0.3);*/
 }
 
 .navbar-nav > li > a {
     line-height: 40px;
+}
+.navbar-nav > li > a:hover {
+    background: transparent;
+    color: #FFF;
 }
 
 .global-nav {
@@ -57,11 +53,12 @@ body {
 }
 
 .global-nav-main {
-    border-right: 1px solid rgba(256,256,256, 0.3);
+    padding: 0 10px;
+    border-right: 1px solid rgba(255,255,255, 0.1);
 }
 
 .global-nav-main a {
-    color: #FAFAFA;
+    color: #EEE;
     font-weight: 600;
     text-transform: uppercase;
     font-style: normal;
@@ -71,11 +68,11 @@ body {
 .global-nav-sub {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     float: left;
 }
 .global-nav-sub a {
-    color: #FAFAFA;
+    color: #EEE;
     display: block;
     font-weight: 500;
     font-size: 1.2rem;
@@ -85,21 +82,49 @@ body {
     margin: 0;
     padding: 0;
     float: right;
-    border-left: 1px solid rgba(256,256,256, 0.3);
+    /*border-left: 1px solid rgba(256,256,256, 0.3);*/
 }
 .global-nav-ffp a {
-    color: #FAFAFA;
+    color: #EEE;
     display: block;
     font-weight: 500;
     font-size: 1.2rem;
 }
 
+
 /* Booker */
 
 section.booker-section {
+    color: rgba(255,255,255, 0.9);
     display: block;
     height: 650px;
-    background: rgba(0,0,0,0.4);
+    background: url("../img/background.jpg") no-repeat;
+    background-size: cover;
+}
+
+.booker-headers {
+    padding-top: 120px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.booker-headers h2 {
+    font-size: 5rem;
+    font-family: sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 135%;
+    margin: 0 0 20px;
+    text-align: center;
+}
+.booker-headers p {
+    font-size: 2rem;
+    font-family: sans-serif;
+    font-weight: 300;
+    font-style: oblique;
+    line-height: 120%;
+    margin: 0 0 20px;
+    text-align: center;
 }
 
 /* Content */
@@ -146,7 +171,6 @@ footer {
 }
 
 /* Responsive Styles */
-
 @media(max-width:991px) {
     .customer-img,
     .img-related {
