@@ -7,7 +7,6 @@ import MAS.Exception.NotFoundException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -44,6 +43,10 @@ public class CustomerBean {
 
     public List<Customer> getAllCustomers() {
         return em.createQuery("SELECT c from Customer c", Customer.class).getResultList();
+    }
+
+    public boolean isEmailUnique(String email) {
+        return (Long) em.createQuery("SELECT COUNT(c) FROM Customer c WHERE c.email = :email").setParameter("email", email.toLowerCase()).getSingleResult() == 0;
     }
 
 }
