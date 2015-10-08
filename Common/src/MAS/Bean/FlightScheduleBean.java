@@ -12,12 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Stateless(name = "FlightScheduleEJB")
 public class FlightScheduleBean {
@@ -88,7 +87,8 @@ public class FlightScheduleBean {
     public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays) throws NotFoundException, NoItemsCreatedException {
         AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aircraftAssignmentId);
         if (aircraftAssignment == null) throw new NotFoundException();
-        int days = Period.between(recurringStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), recurringEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).getDays();
+
+        long days = TimeUnit.DAYS.convert(recurringEndDate.getTime() - recurringStartDate.getTime(), TimeUnit.MILLISECONDS);
 
         if (days < 0) {
             throw new NoItemsCreatedException();
@@ -115,6 +115,7 @@ public class FlightScheduleBean {
         for (int i = 0; i <= days; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(currDepartureDate);
+            System.out.println(currDepartureDate);
             if (recurringDaysList.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                 // @TODO: Check if flight can be scheduled at this time
                 System.out.println(currDepartureDate);
