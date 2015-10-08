@@ -34,5 +34,6 @@
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.0 - EJB" level="application_server_libraries" />
     <orderEntry type="library" name="JPA 2.1-2.1" level="project" />
     <orderEntry type="library" name="javax.mail" level="project" />
+    <orderEntry type="library" name="joda-time:joda-time:2.8.2" level="project" />
   </component>
 </module>

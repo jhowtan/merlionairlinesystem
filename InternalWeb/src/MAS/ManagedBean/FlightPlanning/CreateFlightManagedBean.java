@@ -68,6 +68,7 @@ public class CreateFlightManagedBean {
             setCode(null);
             setAaId(0);
             setRecurringDays(new int[]{});
+            setRecurringStartDate(null);
             setRecurringEndDate(null);
             setDepartureTime(null);
             setDepartureDate(null);
