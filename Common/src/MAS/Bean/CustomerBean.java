@@ -2,6 +2,7 @@ package MAS.Bean;
 
 import MAS.Common.Utils;
 import MAS.Entity.Customer;
+import MAS.Exception.InvalidLoginException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -47,6 +48,17 @@ public class CustomerBean {
 
     public boolean isEmailUnique(String email) {
         return (Long) em.createQuery("SELECT COUNT(c) FROM Customer c WHERE c.email = :email").setParameter("email", email.toLowerCase()).getSingleResult() == 0;
+    }
+
+    public Customer login(long customerId, String password) throws InvalidLoginException {
+        try {
+            Customer customer = em.find(Customer.class, customerId);
+            if (!Utils.hash(password, customer.getSalt()).equals(customer.getPasswordHash().toString()))
+                throw new InvalidLoginException();
+            return customer;
+        } catch (Exception e) {
+            throw new InvalidLoginException();
+        }
     }
 
 }
