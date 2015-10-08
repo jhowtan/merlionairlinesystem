@@ -36,12 +36,23 @@ body {
     /*border-right: 1px solid rgba(256,256,256, 0.3);*/
 }
 
-.navbar-nav > li > a {
+.navbar-nav > li > a,
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
     line-height: 40px;
-}
-.navbar-nav > li > a:hover {
     background: transparent;
+    color: #EEE;
+}
+
+.navbar-nav > li > a:hover {
     color: #FFF;
+}
+
+.navbar-nav > li.open > a,
+.navbar-nav > li.open > a:hover,
+.navbar-nav > li.open > a:focus {
+    background-color: rgba(0,0,0,0.2);
+    border: none;
 }
 
 .global-nav {
@@ -186,4 +197,28 @@ footer {
     header.carousel .carousel {
         height: 70%;
     }
+}
+
+/* Login Dropdown */
+#login-dp{
+    color: #111133;
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.9);
+}
+#login-dp a {
+    color: #236DB0;
+}
+#login-dp .help-block{
+    font-size:12px
+}
+#login-dp .bottom{
+    background-color:rgba(255,255,255,.8);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
 }
