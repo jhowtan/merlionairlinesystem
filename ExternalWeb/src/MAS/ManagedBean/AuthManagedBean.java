@@ -3,12 +3,15 @@ package MAS.ManagedBean;
 import MAS.Bean.CustomerBean;
 import MAS.Common.Constants;
 import MAS.Entity.Customer;
+import MAS.Exception.NotFoundException;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.util.Map;
 
 @ManagedBean
 @SessionScoped
@@ -46,12 +49,46 @@ public class AuthManagedBean {
         }
     }
 
+    public Customer retrieveCustomer() {
+        if (!this.authenticated) {
+            return null;
+        }
+        try {
+            return customerBean.getCustomer(this.customerId);
+        } catch (NotFoundException e) {
+            return null;
+        }
+    }
+
     public void forwardToLogin() {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT + "/login");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT_EXT + "login.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerDisplayName() {
+        return customerDisplayName;
+    }
+
+    public void setCustomerDisplayName(String customerDisplayName) {
+        this.customerDisplayName = customerDisplayName;
+    }
+
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
 }

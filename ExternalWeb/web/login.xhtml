@@ -23,20 +23,17 @@
                                 </h:panelGroup>
                                 <h:form>
                                     <div class="form-group">
-                                        <!--<label for="membershipNum">Membership Number</label>-->
-                                        <h:inputText styleClass="form-control" pt:placeholder="Membership Number" id="membershipNum" />
+                                        <h:inputText styleClass="form-control" pt:placeholder="Membership No." value="#{loginManagedBean.customerIdString}" />
                                     </div>
                                     <div class="form-group">
-                                        <!--<label for="password">Password</label>-->
-                                        <h:inputSecret styleClass="form-control" pt:placeholder="Password" id="password" />
+                                        <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="#{loginManagedBean.password}" />
                                     </div>
-                                    <h:link outcome="/index" value="Forgot Password" styleClass="btn btn-default btn-block"/>
-                                    <h:link outcome="/index" value="SIGN IN" styleClass="btn btn-default btn-block" />
+                                    <h:commandButton action="#{loginManagedBean.login}" value="Login" styleClass="btn btn-default btn-block" />
                                 </h:form>
                             </div>
                             <div class="panel-footer">
-                                <div style="margin-bottom: 10px;">Not yet a member?</div>
-                                <h:link outcome="/signup" value="JOIN NOW" styleClass="btn btn-default btn-block" />
+                                <p><h:link outcome="/signup" value="Not yet a member? Join now!" /></p>
+                                <p><h:link outcome="/index" value="Forgot Password" /></p>
                             </div>
                         </div>
                     </div>

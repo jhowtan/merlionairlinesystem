@@ -64,37 +64,54 @@
                             ✈ FrequentFlyer
                         </a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
-                        <ul id="login-dp" class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h:form role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-                                            <div class="form-group">
-                                                <label class="sr-only" for="login-email">Email address</label>
-                                                <h:inputText class="form-control" id="login-email" pt:placeholder="Membership No." required="true"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                                <h:inputText type="password" class="form-control" id="exampleInputPassword2" pt:placeholder="Password" required="true"/>
+                    <ui:fragment rendered="#{authManagedBean.authenticated}">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>#{authManagedBean.customerDisplayName}</b> <span class="caret"></span></a>
+                            <ul id="login-dp" class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Welcome back, #{authManagedBean.retrieveCustomer().firstName}!</p>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            <h:link outcome="/logout" styleClass="btn btn-primary btn-block">Log Out</h:link>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!authManagedBean.authenticated}">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                            <ul id="login-dp" class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h:form role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+                                                <div class="form-group">
+                                                    <h:inputText styleClass="form-control" pt:placeholder="Membership No." value="#{loginManagedBean.customerIdString}" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="#{loginManagedBean.password}" />
+                                                </div>
                                                 <div class="help-block text-right"><a href="">Forgot password?</a></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-                                            </div>
-                                        </h:form>
+                                                <div class="form-group">
+                                                    <h:commandButton action="#{loginManagedBean.loginNavBar}" value="Login" styleClass="btn btn-primary btn-block" />
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            New here ? <a href="#"><b>Join Us</b></a>
+                                        </div>
                                     </div>
-                                    <div class="bottom text-center">
-                                        New here ? <a href="#"><b>Join Us</b></a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h:link outcome="signup.xhtml">Register</h:link>
-                    </li>
+                                </li>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!authManagedBean.authenticated}">
+                        <li><h:link outcome="signup.xhtml">Register</h:link></li>
+                    </ui:fragment>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
