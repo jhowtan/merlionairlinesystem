@@ -2,7 +2,10 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:merlion="http://java.sun.com/jsf/composite/merlion"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="preRender"><f:event type="preRenderView" listener="#{authManagedBean.requiresLogin}" /></ui:define>
+
     <ui:define name="title">MerlionFlyer Elite - Merlion Airlines</ui:define>
     <ui:define name="content">
         <section class="splash splash-full auth">

@@ -49,7 +49,7 @@ public class AuthManagedBean {
         forwardToLogin();
     }
 
-    public void checkPermission() {
+    public void requiresLogin() {
         if (!this.authenticated) {
             forwardToLogin();
         }
