@@ -1,0 +1,35 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:merlion="http://java.sun.com/jsf/composite/merlion"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">MerlionFlyer Elite - Merlion Airlines</ui:define>
+    <ui:define name="content">
+        <section class="splash splash-full auth">
+            <div class="container-fluid">
+                <h1 class="title">MerlionFlyer Elite</h1>
+                <p class="lead">The best frequent flyer program the sky has to offer</p>
+                <div class="row">
+                    <div class="col-md-6 col-md-push-3">
+                        <div class="panel panel-translucent">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Thank you for signing up with MerlionFlyer Elite.</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><strong>Congratulations, you're on your way to great rewards!</strong></p>
+                                <p>Before you continue, please take note of your membership number. You may print a temperory copy of your membership card for immediate use. Your card will be mailed to the address you provided within fourteen working days.</p>
+                                <hr />
+                                <p><merlion:card /></p>
+                                <p><h:link outcome="/ffp/printCard" value="Print Card" target="_blank" styleClass="btn btn-primary btn-sm" /></p>
+                            </div>
+                            <div class="panel-footer">
+                                <h:link outcome="/ffp/printCard" value="Take Me to my Account" target="_blank" styleClass="btn btn-success btn-lg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </ui:define>
+</ui:composition>

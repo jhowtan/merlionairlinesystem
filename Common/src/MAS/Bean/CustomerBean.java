@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.Customer;
 import MAS.Exception.InvalidLoginException;
@@ -9,6 +10,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "CustomerEJB")
@@ -23,6 +25,8 @@ public class CustomerBean {
     public Customer createCustomer(Customer customer, String password) {
         customer.setSalt(Utils.generateSalt());
         customer.setPasswordHash(Utils.hash(password, customer.getSalt()));
+        customer.setJoinDate(new Date());
+        customer.setTier(Constants.FFP_TIER_BLUE);
         customer.setLocked(false);
 
         em.persist(customer);

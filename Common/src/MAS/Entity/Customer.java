@@ -150,4 +150,27 @@ public class Customer {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
+    private Date joinDate;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getJoinDate() {
+        return joinDate;
+    }
+
+    public void setJoinDate(Date joinDate) {
+        this.joinDate = joinDate;
+    }
+
+    private int tier;
+
+    @Basic
+    public int getTier() {
+        return tier;
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+    }
 }

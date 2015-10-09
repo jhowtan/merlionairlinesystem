@@ -16,6 +16,7 @@
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/open-sans/css/open-sans.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/animate.css/animate.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/main.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/cards.css" />
 
 
 </h:head>
@@ -32,8 +33,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h:link class="navbar-brand " rel="home" outcome="index.xhtml" title="Merlion Airlines">
-                    <img alt="Merlion Airlines" src="#{commonManagedBean.getRoot()}/assets/img/merlionairlinesbrand.png" class="hidden-xs" />
+                <h:link class="navbar-brand " rel="home" outcome="/index" title="Merlion Airlines">
+                    <img alt="Merlion Airlines" src="#{commonManagedBean.getRoot()}/assets/img/logo.png" class="hidden-xs" />
                     <span class="visible-xs">Merlion Airlines</span>
                 </h:link>
             </div>
@@ -56,7 +57,7 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right navbar-nav-tertiary">
-                    <li><a href="#"><i class="fa fa-fw fa-plane"></i> Frequent Flyer</a></li>
+                    <li><a href="#"><i class="fa fa-fw fa-plane"></i> <strong>MerlionFlyer</strong></a></li>
 
                     <ui:fragment rendered="#{authManagedBean.authenticated}">
                         <li class="dropdown hidden-xs">
@@ -100,7 +101,7 @@
                                     </h:form>
                                     <div class="bottom text-center">
                                         Not yet a member?<br />
-                                        <a href="#"><strong>Join us Today</strong></a>
+                                        <h:link outcome="/signup"><strong>Join us Today</strong></h:link>
                                     </div>
                                 </li>
                             </ul>

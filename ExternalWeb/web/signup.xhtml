@@ -110,10 +110,11 @@
                                 </h:inputText>
                                 <h:message for="address" styleClass="help-block" />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group #{!country.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="country">Country of Residence</label>
                                 <h:selectOneMenu class="form-control"
-                                                 value="#{signUpManagedBean.country}" binding="#{country}" id="country">
+                                                 value="#{signUpManagedBean.country}" binding="#{country}" id="country"
+                                                 required="true" requiredMessage="Please select your country of residence">
                                     <f:selectItem itemLabel="Please choose"/>
                                     <f:selectItems value="#{signUpManagedBean.getCountries()}"/>
                                 </h:selectOneMenu>

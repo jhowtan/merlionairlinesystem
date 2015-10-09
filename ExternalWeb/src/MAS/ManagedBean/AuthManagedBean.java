@@ -35,6 +35,12 @@ public class AuthManagedBean {
         }
     }
 
+    public void login(Customer customer) {
+        this.customerId = customer.getId();
+        this.customerDisplayName = customer.getDisplayName();
+        this.authenticated = true;
+    }
+
     public void logout() {
         this.customerId = -1;
         this.customerDisplayName = "";

@@ -1,6 +1,8 @@
 package MAS.ManagedBean;
 
+import MAS.Common.Constants;
 import MAS.Common.Utils;
+import MAS.Entity.Customer;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -50,13 +52,13 @@ public class CommonManagedBean {
         }
     }
 
-    public static String displayDouble(double value, String format) {
+    public String displayDouble(double value, String format) {
         DecimalFormat formatter = new DecimalFormat(format);
         formatter.setRoundingMode(RoundingMode.HALF_UP);
         return formatter.format(value);
     }
 
-    public static String getDayString(int day) {
+    public String getDayString(int day) {
         switch (day) {
             case Calendar.MONDAY:
                 return "Monday";
@@ -74,6 +76,18 @@ public class CommonManagedBean {
                 return "Sunday";
         }
         return "";
+    }
+
+    public String getTierString(int tier) {
+        switch (tier) {
+            case Constants.FFP_TIER_BLUE:
+                return "blue";
+            case Constants.FFP_TIER_SILVER:
+                return "silver";
+            case Constants.FFP_TIER_GOLD:
+                return "gold";
+        }
+        return "blue";
     }
 
 }

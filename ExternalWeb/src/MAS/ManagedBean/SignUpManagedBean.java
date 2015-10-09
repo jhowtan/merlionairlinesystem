@@ -6,12 +6,18 @@ import MAS.Entity.Customer;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.util.Date;
 
 @ManagedBean
 public class SignUpManagedBean {
     @EJB
     CustomerBean customerBean;
+
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
 
     private String email;
     private String password;
@@ -35,8 +41,13 @@ public class SignUpManagedBean {
         customer.setPhone(phone);
         customer.setAddress(address);
         customer.setDisplayName(displayName);
-        System.out.println(email + ": " + "AAAAAA");
         customer = customerBean.createCustomer(customer, password);
+        authManagedBean.login(customer);
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/ffp/firstWelcome.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String[] getNationalities() {
@@ -125,5 +136,9 @@ public class SignUpManagedBean {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
     }
 }
