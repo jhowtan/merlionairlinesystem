@@ -5,22 +5,22 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="title">Home - Merlion Airlines</ui:define>
     <ui:define name="content">
-        <section class="booker-section">
-            <div class="container booker-headers">
-                <h2>Login to our Frequent Flyer Program</h2>
-                <p>Gain access to Miles Redemption, and more perks now.</p>
-            </div>
-            <div class="container">
+        <section class="splash splash-full auth">
+            <div class="container-fluid">
+                <h1 class="title">MerlionFlyer Elite</h1>
+                <p class="lead">The best frequent flyer program the sky has to offer</p>
                 <div class="row">
-                    <div class="col-md-4 col-md-offset-4">
-                        <div class="panel panel-default" style="margin-top: 20px;">
+                    <div class="col-md-4 col-md-push-4">
+                        <div class="panel panel-translucent">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Frequent Flyer Programme Access</h3>
                             </div>
                             <div class="panel-body">
+
                                 <h:panelGroup rendered="#{loginManagedBean.invalidLogin}">
-                                    <p class="text-danger">Invalid username and password combination.</p>
+                                    <div class="alert alert-danger text-left" role="alert"><i class="fa fa-fw fa-warning"></i> <strong>Error:</strong> Invalid username and password combination.</div>
                                 </h:panelGroup>
+
                                 <h:form>
                                     <div class="form-group">
                                         <h:inputText styleClass="form-control" pt:placeholder="Membership No." value="#{loginManagedBean.customerIdString}" />
@@ -28,12 +28,12 @@
                                     <div class="form-group">
                                         <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="#{loginManagedBean.password}" />
                                     </div>
-                                    <h:commandButton action="#{loginManagedBean.login}" value="Login" styleClass="btn btn-default btn-block" />
+                                    <h:commandButton action="#{loginManagedBean.login}" value="Sign In" styleClass="btn btn-primary btn-block btn-lg" />
                                 </h:form>
                             </div>
                             <div class="panel-footer">
-                                <p><h:link outcome="/signup" value="Not yet a member? Join now!" /></p>
-                                <p><h:link outcome="/index" value="Forgot Password" /></p>
+                                <h:link outcome="/index" value="Forgot Password?" /><br />
+                                <h:link outcome="/index" value="New here? Sign Up Now!" />
                             </div>
                         </div>
                     </div>
@@ -41,10 +41,5 @@
             </div>
 
         </section>
-    </ui:define>
-    <ui:define name="javascript">
-        <script type="text/javascript">
-
-        </script>
     </ui:define>
 </ui:composition>
