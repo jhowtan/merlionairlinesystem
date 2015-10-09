@@ -22,6 +22,7 @@
         <class>MAS.Entity.AircraftMaintenanceSlot</class>
         <class>MAS.Entity.BookingClass</class>
         <class>MAS.Entity.FlightGroup</class>
+        <class>MAS.Entity.Customer</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

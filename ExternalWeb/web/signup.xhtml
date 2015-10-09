@@ -1,0 +1,174 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Sign Up - Merlion Airlines</ui:define>
+    <ui:define name="content">
+        <section class="content">
+            <div class="container">
+                <div class="row content-heading">
+                    <div class="col-lg-offset-1 col-lg-10">
+                        <h1 class="page-heading">Frequent Flyer Registration</h1>
+                        <p class="page-subheading">Merlion Airlines gets you where you need to go, for work and play, in style. Fly to more than 20 hot spots with moodlighting,
+                            fleetwide WiFi, on-demand entertainment and more one way flights</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="container">
+                <h:form>
+                    <div class="row">
+                        <div class="col-lg-5 col-lg-offset-1">
+                            <h2 class="form-heading">Email</h2>
+                            <p class="form-subheading">Use your email address or FFP number next time to sign into your account.
+                                You'll save time booking flights and managing your travel details and Frequent Flyer activity.</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group #{!email.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="email">Email</label>
+                                <h:inputText pt:type="email" value="#{signUpManagedBean.email}" binding="#{email}" class="form-control" id="email">
+                                    <f:validator validatorId="emailValidator" />
+                                </h:inputText>
+                                <h:message for="email" styleClass="help-block" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-5 col-lg-offset-1">
+                            <h2 class="form-heading">Password</h2>
+                            <p class="form-subheading">Please create a password that is at least 6 characters in length.
+                                For a more secure password, please include at least a letter and a number.</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group #{!password.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="password">Password</label>
+                                <h:inputSecret pt:type="password" class="form-control" id="password" binding="#{password}"
+                                               value="#{signUpManagedBean.password}"
+                                               required="true" requiredMessage="Please enter a password that is at least 6 characters long">
+                                    <f:validator validatorId="passwordValidator" />
+                                    <f:attribute name="confirmPassword" value="#{confirmPassword}" />
+                                </h:inputSecret>
+                            </div>
+                            <div class="form-group #{!password.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="confirmPassword">Confirm Password</label>
+                                <h:inputSecret pt:type="password" class="form-control" binding="#{confirmPassword}" id="confirmPassword" />
+                                <h:message for="password" styleClass="help-block" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-5 col-lg-offset-1">
+                            <h2 class="form-heading">Personal Information</h2>
+                            <p class="form-subheading">Your personal information provided should be the same as in your passport.
+                                It will be used for your future bookings via merlionair.com.</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group #{!firstName.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="firstName">First Name</label>
+                                <h:inputText pt:type="text" styleClass="form-control" id="firstName"
+                                             value="#{signUpManagedBean.firstName}" binding="#{firstName}"
+                                             required="true" requiredMessage="Please enter your first name"/>
+                                <h:message for="firstName" styleClass="help-block" />
+                            </div>
+                            <div class="form-group #{!lastName.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="lastName">Last Name</label>
+                                <h:inputText pt:type="text" styleClass="form-control"
+                                             value="#{signUpManagedBean.lastName}" binding="#{lastName}" id="lastName"
+                                             required="true" requiredMessage="Please enter your last name" />
+                                <h:message for="lastName" styleClass="help-block" />
+                            </div>
+                            <div class="form-group #{!birthDate.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="birthDate">Date of Birth</label>
+                                <h:inputText pt:type="date" styleClass="form-control"
+                                             value="#{signUpManagedBean.birthDate}" binding="#{birthDate}" id="birthDate"
+                                             required="true" requiredMessage="Please enter your Date of Birth">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                                <h:message for="birthDate" styleClass="help-block" />
+                            </div>
+                            <div class="form-group #{!nationality.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="nationality">Nationality</label>
+                                <h:selectOneMenu class="form-control"
+                                                 value="#{signUpManagedBean.nationality}" binding="#{nationality}" id="nationality"
+                                        required="true" requiredMessage="Please enter your nationality">
+                                    <f:selectItem itemLabel="Please choose"/>
+                                    <f:selectItems value="#{signUpManagedBean.getNationalities()}"/>
+                                </h:selectOneMenu>
+                                <h:message for="nationality" styleClass="help-block" />
+                            </div>
+                            <div class="form-group #{!address.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="address">Address</label>
+                                <h:inputText pt:type="text" styleClass="form-control"
+                                             value="#{signUpManagedBean.address}" binding="#{address}" id="address"
+                                             pt:placeholder="Unit number, Building name, Street, etc "
+                                             required="true" requiredMessage="Please enter your address">
+                                </h:inputText>
+                                <h:message for="address" styleClass="help-block" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="country">Country of Residence</label>
+                                <h:selectOneMenu class="form-control"
+                                                 value="#{signUpManagedBean.country}" binding="#{country}" id="country">
+                                    <f:selectItem itemLabel="Please choose"/>
+                                    <f:selectItems value="#{signUpManagedBean.getCountries()}"/>
+                                </h:selectOneMenu>
+                                <h:message for="country" styleClass="help-block" />
+                            </div>
+                            <div class="form-group #{!phone.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="phone">Mobile Number</label>
+                                <h:inputText pt:type="tel" styleClass="form-control"
+                                             value="#{signUpManagedBean.phone}" binding="#{phone}" id="phone"
+                                             required="true" requiredMessage="Please enter a mobile number"/>
+                                <h:message for="phone" styleClass="help-block" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg-5 col-lg-offset-1">
+                            <h2 class="form-heading">Frequent Flyer Details</h2>
+                            <p class="form-subheading">Information here will be used for your Frequent Flyer membership card.
+                            Your membership number will be assigned to you after registration.</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group #{!displayName.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="displayName">Display Name</label>
+                                <h:inputText pt:type="text" styleClass="form-control" binding="#{displayName}" id="displayName"
+                                             maxlength="25" value="#{signUpManagedBean.displayName}"
+                                             required="true" requiredMessage="Please enter a name to display on your Frequent Flyer Card"/>
+                                <h:message for="displayName" styleClass="help-block" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-6 col-md-push-3 col-lg-6 col-lg-push-3">
+                            <h:commandButton action="#{signUpManagedBean.register()}" value="Submit" styleClass="btn btn-default btn-block" />
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </section>
+
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var firstNameEl = $("[id='#{firstName.clientId}']");
+            var lastNameEl = $("[id='#{lastName.clientId}']");
+            var displayNameEl = $("[id='#{displayName.clientId}']");
+            var updateDisplayName = function() {
+                displayNameEl.val((firstNameEl.val() + ' ' + lastNameEl.val()).substring(0,25));
+            };
+            firstNameEl.on('change', updateDisplayName);
+            lastNameEl.on('change', updateDisplayName);
+
+            firstNameEl.on('keyup', updateDisplayName);
+            lastNameEl.on('keyup', updateDisplayName);
+        </script>
+    </ui:define>
+</ui:composition>

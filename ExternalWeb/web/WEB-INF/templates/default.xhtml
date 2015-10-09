@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title><ui:insert name="title">Merlion Airlines</ui:insert></title>
+
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/main.css" />
+
+
+</h:head>
+
+<h:body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-fixed-top global-nav" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h:link class="navbar-brand" rel="home" outcome="index.xhtml" title="Merlion Airlines">
+                    <img src="#{commonManagedBean.getRoot()}/assets/img/merlionairlinesbrand.png"/>
+                </h:link>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <!-- First Group -->
+                <ul class="nav navbar-nav global-nav-main">
+                    <li>
+                        <a href="#">Book</a>
+                    </li>
+                    <li>
+                        <a href="#">Check in</a>
+                    </li>
+                    <li>
+                        <a href="#">Manage</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav global-nav-sub">
+                    <li>
+                        <a href="#">Deals</a>
+                    </li>
+                    <li>
+                        <a href="#">Where we Fly</a>
+                    </li>
+                    <li>
+                        <a href="#">Flying with us</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav global-nav-ffp">
+                    <li>
+                        <a href="#">
+                            ✈ FrequentFlyer
+                        </a>
+                    </li>
+                    <ui:fragment rendered="#{authManagedBean.authenticated}">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>#{authManagedBean.customerDisplayName}</b> <span class="caret"></span></a>
+                            <ul id="login-dp" class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Welcome back, #{authManagedBean.retrieveCustomer().firstName}!</p>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            <h:link outcome="/logout" styleClass="btn btn-primary btn-block">Log Out</h:link>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!authManagedBean.authenticated}">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                            <ul id="login-dp" class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h:form role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+                                                <div class="form-group">
+                                                    <h:inputText styleClass="form-control" pt:placeholder="Membership No." value="#{loginManagedBean.customerIdString}" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <h:inputSecret styleClass="form-control" pt:placeholder="Password" value="#{loginManagedBean.password}" />
+                                                </div>
+                                                <div class="help-block text-right"><a href="">Forgot password?</a></div>
+                                                <div class="form-group">
+                                                    <h:commandButton action="#{loginManagedBean.loginNavBar}" value="Login" styleClass="btn btn-primary btn-block" />
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            New here ? <a href="#"><b>Join Us</b></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!authManagedBean.authenticated}">
+                        <li><h:link outcome="signup.xhtml">Register</h:link></li>
+                    </ui:fragment>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Travel Advisory Messages here -->
+    <div class="travel-advisory">
+        <span>Traveler Alert: </span>
+        <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+            <span>#{message.detail}</span>
+        </ui:repeat>
+    </div>
+
+    <ui:insert name="content"></ui:insert>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>Copyright &#169; Merlion Airlines 2015</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <ui:insert name="javascript"></ui:insert>
+
+</h:body>
+</html>

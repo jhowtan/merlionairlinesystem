@@ -1,0 +1,241 @@
+/* Global Styles */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    font-family: sans-serif;
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.container {
+    width: 100%;
+    padding: 0 20px;
+}
+
+.travel-advisory {
+    display: block;
+    top: 0;
+    background: #113;
+    font-size: 1.3rem;
+    line-height: 16px;
+    padding: 10px 0;
+    text-align: center;
+    color: #CCC;
+    position: relative;
+}
+
+.navbar-brand {
+    color: #EEE;
+    height: 70px;
+    padding: 12px 15px;
+    line-height: 40px;
+    /*border-right: 1px solid rgba(256,256,256, 0.3);*/
+}
+
+.navbar-nav > li > a,
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+    line-height: 40px;
+    background: transparent;
+    color: #EEE;
+}
+
+.navbar-nav > li > a:hover {
+    color: #FFF;
+}
+
+.navbar-nav > li.open > a,
+.navbar-nav > li.open > a:hover,
+.navbar-nav > li.open > a:focus {
+    background-color: rgba(0,0,0,0.2);
+    border: none;
+}
+
+.global-nav {
+    height: 70px;
+    width: 100%;
+    min-width: 320px;
+    background: linear-gradient(to right, #223466 0%,#4469CC 59%,#517CF2 87%);
+    color: #FFF;
+}
+
+.global-nav-main {
+    padding: 0 10px;
+    border-right: 1px solid rgba(255,255,255, 0.1);
+}
+
+.global-nav-main a {
+    color: #EEE;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-style: normal;
+    font-size: 1.4rem;
+}
+
+.global-nav-sub {
+    list-style: none;
+    margin: 0;
+    padding: 0 10px;
+    float: left;
+}
+.global-nav-sub a {
+    color: #EEE;
+    display: block;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.global-nav-ffp {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+    /*border-left: 1px solid rgba(256,256,256, 0.3);*/
+}
+.global-nav-ffp a {
+    color: #EEE;
+    display: block;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+
+/* Booker */
+
+section.booker-section {
+    color: rgba(255,255,255, 0.9);
+    display: block;
+    height: 650px;
+    background: url("../img/background.jpg") no-repeat;
+    background-size: cover;
+}
+
+.booker-headers {
+    padding-top: 100px;
+    margin: 0 auto;
+}
+
+.booker-headers h2 {
+    font-size: 5rem;
+    font-family: sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 135%;
+    margin: 0 0 20px;
+    text-align: center;
+}
+.booker-headers p {
+    font-size: 2rem;
+    font-family: sans-serif;
+    font-weight: 300;
+    font-style: oblique;
+    line-height: 120%;
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+/* Content */
+section.content {
+    padding-top: 40px;
+    font-family: sans-serif;
+    color: #223466;
+
+}
+
+.content>.container {
+    width: 80%;
+}
+
+.content>.container .content-heading {
+    text-align: center;
+}
+.page-heading {
+    color: #3755A6;
+    font-family: sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 7rem;
+    letter-spacing: -0.2rem;
+    line-height: 1.2;
+    margin: 32px 0 20px;
+    text-transform: uppercase;
+}
+
+.page-subheading {
+    color: #223466;
+    font-size: 2rem;
+    line-height: 30px;
+}
+
+form>.row {
+    padding: 20px 0;
+}
+
+/* Footer Styles */
+
+footer {
+    margin: 50px 0;
+}
+
+/* Responsive Styles */
+@media(max-width:991px) {
+    .customer-img,
+    .img-related {
+        margin-bottom: 30px;
+    }
+}
+
+@media(max-width:767px) {
+    .img-portfolio {
+        margin-bottom: 15px;
+    }
+
+    header.carousel .carousel {
+        height: 70%;
+    }
+}
+
+/* Login Dropdown */
+#login-dp{
+    color: #111133;
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.9);
+}
+#login-dp a {
+    color: #236DB0;
+}
+#login-dp .help-block{
+    font-size:12px
+}
+#login-dp .bottom{
+    background-color:rgba(255,255,255,.8);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+
+/* Login Page */
+.panel {
+    border-color: transparent;
+}
+
+.panel-default {
+    background-color: rgba(255,255,255,0.2);
+    border-color: transparent;
+    text-align: center;
+}
+
+.panel-default>.panel-heading,
+.panel-default>.panel-footer {
+    background-color: rgba(255,255,255,0.3);
+    border-color: transparent;
+    color: #FFF;
+}

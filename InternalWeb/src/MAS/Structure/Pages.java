@@ -1,6 +1,7 @@
 package MAS.Structure;
 
 import MAS.Common.Permissions;
+import MAS.Entity.Permission;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
@@ -67,5 +68,10 @@ public class Pages {
 
     public static final Page LIST_BOOKING_CLASSES = new Page("/App/PriceManagement/bookingClasses", Permissions.MANAGE_BOOKING_CLASSES);
     public static final Page CREATE_BOOKING_CLASS = new Page("/App/PriceManagement/createBookingClass", Permissions.MANAGE_BOOKING_CLASSES);
+
+    // CRM
+    public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);
+    public static final Page VIEW_CUSTOMER = new Page("/App/CustomerRelations/customer", Permissions.MANAGE_CUSTOMERS);
+    public static final Page CUSTOMER_HELPDESK = new Page("/App/CustomerRelations/helpdesk", Permissions.MANAGE_CUSTOMERS);
 
 }
