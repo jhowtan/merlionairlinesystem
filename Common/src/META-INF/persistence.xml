@@ -24,6 +24,9 @@
         <class>MAS.Entity.FlightGroup</class>
         <class>MAS.Entity.Cost</class>
         <class>MAS.Entity.Customer</class>
+        <class>MAS.Entity.StringAttribute</class>
+        <class>MAS.Entity.DoubleAttribute</class>
+        <class>MAS.Entity.IntAttribute</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

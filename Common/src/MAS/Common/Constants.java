@@ -20,4 +20,12 @@ public class Constants {
     public static final int COST_PER_MAINTENANCE = 2;
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
+
+    public static final String AVERAGE_PERSON_WEIGHT = "AVERAGE_PERSON_WEIGHT";
+    public static final String AVERAGE_BAGGAGE_WEIGHT = "AVERAGE_BAGGAGE_WEIGHT";
+    public static final String FUEL_WEIGHT = "FUEL_WEIGHT";
+    public static final String CABIN_CREW_SALARY = "CABIN_CREW_SALARY";
+    public static final String COCKPIT_CREW_SALARY = "COCKPIT_CREW_SALARY";
+    public static final String FLIGHTS_PER_YEAR = "FLIGHTS_PER_YEAR";
+    public static final String MAINTENANCE_PER_YEAR = "MAINTENANCE_PER_YEAR";
 }
