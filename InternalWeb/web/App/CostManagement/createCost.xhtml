@@ -77,18 +77,6 @@
                                             <h:message for="acAssignment" styleClass="help-block" />
                                         </div>
                                     </h:panelGroup>
-                                    <h:panelGroup rendered="#{createCostManagedBean.type == 5}">
-                                        <div class="form-group col-lg-12">
-                                            <label class="control-label" for="employee">Employee</label>
-                                            <br/>
-                                            <h:selectOneMenu styleClass="form-control"
-                                                             id="employee" value="#{createCostManagedBean.assocId}">
-                                                <f:selectItems value="#{createCostManagedBean.userList}" var="employee"
-                                                               itemLabel="#{commonManagedBean.formatName(employee)}" itemValue="#{employee.id}" />
-                                            </h:selectOneMenu>
-                                            <h:message for="employee" styleClass="help-block" />
-                                        </div>
-                                    </h:panelGroup>
                                 </div>
                             </div>
                         </div>

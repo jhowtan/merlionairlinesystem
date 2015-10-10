@@ -12,13 +12,12 @@ public class Constants {
     public static final int FFP_TIER_SILVER = 2;
     public static final int FFP_TIER_GOLD = 3;
 
-    public static final String[] COSTS = {"Cost Per Flight", "Aircraft Cost",
-            "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost", "Salary"};
+    public static final String[] COSTS = {"Consumables Per Flight", "Aircraft One-Time Cost",
+            "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost"};
 
     public static final int COST_PER_FLIGHT = 0;
     public static final int COST_PER_AIRCRAFT = 1;
     public static final int COST_PER_MAINTENANCE = 2;
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
-    public static final int COST_SALARY = 5;
 }

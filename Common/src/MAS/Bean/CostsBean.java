@@ -35,11 +35,6 @@ public class CostsBean {
             if (aircraftAssignment == null) throw new NotFoundException();
             cost.setAssocId(aircraftAssignment.getId());
         }
-        else if (type == Constants.COST_SALARY) {
-            User user = em.find(User.class, assocId);
-            if (user == null) throw new NotFoundException();
-            cost.setAssocId(user.getId());
-        }
         cost.setDate(new Date());
         em.persist(cost);
         em.flush();
@@ -77,7 +72,7 @@ public class CostsBean {
         return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
     }
 
-    public double calculateCostPerAircraft(long aircraftId) throws NotFoundException {
+    public double calculateCostPerFlight(long flightId) throws NotFoundException {
         return 0;
     }
 }
