@@ -173,4 +173,49 @@ public class Customer {
     public void setTier(int tier) {
         this.tier = tier;
     }
+
+
+    private Date statusExpiry;
+
+    @Basic
+    public Date getStatusExpiry() {
+        return statusExpiry;
+    }
+
+    public void setStatusExpiry(Date statusExpiry) {
+        this.statusExpiry = statusExpiry;
+    }
+
+    private Date qualificationEndDate;
+
+    @Basic
+    public Date getQualificationEndDate() {
+        return qualificationEndDate;
+    }
+
+    public void setQualificationEndDate(Date qualificationEndDate) {
+        this.qualificationEndDate = qualificationEndDate;
+    }
+
+    private int eliteMiles;
+
+    @Basic
+    public int getEliteMiles() {
+        return eliteMiles;
+    }
+
+    public void setEliteMiles(int eliteMiles) {
+        this.eliteMiles = eliteMiles;
+    }
+
+    private int miles;
+
+    @Basic
+    public int getMiles() {
+        return miles;
+    }
+
+    public void setMiles(int miles) {
+        this.miles = miles;
+    }
 }
