@@ -80,4 +80,5 @@ public class Pages {
     public static final Page HELPDESK_CUSTOMER = new Page("/App/CustomerRelations/Helpdesk/customer", Permissions.MANAGE_CUSTOMERS);
     public static final Page HELPDESK_UPDATE_CUSTOMER_PROFILE = new Page("/App/CustomerRelations/Helpdesk/customer/updateCustomerProfile", Permissions.MANAGE_CUSTOMERS);
     public static final Page HELPDESK_UPDATE_MEMBERSHIP = new Page("/App/CustomerRelations/Helpdesk/customer/updateMembership", Permissions.MANAGE_CUSTOMERS);
+    public static final Page HELPDESK_ISSUE_CARD = new Page("/App/CustomerRelations/Helpdesk/customer/issueCard", Permissions.MANAGE_CUSTOMERS);
 }

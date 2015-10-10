@@ -7,7 +7,7 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="helpdesk-main">
-        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} zoomInDown" layout="block">
+        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} fadeIn" layout="block">
             <div class="panel-heading">
                 <i class="fa fa-pencil fa-fw"></i>
                 Update Membership
@@ -91,10 +91,12 @@
                 Membership Card
             </div>
 
-            <h:panelGroup class="panel-body" layout="block">
-                <p class="text-center">
-                    <merlion:card customer="#{helpdeskManagedBean.customer}" />
-                </p>
+            <h:panelGroup class="panel-body text-center" layout="block">
+                <p><merlion:card customer="#{helpdeskManagedBean.customer}" /></p>
+                <h:link outcome="issueCard" value="Reissue Membership Card" styleClass="btn btn-default btn-sm">
+                    <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                    <f:param name="animate" value="1" />
+                </h:link>
             </h:panelGroup>
         </h:panelGroup>
     </ui:define>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:merlion="http://java.sun.com/jsf/composite/merlion" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:event listener="#{authManagedBean.checkPermission()}" type="preRenderView" />
+
+<h:head>
+    <title>Merlion Airlines System</title>
+    <style type="text/css">
+        .mailing-label-print {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 30px 225px 30px 50px;
+            display: inline-block;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="mailing-label-print">
+        <p>PRIVATE AND CONFIDENTIAL</p>
+        <p>
+            <strong>#{printMailingLabelManagedBean.customer.firstName} #{printMailingLabelManagedBean.customer.lastName}</strong><br />
+            #{printMailingLabelManagedBean.customer.address},<br />
+            #{printMailingLabelManagedBean.customer.country}
+        </p>
+    </div>
+
+    <script type="text/javascript">
+        window.print();
+        setTimeout("window.close()", 300);
+    </script>
+
+</h:body>
+</html>
