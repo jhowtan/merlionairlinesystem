@@ -19,7 +19,7 @@
                     <table class="table" id="customers_table">
                         <thead>
                             <tr>
-                                <th>Membership</th>
+                                <th>Membership No.</th>
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Action</th>
@@ -34,10 +34,10 @@
                                     <td>
                                         <h:form>
                                             <div class="btn-group">
-                                                <h:link outcome="/App/CustomerRelations/customer" styleClass="btn btn-default btn-xs btn-primary">
+                                                <h:link outcome="/App/CustomerRelations/Helpdesk/updateCustomerProfile" styleClass="btn btn-default btn-xs btn-primary">
                                                     <i class="fa fa-user"></i>
-                                                    <f:param name="id" value="#{customer.id}" />
-                                                    View
+                                                    <f:param name="customerId" value="#{customer.id}" />
+                                                    Helpdesk
                                                 </h:link>
                                             </div>
                                         </h:form>

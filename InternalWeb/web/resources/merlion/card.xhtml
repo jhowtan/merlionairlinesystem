@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:composite="http://xmlns.jcp.org/jsf/composite">
 
     <composite:interface>
-        <composite:attribute name="customer" default="#{authManagedBean.retrieveCustomer()}" type="MAS.Entity.Customer" />
+        <composite:attribute name="customer" type="MAS.Entity.Customer" required="true" />
         <composite:attribute name="styleClass" type="java.lang.String" />
     </composite:interface>
 

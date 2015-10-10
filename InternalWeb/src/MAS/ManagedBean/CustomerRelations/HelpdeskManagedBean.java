@@ -6,6 +6,7 @@ import MAS.Entity.Customer;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class HelpdeskManagedBean implements Serializable {
     @EJB
     CustomerBean customerBean;
@@ -22,6 +24,7 @@ public class HelpdeskManagedBean implements Serializable {
     private Customer customer;
     private Long customerId;
     private boolean customerVerified = false;
+    private boolean animateComponents = false;
 
     @PostConstruct
     public void init() {
@@ -30,9 +33,19 @@ public class HelpdeskManagedBean implements Serializable {
             customerId = Long.parseLong(params.get("customerId"));
             customer = customerBean.getCustomer(customerId);
             customerVerified = true;
+            if (params.get("animate") != null) {
+                animateComponents = true;
+            }
         } catch (Exception e) {
             // Cannot find customer!
         }
+    }
+
+    public String animateClass() {
+        if (animateComponents) {
+            return "animated";
+        }
+        return "";
     }
 
     public void customerIdAjaxListener(AjaxBehaviorEvent event) {
@@ -83,5 +96,13 @@ public class HelpdeskManagedBean implements Serializable {
 
     public void setCustomerVerified(boolean customerVerified) {
         this.customerVerified = customerVerified;
+    }
+
+    public boolean isAnimateComponents() {
+        return animateComponents;
+    }
+
+    public void setAnimateComponents(boolean animateComponents) {
+        this.animateComponents = animateComponents;
     }
 }

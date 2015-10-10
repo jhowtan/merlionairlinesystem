@@ -1,0 +1,109 @@
+<ui:composition template="/App/CustomerRelations/Helpdesk/customer.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="helpdesk-main">
+        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} fadeIn" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-pencil fa-fw"></i>
+                Update Customer Profile
+            </div>
+
+            <h:panelGroup class="panel-body" layout="block">
+
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+
+                <h:form>
+                    <div class="row">
+                        <div class="form-group col-lg-6 #{!firstName.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="firstName">First Name</label>
+                            <h:inputText id="firstName" binding="#{firstName}" value="#{updateCustomerProfileManagedBean.customer.firstName}" styleClass="form-control" required="true" requiredMessage="The customer's first name is required" />
+                            <h:message for="firstName" styleClass="help-block" />
+                        </div>
+                        <div class="form-group col-lg-6 #{!lastName.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="lastName">Last Name</label>
+                            <h:inputText id="lastName" binding="#{lastName}" value="#{updateCustomerProfileManagedBean.customer.lastName}" styleClass="form-control" required="true" requiredMessage="The customer's last name is required" />
+                            <h:message for="lastName" styleClass="help-block" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6 #{!dateOfBirth.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="dateOfBirth">Date of Birth</label>
+                            <h:inputText pt:type="date" id="dateOfBirth" binding="#{dateOfBirth}" value="#{updateCustomerProfileManagedBean.customer.dateOfBirth}" styleClass="form-control" required="true" requiredMessage="The customer's date of birth is required">
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            <h:message for="dateOfBirth" styleClass="help-block" />
+                        </div>
+                        <div class="form-group col-lg-6 #{!nationality.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="nationality">Nationality</label>
+                            <h:selectOneMenu class="form-control"
+                                             value="#{updateCustomerProfileManagedBean.customer.nationality}" binding="#{nationality}" id="nationality"
+                                             required="true" requiredMessage="The customer's nationality is required">
+                                <f:selectItems value="#{updateCustomerProfileManagedBean.getNationalities()}"/>
+                            </h:selectOneMenu>
+                            <h:message for="nationality" styleClass="help-block" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 #{!address.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="address">Address</label>
+                            <h:inputText id="address" binding="#{address}" value="#{updateCustomerProfileManagedBean.customer.address}" styleClass="form-control" required="true" requiredMessage="The customer's address is required">
+                            </h:inputText>
+                            <h:message for="address" styleClass="help-block" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 #{!country.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="country">Country</label>
+                            <h:selectOneMenu class="form-control"
+                                             value="#{updateCustomerProfileManagedBean.customer.country}" binding="#{country}" id="country"
+                                             required="true" requiredMessage="The customer's country is required">
+                                <f:selectItems value="#{updateCustomerProfileManagedBean.getCountries()}"/>
+                            </h:selectOneMenu>
+                            <h:message for="country" styleClass="help-block" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6 #{!email.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="email">Email</label>
+                            <h:inputText pt:type="email" id="email" binding="#{email}" value="#{updateCustomerProfileManagedBean.customer.email}" styleClass="form-control" required="true" requiredMessage="The customer's email is required">
+                                <f:validator validatorId="emailValidator"/>
+                            </h:inputText>
+                            <h:message for="email" styleClass="help-block" />
+                        </div>
+                        <div class="form-group col-lg-6 #{!phone.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="phone">Phone Number</label>
+                            <h:inputText id="phone" binding="#{phone}" pt:type="tel" value="#{updateCustomerProfileManagedBean.customer.phone}" styleClass="form-control" required="true" requiredMessage="The customer's phone number is required"/>
+                            <h:message for="phone" styleClass="help-block" />
+                        </div>
+                    </div>
+
+                    <h:commandButton action="#{updateCustomerProfileManagedBean.save}" value="Update Customer" styleClass="btn btn-default btn-success pull-right">
+                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                    </h:commandButton>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="helpdesk-side">
+        <h:panelGroup class="panel panel-primary" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-exclamation-circle fa-fw"></i>
+                Important Note
+            </div>
+
+            <h:panelGroup class="panel-body" layout="block">
+                Please update the customer's information only after verifying with their passport details.
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>
