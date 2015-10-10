@@ -76,5 +76,7 @@ public class Pages {
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);
     public static final Page VIEW_CUSTOMER = new Page("/App/CustomerRelations/customer", Permissions.MANAGE_CUSTOMERS);
-    public static final Page CUSTOMER_HELPDESK = new Page("/App/CustomerRelations/helpdesk", Permissions.MANAGE_CUSTOMERS);
+    public static final Page HELPDESK = new Page("/App/CustomerRelations/Helpdesk/index", Permissions.MANAGE_CUSTOMERS);
+    public static final Page HELPDESK_CUSTOMER = new Page("/App/CustomerRelations/Helpdesk/customer", Permissions.MANAGE_CUSTOMERS);
+    public static final Page HELPDESK_UPDATE_CUSTOMER_PROFILE = new Page("/App/CustomerRelations/Helpdesk/customer/updateCustomerProfile", Permissions.MANAGE_CUSTOMERS);
 }
