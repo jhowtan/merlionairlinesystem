@@ -22,12 +22,7 @@
         <class>MAS.Entity.AircraftMaintenanceSlot</class>
         <class>MAS.Entity.BookingClass</class>
         <class>MAS.Entity.FlightGroup</class>
-        <class>MAS.Entity.CostAircraftSingle</class>
-        <class>MAS.Entity.CostAAOccurrence</class>
-        <class>MAS.Entity.CostMaintenanceOccurrence</class>
-        <class>MAS.Entity.CostOverTime</class>
-        <class>MAS.Entity.CostSalary</class>
-        <class>MAS.Entity.CostMarketFuel</class>
+        <class>MAS.Entity.Cost</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

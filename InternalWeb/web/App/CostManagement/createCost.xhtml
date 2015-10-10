@@ -1,0 +1,106 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Create Cost - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Create Cost</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="/App/CostManagement/costs">Costs</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/CostManagement/createCost">Create Cost</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <!-- BEGIN FORM PANEL BODY -->
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Cost Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label" for="type">Cost Type</label>
+                                        <br/>
+                                        <h:selectOneMenu styleClass="form-control"
+                                                         id="type" value="#{createCostManagedBean.type}">
+                                            <f:selectItems value="#{createCostManagedBean.costTypes}" var="ctype"
+                                                           itemLabel="#{ctype}" itemValue="#{createCostManagedBean.costIndex(ctype)}" />
+                                            <f:ajax render="@form"/>
+                                        </h:selectOneMenu>
+                                        <h:message for="type" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!comments.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="comments">Comments</label>
+                                        <h:inputText id="comments" binding="#{comments}" value="#{createCostManagedBean.comments}" styleClass="form-control"
+                                                     pt:placeholder="e.g. Aircraft Purchase" required="true" requiredMessage="Comments are required.">
+                                        </h:inputText>
+                                        <h:message for="comments" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!amount.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="amount">Amount</label>
+                                        <h:inputText id="amount" binding="#{amount}" value="#{createCostManagedBean.amount}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 100,000.50" required="true" requiredMessage="Amount is required."
+                                                    pt:type="number" pt:min="1" pt:step="0.01">
+                                        </h:inputText>
+                                        <h:message for="amount" styleClass="help-block" />
+                                    </div>
+                                    <h:panelGroup rendered="#{createCostManagedBean.type == 1 || createCostManagedBean.type == 2}">
+                                        <div class="form-group col-lg-12">
+                                            <label class="control-label" for="aircraft">Aircraft</label>
+                                            <br/>
+                                            <h:selectOneMenu styleClass="form-control"
+                                                             id="aircraft" value="#{createCostManagedBean.assocId}">
+                                                <f:selectItems value="#{createCostManagedBean.aircraftList}" var="ac"
+                                                               itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="aircraft" styleClass="help-block" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{createCostManagedBean.type == 0}">
+                                        <div class="form-group col-lg-12">
+                                            <label class="control-label" for="acAssignment">Aircraft Assignment</label>
+                                            <br/>
+                                            <h:selectOneMenu styleClass="form-control"
+                                                             id="acAssignment" value="#{createCostManagedBean.assocId}">
+                                                <f:selectItems value="#{createCostManagedBean.aaList}" var="aa"
+                                                               itemLabel="#{commonManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="acAssignment" styleClass="help-block" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{createCostManagedBean.type == 5}">
+                                        <div class="form-group col-lg-12">
+                                            <label class="control-label" for="employee">Employee</label>
+                                            <br/>
+                                            <h:selectOneMenu styleClass="form-control"
+                                                             id="employee" value="#{createCostManagedBean.assocId}">
+                                                <f:selectItems value="#{createCostManagedBean.userList}" var="employee"
+                                                               itemLabel="#{commonManagedBean.formatName(employee)}" itemValue="#{employee.id}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="employee" styleClass="help-block" />
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-right">
+                            <div class="btn-group">
+                                <h:link outcome="/App/CostManagement/costs" class="btn btn-default" value="Cancel" />
+                                <h:commandButton action="#{createCostManagedBean.createCost()}" value="Create Cost" styleClass="btn btn-success"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

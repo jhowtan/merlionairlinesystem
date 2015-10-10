@@ -7,6 +7,7 @@ import MAS.Entity.AircraftAssignment;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
+import MAS.ManagedBean.CommonManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -101,7 +102,7 @@ public class CreateFlightManagedBean {
     }
 
     public String formatAA(AircraftAssignment aa) {
-        return aa.getAircraft().getTailNumber() + " : " + aa.getRoute().getOrigin().getName() + " - " + aa.getRoute().getDestination().getName();
+        return CommonManagedBean.formatAA(aa);
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

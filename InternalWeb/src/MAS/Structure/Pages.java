@@ -68,4 +68,7 @@ public class Pages {
     public static final Page LIST_BOOKING_CLASSES = new Page("/App/PriceManagement/bookingClasses", Permissions.MANAGE_BOOKING_CLASSES);
     public static final Page CREATE_BOOKING_CLASS = new Page("/App/PriceManagement/createBookingClass", Permissions.MANAGE_BOOKING_CLASSES);
 
+    // Airline Administrative Subsystem: Costs Management
+    public static final Page LIST_COSTS = new Page("/App/CostManagement/costs", Permissions.MANAGE_COSTS);
+    public static final Page CREATE_COST = new Page("/App/CostManagement/createCost", Permissions.MANAGE_COSTS);
 }
