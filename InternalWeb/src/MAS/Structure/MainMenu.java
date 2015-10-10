@@ -56,6 +56,12 @@ public class MainMenu {
         );
 
         entries.add(
+                new MenuEntry("Costs Management", "book",
+                        new MenuEntry("Costs", null, Pages.LIST_COSTS, Pages.CREATE_COST)
+                )
+        );
+
+        entries.add(
                 new MenuEntry("Customer Relations", "user",
                         new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER),
                         new MenuEntry("Helpdesk", null, Pages.CUSTOMER_HELPDESK)

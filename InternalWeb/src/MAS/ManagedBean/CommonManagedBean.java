@@ -1,6 +1,8 @@
 package MAS.ManagedBean;
 
 import MAS.Common.Utils;
+import MAS.Entity.AircraftAssignment;
+import MAS.Entity.User;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -77,4 +79,11 @@ public class CommonManagedBean {
         return "";
     }
 
+    public static String formatAA(AircraftAssignment aa) {
+        return aa.getAircraft().getTailNumber() + " : " + aa.getRoute().getOrigin().getName() + " - " + aa.getRoute().getDestination().getName();
+    }
+
+    public static String formatName(User user) {
+        return user.getFirstName() + " " + user.getLastName();
+    }
 }

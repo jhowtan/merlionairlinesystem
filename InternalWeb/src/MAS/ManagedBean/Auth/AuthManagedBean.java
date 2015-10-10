@@ -20,12 +20,13 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
 @ManagedBean
 @SessionScoped
-public class AuthManagedBean {
+public class AuthManagedBean implements Serializable {
     @EJB
     private UserBean userBean;
 

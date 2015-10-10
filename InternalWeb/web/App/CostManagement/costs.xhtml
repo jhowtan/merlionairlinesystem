@@ -1,0 +1,82 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Costs - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Costs</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/CostManagement/costs">Costs</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/CostManagement/createCost">Create Cost</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <h:form>
+                        <div class="form-group col-lg-12">
+                            <label class="control-label" for="type">Cost Type</label>
+                            <br/>
+                            <h:selectOneMenu styleClass="form-control"
+                                             id="type" value="#{costManagedBean.type}">
+                                <f:selectItems value="#{costManagedBean.costTypes}" var="ctype"
+                                               itemLabel="#{ctype}" itemValue="#{costManagedBean.costIndex(ctype)}" />
+                                <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="costs" onevent="
+                                function() {
+                                    $('#costs_table').DataTable({
+                                        'retrieve': true,
+                                        'stateSave': true,
+                                        'aoColumnDefs': [
+                                            { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                                        ]
+                                    });
+                                 }"/>
+                            </h:selectOneMenu> <br/>
+                        </div>
+                        <h:panelGroup id="costs">
+                        <table class="table" id="costs_table">
+                            <thead>
+                            <tr>
+                                <th>Comments</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ui:repeat value="#{costManagedBean.displayCosts}" var="cost">
+                                <tr>
+                                    <td>#{costManagedBean.displayComments(cost)}</td>
+                                    <td>#{cost.amount}</td>
+                                    <td>#{commonManagedBean.formatDate("dd MMMM yyyy",cost.date)}</td>
+                                    <td>
+                                        <h:commandLink action="#{costManagedBean.delete(cost.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete cost: #{cost.comments}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                            </tbody>
+                        </table>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#costs_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
