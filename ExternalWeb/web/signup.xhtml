@@ -140,7 +140,7 @@
                             <div class="form-group #{!displayName.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="displayName">Display Name</label>
                                 <h:inputText pt:type="text" styleClass="form-control" binding="#{displayName}" id="displayName"
-                                             maxlength="25" value="#{signUpManagedBean.displayName}"
+                                             maxlength="16" value="#{signUpManagedBean.displayName}"
                                              required="true" requiredMessage="Please enter a name to display on your Frequent Flyer Card"/>
                                 <h:message for="displayName" styleClass="help-block" />
                             </div>
@@ -163,7 +163,7 @@
             var lastNameEl = $("[id='#{lastName.clientId}']");
             var displayNameEl = $("[id='#{displayName.clientId}']");
             var updateDisplayName = function() {
-                displayNameEl.val((firstNameEl.val() + ' ' + lastNameEl.val()).substring(0,25));
+                displayNameEl.val((firstNameEl.val() + ' ' + lastNameEl.val()).substring(0,16));
             };
             firstNameEl.on('change', updateDisplayName);
             lastNameEl.on('change', updateDisplayName);
