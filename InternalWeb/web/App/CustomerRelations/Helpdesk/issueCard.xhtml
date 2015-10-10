@@ -1,0 +1,45 @@
+<ui:composition template="/App/CustomerRelations/Helpdesk/customer.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:merlion="http://java.sun.com/jsf/composite/merlion">
+
+    <ui:define name="helpdesk-main">
+        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} zoomInDown" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-pencil fa-fw"></i>
+                Issue Membership Card
+            </div>
+
+            <h:panelGroup class="panel-body" layout="block">
+
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+
+                <p><strong>Prepare Card for Printing</strong></p>
+                <p>Pleaser check the headers and information on the card before sending for printing.</p>
+                <p><merlion:card customer="#{helpdeskManagedBean.customer}"/></p>
+
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="helpdesk-side">
+        <h:panelGroup class="panel panel-primary" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-exclamation-circle fa-fw"></i>
+                Important Note
+            </div>
+
+            <h:panelGroup class="panel-body" layout="block">
+                Please update the customer's information only after verifying with their passport details.
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>
