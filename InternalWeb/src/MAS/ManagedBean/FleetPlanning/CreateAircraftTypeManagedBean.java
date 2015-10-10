@@ -19,9 +19,14 @@ public class CreateAircraftTypeManagedBean {
 
     private String typeName;
     private int fuelCapacity;
+    private int cabinReq;
+    private int cockpitReq;
+    private int weight;
+    private double fuelEfficiency;
+    private double speed;
 
     public void createType() {
-        fleetBean.createAircraftType(typeName, fuelCapacity);
+        fleetBean.createAircraftType(typeName, fuelCapacity, getCabinReq(), getCockpitReq(), getFuelEfficiency(), getSpeed(), getWeight());
         authManagedBean.createAuditLog("Created new aircraft type: " + typeName, "create_aircraft_type");
         setTypeName(null);
         setFuelCapacity(0);
@@ -50,4 +55,43 @@ public class CreateAircraftTypeManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
+    public int getCabinReq() {
+        return cabinReq;
+    }
+
+    public void setCabinReq(int cabinReq) {
+        this.cabinReq = cabinReq;
+    }
+
+    public int getCockpitReq() {
+        return cockpitReq;
+    }
+
+    public void setCockpitReq(int cockpitReq) {
+        this.cockpitReq = cockpitReq;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public double getFuelEfficiency() {
+        return fuelEfficiency;
+    }
+
+    public void setFuelEfficiency(double fuelEfficiency) {
+        this.fuelEfficiency = fuelEfficiency;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 }

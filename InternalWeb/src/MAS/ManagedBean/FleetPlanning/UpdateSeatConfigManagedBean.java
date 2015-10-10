@@ -57,7 +57,7 @@ public class UpdateSeatConfigManagedBean {
     }
 
     public void updateConfig() throws NotFoundException {
-        fleetBean.changeWeight(aircraftSeatConfig.getId(), weight);
+        fleetBean.changeSeatConfigWeight(aircraftSeatConfig.getId(), weight);
         fleetBean.changeName(aircraftSeatConfig.getId(), configName);
 
         FacesMessage m = new FacesMessage("Seat Configuration updated successfully.");

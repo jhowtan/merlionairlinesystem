@@ -82,7 +82,7 @@ public class FleetBean {
         em.remove(aircraftSeatConfig);
     }
 
-    public void changeWeight(long id, int weight) throws NotFoundException {
+    public void changeSeatConfigWeight(long id, int weight) throws NotFoundException {
         AircraftSeatConfig aircraftSeatConfig = em.find(AircraftSeatConfig.class, id);
         if (aircraftSeatConfig == null) throw new NotFoundException();
         aircraftSeatConfig.setWeight(weight);
@@ -106,10 +106,16 @@ public class FleetBean {
         return em.createQuery("SELECT a from AircraftSeatConfig a", AircraftSeatConfig.class).getResultList();
     }
     //-----------------AIRCRAFT TYPES/EQUIPMENT---------------------------
-    public long createAircraftType(String name, int fuelCapacity) {
+    public long createAircraftType(String name, int fuelCapacity,
+                                   int cabinReq, int cockpitReq, double fuelEfficiency, double speed, int weight) {
         AircraftType aircraftType = new AircraftType();
         aircraftType.setName(name);
         aircraftType.setFuelCapacity(fuelCapacity);
+        aircraftType.setCabinCrewReq(cabinReq);
+        aircraftType.setCockpitCrewReq(cockpitReq);
+        aircraftType.setFuelEfficiency(fuelEfficiency);
+        aircraftType.setSpeed(speed);
+        aircraftType.setWeight(weight);
         em.persist(aircraftType);
         em.flush();
 
@@ -130,7 +136,7 @@ public class FleetBean {
         em.remove(aircraftType);
     }
 
-    public void changeFuelCapacity(long id, int fuelCapacity) throws NotFoundException {
+    public void changeAircraftTypeFuelCap(long id, int fuelCapacity) throws NotFoundException {
         AircraftType aircraftType = em.find(AircraftType.class, id);
         if (aircraftType == null) throw new NotFoundException();
         aircraftType.setFuelCapacity(fuelCapacity);
@@ -141,6 +147,41 @@ public class FleetBean {
         AircraftType aircraftType = em.find(AircraftType.class, id);
         if (aircraftType == null) throw new NotFoundException();
         aircraftType.setName(newName);
+        em.persist(aircraftType);
+    }
+
+    public void changeAircraftTypeWeight(long id, int weight) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setWeight(weight);
+        em.persist(aircraftType);
+    }
+
+    public void changeAircraftTypeSpeed(long id, double speed) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setSpeed(speed);
+        em.persist(aircraftType);
+    }
+
+    public void changeAircraftTypeFuelEff(long id, double fuelEfficiency) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setFuelEfficiency(fuelEfficiency);
+        em.persist(aircraftType);
+    }
+
+    public void changeAircraftTypeCabinReq(long id, int cabinReq) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setCabinCrewReq(cabinReq);
+        em.persist(aircraftType);
+    }
+
+    public void changeAircraftTypeCockpitReq(long id, int cockpitReq) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setCockpitCrewReq(cockpitReq);
         em.persist(aircraftType);
     }
 
