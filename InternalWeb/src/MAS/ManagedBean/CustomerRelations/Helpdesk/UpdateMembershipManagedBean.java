@@ -66,8 +66,12 @@ public class UpdateMembershipManagedBean implements Serializable {
         }
     }
 
-    public void tierAjaxListener(AjaxBehaviorEvent event) {
-        System.out.println("XXXXXXXXXXXXXXXX");
+    public void statusExpiryAjaxListener(AjaxBehaviorEvent event) {
+        customer.setQualificationEndDate(customer.getStatusExpiry());
+    }
+
+    public void qualificationEndDateResetAjaxListener(AjaxBehaviorEvent event) {
+        customer.setQualificationEndDate(null);
     }
 
     public double random() {

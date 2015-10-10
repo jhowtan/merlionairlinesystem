@@ -15,7 +15,7 @@
         <span class="ffp-card #{commonManagedBean.getTierString(cc.attrs.customer.tier)} #{cc.attrs.styleClass}">
             <span class="name">#{cc.attrs.customer.displayName}</span>
             <span class="number">#{cc.attrs.customer.id}</span>
-            <span class="member-since">#{commonManagedBean.formatDate("MM/yy", cc.attrs.customer.joinDate)}</span>
+            <h:panelGroup styleClass="expiry" rendered="#{cc.attrs.customer.tier != 1}">#{commonManagedBean.formatDate("MM/yy", cc.attrs.customer.statusExpiry)}</h:panelGroup>
         </span>
     </composite:implementation>
 

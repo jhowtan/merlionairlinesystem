@@ -35,25 +35,14 @@
                                              value="#{updateMembershipManagedBean.customer.tier}" binding="#{tier}" id="tier"
                                              required="true" requiredMessage="The membership tier is required">
                                 <f:selectItems value="#{updateMembershipManagedBean.getTierList()}" />
-                                <f:ajax listener="#{updateMembershipManagedBean.tierAjaxListener}" render="statusExpiryArea" />
+                                <f:ajax render="statusExpiryArea qualificationEndDateArea" />
                             </h:selectOneMenu>
-
                             <h:message for="tier" styleClass="help-block" />
-                        </div>
-                        <div class="form-group col-lg-12 #{!eliteMiles.valid ? 'has-error' : ''}">
-                            <label class="control-label" for="eliteMiles">Elite Miles</label>
-                            <h:inputText class="form-control"
-                                 value="#{updateMembershipManagedBean.customer.eliteMiles}" binding="#{eliteMiles}" id="eliteMiles"
-                                 required="true" requiredMessage="The number of elite miles is required" converterMessage="Please enter a valid number">
-                                <f:validator validatorId="eliteMilesValidator" />
-                                <f:attribute name="tier" value="#{tier}" />
-                            </h:inputText>
-                            <h:message for="eliteMiles" styleClass="help-block" />
                         </div>
 
                         <h:panelGroup id="statusExpiryArea">
                             <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
-                                <label class="control-label" for="eliteMiles">Status Expiry</label>
+                                <label class="control-label" for="statusExpiry">Status Expiry</label>
 
                                 <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier == 1}">
                                     <h:inputText pt:type="text" class="form-control" value="Not Applicable" readonly="true" />
@@ -64,15 +53,49 @@
                                                  value="#{updateMembershipManagedBean.customer.statusExpiry}" binding="#{statusExpiry}" id="statusExpiry"
                                                  required="true" requiredMessage="The status expiry date is required" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        <f:ajax render="qualificationEndDateArea" listener="#{updateMembershipManagedBean.statusExpiryAjaxListener}" />
                                     </h:inputText>
                                 </ui:fragment>
 
                                 <h:message for="statusExpiry" styleClass="help-block" />
                             </div>
+                        </h:panelGroup>
 
+                        <div class="form-group col-lg-12 #{!eliteMiles.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="eliteMiles">Elite Miles</label>
+                            <h:inputText class="form-control"
+                                         value="#{updateMembershipManagedBean.customer.eliteMiles}" binding="#{eliteMiles}" id="eliteMiles"
+                                         required="true" requiredMessage="The number of elite miles is required" converterMessage="Please enter a valid number">
+                                <f:validator validatorId="eliteMilesValidator" />
+                                <f:attribute name="tier" value="#{tier}" />
+                            </h:inputText>
+                            <h:message for="eliteMiles" styleClass="help-block" />
+                        </div>
+
+                        <h:panelGroup id="qualificationEndDateArea">
+                            <div class="form-group col-lg-12 #{!qualificationEndDate.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="qualificationEndDate">End of Qualification Period</label>
+
+                            <div class="input-group">
+                                <h:inputText pt:type="date" class="form-control"
+                                             value="#{updateMembershipManagedBean.customer.qualificationEndDate}" binding="#{qualificationEndDate}" id="qualificationEndDate"
+                                             pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                             readonly="#{updateMembershipManagedBean.customer.tier != 1}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                                <span class="input-group-btn">
+                                    <h:commandButton styleClass="btn btn-default" disabled="#{updateMembershipManagedBean.customer.tier != 1}" value="Reset Date">
+                                        <f:ajax render="qualificationEndDateArea" listener="#{updateMembershipManagedBean.qualificationEndDateResetAjaxListener}" />
+                                    </h:commandButton>
+                                </span>
+                            </div>
+
+                                <h:message for="qualificationEndDate" styleClass="help-block" />
+                            </div>
                         </h:panelGroup>
 
                     </div>
+
 
                     <h:commandButton action="#{updateMembershipManagedBean.save}" value="Update Membership" styleClass="btn btn-default btn-success">
                         <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />

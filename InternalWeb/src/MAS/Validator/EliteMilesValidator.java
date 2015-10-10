@@ -37,8 +37,5 @@ public class EliteMilesValidator implements Validator {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
-        System.out.println("X" + tier + "X" + o);
-
-
     }
 }
