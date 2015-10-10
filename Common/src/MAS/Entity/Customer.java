@@ -178,6 +178,7 @@ public class Customer {
     private Date statusExpiry;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getStatusExpiry() {
         return statusExpiry;
     }
@@ -189,6 +190,7 @@ public class Customer {
     private Date qualificationEndDate;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getQualificationEndDate() {
         return qualificationEndDate;
     }
