@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:merlion="http://java.sun.com/jsf/composite/merlion" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Merlion Airlines System</title>
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/open-sans/css/open-sans.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/cards.css" />
+</h:head>
+
+<h:body>
+    <div class="ffp-card-print">
+        <merlion:card />
+    </div>
+
+    <script type="text/javascript">
+        window.print();
+        setTimeout("window.close()", 300);
+    </script>
+
+</h:body>
+</html>
