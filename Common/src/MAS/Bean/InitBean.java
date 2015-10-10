@@ -33,11 +33,15 @@ public class InitBean {
     FareRuleBean fareRuleBean;
     @EJB
     BookingClassBean bookingClassBean;
+    @EJB
+    AttributesBean attributesBean;
 
     @PostConstruct
     public void init() {
-        List<Long> permissionIds = new ArrayList<>();
-        if(roleBean.getAllPermissions().size() == 0) {
+        if (!attributesBean.getBooleanAttribute("DATABASE_INITIALIZED", false)) {
+            attributesBean.setBooleanAttribute("DATABASE_INITIALIZED", true);
+
+            List<Long> permissionIds = new ArrayList<>();
             for(Field permissionField : Permissions.class.getDeclaredFields()) {
                 try {
                     permissionIds.add(roleBean.createPermission((String) permissionField.get(null)));
@@ -70,9 +74,7 @@ public class InitBean {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
-        if (fleetBean.getAllAircraftTypes().size() == 0) {
             try {
                 long acTypeId = fleetBean.createAircraftType("A380 NR", 323546);
                 //long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_3e", "A3180 ABC test", 5800, acTypeId);
@@ -114,10 +116,8 @@ public class InitBean {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
 
-        if (fareRuleBean.getAllFareRules().size() == 0) {
             try {
                 int minimumStay = 1;
                 int maximumStay = 30;
@@ -125,15 +125,14 @@ public class InitBean {
                 int minimumPassengers = 1;
                 int milesAccrual = 100;
                 fareRuleBean.createFareRule("SVR-2", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
-                fareRuleBean.createFareRule("SVR-3", minimumStay+9, maximumStay, advancePurchase-30, minimumPassengers, milesAccrual-25, false);
+                fareRuleBean.createFareRule("SVR-3", minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual - 25, false);
                 fareRuleBean.createFareRule("SVR-4", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers + 1, milesAccrual - 50, false);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
-        if (routeBean.getAllAirports().size() == 0) {
+
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
                 long ctId = routeBean.createCity("Singapore", ctryId);
