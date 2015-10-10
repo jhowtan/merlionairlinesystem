@@ -21,16 +21,6 @@ public class AttributesBean {
     public AttributesBean() {
 
     }
-    @PostConstruct
-    private void init() {
-        setDoubleAttribute(Constants.AVERAGE_PERSON_WEIGHT, 62.0);
-        setDoubleAttribute(Constants.AVERAGE_BAGGAGE_WEIGHT, 32.0);
-        setDoubleAttribute(Constants.CABIN_CREW_SALARY, 48000);
-        setDoubleAttribute(Constants.COCKPIT_CREW_SALARY, 100000);
-        setDoubleAttribute(Constants.FUEL_WEIGHT, 0.81);
-        setIntAttribute(Constants.FLIGHTS_PER_YEAR, 100);
-        setIntAttribute(Constants.MAINTENANCE_PER_YEAR, 15);
-    }
 
     public String getStringAttribute(String key, String defaultValue) {
         StringAttribute attribute = em.find(StringAttribute.class, key);
@@ -48,6 +38,7 @@ public class AttributesBean {
         attribute.setKey(key);
         attribute.setValue(value);
         em.merge(attribute);
+        em.flush();
     }
 
     public double getDoubleAttribute(String key, double defaultValue) {
@@ -66,6 +57,7 @@ public class AttributesBean {
         attribute.setKey(key);
         attribute.setValue(value);
         em.merge(attribute);
+        em.flush();
     }
 
     public int getIntAttribute(String key, int defaultValue) {
