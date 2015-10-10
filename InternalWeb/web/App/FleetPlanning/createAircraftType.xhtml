@@ -41,10 +41,9 @@
                                         <h:message for="fuelCapacity" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!fuelEfficiency.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="fuelEfficiency">Fuel Efficiency (in Litres/Kilogram/Kilometre)</label>
-                                        <h:inputText pt:type="number" pt:min="1" pt:step="0.01" id="fuelEfficiency" binding="#{fuelEfficiency}" value="#{createAircraftTypeManagedBean.fuelEfficiency}"
+                                        <label class="control-label" for="fuelEfficiency">Fuel Efficiency (in Litres/Mile/1,000 Miles)</label>
+                                        <h:inputText pt:type="number" pt:min="0.01" pt:step="0.01" id="fuelEfficiency" binding="#{fuelEfficiency}" value="#{createAircraftTypeManagedBean.fuelEfficiency}"
                                                      styleClass="form-control" required="true" requiredMessage="Fuel efficiency of aircraft type is required." validatorMessage="A valid fuel efficiency is required." converterMessage="A valid number is required.">
-                                            <f:validateLongRange minimum="1" />
                                         </h:inputText>
                                         <h:message for="fuelEfficiency" styleClass="help-block" />
                                     </div>

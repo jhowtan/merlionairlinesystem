@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +37,11 @@ public class CommonManagedBean {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String formatMoney(double amount) {
+        NumberFormat numberFormat = new DecimalFormat("#,###.00");
+        return numberFormat.format(amount);
     }
 
     public List truncateList(List list, int size) {

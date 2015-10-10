@@ -1,5 +1,6 @@
 package MAS.ManagedBean.FlightPlanning;
 
+import MAS.Bean.CostsBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
@@ -17,6 +18,9 @@ import java.util.List;
 public class FlightsManagedBean {
     @EJB
     FlightScheduleBean flightScheduleBean;
+
+    @EJB
+    CostsBean costsBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -40,6 +44,14 @@ public class FlightsManagedBean {
             FacesMessage m = new FacesMessage("The flight cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public double estimatedCost(long flightId) {
+        try {
+            return costsBean.calculateCostPerFlight(flightId);
+        } catch (NotFoundException e) {
+            return 0;
         }
     }
 

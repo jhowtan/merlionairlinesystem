@@ -29,7 +29,7 @@
                                         <h:message for="configName" styleClass="help-block" />
                                     </div>
                                     <div class="form-group col-lg-12 #{!weight.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="weight">Base Weight (in kg)</label>
+                                        <label class="control-label" for="weight">Added Weight (in kg)</label>
                                         <h:inputText pt:type="number" id="weight" binding="#{weight}" value="#{createSeatConfigManagedBean.weight}" styleClass="form-control" pt:placeholder="e.g. 4000" validatorMessage="Base weight must be greater than 0." converterMessage="Base weight must be greater than 0.">
                                             <f:validateLongRange minimum="1" />
                                         </h:inputText>

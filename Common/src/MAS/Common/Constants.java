@@ -31,4 +31,5 @@ public class Constants {
     public static final String COCKPIT_CREW_SALARY = "COCKPIT_CREW_SALARY";
     public static final String FLIGHTS_PER_YEAR = "FLIGHTS_PER_YEAR";
     public static final String MAINTENANCE_PER_YEAR = "MAINTENANCE_PER_YEAR";
+    public static final String AIRCRAFT_EXPECTED_LIFE = "AIRCRAFT_EXPECTED_LIFE";
 }

@@ -49,7 +49,7 @@
                                         <label class="control-label" for="amount">Amount</label>
                                         <h:inputText id="amount" binding="#{amount}" value="#{createCostManagedBean.amount}" styleClass="form-control"
                                                      pt:placeholder="e.g. 100,000.50" required="true" requiredMessage="Amount is required."
-                                                    pt:type="number" pt:min="1" pt:step="0.01">
+                                                    pt:type="number" pt:min="0.01" pt:step="0.01">
                                         </h:inputText>
                                         <h:message for="amount" styleClass="help-block" />
                                     </div>
