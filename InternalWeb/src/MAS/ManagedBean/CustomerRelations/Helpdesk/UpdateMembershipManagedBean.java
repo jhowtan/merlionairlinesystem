@@ -24,16 +24,15 @@ public class UpdateMembershipManagedBean implements Serializable {
     @EJB
     CustomerBean customerBean;
 
-    @ManagedProperty(value="#{helpdeskManagedBean}")
-    private HelpdeskManagedBean helpdeskManagedBean;
-
     private Customer customer;
+    private Customer customerUpdated;
 
     @PostConstruct
     public void init() {
         try {
             Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
             customer = customerBean.getCustomer(Long.parseLong(params.get("customerId")));
+            customerUpdated = customerBean.getCustomer(Long.parseLong(params.get("customerId")));
         } catch (Exception e) {
             // Cannot find customer!
         }
@@ -49,10 +48,14 @@ public class UpdateMembershipManagedBean implements Serializable {
 
     public void save() {
         try {
+            if (customer.getTier() == Constants.FFP_TIER_BLUE) {
+                customer.setStatusExpiry(null);
+            }
+
             customerBean.updateCustomer(customer);
 
-            // Update Customer in HelpdeskManagedBean to reflect the new changes
-            helpdeskManagedBean.setCustomer(customer);
+            // Update card to reflect new changes
+            customerUpdated = customerBean.getCustomer(customer.getId());
 
             FacesMessage m = new FacesMessage("Customer membership updated successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -79,7 +82,11 @@ public class UpdateMembershipManagedBean implements Serializable {
         this.customer = customer;
     }
 
-    public void setHelpdeskManagedBean(HelpdeskManagedBean helpdeskManagedBean) {
-        this.helpdeskManagedBean = helpdeskManagedBean;
+    public Customer getCustomerUpdated() {
+        return customerUpdated;
+    }
+
+    public void setCustomerUpdated(Customer customerUpdated) {
+        this.customerUpdated = customerUpdated;
     }
 }

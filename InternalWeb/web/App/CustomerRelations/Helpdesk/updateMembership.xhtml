@@ -40,16 +40,18 @@
 
                             <h:message for="tier" styleClass="help-block" />
                         </div>
-                        <div class="form-group col-lg-12 #{!tier.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-12 #{!eliteMiles.valid ? 'has-error' : ''}">
                             <label class="control-label" for="eliteMiles">Elite Miles</label>
                             <h:inputText class="form-control"
                                  value="#{updateMembershipManagedBean.customer.eliteMiles}" binding="#{eliteMiles}" id="eliteMiles"
-                                 required="true" requiredMessage="The membership tier is required"/>
+                                 required="true" requiredMessage="The number of elite miles is required" converterMessage="Please enter a valid number">
+                                <f:validator validatorId="eliteMilesValidator" />
+                                <f:attribute name="tier" value="#{tier}" />
+                            </h:inputText>
                             <h:message for="eliteMiles" styleClass="help-block" />
                         </div>
 
                         <h:panelGroup id="statusExpiryArea">
-
                             <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="eliteMiles">Status Expiry</label>
 
@@ -60,7 +62,7 @@
                                 <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier != 1}">
                                     <h:inputText pt:type="date" class="form-control"
                                                  value="#{updateMembershipManagedBean.customer.statusExpiry}" binding="#{statusExpiry}" id="statusExpiry"
-                                                 required="true" requiredMessage="The status expiry date is required">
+                                                 required="true" requiredMessage="The status expiry date is required" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" />
                                     </h:inputText>
                                 </ui:fragment>
@@ -88,7 +90,7 @@
             </div>
 
             <h:panelGroup class="panel-body text-center" layout="block">
-                <p><merlion:card customer="#{helpdeskManagedBean.customer}" /></p>
+                <p><merlion:card customer="#{updateMembershipManagedBean.customerUpdated}" /></p>
                 <h:link outcome="issueCard" value="Reissue Membership Card" styleClass="btn btn-default btn-sm">
                     <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
                     <f:param name="animate" value="1" />
