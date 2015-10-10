@@ -1,0 +1,94 @@
+/* FFP Cards */
+
+@media print {
+    .ffp-card,
+    .ffp-card * {
+        -webkit-print-color-adjust: exact;
+    }
+    .ffp-card-print {
+        text-align: center;
+    }
+}
+
+.ffp-card {
+    width: 342px;
+    height: 216px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: #fff;
+    background: url(../img/ffp-card-bg.png) repeat, url(../img/ffp-card-logo.png) no-repeat 15px 15px;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
+    display: inline-block;
+}
+
+.ffp-card:after {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.ffp-card .name {
+    font-family: Courier, monospace;
+    letter-spacing: 0.05em;
+    position: absolute;
+    bottom: 35px;
+    left: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.ffp-card .number {
+    font-family: Courier, monospace;
+    letter-spacing: 0.05em;
+    position: absolute;
+    bottom: 15px;
+    left: 20px;
+    font-size: 15px;
+}
+
+.ffp-card .member-since {
+    font-family: Courier, monospace;
+    letter-spacing: 0.05em;
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 15px;
+}
+
+/* Elite Blue */
+
+.ffp-card.blue {
+    background-color: #215c90;
+}
+
+.ffp-card.blue:after {
+    content: "Elite Blue";
+}
+
+/* Elite Silver */
+
+.ffp-card.silver {
+    background-color: #5b8a94;
+}
+
+.ffp-card.silver:after {
+    content: "Elite Silver";
+}
+
+/* Elite Gold */
+
+.ffp-card.gold {
+    background-color: #b3853e;
+}
+
+.ffp-card.gold:after {
+    content: "Elite Gold";
+}

@@ -64,7 +64,7 @@ public class MainMenu {
         entries.add(
                 new MenuEntry("Customer Relations", "user",
                         new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER),
-                        new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE)
+                        new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP)
                 )
         );
     }

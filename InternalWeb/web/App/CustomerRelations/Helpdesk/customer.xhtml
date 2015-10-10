@@ -106,13 +106,15 @@
                                                             <div class="clearfix"></div>
                                                         </div>
                                                     </h:outputLink>
-                                                    <a href="#">
+                                                    <h:outputLink value="updateMembership.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
                                                         <div class="panel-footer">
-                                                            <span class="pull-left">View Account History</span>
+                                                            <span class="pull-left">Update Membership</span>
                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                    </a>
+                                                    </h:outputLink>
                                                 </div>
                                             </div>
 
