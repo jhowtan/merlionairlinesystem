@@ -72,7 +72,7 @@ public class InitBean {
             }
         }
 
-        if (fleetBean.getAllAircraftTypes().size() == 0) {
+        /*if (fleetBean.getAllAircraftTypes().size() == 0) {
             try {
                 long acTypeId = fleetBean.createAircraftType("A380 NR", 323546);
                 //long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_3e", "A3180 ABC test", 5800, acTypeId);
@@ -114,7 +114,7 @@ public class InitBean {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
 
         if (fareRuleBean.getAllFareRules().size() == 0) {
@@ -133,7 +133,7 @@ public class InitBean {
             }
         }
 
-        if (routeBean.getAllAirports().size() == 0) {
+        /*if (routeBean.getAllAirports().size() == 0) {
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
                 long ctId = routeBean.createCity("Singapore", ctryId);
@@ -175,7 +175,7 @@ public class InitBean {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 }

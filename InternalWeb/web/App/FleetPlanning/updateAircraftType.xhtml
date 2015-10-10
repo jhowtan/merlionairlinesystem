@@ -43,6 +43,46 @@
                                         </h:inputText>
                                         <h:message for="fuelCapacity" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!fuelEfficiency.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="fuelEfficiency">Fuel Efficiency (in Litres/Kilogram/Kilometre)</label>
+                                        <h:inputText pt:type="number" pt:min="1" pt:step="0.01" id="fuelEfficiency" binding="#{fuelEfficiency}" value="#{updateAircraftTypeManagedBean.fuelEfficiency}"
+                                                     styleClass="form-control" required="true" requiredMessage="Fuel efficiency of aircraft type is required." validatorMessage="A valid fuel efficiency is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                        <h:message for="fuelEfficiency" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!speed.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="speed">Average Speed (in Kilometres/hour)</label>
+                                        <h:inputText pt:type="number" pt:min="1" pt:step="0.01" id="speed" binding="#{speed}" value="#{updateAircraftTypeManagedBean.speed}"
+                                                     styleClass="form-control" required="true" requiredMessage="Average speed of aircraft type is required." validatorMessage="A valid average speed is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                        <h:message for="speed" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!weight.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="weight">Dry Weight (in Kilograms)</label>
+                                        <h:inputText pt:type="number" pt:min="1" pt:step="1" id="weight" binding="#{weight}" value="#{updateAircraftTypeManagedBean.weight}"
+                                                     styleClass="form-control" required="true" requiredMessage="Dry weight of aircraft type is required." validatorMessage="A valid weight is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                        <h:message for="weight" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!cockpitReq.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="cockpitReq">Cockpit Crew Requirements</label>
+                                        <h:inputText pt:type="number" pt:min="1" pt:max="5" pt:step="1" id="cockpitReq" binding="#{cockpitReq}" value="#{updateAircraftTypeManagedBean.cockpitReq}"
+                                                     styleClass="form-control" required="true" requiredMessage="Cockpit crew requirements of aircraft type is required." validatorMessage="A valid crew requirement is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                        <h:message for="cockpitReq" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!cabinReq.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="cabinReq">Cabin Crew Requirements</label>
+                                        <h:inputText pt:type="number" pt:min="1" pt:step="1" id="cabinReq" binding="#{cabinReq}" value="#{updateAircraftTypeManagedBean.cabinReq}"
+                                                     styleClass="form-control" required="true" requiredMessage="Cabin crew requirements of aircraft type is required." validatorMessage="A valid crew requirement is required." converterMessage="A valid number is required.">
+                                            <f:validateLongRange minimum="1" />
+                                        </h:inputText>
+                                        <h:message for="cabinReq" styleClass="help-block" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

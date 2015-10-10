@@ -25,6 +25,11 @@ public class UpdateAircraftTypeManagedBean {
     private AircraftType type;
     private String typeName;
     private int fuelCapacity;
+    private int cabinReq;
+    private int cockpitReq;
+    private int weight;
+    private double fuelEfficiency;
+    private double speed;
     private Map<String,String> params;
     private List<AircraftSeatConfig> seatConfigs;
 
@@ -44,6 +49,11 @@ public class UpdateAircraftTypeManagedBean {
         }
         typeName = type.getName();
         fuelCapacity = type.getFuelCapacity();
+        cabinReq = type.getCabinCrewReq();
+        cockpitReq = type.getCockpitCrewReq();
+        weight = type.getWeight();
+        fuelEfficiency = type.getFuelEfficiency();
+        speed = type.getSpeed();
     }
 
     private void populateSeatConfig(long typeId) {
@@ -53,7 +63,12 @@ public class UpdateAircraftTypeManagedBean {
     public void save() throws NotFoundException {
         try {
             fleetBean.changeAircraftTypeName(type.getId(), typeName);
-            fleetBean.changeFuelCapacity(type.getId(), fuelCapacity);
+            fleetBean.changeAircraftTypeFuelCap(type.getId(), fuelCapacity);
+            fleetBean.changeAircraftTypeCabinReq(type.getId(), cabinReq);
+            fleetBean.changeAircraftTypeCockpitReq(type.getId(), cockpitReq);
+            fleetBean.changeAircraftTypeFuelEff(type.getId(), fuelEfficiency);
+            fleetBean.changeAircraftTypeSpeed(type.getId(), speed);
+            fleetBean.changeAircraftTypeWeight(type.getId(), weight);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -119,5 +134,45 @@ public class UpdateAircraftTypeManagedBean {
 
     public void setParams(Map<String, String> params) {
         this.params = params;
+    }
+
+    public int getCabinReq() {
+        return cabinReq;
+    }
+
+    public void setCabinReq(int cabinReq) {
+        this.cabinReq = cabinReq;
+    }
+
+    public int getCockpitReq() {
+        return cockpitReq;
+    }
+
+    public void setCockpitReq(int cockpitReq) {
+        this.cockpitReq = cockpitReq;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public double getFuelEfficiency() {
+        return fuelEfficiency;
+    }
+
+    public void setFuelEfficiency(double fuelEfficiency) {
+        this.fuelEfficiency = fuelEfficiency;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

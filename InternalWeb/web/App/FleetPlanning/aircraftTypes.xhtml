@@ -25,6 +25,10 @@
                         <tr>
                             <th>Name </th>
                             <th>Fuel Capacity</th>
+                            <th>Fuel Efficiency</th>
+                            <th>Crew Requirements</th>
+                            <th>Dry Weight</th>
+                            <th>Average Speed</th>
                             <th>No. of Aircraft</th>
                             <th>Action</th>
                         </tr>
@@ -34,6 +38,10 @@
                             <tr>
                                 <td>#{type.name}</td>
                                 <td>#{type.fuelCapacity}</td>
+                                <td>#{type.fuelEfficiency}</td>
+                                <td>#{type.cockpitCrewReq}/#{type.cabinCrewReq}</td>
+                                <td>#{type.weight}</td>
+                                <td>#{type.speed}</td>
                                 <td>#{aircraftTypeManagedBean.getAircraftCount(type.id)}</td>
                                 <td>
                                     <h:form>
