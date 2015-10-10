@@ -22,30 +22,26 @@
 
                 <h:form>
                     <div class="row">
-                        <div class="form-group col-lg-12 #{!firstName.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!firstName.valid ? 'has-error' : ''}">
                             <label class="control-label" for="firstName">First Name</label>
                             <h:inputText id="firstName" binding="#{firstName}" value="#{updateCustomerProfileManagedBean.customer.firstName}" styleClass="form-control" required="true" requiredMessage="The customer's first name is required" />
                             <h:message for="firstName" styleClass="help-block" />
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12 #{!lastName.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!lastName.valid ? 'has-error' : ''}">
                             <label class="control-label" for="lastName">Last Name</label>
                             <h:inputText id="lastName" binding="#{lastName}" value="#{updateCustomerProfileManagedBean.customer.lastName}" styleClass="form-control" required="true" requiredMessage="The customer's last name is required" />
                             <h:message for="lastName" styleClass="help-block" />
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12 #{!dateOfBirth.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!dateOfBirth.valid ? 'has-error' : ''}">
                             <label class="control-label" for="dateOfBirth">Date of Birth</label>
                             <h:inputText pt:type="date" id="dateOfBirth" binding="#{dateOfBirth}" value="#{updateCustomerProfileManagedBean.customer.dateOfBirth}" styleClass="form-control" required="true" requiredMessage="The customer's date of birth is required">
                                 <f:convertDateTime pattern="yyyy-MM-dd" />
                             </h:inputText>
                             <h:message for="dateOfBirth" styleClass="help-block" />
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12 #{!nationality.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!nationality.valid ? 'has-error' : ''}">
                             <label class="control-label" for="nationality">Nationality</label>
                             <h:selectOneMenu class="form-control"
                                              value="#{updateCustomerProfileManagedBean.customer.nationality}" binding="#{nationality}" id="nationality"
@@ -75,23 +71,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12 #{!email.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!email.valid ? 'has-error' : ''}">
                             <label class="control-label" for="email">Email</label>
                             <h:inputText pt:type="email" id="email" binding="#{email}" value="#{updateCustomerProfileManagedBean.customer.email}" styleClass="form-control" required="true" requiredMessage="The customer's email is required">
                                 <f:validator validatorId="emailValidator"/>
                             </h:inputText>
                             <h:message for="email" styleClass="help-block" />
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12 #{!phone.valid ? 'has-error' : ''}">
+                        <div class="form-group col-lg-6 #{!phone.valid ? 'has-error' : ''}">
                             <label class="control-label" for="phone">Phone Number</label>
                             <h:inputText id="phone" binding="#{phone}" pt:type="tel" value="#{updateCustomerProfileManagedBean.customer.phone}" styleClass="form-control" required="true" requiredMessage="The customer's phone number is required"/>
                             <h:message for="phone" styleClass="help-block" />
                         </div>
                     </div>
 
-                    <h:commandButton action="#{updateCustomerProfileManagedBean.save}" value="Update User" styleClass="btn btn-default btn-success">
+                    <h:commandButton action="#{updateCustomerProfileManagedBean.save}" value="Update Customer" styleClass="btn btn-default btn-success pull-right">
                         <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
                     </h:commandButton>
                 </h:form>
@@ -102,12 +96,12 @@
     <ui:define name="helpdesk-side">
         <h:panelGroup class="panel panel-primary" layout="block">
             <div class="panel-heading">
-                <i class="fa fa-comment fa-fw"></i>
-                Extra Information Here
+                <i class="fa fa-exclamation-circle fa-fw"></i>
+                Important Note
             </div>
 
             <h:panelGroup class="panel-body" layout="block">
-                You can also optionally add stuf to the side panel.
+                Please update the customer's information only after verifying with their passport details.
             </h:panelGroup>
         </h:panelGroup>
     </ui:define>
