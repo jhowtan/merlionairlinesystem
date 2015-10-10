@@ -35,7 +35,7 @@
                                              value="#{updateMembershipManagedBean.customer.tier}" binding="#{tier}" id="tier"
                                              required="true" requiredMessage="The membership tier is required">
                                 <f:selectItems value="#{updateMembershipManagedBean.getTierList()}" />
-                                <!-- INSERT AJAX -->
+                                <f:ajax listener="#{updateMembershipManagedBean.tierAjaxListener}" render="statusExpiryArea" />
                             </h:selectOneMenu>
 
                             <h:message for="tier" styleClass="help-block" />
@@ -47,33 +47,29 @@
                                  required="true" requiredMessage="The membership tier is required"/>
                             <h:message for="eliteMiles" styleClass="help-block" />
                         </div>
-                        <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
-                            <label class="control-label" for="eliteMiles">Elite Miles Qualification End Date</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <h:selectBooleanCheckbox value="#{updateMembershipManagedBean.customer.eliteMiles > 0}" />
-                                </span>
-                                <h:inputText class="form-control"
-                                         value="#{updateMembershipManagedBean.customer.qualificationEndDate}" binding="#{qualificationEndDate}" id="qualificationEndDate"
-                                         required="true" requiredMessage="The status expiry date is required"/>
-                            </div>
-                            <h:message for="qualificationEndDate" styleClass="help-block" />
-                        </div>
-                        <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
-                            <label class="control-label" for="eliteMiles">Status Expiry</label>
 
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <h:selectBooleanCheckbox value="#{updateMembershipManagedBean.customer.eliteMiles > 0}" />
-                                </span>
-                                <h:inputText class="form-control"
-                                             value="#{updateMembershipManagedBean.customer.statusExpiry}" binding="#{statusExpiry}" id="statusExpiry"
-                                             required="true" requiredMessage="The status expiry date is required">
-                                </h:inputText>
+                        <h:panelGroup id="statusExpiryArea">
+
+                            <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="eliteMiles">Status Expiry</label>
+
+                                <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier == 1}">
+                                    <h:inputText pt:type="text" class="form-control" value="Not Applicable" readonly="true" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier != 1}">
+                                    <h:inputText pt:type="date" class="form-control"
+                                                 value="#{updateMembershipManagedBean.customer.statusExpiry}" binding="#{statusExpiry}" id="statusExpiry"
+                                                 required="true" requiredMessage="The status expiry date is required">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    </h:inputText>
+                                </ui:fragment>
+
+                                <h:message for="statusExpiry" styleClass="help-block" />
                             </div>
 
-                            <h:message for="statusExpiry" styleClass="help-block" />
-                        </div>
+                        </h:panelGroup>
+
                     </div>
 
                     <h:commandButton action="#{updateMembershipManagedBean.save}" value="Update Membership" styleClass="btn btn-default btn-success">

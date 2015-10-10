@@ -11,12 +11,15 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class UpdateMembershipManagedBean implements Serializable {
     @EJB
     CustomerBean customerBean;
@@ -58,6 +61,14 @@ public class UpdateMembershipManagedBean implements Serializable {
         } catch (NotFoundException e) {
             // Cannot find customer!
         }
+    }
+
+    public void tierAjaxListener(AjaxBehaviorEvent event) {
+        System.out.println("XXXXXXXXXXXXXXXX");
+    }
+
+    public double random() {
+        return Math.random();
     }
 
     public Customer getCustomer() {

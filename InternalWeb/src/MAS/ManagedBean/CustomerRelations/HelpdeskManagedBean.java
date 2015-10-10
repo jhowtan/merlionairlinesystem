@@ -6,6 +6,7 @@ import MAS.Entity.Customer;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class HelpdeskManagedBean implements Serializable {
     @EJB
     CustomerBean customerBean;
