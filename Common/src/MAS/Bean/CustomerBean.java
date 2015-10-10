@@ -27,6 +27,8 @@ public class CustomerBean {
         customer.setPasswordHash(Utils.hash(password, customer.getSalt()));
         customer.setJoinDate(new Date());
         customer.setTier(Constants.FFP_TIER_BLUE);
+        customer.setMiles(0);
+        customer.setEliteMiles(0);
         customer.setLocked(false);
 
         em.persist(customer);
