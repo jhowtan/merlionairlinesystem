@@ -1,6 +1,7 @@
 package MAS.Bean;
 
 import MAS.Common.Constants;
+import MAS.Entity.BooleanAttribute;
 import MAS.Entity.DoubleAttribute;
 import MAS.Entity.IntAttribute;
 import MAS.Entity.StringAttribute;
@@ -81,6 +82,26 @@ public class AttributesBean {
 
     public void setIntAttribute(String key, int value) {
         IntAttribute attribute = new IntAttribute();
+        attribute.setKey(key);
+        attribute.setValue(value);
+        em.merge(attribute);
+        em.flush();
+    }
+
+    public boolean getBooleanAttribute(String key, boolean defaultValue) {
+        BooleanAttribute attribute = em.find(BooleanAttribute.class, key);
+        if (attribute == null) {
+            attribute = new BooleanAttribute();
+            attribute.setKey(key);
+            attribute.setValue(defaultValue);
+            em.persist(attribute);
+            em.flush();
+        }
+        return attribute.getValue();
+    }
+
+    public void setBooleanAttribute(String key, boolean value) {
+        BooleanAttribute attribute = new BooleanAttribute();
         attribute.setKey(key);
         attribute.setValue(value);
         em.merge(attribute);

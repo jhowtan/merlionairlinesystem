@@ -1,5 +1,6 @@
 package MAS.ManagedBean;
 
+import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
 import MAS.Entity.User;
@@ -77,6 +78,18 @@ public class CommonManagedBean {
                 return "Sunday";
         }
         return "";
+    }
+
+    public String getTierString(int tier) {
+        switch (tier) {
+            case Constants.FFP_TIER_BLUE:
+                return "blue";
+            case Constants.FFP_TIER_SILVER:
+                return "silver";
+            case Constants.FFP_TIER_GOLD:
+                return "gold";
+        }
+        return "blue";
     }
 
     public static String formatAA(AircraftAssignment aa) {

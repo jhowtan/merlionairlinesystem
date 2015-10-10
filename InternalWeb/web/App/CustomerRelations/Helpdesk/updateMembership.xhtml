@@ -1,0 +1,125 @@
+<ui:composition template="/App/CustomerRelations/Helpdesk/customer.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:merlion="http://java.sun.com/jsf/composite/merlion"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="helpdesk-main">
+        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} fadeIn" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-pencil fa-fw"></i>
+                Update Membership
+            </div>
+
+            <h:panelGroup class="panel-body" layout="block">
+
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+
+                <h:form>
+                    <div class="row">
+                        <div class="form-group col-lg-12 #{!displayName.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="displayName">Card Display Name</label>
+                            <h:inputText id="displayName" binding="#{displayName}" value="#{updateMembershipManagedBean.customer.displayName}" styleClass="form-control" required="true" requiredMessage="The customer's display name is required" maxlength="16" />
+                            <h:message for="displayName" styleClass="help-block" />
+                        </div>
+                        <div class="form-group col-lg-12 #{!tier.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="tier">Membership Tier</label>
+
+                            <h:selectOneMenu class="form-control"
+                                             value="#{updateMembershipManagedBean.customer.tier}" binding="#{tier}" id="tier"
+                                             required="true" requiredMessage="The membership tier is required">
+                                <f:selectItems value="#{updateMembershipManagedBean.getTierList()}" />
+                                <f:ajax render="statusExpiryArea qualificationEndDateArea" />
+                            </h:selectOneMenu>
+                            <h:message for="tier" styleClass="help-block" />
+                        </div>
+
+                        <h:panelGroup id="statusExpiryArea">
+                            <div class="form-group col-lg-12 #{!statusExpiry.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="statusExpiry">Status Expiry</label>
+
+                                <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier == 1}">
+                                    <h:inputText pt:type="text" class="form-control" value="Not Applicable" readonly="true" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{updateMembershipManagedBean.customer.tier != 1}">
+                                    <h:inputText pt:type="date" class="form-control"
+                                                 value="#{updateMembershipManagedBean.customer.statusExpiry}" binding="#{statusExpiry}" id="statusExpiry"
+                                                 required="true" requiredMessage="The status expiry date is required" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        <f:ajax render="qualificationEndDateArea" listener="#{updateMembershipManagedBean.statusExpiryAjaxListener}" />
+                                    </h:inputText>
+                                </ui:fragment>
+
+                                <h:message for="statusExpiry" styleClass="help-block" />
+                            </div>
+                        </h:panelGroup>
+
+                        <div class="form-group col-lg-12 #{!eliteMiles.valid ? 'has-error' : ''}">
+                            <label class="control-label" for="eliteMiles">Elite Miles</label>
+                            <h:inputText class="form-control"
+                                         value="#{updateMembershipManagedBean.customer.eliteMiles}" binding="#{eliteMiles}" id="eliteMiles"
+                                         required="true" requiredMessage="The number of elite miles is required" converterMessage="Please enter a valid number">
+                                <f:validator validatorId="eliteMilesValidator" />
+                                <f:attribute name="tier" value="#{tier}" />
+                            </h:inputText>
+                            <h:message for="eliteMiles" styleClass="help-block" />
+                        </div>
+
+                        <h:panelGroup id="qualificationEndDateArea">
+                            <div class="form-group col-lg-12 #{!qualificationEndDate.valid ? 'has-error' : ''}">
+                                <label class="control-label" for="qualificationEndDate">End of Qualification Period</label>
+
+                            <div class="input-group">
+                                <h:inputText pt:type="date" class="form-control"
+                                             value="#{updateMembershipManagedBean.customer.qualificationEndDate}" binding="#{qualificationEndDate}" id="qualificationEndDate"
+                                             pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                             readonly="#{updateMembershipManagedBean.customer.tier != 1}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                                <span class="input-group-btn">
+                                    <h:commandButton styleClass="btn btn-default" disabled="#{updateMembershipManagedBean.customer.tier != 1}" value="Reset Date">
+                                        <f:ajax render="qualificationEndDateArea" listener="#{updateMembershipManagedBean.qualificationEndDateResetAjaxListener}" />
+                                    </h:commandButton>
+                                </span>
+                            </div>
+
+                                <h:message for="qualificationEndDate" styleClass="help-block" />
+                            </div>
+                        </h:panelGroup>
+
+                    </div>
+
+
+                    <h:commandButton action="#{updateMembershipManagedBean.save}" value="Update Membership" styleClass="btn btn-default btn-success">
+                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                    </h:commandButton>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="helpdesk-side">
+        <h:panelGroup class="panel panel-primary" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-credit-card fa-fw"></i>
+                Membership Card
+            </div>
+
+            <h:panelGroup class="panel-body text-center" layout="block">
+                <p><merlion:card customer="#{updateMembershipManagedBean.customerUpdated}" /></p>
+                <h:link outcome="issueCard" value="Reissue Membership Card" styleClass="btn btn-default btn-sm">
+                    <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                    <f:param name="animate" value="1" />
+                </h:link>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

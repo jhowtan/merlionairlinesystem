@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class StringAttribute {
+public class BooleanAttribute {
     private String key;
 
     @Id
@@ -19,14 +19,14 @@ public class StringAttribute {
         this.key = key;
     }
 
-    private String value;
+    private boolean value;
 
     @Basic
-    public String getValue() {
+    public boolean getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(boolean value) {
         this.value = value;
     }
 }

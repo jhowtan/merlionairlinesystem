@@ -11,6 +11,9 @@ public class Constants {
     public static final int FFP_TIER_BLUE = 1;
     public static final int FFP_TIER_SILVER = 2;
     public static final int FFP_TIER_GOLD = 3;
+    public static final String FFP_TIER_BLUE_LABEL = "Elite Blue";
+    public static final String FFP_TIER_SILVER_LABEL = "Elite Silver";
+    public static final String FFP_TIER_GOLD_LABEL = "Elite Gold";
 
     public static final String[] COSTS = {"Consumables Per Flight", "Aircraft One-Time Cost",
             "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost"};

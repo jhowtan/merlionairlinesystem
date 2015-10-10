@@ -14,63 +14,9 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Customer Helpdesk</h1>
 
-                    <h:panelGroup class="panel panel-primary" id="customerLookupPanel" layout="block" rendered="#{!helpdeskManagedBean.customerVerified}">
-                        <div class="panel-heading">
-                            <i class="fa fa-user fa-fw"></i>
-                            Customer Lookup
-                        </div>
-
-                        <h:panelGroup class="panel-body" layout="block">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <blockquote>
-                                        <p>Good #{helpdeskManagedBean.timeOfDayGreeting()}, my name is #{authManagedBean.userDisplayName} and I am happy to help you today.</p>
-                                        <p>In order to better serve you, could you kindly provide me with your membership number?</p>
-                                    </blockquote>
-
-                                    <div class="form-group form-group-lg">
-                                        <h:form>
-                                            <div class="input-group">
-                                            <span class="input-group-addon">Membership Number</span>
-                                            <h:inputText styleClass="form-control" pt:placeholder="e.g. 80001234" maxlength="8">
-                                                <f:ajax event="keyup" render="customerLookupResult" listener="#{helpdeskManagedBean.customerIdAjaxListener}" />
-                                            </h:inputText>
-                                            </div>
-                                        </h:form>
-                                    </div>
-
-                                    <h:panelGroup id="customerLookupResult" layout="block">
-                                        <ui:fragment rendered="#{! empty helpdeskManagedBean.customerId}">
-                                            <ui:fragment rendered="#{empty helpdeskManagedBean.customer}">
-                                                <blockquote>
-                                                    <p>I'm sorry, I can't find anyone with the membership number #{helpdeskManagedBean.customerId}.</p>
-                                                    <p>Could you please read your membership number to me again?</p>
-                                                </blockquote>
-                                            </ui:fragment>
-                                            <ui:fragment rendered="#{! empty helpdeskManagedBean.customer}">
-                                                <blockquote>
-                                                    <p>Thank you very much for the information, #{helpdeskManagedBean.customer.firstName}.</p>
-                                                    <p>Before we proceed, could I please verify your date of birth?</p>
-                                                </blockquote>
-                                                <h:form>
-                                                    <div class="form-group form-group-lg">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">Date of Birth</span>
-                                                            <h:inputText pt:type="date" styleClass="form-control" value="#{commonManagedBean.formatDate('yyyy-MM-dd', helpdeskManagedBean.customer.dateOfBirth)}" readonly="true" />
-                                                            <span class="input-group-btn">
-                                                                <h:link styleClass="btn btn-lg btn-success" value="Verify" outcome="helpdesk">
-                                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
-                                                                </h:link>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </h:form>
-                                            </ui:fragment>
-                                        </ui:fragment>
-                                    </h:panelGroup>
-                                </div>
-                            </div>
-                        </h:panelGroup>
+                    <h:panelGroup rendered="#{!helpdeskManagedBean.customerVerified}">
+                        <p>Unable to find customer.</p>
+                        <h:link outcome="index" value="Return to Helpdesk" styleClass="btn btn-default" />
                     </h:panelGroup>
 
 
@@ -103,6 +49,9 @@
                                         </tr>
                                     </table>
                                 </h:panelGroup>
+
+                                <ui:insert name="helpdesk-side"></ui:insert>
+
                             </div>
 
 
@@ -114,7 +63,6 @@
                                     </div>
 
                                     <h:panelGroup class="panel-body" layout="block">
-
 
                                         <blockquote>
                                             <p>How may I help you today?</p>
@@ -149,27 +97,45 @@
                                                     <div class="panel-heading">
                                                         <i class="fa fa-user fa-4x"></i>
                                                     </div>
-                                                    <a href="#">
+                                                    <h:outputLink value="updateCustomerProfile.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
                                                         <div class="panel-footer">
                                                             <span class="pull-left">Update Customer Profile</span>
                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                    </a>
-                                                    <a href="#">
+                                                    </h:outputLink>
+                                                    <h:outputLink value="updateMembership.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
                                                         <div class="panel-footer">
-                                                            <span class="pull-left">View Account History</span>
+                                                            <span class="pull-left">Update Membership</span>
                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                    </a>
+                                                    </h:outputLink>
+                                                    <h:outputLink value="issueCard.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
+                                                        <div class="panel-footer">
+                                                            <span class="pull-left">Issue Membership Card
+                                                            </span>
+                                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </h:outputLink>
                                                 </div>
                                             </div>
 
                                         </div>
                                     </h:panelGroup>
                                 </h:panelGroup>
+
+                                <ui:insert name="helpdesk-main"></ui:insert>
+
                             </div>
+
                         </div>
                     </h:panelGroup>
 
