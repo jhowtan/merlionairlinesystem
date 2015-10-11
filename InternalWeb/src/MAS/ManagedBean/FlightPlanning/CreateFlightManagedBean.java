@@ -15,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -100,6 +101,14 @@ public class CreateFlightManagedBean {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void acTypeChangeListener(AjaxBehaviorEvent event) {
+        try {
+            flightDuration = routeBean.getEstimatedDuration(aaId);
+        } catch (NotFoundException e) {
+            flightDuration = 0;
+        }
     }
 
     public String formatAA(AircraftAssignment aa) {

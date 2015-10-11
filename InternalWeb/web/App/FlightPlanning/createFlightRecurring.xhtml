@@ -48,6 +48,7 @@
                                         <h:selectOneMenu styleClass="form-control" id="aircraftAssignment" value="#{createFlightManagedBean.aaId}" binding="#{aircraftAssignment}">
                                             <f:selectItems value="#{createFlightManagedBean.aircraftAssignments}" var="aa"
                                                            itemLabel="#{createFlightManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
+                                            <f:ajax listener="#{createFlightManagedBean.acTypeChangeListener}" render="flightDuration" />
                                         </h:selectOneMenu>
                                         <h:message for="aircraftAssignment" styleClass="help-block" />
                                     </div>

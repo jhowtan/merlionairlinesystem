@@ -254,4 +254,10 @@ public class RouteBean {
         return aircraftAssignment;
     }
 
+    public int getEstimatedDuration (long aaId) throws NotFoundException {
+        AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aaId);
+        if (aircraftAssignment == null) throw new NotFoundException();
+        return (int)((aircraftAssignment.getRoute().getDistance() / aircraftAssignment.getAircraft().getSeatConfig().getAircraftType().getSpeed()) * 60);
+    }
+
 }
