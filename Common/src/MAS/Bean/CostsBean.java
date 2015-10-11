@@ -21,6 +21,8 @@ public class CostsBean {
 
     @EJB
     AttributesBean attributesBean;
+    @EJB
+    FleetBean fleetBean;
 
     public CostsBean() {
     }
@@ -32,13 +34,28 @@ public class CostsBean {
         cost.setComments(comments);
         if (type == Constants.COST_PER_AIRCRAFT || type == Constants.COST_PER_MAINTENANCE) {
             Aircraft aircraft = em.find(Aircraft.class, assocId);
-            if (aircraft == null) throw new NotFoundException();
-            cost.setAssocId(aircraft.getId());
+            if (aircraft == null) {
+                if (assocId == -1)
+                    cost.setAssocId(-1);
+                else
+                    throw new NotFoundException();
+            }
+            else {
+                cost.setAssocId(aircraft.getId());
+            }
         }
         else if (type == Constants.COST_PER_FLIGHT) {
             AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, assocId);
-            if (aircraftAssignment == null) throw new NotFoundException();
-            cost.setAssocId(aircraftAssignment.getId());
+            if (aircraftAssignment == null)
+            {
+                if (assocId == -1)
+                    cost.setAssocId(-1);
+                else
+                    throw new NotFoundException();
+            }
+            else {
+                cost.setAssocId(aircraftAssignment.getId());
+            }
         }
         cost.setDate(new Date());
         em.persist(cost);
@@ -84,11 +101,11 @@ public class CostsBean {
         long aaId = flight.getAircraftAssignment().getId();
         double result = 0;
         //All consumables per flight
-        List<Cost> costPFlight = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :aaId")
+        List<Cost> costPFlight = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :aaId OR  c.type = :type AND c.assocId = -1")
                 .setParameter("type", Constants.COST_PER_FLIGHT)
                 .setParameter("aaId", aaId).getResultList();
         //Aircraft costs divided into per flight
-        List<Cost> acDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId")
+        List<Cost> acDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
                 .setParameter("type", Constants.COST_PER_AIRCRAFT)
                 .setParameter("acId", acId).getResultList();
         double acAll = addAllInList(acDLife);
@@ -96,6 +113,7 @@ public class CostsBean {
         //Annual costs divided into per flight
         List<Cost> annualDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type")
                 .setParameter("type", Constants.COST_ANNUAL).getResultList();
+        double annualAll = addAllInList(annualDLife)/(fleetBean.getAllAircraft().size() * attributesBean.getIntAttribute(Constants.FLIGHTS_PER_YEAR, 100));
         //Fuel costs
         List<Cost> fuelCosts = em.createQuery("SELECT c from Cost c WHERE c.type = :type ORDER BY c.id DESC")
                 .setParameter("type", Constants.COST_FUEL).setMaxResults(1).getResultList();
@@ -120,7 +138,7 @@ public class CostsBean {
         double totalFuelCosts = fuelCost * fuelRequired;
 
         //Maintenance costs divided by flights
-        List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId")
+        List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
                 .setParameter("type", Constants.COST_PER_MAINTENANCE)
                 .setParameter("acId", acId).getResultList();
         double allMaint = addAllInList(maintDLife) * attributesBean.getIntAttribute(Constants.MAINTENANCE_PER_YEAR, 15);
@@ -133,9 +151,11 @@ public class CostsBean {
 
         result += addAllInList(costPFlight);
         result += acAll;
+        result += annualAll;
         result += totalFuelCosts;
         result += allMaint;
         result += totalSalary;
+        //System.out.println(addAllInList(costPFlight) + " " + acAll + " " + annualAll + " " + totalFuelCosts + " " + allMaint + " " + totalSalary);
         return result;
     }
 

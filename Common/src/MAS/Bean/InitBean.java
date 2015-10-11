@@ -3,6 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -137,6 +138,16 @@ public class InitBean {
                 e.printStackTrace();
             }
 
+            try {
+                costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
+                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 85000000, "Aircraft Purchase", -1);
+                costsBean.createCost(Constants.COST_PER_FLIGHT, 10000, "Food & Beverages", -1);
+                costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
@@ -157,12 +168,12 @@ public class InitBean {
                     String flight1Code = "MA11";
                     Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
                     Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
-                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id);
+                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
 
                     String flight2Code = "MA12";
                     Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
                     Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
-                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id);
+                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
 
 //                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
 //                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
@@ -176,12 +187,6 @@ public class InitBean {
 //                    }
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
             } catch (Exception e) {
                 e.printStackTrace();
             }

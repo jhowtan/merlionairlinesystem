@@ -72,13 +72,14 @@ public class CostManagedBean {
 
     public String displayComments(Cost cost) {
         if (cost.getType() == 1 || cost.getType() == 2) {
+            if (cost.getAssocId() == -1)
+                return "All - " + cost.getComments();
             return displayAC(cost.getAssocId()) + " - " + cost.getComments();
         }
         else if (cost.getType() == 0) {
+            if (cost.getAssocId() == -1)
+                return "All - " + cost.getComments();
             return displayAA(cost.getAssocId()) + " - " + cost.getComments();
-        }
-        else if (cost.getType() == 5) {
-            return displayUser(cost.getAssocId()) + " - " + cost.getComments();
         }
         else {
             return cost.getComments();
