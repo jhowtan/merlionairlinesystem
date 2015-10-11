@@ -41,7 +41,7 @@ public class CommonManagedBean {
 
     public String formatMoney(double amount) {
         NumberFormat numberFormat = new DecimalFormat("#,###.00");
-        return numberFormat.format(amount);
+        return "$" + numberFormat.format(amount);
     }
 
     public List truncateList(List list, int size) {

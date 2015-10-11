@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
 
@@ -35,6 +36,8 @@ public class InitBean {
     BookingClassBean bookingClassBean;
     @EJB
     AttributesBean attributesBean;
+    @EJB
+    CostsBean costsBean;
 
     @PostConstruct
     public void init() {
@@ -172,6 +175,12 @@ public class InitBean {
 //                    }
                 }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
             } catch (Exception e) {
                 e.printStackTrace();
             }

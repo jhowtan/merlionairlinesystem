@@ -30,6 +30,7 @@ public class UpdateBookingClassManagedBean {
     private BookingClass bookingClass;
     private String name;
     private int allocation;
+    private double price;
     private Flight flight;
     private FareRule fareRule;
 
@@ -49,6 +50,7 @@ public class UpdateBookingClassManagedBean {
         name = bookingClass.getName();
         allocation = bookingClass.getAllocation();
         flight = bookingClass.getFlight();
+        setPrice(bookingClass.getPrice());
         fareRule = bookingClass.getFareRule();
     }
 
@@ -115,5 +117,13 @@ public class UpdateBookingClassManagedBean {
 
     public String[] getTravelClasses() {
         return travelClasses;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

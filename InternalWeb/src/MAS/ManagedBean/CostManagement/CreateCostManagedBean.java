@@ -49,7 +49,7 @@ public class CreateCostManagedBean {
     private String comments;
     private long assocId;
     private int type;
-    private Date date;
+    //private Date date;
 
     @PostConstruct
     private void init() {

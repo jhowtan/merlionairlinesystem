@@ -40,6 +40,7 @@ public class CreateBookingClassManagedBean {
     private int allocation;
     private int travelClass;
     private boolean openStatus;
+    private double price;
 
     public CreateBookingClassManagedBean() {
         resetFields();
@@ -74,7 +75,7 @@ public class CreateBookingClassManagedBean {
                 FacesContext.getCurrentInstance().addMessage("status", m);
                 return;
             }*/
-            bookingClassBean.createBookingClass(name, allocation, getTravelClass(), fareRuleId, flightId);
+            bookingClassBean.createBookingClass(name, allocation, getTravelClass(), fareRuleId, flightId, getPrice());
 
             getAuthManagedBean().createAuditLog("Created new booking class: " + getName(), "create_booking_class");
 
@@ -178,5 +179,13 @@ public class CreateBookingClassManagedBean {
 
     public void setTravelClasses(String[] travelClasses) {
         this.travelClasses = travelClasses;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

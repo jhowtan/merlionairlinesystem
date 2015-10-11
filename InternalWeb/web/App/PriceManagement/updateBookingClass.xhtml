@@ -42,6 +42,11 @@
                                         <h:inputText styleClass="form-control" id="flight" readonly="true" value="#{updateBookingClassManagedBean.flight.code}" binding="#{flight}"/>
                                         <h:message for="flight" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 ">
+                                        <label class="control-label" for="price">Price</label>
+                                        <h:inputText id="price" readonly="true" value="#{commonManagedBean.formatMoney(updateBookingClassManagedBean.price)}" styleClass="form-control" />
+                                        <h:message for="price" styleClass="help-block" />
+                                    </div>
                                     <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="flight">Fare Rule</label>
                                         <h:inputText styleClass="form-control" id="fareRule" readonly="true" value="#{updateBookingClassManagedBean.fareRule.name}" binding="#{fareRule}"/>

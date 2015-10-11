@@ -40,6 +40,14 @@
                                         </h:selectOneMenu>
                                         <h:message for="flight" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!price.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="price">Price</label>
+                                        <h:inputText id="price" binding="#{price}" value="#{createBookingClassManagedBean.price}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 199.99" required="true" requiredMessage="Price is required."
+                                                     pt:type="number" pt:min="1" pt:step="0.01">
+                                        </h:inputText>
+                                        <h:message for="price" styleClass="help-block" />
+                                    </div>
                                     <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="flight">Choose Fare Rule</label>
                                         <h:selectOneMenu styleClass="form-control" id="fareRule" value="#{createBookingClassManagedBean.fareRuleId}" binding="#{fareRule}">
