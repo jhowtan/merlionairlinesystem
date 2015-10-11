@@ -53,7 +53,7 @@ public class CostManagedBean {
 
     @PostConstruct
     private void init() {
-        displayCosts = costsBean.getAllCostOfType(0);
+        displayCosts = costsBean.getAllCostOfType(type);
         setAircraftList(fleetBean.getAllAircraft());
         setAaList(routeBean.getAllAircraftAssignments());
         setUserList(userBean.getAllUsers());
@@ -65,19 +65,19 @@ public class CostManagedBean {
             authManagedBean.createAuditLog("Created new cost: " + comments, "create_cost");
             setAssocId(0);
             setAmount(0);
-            setType(0);
             setComments(null);
             FacesMessage m = new FacesMessage("Cost created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+            changeCostsDisplay();
         } catch (NotFoundException e) {
             setAssocId(0);
             setAmount(0);
-            setType(0);
             setComments(null);
-            FacesMessage m = new FacesMessage("Cost could not be created");
+            FacesMessage m = new FacesMessage("Cost could not be created because it already exists");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+            changeCostsDisplay();
         }
     }
 
