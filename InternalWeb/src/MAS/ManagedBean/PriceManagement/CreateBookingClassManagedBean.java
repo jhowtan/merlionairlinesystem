@@ -6,6 +6,7 @@ import MAS.Bean.FlightScheduleBean;
 import MAS.Common.Cabin;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
+import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class CreateBookingClassManagedBean {
 
     private List<Flight> flights;
     private List<FareRule> fareRules;
+    private FareRule fareRule;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -47,9 +50,10 @@ public class CreateBookingClassManagedBean {
     }
 
     @PostConstruct
-    private void init() {
+    private void init() throws NotFoundException {
         flights = flightScheduleBean.getAllFlights();
         fareRules = fareRuleBean.getAllFareRules();
+        fareRule = fareRuleBean.getFareRule(fareRuleId);
     }
 
     public void resetFields() {
@@ -87,6 +91,10 @@ public class CreateBookingClassManagedBean {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void fareRuleChangeListener(AjaxBehaviorEvent event) throws NotFoundException {
+        fareRule = fareRuleBean.getFareRule(fareRuleId);
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
@@ -187,5 +195,9 @@ public class CreateBookingClassManagedBean {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public FareRule getFareRule() {
+        return fareRule;
     }
 }
