@@ -5,7 +5,10 @@ import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
 import MAS.Bean.UserBean;
 import MAS.Common.Constants;
+import MAS.Entity.Aircraft;
+import MAS.Entity.AircraftAssignment;
 import MAS.Entity.Cost;
+import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import MAS.ManagedBean.CommonManagedBean;
@@ -38,11 +41,44 @@ public class CostManagedBean {
 
     private String[] costTypes = Constants.COSTS;
     private List<Cost> displayCosts;
+    private List<Aircraft> aircraftList;
+    private List<AircraftAssignment> aaList;
+    private List<User> userList;
+
+    private double amount;
+    private String comments;
+    private long assocId;
     private int type;
+
 
     @PostConstruct
     private void init() {
         displayCosts = costsBean.getAllCostOfType(0);
+        setAircraftList(fleetBean.getAllAircraft());
+        setAaList(routeBean.getAllAircraftAssignments());
+        setUserList(userBean.getAllUsers());
+    }
+
+    public void createCost() {
+        try {
+            costsBean.createCost(type, amount, comments, assocId);
+            authManagedBean.createAuditLog("Created new cost: " + comments, "create_cost");
+            setAssocId(0);
+            setAmount(0);
+            setType(0);
+            setComments(null);
+            FacesMessage m = new FacesMessage("Cost created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            setAssocId(0);
+            setAmount(0);
+            setType(0);
+            setComments(null);
+            FacesMessage m = new FacesMessage("Cost could not be created");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void delete(long id) {
@@ -139,5 +175,53 @@ public class CostManagedBean {
 
     public void setDisplayCosts(List<Cost> displayCosts) {
         this.displayCosts = displayCosts;
+    }
+
+    public List<Aircraft> getAircraftList() {
+        return aircraftList;
+    }
+
+    public void setAircraftList(List<Aircraft> aircraftList) {
+        this.aircraftList = aircraftList;
+    }
+
+    public List<AircraftAssignment> getAaList() {
+        return aaList;
+    }
+
+    public void setAaList(List<AircraftAssignment> aaList) {
+        this.aaList = aaList;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public long getAssocId() {
+        return assocId;
+    }
+
+    public void setAssocId(long assocId) {
+        this.assocId = assocId;
     }
 }
