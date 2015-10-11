@@ -7,6 +7,7 @@ import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +36,11 @@ public class BookingClassManagedBean {
             FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (EJBException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The booking class you are trying to delete has been open for sale for existing passengers.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
@@ -49,6 +55,11 @@ public class BookingClassManagedBean {
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (EJBException e) {
+            e.getMessage();
+            FacesMessage m = new FacesMessage("The booking class you are trying to modify has existing tickets sold to customers.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
