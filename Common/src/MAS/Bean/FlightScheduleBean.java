@@ -54,35 +54,39 @@ public class FlightScheduleBean {
 
     public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId, boolean createBkingClass) throws NotFoundException {
         long flightId = createFlight(code, departureTime, arrivalTime, aircraftAssignmentId);
+        if (createBkingClass)
+            createDefaultBookingClasses(flightId);
+
+        return  flightId;
+    }
+
+    private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
         Flight flight = em.find(Flight.class, flightId);
 
-        if (createBkingClass) {
-            long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();//40%
-            long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();//20%
-            long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();//15%
-            long fareD = fareRuleBean.getFareRuleByName("DEF-Double").getId();//15%
-            long fareEx = fareRuleBean.getFareRuleByName("DEF-Expensive").getId();//10%
-            double totalCost = costsBean.calculateCostPerFlight(flightId);
-            SeatConfigObject seatConfigObject = new SeatConfigObject();
-            seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-            double costPerSeat = totalCost/seatConfigObject.getTotalSeats();
-            costPerSeat *= Constants.PROFIT_MARGIN;
+        long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();//40%
+        long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();//20%
+        long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();//15%
+        long fareD = fareRuleBean.getFareRuleByName("DEF-Double").getId();//15%
+        long fareEx = fareRuleBean.getFareRuleByName("DEF-Expensive").getId();//10%
+        double totalCost = costsBean.calculateCostPerFlight(flightId);
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        double costPerSeat = totalCost/seatConfigObject.getTotalSeats();
+        costPerSeat *= Constants.PROFIT_MARGIN;
 
-            for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
-                int seatsInClass = seatConfigObject.getSeatsInClass(i);
-                int seatsLeft = seatsInClass;
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85));
-                seatsLeft -= (int)(0.2 * seatsInClass);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15));
-                seatsLeft -= (int)(0.15 * seatsInClass);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9));
-                seatsLeft -= (int)(0.15 * seatsInClass);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35));
-                seatsLeft -= (int)(0.1 * seatsInClass);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareN, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0));
-            }
+        for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
+            int seatsInClass = seatConfigObject.getSeatsInClass(i);
+            int seatsLeft = seatsInClass;
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85));
+            seatsLeft -= (int)(0.2 * seatsInClass);
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15));
+            seatsLeft -= (int)(0.15 * seatsInClass);
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9));
+            seatsLeft -= (int)(0.15 * seatsInClass);
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35));
+            seatsLeft -= (int)(0.1 * seatsInClass);
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareN, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0));
         }
-        return  flightId;
     }
 
     private double makeNiceMoney(double amount) {
@@ -200,6 +204,19 @@ public class FlightScheduleBean {
         em.flush();
 
         return flightGroup.getId();
+    }
+
+    public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays, boolean createBkingClass) throws NotFoundException, NoItemsCreatedException {
+        long flightGrpId = createRecurringFlight(code, aircraftAssignmentId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays);
+
+        if (createBkingClass) {
+            FlightGroup flightGroup = em.find(FlightGroup.class, flightGrpId);
+            for (int i = 0; i < flightGroup.getFlights().size(); i++) {
+                createDefaultBookingClasses(flightGroup.getFlights().get(i).getId());
+            }
+        }
+
+        return flightGrpId;
     }
 
 

@@ -32,7 +32,7 @@
                         <ui:repeat value="#{bookingClassManagedBean.getAllBookingClasses()}" var="bkClass">
                             <tr>
                                 <td>#{bkClass.name}</td>
-                                <td>#{bkClass.flight.getCode()}</td>
+                                <td>#{bkClass.flight.getCode()} (#{commonManagedBean.formatDate("dd MMM yy", bkClass.flight.getDepartureTime())})</td>
                                 <td>#{commonManagedBean.formatMoney(bkClass.price)}</td>
                                 <td>#{bkClass.fareRule.getName()}</td>
                                 <td>#{bookingClassManagedBean.getTravelClassName(bkClass.travelClass)}</td>

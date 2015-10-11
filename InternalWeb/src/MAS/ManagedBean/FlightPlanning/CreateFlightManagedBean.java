@@ -64,7 +64,7 @@ public class CreateFlightManagedBean {
 
     public void createRecurringFlight() {
         try {
-            flightScheduleBean.createRecurringFlight(code, aaId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays);
+            flightScheduleBean.createRecurringFlight(code, aaId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays, true);
 
             authManagedBean.createAuditLog("Created new recurring flight: " + code, "create_recurring_flight");
             setCode(null);
