@@ -1,12 +1,17 @@
 package MAS.Bean;
 
+import MAS.Common.Cabin;
+import MAS.Common.Constants;
+import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
+import MAS.Entity.BookingClass;
 import MAS.Entity.Flight;
 import MAS.Entity.FlightGroup;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +28,13 @@ public class FlightScheduleBean {
     @PersistenceContext
     EntityManager em;
 
+    @EJB
+    FareRuleBean fareRuleBean;
+    @EJB
+    BookingClassBean bookingClassBean;
+    @EJB
+    CostsBean costsBean;
+
     public FlightScheduleBean() {
     }
 
@@ -38,6 +50,34 @@ public class FlightScheduleBean {
         em.persist(flight);
         em.flush();
         return flight.getId();
+    }
+
+    public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId, boolean createBkingClass) throws NotFoundException {
+        long flightId = createFlight(code, departureTime, arrivalTime, aircraftAssignmentId);
+        Flight flight = em.find(Flight.class, flightId);
+
+        if (createBkingClass) {
+            long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();//40%
+            long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();//20%
+            long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();//15%
+            long fareD = fareRuleBean.getFareRuleByName("DEF-Double").getId();//15%
+            long fareEx = fareRuleBean.getFareRuleByName("DEF-Expensive").getId();//10%
+            double totalCost = costsBean.calculateCostPerFlight(flightId);
+            SeatConfigObject seatConfigObject = new SeatConfigObject();
+            seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+            double costPerSeat = totalCost/seatConfigObject.getTotalSeats();
+            costPerSeat *= Constants.PROFIT_MARGIN;
+
+            for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
+                int seatsInClass = seatConfigObject.getSeatsInClass(i);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], (int)(0.4 * seatsInClass), i, fareN, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35);
+            }
+        }
+        return  flightId;
     }
 
     public void changeFlightCode(long id, String code) throws NotFoundException {

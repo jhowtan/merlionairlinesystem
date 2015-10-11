@@ -59,6 +59,7 @@
                                             <br/>
                                             <h:selectOneMenu styleClass="form-control"
                                                              id="aircraft" value="#{createCostManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
                                                 <f:selectItems value="#{createCostManagedBean.aircraftList}" var="ac"
                                                                itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
                                             </h:selectOneMenu>
@@ -71,6 +72,7 @@
                                             <br/>
                                             <h:selectOneMenu styleClass="form-control"
                                                              id="acAssignment" value="#{createCostManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
                                                 <f:selectItems value="#{createCostManagedBean.aaList}" var="aa"
                                                                itemLabel="#{commonManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
                                             </h:selectOneMenu>

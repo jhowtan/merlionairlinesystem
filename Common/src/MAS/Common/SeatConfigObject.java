@@ -116,4 +116,8 @@ public class SeatConfigObject {
         }
         return result;
     }
+
+    public int getTotalSeats() {
+        return getSeatsInClass(0) + getSeatsInClass(1) + getSeatsInClass(2) + getSeatsInClass(3);
+    }
 }

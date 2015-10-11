@@ -3,6 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -82,12 +83,12 @@ public class InitBean {
                 long acTypeId = fleetBean.createAircraftType("A380 NR", 323546, 30, 2, 0.08, 634, 270000);
                 //long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_3e", "A3180 ABC test", 5800, acTypeId);
                 long seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
-                        "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
+                        "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
-                        "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
-                        "ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
+                        "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
+                        "ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
-                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "A380 NR Normal", 2580, acTypeId);
+                        "sss|ssss|sss/sss|ssss|sss/_3e", "A380 NR Normal", 2580, acTypeId);
                 long acId = fleetBean.createAircraft("9V-ABC", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
                 fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/" +
@@ -127,15 +128,27 @@ public class InitBean {
                 int advancePurchase = 60;
                 int minimumPassengers = 1;
                 int milesAccrual = 100;
-                fareRuleBean.createFareRule("DEF-1", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
-                fareRuleBean.createFareRule("DEF-2", minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual - 25, false);
-                fareRuleBean.createFareRule("DEF-3", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers + 1, milesAccrual - 50, false);
-                fareRuleBean.createFareRule("DEF-4", minimumStay, maximumStay + 30, advancePurchase - 60, minimumPassengers, milesAccrual - 25, true);
+                fareRuleBean.createFareRule("DEF-Normal", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
+                fareRuleBean.createFareRule("DEF-Late", minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual - 25, false);
+                fareRuleBean.createFareRule("DEF-Double", minimumStay, maximumStay + 30, advancePurchase, minimumPassengers + 1, milesAccrual - 50, false);
+                fareRuleBean.createFareRule("DEF-Early", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers, milesAccrual - 50, false);
+                fareRuleBean.createFareRule("DEF-Expensive", minimumStay, maximumStay + 30, advancePurchase - 60, minimumPassengers, milesAccrual - 25, true);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            try {
+                costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
+                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 85000000, "Aircraft Purchase", -1);
+                costsBean.createCost(Constants.COST_PER_FLIGHT, 10000, "Food & Beverages", -1);
+                costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 200000000, "Misc Fees", -1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
@@ -156,12 +169,12 @@ public class InitBean {
                     String flight1Code = "MA11";
                     Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
                     Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
-                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id);
+                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
 
                     String flight2Code = "MA12";
                     Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
                     Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
-                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id);
+                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
 
 //                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
 //                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
@@ -175,12 +188,6 @@ public class InitBean {
 //                    }
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
