@@ -10,80 +10,131 @@
     <ui:define name="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Create Booking Class</h1>
-                    <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation"><h:link outcome="/App/PriceManagement/bookingClasses">Summary</h:link></li>
-                        <li role="presentation" class="active"><h:link outcome="/App/PriceManagement/createBookingClass">Create Booking Class</h:link></li>
-                    </ul><br />
-                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                        <h:panelGroup layout="block" styleClass="alert alert-info">
-                            #{message.detail}
-                        </h:panelGroup>
-                    </ui:repeat>
-                    <h:form>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Booking Class</div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-lg-12 #{!name.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="name">Booking Class Name</label>
-                                        <h:inputText id="name" binding="#{name}" value="#{createBookingClassManagedBean.name}" styleClass="form-control" pt:placeholder="e.g. Y" required="true" requiredMessage="Please enter a name for your booking class.">
-                                        </h:inputText>
-                                        <h:message for="name" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="flight">Choose Flight Code</label>
-                                        <h:selectOneMenu styleClass="form-control" id="flight" value="#{createBookingClassManagedBean.flightId}" binding="#{flight}">
-                                            <f:selectItems value="#{createBookingClassManagedBean.flights}" var="fl"
-                                                           itemLabel="#{fl.getCode()} (#{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
-                                        </h:selectOneMenu>
-                                        <h:message for="flight" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12 #{!price.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="price">Price</label>
-                                        <h:inputText id="price" binding="#{price}" value="#{createBookingClassManagedBean.price}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 199.99" required="true" requiredMessage="Price is required."
-                                                     pt:type="number" pt:min="1" pt:step="0.01">
-                                        </h:inputText>
-                                        <h:message for="price" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="flight">Choose Fare Rule</label>
-                                        <h:selectOneMenu styleClass="form-control" id="fareRule" value="#{createBookingClassManagedBean.fareRuleId}" binding="#{fareRule}">
-                                            <f:selectItems value="#{createBookingClassManagedBean.fareRules}" var="fr"
-                                                           itemLabel="#{fr.getName()}" itemValue="#{fr.id}" />
-                                        </h:selectOneMenu>
-                                        <h:message for="fareRule" styleClass="help-block" />
-                                    </div>
-                                    <div class="form-group col-lg-12">
-                                        <label class="control-label" for="travelClass">Choose Travel Class</label>
-                                        <h:selectOneMenu id="travelClass" binding="#{travelClass}" value="#{createBookingClassManagedBean.travelClass}" styleClass="form-control">
-                                            <f:selectItems value="#{createBookingClassManagedBean.travelClasses}" var="tc"
-                                                           itemLabel="#{tc}" itemValue="#{createBookingClassManagedBean.getClassIndex(tc)}" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                    <div class="form-group col-lg-3 #{!allocation.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="allocation">Seats to Allocate</label>
-                                        <h:inputText id="allocation" styleClass="form-control form-inline" value="#{createBookingClassManagedBean.allocation}" binding="#{allocation}" required="true">
-                                            <f:validator validatorId="seatAllocationValidator" />
-                                            <f:attribute name="travelClass" value="#{travelClass}" />
-                                            <f:attribute name="flight" value="#{flight}" />
-                                        </h:inputText>
-                                        <h:message for="allocation" styleClass="help-block" />
-                                    </div>
+                <h1 class="page-header">Create Booking Class</h1>
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation"><h:link outcome="/App/PriceManagement/bookingClasses">Summary</h:link></li>
+                    <li role="presentation" class="active"><h:link outcome="/App/PriceManagement/createBookingClass">Create Booking Class</h:link></li>
+                </ul><br />
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+            </div>
+            <h:form>
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Booking Class</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12 #{!name.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="name">Booking Class Name</label>
+                                    <h:inputText id="name" binding="#{name}" value="#{createBookingClassManagedBean.name}" styleClass="form-control" pt:placeholder="e.g. Y" required="true" requiredMessage="Please enter a name for your booking class.">
+                                    </h:inputText>
+                                    <h:message for="name" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="flight">Choose Flight Code</label>
+                                    <h:selectOneMenu styleClass="form-control" id="flight" value="#{createBookingClassManagedBean.flightId}" binding="#{flight}">
+                                        <f:selectItems value="#{createBookingClassManagedBean.flights}" var="fl"
+                                                       itemLabel="#{fl.getCode()} (#{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
+                                    </h:selectOneMenu>
+                                    <h:message for="flight" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12 #{!price.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="price">Price</label>
+                                    <h:inputText id="price" binding="#{price}" value="#{createBookingClassManagedBean.price}" styleClass="form-control"
+                                                 pt:placeholder="e.g. 199.99" required="true" requiredMessage="Price is required."
+                                                 pt:type="number" pt:min="1" pt:step="0.01">
+                                    </h:inputText>
+                                    <h:message for="price" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="flight">Choose Fare Rule</label>
+                                    <h:selectOneMenu styleClass="form-control" id="fareRule" value="#{createBookingClassManagedBean.fareRuleId}" required="true" binding="#{fareRule}">
+                                        <f:selectItem itemLabel="Please Choose"/>
+                                        <f:selectItems value="#{createBookingClassManagedBean.fareRules}" var="fr"
+                                                       itemLabel="#{fr.getName()}" itemValue="#{fr.id}" />
+                                        <f:ajax event="change" listener="#{createBookingClassManagedBean.fareRuleChangeListener}" render="minimumStay maximumStay advancePurchase milesAccrual minimumPassengers freeCancellation" />
+                                    </h:selectOneMenu>
+                                    <h:message for="fareRule" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="travelClass">Choose Travel Class</label>
+                                    <h:selectOneMenu id="travelClass" binding="#{travelClass}" value="#{createBookingClassManagedBean.travelClass}" styleClass="form-control">
+                                        <f:selectItems value="#{createBookingClassManagedBean.travelClasses}" var="tc"
+                                                       itemLabel="#{tc}" itemValue="#{createBookingClassManagedBean.getClassIndex(tc)}" />
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-lg-3 #{!allocation.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="allocation">Seats to Allocate</label>
+                                    <h:inputText id="allocation" styleClass="form-control form-inline" value="#{createBookingClassManagedBean.allocation}" binding="#{allocation}" required="true">
+                                        <f:validator validatorId="seatAllocationValidator" />
+                                        <f:attribute name="travelClass" value="#{travelClass}" />
+                                        <f:attribute name="flight" value="#{flight}" />
+                                    </h:inputText>
+                                    <h:message for="allocation" styleClass="help-block" />
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="btn-group">
-                                <h:link outcome="/App/PriceManagement/bookingClasses" class="btn btn-default" value="Cancel" />
-                                <h:commandButton action="#{createBookingClassManagedBean.createBookingClass()}" value="Create Booking Class" styleClass="btn btn-default btn-success" />
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Fare Rule</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="minimumStay">Minimum Stay</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="minimumStay" pt:placeholder="-" readonly="true" binding="#{minimumStay}" value="#{createBookingClassManagedBean.fareRule.minimumStay}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="maximumStay">Maximum Stay</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="maximumStay" pt:placeholder="-" readonly="true" binding="#{maximumStay}" value="#{createBookingClassManagedBean.fareRule.maximumStay}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="advancePurchase">Advance Purchase</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="advancePurchase" pt:placeholder="-" readonly="true" binding="#{advancePurchase}" value="#{createBookingClassManagedBean.fareRule.advancePurchase}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="milesAccrual">FFP Millage Accrual</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="milesAccrual" pt:placeholder="-" readonly="true" binding="#{milesAccrual}" value="#{createBookingClassManagedBean.fareRule.milesAccrual}" styleClass="form-control" />
+                                        <div class="input-group-addon">%</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="minimumPassengers">Minimum Passengers in Group</label>
+                                    <h:inputText pt:type="number" id="minimumPassengers" pt:placeholder="-" readonly="true" binding="#{minimumPassengers}" value="#{createBookingClassManagedBean.fareRule.minimumPassengers}" styleClass="form-control" />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="freeCancellation">Free Cancellation</label>
+                                    <h:inputText id="freeCancellation" binding="#{freeCancellation}" pt:placeholder="-" readonly="true" value="#{createBookingClassManagedBean.fareRule.freeCancellation ? 'Yes' : 'No'}" styleClass="form-control"/>
+                                </div>
                             </div>
                         </div>
-                    </h:form>
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="text-right">
+                    <div class="btn-group">
+                        <h:link outcome="/App/PriceManagement/bookingClasses" class="btn btn-default" value="Cancel" />
+                        <h:commandButton action="#{createBookingClassManagedBean.createBookingClass()}" value="Create Booking Class" styleClass="btn btn-default btn-success" />
+                    </div>
+                </div>
+            </div>
+            </h:form>
         </div>
     </ui:define>
 </ui:composition>
