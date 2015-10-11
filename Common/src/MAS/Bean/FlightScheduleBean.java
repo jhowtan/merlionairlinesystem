@@ -67,7 +67,7 @@ public class FlightScheduleBean {
             seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
             double costPerSeat = totalCost/(seatConfigObject.getTotalSeats() * (Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[0] + Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[1] + Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[2] + Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[3]));
             costPerSeat *= Constants.PROFIT_MARGIN;
-            System.out.println(totalCost + " / " + seatConfigObject.getTotalSeats() + " = " + costPerSeat);
+
             for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
                 int seatsInClass = seatConfigObject.getSeatsInClass(i);
                 bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], (int)(0.4 * seatsInClass), i, fareN, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i]);
