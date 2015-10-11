@@ -52,4 +52,8 @@ public class FareRuleBean {
         return (Long) em.createQuery("SELECT COUNT(f) FROM FareRule f WHERE f.name = :name").setParameter("name", name.toLowerCase()).getSingleResult() == 0;
     }
 
+    public FareRule getFareRuleByName(String name) throws NotFoundException {
+        return (FareRule) em.createQuery("SELECT f FROM FareRule f WHERE f.name = :name").setParameter("name", name).setMaxResults(1).getResultList().get(0);
+    }
+
 }

@@ -49,7 +49,7 @@ public class CreateFlightManagedBean {
         Date departureDateTime = addTimeToDate(departureDate, departureTime);
         flightScheduleBean.createFlight(code,
                 addTimeToDate(departureDate, departureTime),
-                Utils.minutesLater(departureDateTime, flightDuration), aaId);
+                Utils.minutesLater(departureDateTime, flightDuration), aaId, true);
         authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
         setCode(null);
         setAaId(0);

@@ -127,10 +127,11 @@ public class InitBean {
                 int advancePurchase = 60;
                 int minimumPassengers = 1;
                 int milesAccrual = 100;
-                fareRuleBean.createFareRule("DEF-1", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
-                fareRuleBean.createFareRule("DEF-2", minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual - 25, false);
-                fareRuleBean.createFareRule("DEF-3", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers + 1, milesAccrual - 50, false);
-                fareRuleBean.createFareRule("DEF-4", minimumStay, maximumStay + 30, advancePurchase - 60, minimumPassengers, milesAccrual - 25, true);
+                fareRuleBean.createFareRule("DEF-Normal", minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, false);
+                fareRuleBean.createFareRule("DEF-Late", minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual - 25, false);
+                fareRuleBean.createFareRule("DEF-Double", minimumStay, maximumStay + 30, advancePurchase, minimumPassengers + 1, milesAccrual - 50, false);
+                fareRuleBean.createFareRule("DEF-Early", minimumStay, maximumStay + 30, advancePurchase + 30, minimumPassengers, milesAccrual - 50, false);
+                fareRuleBean.createFareRule("DEF-Expensive", minimumStay, maximumStay + 30, advancePurchase - 60, minimumPassengers, milesAccrual - 25, true);
 
             } catch (Exception e) {
                 e.printStackTrace();
