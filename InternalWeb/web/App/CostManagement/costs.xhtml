@@ -21,6 +21,15 @@
                         </h:panelGroup>
                     </ui:repeat>
                 </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Cost Trends</div>
+                        <div class="panel-body">
+                            <div id="costs_chart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <h:form>
                 <div class="row">
@@ -45,7 +54,6 @@
                                                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                                                 ]
                                             });
-                                            costTable.draw();
                                          }"/>
                                     </h:selectOneMenu>
                                 </div>
@@ -111,16 +119,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Cost Trends</div>
-                            <div class="panel-body">
-                                <div id="costChart">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
                             <div class="panel-heading">Summary Table</div>
                             <div class="panel-body">
                                 <h:panelGroup id="costsTable">
@@ -159,6 +157,8 @@
         </div>
     </ui:define>
     <ui:define name="javascript">
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
             var costTable = $('#costs_table').DataTable({
                 "stateSave": false,
@@ -167,8 +167,19 @@
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
-            costTable.draw();
-            console.log('draw called.');
+            new Morris.Area({
+                element: 'costs_chart',
+                data: [
+                    { date: '2008', value: 20 },
+                    { date: '2009', value: 10 },
+                    { date: '2010', value: 5 },
+                    { date: '2011', value: 5 },
+                    { date: '2012', value: 20 }
+                ],
+                xkey: 'date',
+                ykeys: ['value'],
+                labels: ['Value']
+            });
         </script>
     </ui:define>
 </ui:composition>
