@@ -92,4 +92,15 @@ public class BookingClass {
     public void setOpen(boolean open) {
         this.open = open;
     }
+
+    private double price;
+
+    @Basic
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

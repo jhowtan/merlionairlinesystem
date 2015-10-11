@@ -20,6 +20,7 @@
                         <tr>
                             <th>Booking Class Name</th>
                             <th>Flight</th>
+                            <th>Price</th>
                             <th>Fare Rule Name</th>
                             <th>Travel Class</th>
                             <th>Availability</th>
@@ -32,6 +33,7 @@
                             <tr>
                                 <td>#{bkClass.name}</td>
                                 <td>#{bkClass.flight.getCode()}</td>
+                                <td>#{bkClass.price}</td>
                                 <td>#{bkClass.fareRule.getName()}</td>
                                 <td>#{bookingClassManagedBean.getTravelClassName(bkClass.travelClass)}</td>
                                 <td>#{bkClass.occupied}/#{bkClass.allocation}</td>
