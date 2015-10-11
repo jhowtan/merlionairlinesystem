@@ -35,7 +35,7 @@
                                                      id="type" value="#{costManagedBean.type}">
                                         <f:selectItems value="#{costManagedBean.costTypes}" var="ctype"
                                                        itemLabel="#{ctype}" itemValue="#{costManagedBean.costIndex(ctype)}" />
-                                        <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="@form costs" onevent="
+                                        <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="@form :costs :costsTable" onevent="
                                         function() {
                                             $('#costs_table').DataTable({
                                                 'retrieve': true,
@@ -104,12 +104,14 @@
                         </div>
                     </div>
                 </div> <!-- END ROW -->
+                </h:form>
+                <h:form id="costs">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">Summary Table</div>
                             <div class="panel-body">
-                                <h:panelGroup id="costs">
+                                <h:panelGroup id="costsTable">
                                     <table class="table" id="costs_table">
                                         <thead>
                                         <tr>
