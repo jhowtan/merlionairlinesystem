@@ -70,14 +70,31 @@ public class FlightScheduleBean {
 
             for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
                 int seatsInClass = seatConfigObject.getSeatsInClass(i);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], (int)(0.4 * seatsInClass), i, fareN, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9);
-                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35);
+                int seatsLeft = seatsInClass;
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85));
+                seatsLeft -= (int)(0.2 * seatsInClass);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15));
+                seatsLeft -= (int)(0.15 * seatsInClass);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9));
+                seatsLeft -= (int)(0.15 * seatsInClass);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35));
+                seatsLeft -= (int)(0.1 * seatsInClass);
+                bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareN, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0));
             }
         }
         return  flightId;
+    }
+
+    private double makeNiceMoney(double amount) {
+        //Round up or down
+        double round = amount % 10;
+        amount = ((int)amount/10) * 10;
+        if (round >= 5) {
+            amount += 9.99;
+        } else {
+          amount -= 0.01;
+        }
+        return amount;
     }
 
     public void changeFlightCode(long id, String code) throws NotFoundException {
