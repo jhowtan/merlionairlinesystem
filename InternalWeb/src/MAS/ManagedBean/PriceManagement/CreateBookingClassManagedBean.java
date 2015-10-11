@@ -50,10 +50,9 @@ public class CreateBookingClassManagedBean {
     }
 
     @PostConstruct
-    private void init() throws NotFoundException {
+    private void init() {
         flights = flightScheduleBean.getAllFlights();
         fareRules = fareRuleBean.getAllFareRules();
-        fareRule = fareRuleBean.getFareRule(fareRuleId);
     }
 
     public void resetFields() {
