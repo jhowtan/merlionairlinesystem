@@ -30,6 +30,7 @@
         <class>MAS.Entity.FlightItem</class>
         <class>MAS.Entity.Baggage</class>
         <class>MAS.Entity.PNRItem</class>
+        <class>MAS.Entity.PNR</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />
