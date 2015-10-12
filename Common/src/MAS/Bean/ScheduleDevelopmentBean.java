@@ -1,6 +1,7 @@
 package MAS.Bean;
 
 import MAS.Common.Constants;
+import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
@@ -9,6 +10,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless(name = "ScheduleDevelopmentEJB")
@@ -23,6 +25,7 @@ public class ScheduleDevelopmentBean {
     private List<Aircraft> aircraftsToFly;
     private List<Airport> airportsToGo;
     private List<Route> suggestedRoutes;
+    private List<Route> allRoutes;
     private List<AircraftAssignment> suggestedAA;
     private List<AircraftMaintenanceSlot> suggestedMaint;
 
@@ -31,13 +34,19 @@ public class ScheduleDevelopmentBean {
     private double maxRange = 0;
 
     public ScheduleDevelopmentBean() {
+        aircraftsToFly = new ArrayList<>();
+        airportsToGo = new ArrayList<>();
+        allRoutes = new ArrayList<>();
+        suggestedRoutes = new ArrayList<>();
+        suggestedAA = new ArrayList<>();
+        suggestedMaint = new ArrayList<>();
     }
 
-    public void addAircrafts(long[] acIds) throws NotFoundException {
-        int l = acIds.length;
+    public void addAircrafts(List<Long> acIds) throws NotFoundException {
+        int l = acIds.size();
         double range = 0;
         for (int i = 0; i < l; i++) {
-            Aircraft ac = em.find(Aircraft.class, acIds[i]);
+            Aircraft ac = em.find(Aircraft.class, acIds.get(i));
             if (ac == null) throw new NotFoundException();
             else {
                 aircraftsToFly.add(ac);
@@ -48,10 +57,10 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void addAirports(long[] apIds) throws NotFoundException {
-        int l = apIds.length;
+    public void addAirports(List<Long> apIds) throws NotFoundException {
+        int l = apIds.size();
         for (int i = 0; i < l; i++) {
-            Airport ap = em.find(Airport.class, apIds[i]);
+            Airport ap = em.find(Airport.class, apIds.get(i));
             if (ap == null)
                 throw new NotFoundException();
             else
@@ -59,10 +68,10 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void addHubs(long[] apIds) throws NotFoundException {
-        int l = apIds.length;
+    public void addHubs(List<Long> apIds) throws NotFoundException {
+        int l = apIds.size();
         for (int i = 0; i < l; i++) {
-            Airport ap = em.find(Airport.class, apIds[i]);
+            Airport ap = em.find(Airport.class, apIds.get(i));
             if (ap == null)
                 throw new NotFoundException();
             else if (airportsToGo.indexOf(ap) != -1)
@@ -70,12 +79,32 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void process() {
-        //Steps:
-        //Adding aircraft & airports
-        //Set hubs
-        //Setting variables
-        //Create all combinations of possible AAs
+    private void generateRoutes() {
+        int l = airportsToGo.size();
+        for (int i = 0; i < l; i++) {
+            Airport origin = airportsToGo.get(i);
+            for (int j = 0; j < l; j++) {
+                if (j == i) continue;
+                Airport destination = airportsToGo.get(j);
+                Route route = new Route();
+                route.setOrigin(origin);
+                route.setDestination(destination);
+                route.setDistance(Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
+                        destination.getLatitude(), destination.getLongitude()));
+                allRoutes.add(route);
+            }
+        }
+    }
 
+    private void debugAllRoutes() {
+        System.out.println("ALL ROUTES-----------------------");
+        for (int i = 0; i < allRoutes.size(); i++) {
+            System.out.println(allRoutes.get(i).getOrigin().getName() + " - " + allRoutes.get(i).getDestination().getName());
+        }
+    }
+
+    public void process() {
+        generateRoutes();
+        debugAllRoutes();
     }
 }

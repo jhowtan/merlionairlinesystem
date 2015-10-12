@@ -3,6 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
+import MAS.Entity.Airport;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +40,8 @@ public class InitBean {
     AttributesBean attributesBean;
     @EJB
     CostsBean costsBean;
+    @EJB
+    ScheduleDevelopmentBean scheduleDevelopmentBean; //REMOVE THIS AFTER TESTING
 
     @PostConstruct
     public void init() {
@@ -188,6 +191,18 @@ public class InitBean {
 //                    }
                 }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                List<Long> apIds = new ArrayList<>();
+                List<Airport> allAp = routeBean.getAllAirports();
+                for (int i = 0; i < allAp.size(); i++) {
+                    apIds.add(allAp.get(i).getId());
+                }
+                scheduleDevelopmentBean.addAirports(apIds);
+                scheduleDevelopmentBean.process();
             } catch (Exception e) {
                 e.printStackTrace();
             }
