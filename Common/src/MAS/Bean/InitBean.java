@@ -202,25 +202,27 @@ public class InitBean {
 //                        bookingClassBean.createBookingClass("C", 20, 3, fareRuleBean.getAllFareRules().get(2).getId(), flight2Id);
 //                    }
 //                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                List<Long> apIds = new ArrayList<>();
-                List<Airport> allAp = routeBean.getAllAirports();
-                for (int i = 0; i < allAp.size(); i++) {
-                    apIds.add(allAp.get(i).getId());
+                try {
+                    List<Long> apIds = new ArrayList<>();
+                    List<Airport> allAp = routeBean.getAllAirports();
+                    for (int i = 0; i < allAp.size(); i++) {
+                        apIds.add(allAp.get(i).getId());
+                    }
+                    List<Long> acIds = new ArrayList<>();
+                    List<Aircraft> allAc = fleetBean.getAllAircraft();
+                    for (int i = 0; i < allAc.size(); i++) {
+                        acIds.add(allAc.get(i).getId());
+                    }
+                    List<Long> hubIds = new ArrayList<>();
+                    hubIds.add(apId);
+                    scheduleDevelopmentBean.addAirports(apIds);
+                    scheduleDevelopmentBean.addAircrafts(acIds);
+                    scheduleDevelopmentBean.addHubs(hubIds);
+                    scheduleDevelopmentBean.process();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                List<Long> acIds = new ArrayList<>();
-                List<Aircraft> allAc = fleetBean.getAllAircraft();
-                for (int i = 0; i < allAc.size(); i++) {
-                    acIds.add(allAc.get(i).getId());
-                }
-                scheduleDevelopmentBean.addAirports(apIds);
-                scheduleDevelopmentBean.addAircrafts(acIds);
-                scheduleDevelopmentBean.process();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
