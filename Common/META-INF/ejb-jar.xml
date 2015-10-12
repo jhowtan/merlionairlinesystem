@@ -53,5 +53,11 @@
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>
+        <session>
+            <ejb-name>FFPEJB</ejb-name>
+            <ejb-class>MAS.Bean.FFPBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
     </enterprise-beans>
 </ejb-jar>

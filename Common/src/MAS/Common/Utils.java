@@ -25,6 +25,13 @@ public class Utils {
         return calendar.getTime();
     }
 
+    public static Date oneYearLater() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.YEAR, 1);
+        return calendar.getTime();
+    }
+
     public static Date minutesLater(Date date, int minutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
