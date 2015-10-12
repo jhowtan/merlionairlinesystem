@@ -94,6 +94,22 @@ public class CostsBean {
         return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
     }
 
+    public double calculateCostEstimateAA(long aaId) throws NotFoundException {
+        AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aaId);
+        if (aircraftAssignment == null) throw new NotFoundException();
+        long acId = aircraftAssignment.getAircraft().getId();
+        double result = 0;
+        List<Cost> costPFlight = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :aaId OR  c.type = :type AND c.assocId = -1")
+                .setParameter("type", Constants.COST_PER_FLIGHT)
+                .setParameter("aaId", aaId).getResultList();
+
+        List<Cost> acDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
+                .setParameter("type", Constants.COST_PER_AIRCRAFT)
+                .setParameter("acId", acId).getResultList();
+
+        return 0;
+    }
+
     public double calculateCostPerFlight(long flightId) throws NotFoundException {
         Flight flight = em.find(Flight.class, flightId);
         if (flight == null) throw  new NotFoundException();
@@ -114,7 +130,7 @@ public class CostsBean {
         List<Cost> annualDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type")
                 .setParameter("type", Constants.COST_ANNUAL).getResultList();
         double annualAll = addAllInList(annualDLife)/(fleetBean.getAllAircraft().size() * attributesBean.getIntAttribute(Constants.FLIGHTS_PER_YEAR, 100));
-        //Fuel costs
+        /*Fuel costs
         List<Cost> fuelCosts = em.createQuery("SELECT c from Cost c WHERE c.type = :type ORDER BY c.id DESC")
                 .setParameter("type", Constants.COST_FUEL).setMaxResults(1).getResultList();
         double fuelCost = fuelCosts.get(0).getAmount();
@@ -135,7 +151,8 @@ public class CostsBean {
             aircraftWeightWithFuel = aircraftWeight + fuelRequiredPrev * attributesBean.getDoubleAttribute(Constants.FUEL_WEIGHT, 0.81) / 2;
             fuelRequired = fuelEfficiency * distanceTraveled * aircraftWeightWithFuel;
         } while (fuelRequired - fuelRequiredPrev > (aircraftWeight * 0.05));
-        double totalFuelCosts = fuelCost * fuelRequired;
+        double totalFuelCosts = fuelCost * fuelRequired;*/
+        double totalFuelCosts = calculateFuelCost(flight.getAircraftAssignment().getAircraft(), flight.getAircraftAssignment().getRoute().getDistance());
 
         //Maintenance costs divided by flights
         List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
@@ -157,6 +174,30 @@ public class CostsBean {
         result += totalSalary;
         //System.out.println(addAllInList(costPFlight) + " " + acAll + " " + annualAll + " " + totalFuelCosts + " " + allMaint + " " + totalSalary);
         return result;
+    }
+
+    private double calculateFuelCost(Aircraft aircraft, double distanceTraveled) {
+        //Fuel costs
+        List<Cost> fuelCosts = em.createQuery("SELECT c from Cost c WHERE c.type = :type ORDER BY c.id DESC")
+                .setParameter("type", Constants.COST_FUEL).setMaxResults(1).getResultList();
+        double fuelCost = fuelCosts.get(0).getAmount();
+        //Dry weight
+        double aircraftWeight = aircraft.getSeatConfig().getWeight() + aircraft.getSeatConfig().getAircraftType().getWeight();
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(aircraft.getSeatConfig().getSeatConfig());
+        int totalSeats = seatConfigObject.getSeatsInClass(0) + seatConfigObject.getSeatsInClass(1) + seatConfigObject.getSeatsInClass(2) + seatConfigObject.getSeatsInClass(3);
+        //Adding number of seats * people and their baggage (Assume always prepare for worst case scenario)
+        aircraftWeight += totalSeats * (attributesBean.getDoubleAttribute(Constants.AVERAGE_PERSON_WEIGHT, 62) + attributesBean.getDoubleAttribute(Constants.AVERAGE_BAGGAGE_WEIGHT, 30));
+        double fuelEfficiency = aircraft.getSeatConfig().getAircraftType().getFuelEfficiency() / 1000;
+        double fuelRequiredPrev = aircraftWeight * distanceTraveled * fuelEfficiency;
+        double fuelRequired = 0;
+        double aircraftWeightWithFuel = 0;
+        do {
+            fuelRequiredPrev = fuelRequired;
+            aircraftWeightWithFuel = aircraftWeight + fuelRequiredPrev * attributesBean.getDoubleAttribute(Constants.FUEL_WEIGHT, 0.81) / 2;
+            fuelRequired = fuelEfficiency * distanceTraveled * aircraftWeightWithFuel;
+        } while (fuelRequired - fuelRequiredPrev > (aircraftWeight * 0.05));
+        return fuelCost * fuelRequired;
     }
 
     private double addAllInList(List<Cost> costs) {
