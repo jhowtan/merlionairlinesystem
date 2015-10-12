@@ -65,11 +65,11 @@ public class FlightScheduleBean {
 
     private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
         Flight flight = em.find(Flight.class, flightId);
-        long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();
-        long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();
-        long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();
-        long fareD = fareRuleBean.getFareRuleByName("DEF-Double").getId();
-        long fareEx = fareRuleBean.getFareRuleByName("DEF-Expensive").getId();
+        long fareN = fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId();
+        long fareE = fareRuleBean.getFareRuleByName(Constants.FARE_EARLY).getId();
+        long fareL = fareRuleBean.getFareRuleByName(Constants.FARE_LATE).getId();
+        long fareD = fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId();
+        long fareEx = fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId();
         double totalCost = costsBean.calculateCostPerFlight(flightId);
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());

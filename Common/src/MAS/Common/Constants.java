@@ -24,7 +24,11 @@ public class Constants {
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
 
-    //public static final String FARE_NORMAL;
+    public static final String FARE_NORMAL = "NNMA";
+    public static final String FARE_LATE = "LTH";
+    public static final String FARE_DOUBLE = "GV2";
+    public static final String FARE_EARLY = "SVR1";
+    public static final String FARE_EXPENSIVE = "FE7";
 
     public static final String AVERAGE_PERSON_WEIGHT = "AVERAGE_PERSON_WEIGHT";
     public static final String AVERAGE_BAGGAGE_WEIGHT = "AVERAGE_BAGGAGE_WEIGHT";
