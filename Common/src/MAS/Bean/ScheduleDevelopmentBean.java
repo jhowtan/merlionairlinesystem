@@ -108,6 +108,17 @@ public class ScheduleDevelopmentBean {
         }
     }
 
+    private void selectGoodRoutes() {
+        int l = airportsToGo.size();
+        for (int i = 0; i < l; i++) {
+            Airport origin = airportsToGo.get(i);
+            for (int j = 0; j < l; j++) {
+                if (j == i) continue;
+                Airport destination = airportsToGo.get(j);
+            }
+        }
+    }
+
     private boolean isHub(Airport airport) {
         if (hubs.indexOf(airport) != -1)
             return true;
