@@ -43,7 +43,7 @@ public class Customer {
     private Date dateOfBirth;
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -178,7 +178,7 @@ public class Customer {
     private Date statusExpiry;
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     public Date getStatusExpiry() {
         return statusExpiry;
     }
@@ -190,7 +190,7 @@ public class Customer {
     private Date qualificationEndDate;
 
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     public Date getQualificationEndDate() {
         return qualificationEndDate;
     }
