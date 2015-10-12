@@ -4,6 +4,7 @@ import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
+import MAS.ScheduleDev.HypoRoute;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -24,8 +25,9 @@ public class ScheduleDevelopmentBean {
 
     private List<Aircraft> aircraftsToFly;
     private List<Airport> airportsToGo;
+    private List<Airport> hubs;
     private List<Route> suggestedRoutes;
-    private List<Route> allRoutes;
+    private List<HypoRoute> allRoutes;
     private List<AircraftAssignment> suggestedAA;
     private List<AircraftMaintenanceSlot> suggestedMaint;
 
@@ -40,6 +42,7 @@ public class ScheduleDevelopmentBean {
         suggestedRoutes = new ArrayList<>();
         suggestedAA = new ArrayList<>();
         suggestedMaint = new ArrayList<>();
+        hubs = new ArrayList<>();
     }
 
     public void addAircrafts(List<Long> acIds) throws NotFoundException {
@@ -75,7 +78,7 @@ public class ScheduleDevelopmentBean {
             if (ap == null)
                 throw new NotFoundException();
             else if (airportsToGo.indexOf(ap) != -1)
-                airportsToGo.add(ap);
+                hubs.add(ap);
         }
     }
 
@@ -86,24 +89,35 @@ public class ScheduleDevelopmentBean {
             for (int j = 0; j < l; j++) {
                 if (j == i) continue;
                 Airport destination = airportsToGo.get(j);
+                HypoRoute hypoRoute = new HypoRoute();
                 Route route = new Route();
                 route.setOrigin(origin);
                 route.setDestination(destination);
                 double distance = Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
                         destination.getLatitude(), destination.getLongitude());
                 route.setDistance(distance);
-                System.out.println(distance + " " + maxRange);
+                hypoRoute.route = route;
+                hypoRoute.actualDistance = distance;
+                hypoRoute.costDistance = distance * Constants.RANGE_INERTIA;
+                if (isHub(origin) || isHub(destination))
+                    hypoRoute.costDistance *= hubSavings;
                 if (distance > maxRange)
                     continue;
-                allRoutes.add(route);
+                allRoutes.add(hypoRoute);
             }
         }
+    }
+
+    private boolean isHub(Airport airport) {
+        if (hubs.indexOf(airport) != -1)
+            return true;
+        return false;
     }
 
     private void debugAllRoutes() {
         System.out.println("ALL ROUTES-----------------------");
         for (int i = 0; i < allRoutes.size(); i++) {
-            System.out.println(allRoutes.get(i).getOrigin().getName() + " - " + allRoutes.get(i).getDestination().getName());
+            System.out.println(allRoutes.get(i).route.getOrigin().getName() + " - " + allRoutes.get(i).route.getDestination().getName() + " : " + allRoutes.get(i).costDistance);
         }
     }
 

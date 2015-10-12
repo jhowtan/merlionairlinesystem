@@ -46,5 +46,5 @@ public class Constants {
     public static final double PROFIT_MARGIN = 1.4;
 
     public static final int RANGE_CONST = 300;
-    public static final int RANGE_INERTIA = -200;
+    public static final double RANGE_INERTIA = 0.95;
 }
