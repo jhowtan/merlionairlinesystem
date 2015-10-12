@@ -65,7 +65,6 @@ public class FlightScheduleBean {
 
     private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
         Flight flight = em.find(Flight.class, flightId);
-        // Normal curve: Price away from mean -> get number of seats to allocate
         long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();
         long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();
         long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();
@@ -81,21 +80,28 @@ public class FlightScheduleBean {
             int seatsInClass = seatConfigObject.getSeatsInClass(i);
             int seatsLeft = seatsInClass;
             double cabinPrice = costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i];
-            double maxPrice =  cabinPrice * 1.35;
 
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsInClass,
-                    i, fareEx, flightId, makeNiceMoney(cabinPrice * 1.35));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], seatsLeft, i, fareN, flightId, makeNiceMoney(cabinPrice * 1.0));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, makeNiceMoney(cabinPrice * 1.15));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, makeNiceMoney(cabinPrice * 0.9));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.2 * seatsInClass), i, fareE, flightId, makeNiceMoney(cabinPrice * 0.85));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareEx, flightId, makeNiceMoney(cabinPrice * 1.5));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1.5));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], seatsLeft, i, fareL, flightId, makeNiceMoney(cabinPrice * 1.35));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1.35));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], seatsLeft, i, fareN, flightId, makeNiceMoney(cabinPrice * 1));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], seatsLeft, i, fareD, flightId, makeNiceMoney(cabinPrice * 0.9));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], seatsLeft, i, fareE, flightId, makeNiceMoney(cabinPrice * 0.85));
         }
     }
 
-    private int getSeatAllocation(int totalSeats, double price, double basePrice) {
-        NormalDistribution normalDistb = new NormalDistribution(basePrice, attributesBean.getDoubleAttribute(Constants.DEMAND_STDEV, 1.0));
-        //return 0.5 * (1 - normalDistb.probability(basePrice, price));
-        return 0;
+    private int getSeatAllocation(int totalSeats, double basePrice, double price) {
+        try {
+            NormalDistribution normalDistb = new NormalDistribution(0.5, attributesBean.getDoubleAttribute(Constants.DEMAND_STDEV, 0.20));
+            double Z = price / (basePrice * 2);
+            double prob = 1 - normalDistb.cumulativeProbability(Z);
+            return (int) (prob * totalSeats);
+        } catch (Exception e) {
+            System.out.println(price + " " + basePrice);
+            return 0;
+        }
     }
 
     private double makeNiceMoney(double amount) {
