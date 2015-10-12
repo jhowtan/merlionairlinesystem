@@ -10,6 +10,7 @@ public class PNR {
     private Date createdTimeStamp;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getCreatedTimeStamp() {
         return createdTimeStamp;
     }
