@@ -73,4 +73,16 @@ public class Flight {
     public void setFlightGroup(FlightGroup flightGroup) {
         this.flightGroup = flightGroup;
     }
+
+    private Date actualDepartureTime;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getActualDepartureTime() {
+        return actualDepartureTime;
+    }
+
+    public void setActualDepartureTime(Date actualDepartureTime) {
+        this.actualDepartureTime = actualDepartureTime;
+    }
 }

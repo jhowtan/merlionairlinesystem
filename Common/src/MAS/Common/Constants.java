@@ -32,6 +32,7 @@ public class Constants {
     public static final String FLIGHTS_PER_YEAR = "FLIGHTS_PER_YEAR";
     public static final String MAINTENANCE_PER_YEAR = "MAINTENANCE_PER_YEAR";
     public static final String AIRCRAFT_EXPECTED_LIFE = "AIRCRAFT_EXPECTED_LIFE";
+    public static final String DEMAND_STDEV = "DEMAND_STDEV";
 
     public static final String[] BOOKING_CLASS_NAMES = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
