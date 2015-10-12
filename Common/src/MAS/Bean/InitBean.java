@@ -162,6 +162,18 @@ public class InitBean {
                 long ct2Id = routeBean.createCity("London", ctry2Id);
                 long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
 
+                long ctry3Id = routeBean.createCountry("United States", "USA");
+                long ct3Id = routeBean.createCity("New York", ctry3Id);
+                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 4, ct3Id);
+
+                long ctry4Id = routeBean.createCountry("South Korea", "KOR");
+                long ct4Id = routeBean.createCity("Seoul", ctry4Id);
+                long ap4Id = routeBean.createAirport("Incheon International Airport", 37.4601908, 126.44069569999999, "ICN", 4, ct4Id);
+
+                long ctry5Id = routeBean.createCountry("Hong Kong", "HKG");
+                long ct5Id = routeBean.createCity("Hong Kong", ctry5Id);
+                long ap5Id = routeBean.createAirport("Hong Kong International Airport", 22.308047, 113.9184808, "HKG", 4, ct5Id);
+
                 long routeId = routeBean.createRoute(apId, ap2Id);
 
                 List<Aircraft> allAircraft = fleetBean.getAllAircraft();
