@@ -68,7 +68,7 @@ public class Cost {
     private Date date;
 
     @Basic
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDate() {
         return date;
     }
