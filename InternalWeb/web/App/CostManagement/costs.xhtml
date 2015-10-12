@@ -55,7 +55,7 @@
                     <div class="col-lg-6">
                         <h:form id="costsForm">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Cost Details</div>
+                            <div class="panel-heading">Create Cost</div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!comments.valid ? 'has-error' : ''}">
@@ -79,6 +79,7 @@
                                             <br/>
                                             <h:selectOneMenu styleClass="form-control"
                                                              id="aircraft" value="#{costManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
                                                 <f:selectItems value="#{costManagedBean.aircraftList}" var="ac"
                                                                itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
                                             </h:selectOneMenu>
@@ -91,6 +92,7 @@
                                             <br/>
                                             <h:selectOneMenu styleClass="form-control"
                                                              id="acAssignment" value="#{costManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
                                                 <f:selectItems value="#{costManagedBean.aaList}" var="aa"
                                                                itemLabel="#{commonManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
                                             </h:selectOneMenu>
