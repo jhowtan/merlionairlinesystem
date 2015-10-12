@@ -21,46 +21,39 @@
                         </h:panelGroup>
                     </ui:repeat>
                 </div>
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Cost Trends</div>
-                        <div class="panel-body">
-                            <div id="costs_chart">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <h:form>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">Cost Type</div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label class="control-label" for="type">Cost Type</label>
+                                    <label class="control-label" for="type">Select:</label>
                                     <br/>
+                                    <h:form>
                                     <h:selectOneMenu styleClass="form-control"
                                                      id="type" value="#{costManagedBean.type}">
                                         <f:selectItems value="#{costManagedBean.costTypes}" var="ctype"
                                                        itemLabel="#{ctype}" itemValue="#{costManagedBean.costIndex(ctype)}" />
-                                        <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="@form :costs :costsTable" onevent="
-                                        function() {
-                                            var costTable = $('#costs_table').DataTable({
-                                                'retrieve': true,
-                                                'stateSave': false,
-                                                'order': [[2, 'desc']],
-                                                'aoColumnDefs': [
-                                                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
-                                                ]
-                                            });
-                                         }"/>
+                                        <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="costsForm costsTable"
+                                                onevent="function(data) {
+                                                if (data.status == 'success') {
+                                                    costTableDataTable();
+                                                }} "/>
                                     </h:selectOneMenu>
+                                    </h:form>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Market Fuel Cost Trends</div>
+                            <div class="panel-body">
+                                <div id="costs_chart"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
+                        <h:form id="costsForm">
                         <div class="panel panel-default">
                             <div class="panel-heading">Cost Details</div>
                             <div class="panel-body">
@@ -112,16 +105,17 @@
                                 </div>
                             </div>
                         </div>
+                        </h:form>
+
                     </div>
-                </div> <!-- END ROW -->
-                </h:form>
-                <h:form id="costs">
-                <div class="row">
+                </div>
+            <!-- END ROW -->
+                    <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">Summary Table</div>
                             <div class="panel-body">
-                                <h:panelGroup id="costsTable">
+                                <h:form id="costsTable">
                                     <table class="table" id="costs_table">
                                         <thead>
                                         <tr>
@@ -148,37 +142,39 @@
                                         </ui:repeat>
                                         </tbody>
                                     </table>
-                                </h:panelGroup>
+                                </h:form>
                             </div>
                         </div> <!--END OF PANEL -->
                     </div>
                 </div>
-            </h:form>
         </div>
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-            var costTable = $('#costs_table').DataTable({
-                "stateSave": false,
-                "order": [[2, 'desc']],
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
-                ]
-            });
-            new Morris.Area({
+            var costTableDataTable = function() {
+                $('#costs_table').DataTable({
+                    "stateSave": true,
+                    "order": [[2, 'desc']],
+                    "aoColumnDefs": [
+                        { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                    ]
+                });
+            };
+            costTableDataTable();
+            costsChart = new Morris.Area({
                 element: 'costs_chart',
-                data: [
-                    { date: '2008', value: 20 },
-                    { date: '2009', value: 10 },
-                    { date: '2010', value: 5 },
-                    { date: '2011', value: 5 },
-                    { date: '2012', value: 20 }
-                ],
+                data: [],
                 xkey: 'date',
                 ykeys: ['value'],
-                labels: ['Value']
+                labels: ['Price']
+            });
+            $.ajax({
+                url: 'costData.xhtml?q=3',
+                success: function(data) {
+                    costsChart.setData(data);
+                }
             });
         </script>
     </ui:define>

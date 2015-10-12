@@ -81,7 +81,12 @@ public class CostManagedBean {
         }
     }
 
+    public void test() {
+        System.out.println("XXXXXXXXX!!!!");
+    }
+
     public void delete(long id) {
+        System.out.println("XXXXXXXXX" + id);
         try {
             String comments = costsBean.getCost(id).getComments();
             costsBean.removeCost(id);
@@ -89,11 +94,13 @@ public class CostManagedBean {
             FacesMessage m = new FacesMessage("Successfully deleted cost: " + comments);
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+            changeCostsDisplay();
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The cost cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+            changeCostsDisplay();
         }
         changeCostsDisplay();
     }
