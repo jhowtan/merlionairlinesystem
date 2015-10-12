@@ -80,4 +80,12 @@ public class Utils {
         return dist;
     }
 
+    public static String convertBookingReference(long BookingReferenceLong) {
+        return Long.toString(BookingReferenceLong, 36).toUpperCase();
+    }
+
+    public static long convertBookingReference(String BookingReferenceString) {
+        return Long.parseLong(BookingReferenceString, 36);
+    }
+
 }

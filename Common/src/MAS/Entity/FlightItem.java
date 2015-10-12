@@ -73,20 +73,7 @@ public class FlightItem {
     public void setSeatPreference(String seatPreference) {
         this.seatPreference = seatPreference;
     }
-
-    private String specialRequest;
-
-    @Basic
-    @Lob
-    public String getSpecialRequest() {
-        return specialRequest;
-    }
-
-    public void setSpecialRequest(String specialRequest) {
-        this.specialRequest = specialRequest;
-    }
-
-
+    
     private List<Baggage> baggages;
 
     @OneToMany(mappedBy = "flightItem")

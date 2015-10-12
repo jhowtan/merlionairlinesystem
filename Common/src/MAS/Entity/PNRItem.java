@@ -29,17 +29,6 @@ public class PNRItem {
         this.passengerName = passengerName;
     }
 
-    private String passengerPassport;
-
-    @Basic
-    public String getPassengerPassport() {
-        return passengerPassport;
-    }
-
-    public void setPassengerPassport(String passengerPassport) {
-        this.passengerPassport = passengerPassport;
-    }
-
     private String frequentFlyerNumber;
 
     @Basic
@@ -71,5 +60,17 @@ public class PNRItem {
 
     public void setFlightItems(List<FlightItem> flightItems) {
         this.flightItems = flightItems;
+    }
+
+    private String specialRequest;
+
+    @Basic
+    @Lob
+    public String getSpecialRequest() {
+        return specialRequest;
+    }
+
+    public void setSpecialRequest(String specialRequest) {
+        this.specialRequest = specialRequest;
     }
 }
