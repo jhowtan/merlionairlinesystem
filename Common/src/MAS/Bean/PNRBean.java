@@ -1,10 +1,7 @@
 package MAS.Bean;
 
 import MAS.Common.Utils;
-import MAS.Entity.Flight;
-import MAS.Entity.FlightItem;
-import MAS.Entity.PNR;
-import MAS.Entity.PNRItem;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -58,6 +55,17 @@ public class PNRBean {
         PNR pnr = em.find(PNR.class, Utils.convertBookingReference(bookingReference));
         if (pnr == null) throw new NotFoundException();
         // @TODO
+
+        List<PNRItem> pnrItems = pnr.getPNRItems();
+        for (PNRItem pnrItem : pnrItems) {
+            if (pnrItem.getPassengerName().equals(passengerName)) {
+                pnrItem.setFrequentFlyerProgram(ffpProgram);
+                pnrItem.setFrequentFlyerNumber(ffpNumber);
+            }
+        }
+        pnr.setPNRItems(pnrItems);
+        em.merge(pnr);
+        em.flush();
     }
 
 
