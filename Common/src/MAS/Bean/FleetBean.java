@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
@@ -116,6 +117,7 @@ public class FleetBean {
         aircraftType.setFuelEfficiency(fuelEfficiency);
         aircraftType.setSpeed(speed);
         aircraftType.setWeight(weight);
+        aircraftType.setMaxRange(fuelCapacity /(fuelEfficiency * Constants.RANGE_CONST));
         em.persist(aircraftType);
         em.flush();
 
@@ -184,13 +186,6 @@ public class FleetBean {
         aircraftType.setCockpitCrewReq(cockpitReq);
         em.persist(aircraftType);
     }
-
-    /*public void changeAircraftTypeRange(long id, int range) throws NotFoundException {
-        AircraftType aircraftType = em.find(AircraftType.class, id);
-        if (aircraftType == null) throw new NotFoundException();
-        aircraftType.setRange(range);
-        em.persist(aircraftType);
-    }*/
 
     public boolean isTailNumberUnique(String tailNum) {
         return (Long) em.createQuery("SELECT COUNT(a) FROM Aircraft a WHERE a.tailNumber = :tailNum").setParameter("tailNum", tailNum).getSingleResult() == 0;

@@ -97,4 +97,14 @@ public class AircraftType {
         this.cockpitCrewReq = cockpitCrewReq;
     }
 
+    private double maxRange;
+
+    @Basic
+    public double getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(double maxRange) {
+        this.maxRange = maxRange;
+    }
 }

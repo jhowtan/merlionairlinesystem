@@ -44,4 +44,6 @@ public class Constants {
 
     public static final double[] TRAVEL_CLASS_PRICE_MULTIPLIER = {6, 3, 1.5, 1};
     public static final double PROFIT_MARGIN = 1.4;
+
+    public static final int RANGE_CONST = 275;
 }

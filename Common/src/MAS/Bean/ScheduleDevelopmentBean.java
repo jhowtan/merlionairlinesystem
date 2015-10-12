@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
@@ -34,11 +35,15 @@ public class ScheduleDevelopmentBean {
 
     public void addAircrafts(long[] acIds) throws NotFoundException {
         int l = acIds.length;
+        double range = 0;
         for (int i = 0; i < l; i++) {
             Aircraft ac = em.find(Aircraft.class, acIds[i]);
             if (ac == null) throw new NotFoundException();
             else {
                 aircraftsToFly.add(ac);
+                range = ac.getSeatConfig().getAircraftType().getMaxRange();
+                if (range > maxRange)
+                    maxRange = range;
             }
         }
     }
