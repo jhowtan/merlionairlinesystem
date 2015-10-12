@@ -4,13 +4,14 @@ import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.Customer;
 import MAS.Exception.NotFoundException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless(name = "FFPEJB")
+@LocalBean
 public class FFPBean {
     @PersistenceContext
     private EntityManager em;

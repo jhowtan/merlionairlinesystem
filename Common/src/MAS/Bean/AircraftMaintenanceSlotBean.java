@@ -5,6 +5,7 @@ import MAS.Entity.AircraftMaintenanceSlot;
 import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "AircraftMaintenanceSlotEJB")
+@LocalBean
 public class AircraftMaintenanceSlotBean {
     @PersistenceContext
     EntityManager em;

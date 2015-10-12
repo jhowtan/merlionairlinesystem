@@ -13,6 +13,7 @@ import MAS.Exception.NotFoundException;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Stateless(name = "FlightScheduleEJB")
+@LocalBean
 public class FlightScheduleBean {
     @PersistenceContext
     EntityManager em;
