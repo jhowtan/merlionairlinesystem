@@ -92,7 +92,8 @@ public class ScheduleDevelopmentBean {
                 double distance = Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
                         destination.getLatitude(), destination.getLongitude());
                 route.setDistance(distance);
-                if (distance < maxRange)
+                System.out.println(distance + " " + maxRange);
+                if (distance > maxRange)
                     continue;
                 allRoutes.add(route);
             }

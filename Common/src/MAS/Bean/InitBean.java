@@ -213,7 +213,13 @@ public class InitBean {
                 for (int i = 0; i < allAp.size(); i++) {
                     apIds.add(allAp.get(i).getId());
                 }
+                List<Long> acIds = new ArrayList<>();
+                List<Aircraft> allAc = fleetBean.getAllAircraft();
+                for (int i = 0; i < allAc.size(); i++) {
+                    acIds.add(allAc.get(i).getId());
+                }
                 scheduleDevelopmentBean.addAirports(apIds);
+                scheduleDevelopmentBean.addAircrafts(acIds);
                 scheduleDevelopmentBean.process();
             } catch (Exception e) {
                 e.printStackTrace();
