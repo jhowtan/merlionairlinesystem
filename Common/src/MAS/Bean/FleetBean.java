@@ -185,6 +185,13 @@ public class FleetBean {
         em.persist(aircraftType);
     }
 
+    /*public void changeAircraftTypeRange(long id, int range) throws NotFoundException {
+        AircraftType aircraftType = em.find(AircraftType.class, id);
+        if (aircraftType == null) throw new NotFoundException();
+        aircraftType.setRange(range);
+        em.persist(aircraftType);
+    }*/
+
     public boolean isTailNumberUnique(String tailNum) {
         return (Long) em.createQuery("SELECT COUNT(a) FROM Aircraft a WHERE a.tailNumber = :tailNum").setParameter("tailNum", tailNum).getSingleResult() == 0;
     }

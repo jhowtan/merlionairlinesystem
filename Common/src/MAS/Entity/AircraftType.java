@@ -96,4 +96,5 @@ public class AircraftType {
     public void setCockpitCrewReq(int cockpitCrewReq) {
         this.cockpitCrewReq = cockpitCrewReq;
     }
+
 }
