@@ -8,7 +8,6 @@ import MAS.Entity.User;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -104,5 +103,9 @@ public class CommonManagedBean {
 
     public static String formatName(User user) {
         return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public static double random() {
+        return Math.random();
     }
 }
