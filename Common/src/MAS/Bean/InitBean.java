@@ -140,12 +140,12 @@ public class InitBean {
 
             try {
                 costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
-                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 85000000, "Aircraft Purchase", -1);
+                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 285000000, "Aircraft Purchase", -1);
                 costsBean.createCost(Constants.COST_PER_FLIGHT, 10000, "Food & Beverages", -1);
                 costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
-                costsBean.createCost(Constants.COST_ANNUAL, 200000000, "Misc Fees", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
