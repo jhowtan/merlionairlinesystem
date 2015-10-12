@@ -51,20 +51,30 @@ public class PNRBean {
         return pnr;
     }
 
-    public void updateFFP(String bookingReference, String passengerName, String ffpProgram, String ffpNumber) throws NotFoundException {
+    public PNR getPNR(String bookingReference) throws NotFoundException {
         PNR pnr = em.find(PNR.class, Utils.convertBookingReference(bookingReference));
         if (pnr == null) throw new NotFoundException();
-        // @TODO
+        return pnr;
+    }
 
-        List<PNRItem> pnrItems = pnr.getPNRItems();
-        for (PNRItem pnrItem : pnrItems) {
+    public PNRItem getPNRItem(PNR pnr, String passengerName) throws NotFoundException {
+        for (PNRItem pnrItem : pnr.getPNRItems()) {
             if (pnrItem.getPassengerName().equals(passengerName)) {
-                pnrItem.setFrequentFlyerProgram(ffpProgram);
-                pnrItem.setFrequentFlyerNumber(ffpNumber);
+                return pnrItem;
             }
         }
-        pnr.setPNRItems(pnrItems);
-        em.merge(pnr);
+        throw new NotFoundException();
+    }
+
+    public PNRItem getPNRItem(String bookingReference, String passengerName) throws NotFoundException {
+        return getPNRItem(getPNR(bookingReference), passengerName);
+    }
+
+    public void updateFFP(String bookingReference, String passengerName, String ffpProgram, String ffpNumber) throws NotFoundException {
+        PNRItem pnrItem = getPNRItem(bookingReference, passengerName);
+        pnrItem.setFrequentFlyerProgram(ffpProgram);
+        pnrItem.setFrequentFlyerNumber(ffpNumber);
+        em.merge(pnrItem);
         em.flush();
     }
 
