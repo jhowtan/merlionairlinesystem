@@ -42,12 +42,12 @@ public class SeatAllocationValidator implements Validator {
         int travelClass = (Integer) ((UIInput) uiComponent.getAttributes().get("travelClass")).getValue();
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         int totalSeats = seatConfigObject.getSeatsInClass(travelClass);
-        List<BookingClass> sameFlightAndClass = null;
+        //List<BookingClass> sameFlightAndClass = null;
 
         try {
             seatConfigObject.parse(flightScheduleBean.findSeatConfigOfFlight(flightId));
             totalSeats = seatConfigObject.getSeatsInClass(travelClass);
-            sameFlightAndClass = bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
+            //sameFlightAndClass = bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
         } catch (Exception e) {
             e.printStackTrace();
             FacesMessage m = new FacesMessage("No seats available on this flight.");
@@ -55,14 +55,19 @@ public class SeatAllocationValidator implements Validator {
             throw new ValidatorException(m);
         }
 
-        int currSeats = 0;
+        if (seats > totalSeats) {
+            FacesMessage m = new FacesMessage("There are only " + totalSeats + " seats for this travel class.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(m);
+        }
 
+        /*
+        int currSeats = 0;
         try {
             long bookingClassId = (long) uiComponent.getAttributes().get("bookingClass");
             currSeats = bookingClassBean.getBookingClass(bookingClassId).getAllocation();
         } catch (Exception e) {
         }
-
         int allocatedSeats = 0;
         for (int i = 0; i < sameFlightAndClass.size(); i++) {
             allocatedSeats += sameFlightAndClass.get(i).getAllocation();
@@ -78,5 +83,6 @@ public class SeatAllocationValidator implements Validator {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
+        */
     }
 }

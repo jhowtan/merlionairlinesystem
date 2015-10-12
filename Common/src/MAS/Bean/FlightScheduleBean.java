@@ -10,6 +10,7 @@ import MAS.Entity.Flight;
 import MAS.Entity.FlightGroup;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -34,6 +35,8 @@ public class FlightScheduleBean {
     BookingClassBean bookingClassBean;
     @EJB
     CostsBean costsBean;
+    @EJB
+    AttributesBean attributesBean;
 
     public FlightScheduleBean() {
     }
@@ -62,12 +65,11 @@ public class FlightScheduleBean {
 
     private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
         Flight flight = em.find(Flight.class, flightId);
-
-        long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();//40%
-        long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();//20%
-        long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();//15%
-        long fareD = fareRuleBean.getFareRuleByName("DEF-Double").getId();//15%
-        long fareEx = fareRuleBean.getFareRuleByName("DEF-Expensive").getId();//10%
+        long fareN = fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId();
+        long fareE = fareRuleBean.getFareRuleByName(Constants.FARE_EARLY).getId();
+        long fareL = fareRuleBean.getFareRuleByName(Constants.FARE_LATE).getId();
+        long fareD = fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId();
+        long fareEx = fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId();
         double totalCost = costsBean.calculateCostPerFlight(flightId);
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
@@ -77,15 +79,28 @@ public class FlightScheduleBean {
         for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
             int seatsInClass = seatConfigObject.getSeatsInClass(i);
             int seatsLeft = seatsInClass;
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], (int)(0.2 * seatsInClass), i, fareE, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.85));
-            seatsLeft -= (int)(0.2 * seatsInClass);
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], (int)(0.15 * seatsInClass), i, fareL, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.15));
-            seatsLeft -= (int)(0.15 * seatsInClass);
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], (int)(0.15 * seatsInClass), i, fareD, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 0.9));
-            seatsLeft -= (int)(0.15 * seatsInClass);
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], (int)(0.1 * seatsInClass), i, fareEx, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.35));
-            seatsLeft -= (int)(0.1 * seatsInClass);
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareN, flightId, makeNiceMoney(costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i] * 1.0));
+            double cabinPrice = costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i];
+
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 0], seatsLeft, i, fareEx, flightId, makeNiceMoney(cabinPrice * 1.5));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1.5));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 1], seatsLeft, i, fareL, flightId, makeNiceMoney(cabinPrice * 1.35));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1.35));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 2], seatsLeft, i, fareN, flightId, makeNiceMoney(cabinPrice * 1));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 3], seatsLeft, i, fareD, flightId, makeNiceMoney(cabinPrice * 0.9));
+            seatsLeft -= getSeatAllocation(seatsInClass, cabinPrice, makeNiceMoney(cabinPrice * 1));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i*5 + 4], seatsLeft, i, fareE, flightId, makeNiceMoney(cabinPrice * 0.85));
+        }
+    }
+
+    private int getSeatAllocation(int totalSeats, double basePrice, double price) {
+        try {
+            NormalDistribution normalDistb = new NormalDistribution(0.5, attributesBean.getDoubleAttribute(Constants.DEMAND_STDEV, 0.20));
+            double Z = price / (basePrice * 2);
+            double prob = 1 - normalDistb.cumulativeProbability(Z);
+            return (int) (prob * totalSeats);
+        } catch (Exception e) {
+            System.out.println(price + " " + basePrice);
+            return 0;
         }
     }
 

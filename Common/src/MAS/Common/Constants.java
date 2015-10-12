@@ -24,6 +24,12 @@ public class Constants {
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
 
+    public static final String FARE_NORMAL = "NNMA";
+    public static final String FARE_LATE = "LTH";
+    public static final String FARE_DOUBLE = "GV2";
+    public static final String FARE_EARLY = "SVR1";
+    public static final String FARE_EXPENSIVE = "FE7";
+
     public static final String AVERAGE_PERSON_WEIGHT = "AVERAGE_PERSON_WEIGHT";
     public static final String AVERAGE_BAGGAGE_WEIGHT = "AVERAGE_BAGGAGE_WEIGHT";
     public static final String FUEL_WEIGHT = "FUEL_WEIGHT";
@@ -32,6 +38,7 @@ public class Constants {
     public static final String FLIGHTS_PER_YEAR = "FLIGHTS_PER_YEAR";
     public static final String MAINTENANCE_PER_YEAR = "MAINTENANCE_PER_YEAR";
     public static final String AIRCRAFT_EXPECTED_LIFE = "AIRCRAFT_EXPECTED_LIFE";
+    public static final String DEMAND_STDEV = "DEMAND_STDEV";
 
     public static final String[] BOOKING_CLASS_NAMES = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 

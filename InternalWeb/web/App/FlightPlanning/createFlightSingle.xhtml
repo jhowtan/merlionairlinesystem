@@ -36,7 +36,8 @@
                                     <div class="form-group col-lg-12 #{!aircraftAssignment.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="aircraftAssignment">Aircraft Assignment</label>
                                         <br/>
-                                        <h:selectOneMenu styleClass="form-control" id="aircraftAssignment" value="#{createFlightManagedBean.aaId}" binding="#{aircraftAssignment}">
+                                        <h:selectOneMenu styleClass="form-control" id="aircraftAssignment" value="#{createFlightManagedBean.aaId}" binding="#{aircraftAssignment}" required="true" requiredMessage="Aircraft assignment is required">
+                                            <f:selectItem itemLabel="Select an aircraft assignment" />
                                             <f:selectItems value="#{createFlightManagedBean.aircraftAssignments}" var="aa"
                                                            itemLabel="#{createFlightManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
                                             <f:ajax listener="#{createFlightManagedBean.acTypeChangeListener}" render="flightDuration" />
