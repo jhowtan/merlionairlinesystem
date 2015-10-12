@@ -260,4 +260,8 @@ public class RouteBean {
         return (int)((aircraftAssignment.getRoute().getDistance() / aircraftAssignment.getAircraft().getSeatConfig().getAircraftType().getSpeed()) * 60);
     }
 
+    public void autoAssign() {
+        
+    }
+
 }

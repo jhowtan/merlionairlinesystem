@@ -62,7 +62,7 @@ public class FlightScheduleBean {
 
     private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
         Flight flight = em.find(Flight.class, flightId);
-
+        // Normal curve: Price away from mean -> get number of seats to allocate
         long fareN = fareRuleBean.getFareRuleByName("DEF-Normal").getId();//40%
         long fareE = fareRuleBean.getFareRuleByName("DEF-Early").getId();//20%
         long fareL = fareRuleBean.getFareRuleByName("DEF-Late").getId();//15%
