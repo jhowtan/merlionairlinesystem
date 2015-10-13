@@ -32,7 +32,7 @@ public class ScheduleDevelopmentBean {
     private List<AircraftMaintenanceSlot> suggestedMaint;
 
     private int reserveAircraft;
-    private double hubSavings = 0.20;
+    private double hubSavings = 0.25;
     private double maxRange = 0;
 
     public ScheduleDevelopmentBean() {
@@ -58,6 +58,7 @@ public class ScheduleDevelopmentBean {
                     maxRange = range;
             }
         }
+        maxRange *= 0.70;
     }
 
     public void addAirports(List<Long> apIds) throws NotFoundException {

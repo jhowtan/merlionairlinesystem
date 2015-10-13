@@ -156,23 +156,41 @@ public class InitBean {
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
                 long ctId = routeBean.createCity("Singapore", ctryId);
-                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
+                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 8, ctId);
 
                 long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
                 long ct2Id = routeBean.createCity("London", ctry2Id);
-                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
+                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 1, ct2Id);
 
                 long ctry3Id = routeBean.createCountry("United States", "USA");
                 long ct3Id = routeBean.createCity("New York", ctry3Id);
-                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 4, ct3Id);
+                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 1, ct3Id);
+                long ct30Id = routeBean.createCity("San Francisco", ctry3Id);
+                long ap30Id = routeBean.createAirport("San Francisco International Airport", 37.6213129, -122.3789554, "SFO", 4, ct30Id);
 
                 long ctry4Id = routeBean.createCountry("South Korea", "KOR");
                 long ct4Id = routeBean.createCity("Seoul", ctry4Id);
-                long ap4Id = routeBean.createAirport("Incheon International Airport", 37.4601908, 126.44069569999999, "ICN", 4, ct4Id);
+                long ap4Id = routeBean.createAirport("Incheon International Airport", 37.4601908, 126.44069569999999, "ICN", 2, ct4Id);
 
                 long ctry5Id = routeBean.createCountry("Hong Kong", "HKG");
                 long ct5Id = routeBean.createCity("Hong Kong", ctry5Id);
-                long ap5Id = routeBean.createAirport("Hong Kong International Airport", 22.308047, 113.9184808, "HKG", 4, ct5Id);
+                long ap5Id = routeBean.createAirport("Hong Kong International Airport", 22.308047, 113.9184808, "HKG", 3, ct5Id);
+
+                long ctry6Id = routeBean.createCountry("Japan", "JPN");
+                long ct6Id = routeBean.createCity("Tokyo", ctry6Id);
+                long ap6Id = routeBean.createAirport("Narita International Airport", 35.7719867, 140.39285010000003, "NRT", 2, ct6Id);
+
+                long ctry7Id = routeBean.createCountry("Malaysia", "MYS");
+                long ct7Id = routeBean.createCity("Sepang", ctry7Id);
+                long ap7Id = routeBean.createAirport("Kuala Lumpur International Airport", 2.75419, 101.70474000000001, "KUL", 1, ct7Id);
+
+                long ctry8Id = routeBean.createCountry("Thailand", "THA");
+                long ct8Id = routeBean.createCity("Bangkok", ctry8Id);
+                long ap8Id = routeBean.createAirport("Suvarnabhumi Airport", 13.6899991, 100.75011240000003, "BKK", 1, ct8Id);
+
+                long ctry9Id = routeBean.createCountry("China", "CHN");
+                long ct9Id = routeBean.createCity("Beijing", ctry9Id);
+                long ap9Id = routeBean.createAirport("Beijing Capital International Airport", 40.0798573, 116.60311209999997, "HKG", 3, ct9Id);
 
                 /*long routeId = routeBean.createRoute(apId, ap2Id);
 
@@ -215,6 +233,7 @@ public class InitBean {
                     }
                     List<Long> hubIds = new ArrayList<>();
                     hubIds.add(apId);
+                    hubIds.add(ap5Id);
                     scheduleDevelopmentBean.addAirports(apIds);
                     scheduleDevelopmentBean.addAircrafts(acIds);
                     scheduleDevelopmentBean.addHubs(hubIds);
