@@ -158,13 +158,13 @@ public class InitBean {
                 long ctId = routeBean.createCity("Singapore", ctryId);
                 long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
 
-                long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
+                /*long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
                 long ct2Id = routeBean.createCity("London", ctry2Id);
                 long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
 
                 long ctry3Id = routeBean.createCountry("United States", "USA");
                 long ct3Id = routeBean.createCity("New York", ctry3Id);
-                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 4, ct3Id);
+                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 4, ct3Id);*/
 
                 long ctry4Id = routeBean.createCountry("South Korea", "KOR");
                 long ct4Id = routeBean.createCity("Seoul", ctry4Id);
@@ -174,11 +174,11 @@ public class InitBean {
                 long ct5Id = routeBean.createCity("Hong Kong", ctry5Id);
                 long ap5Id = routeBean.createAirport("Hong Kong International Airport", 22.308047, 113.9184808, "HKG", 4, ct5Id);
 
-                long routeId = routeBean.createRoute(apId, ap2Id);
+                /*long routeId = routeBean.createRoute(apId, ap2Id);
 
                 List<Aircraft> allAircraft = fleetBean.getAllAircraft();
                 long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
-                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
+                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);*/
 
 //                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
 //                    String flight1Code = "MA11";
