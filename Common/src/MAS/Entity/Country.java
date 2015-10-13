@@ -7,15 +7,14 @@ import javax.persistence.Id;
 
 @Entity
 public class Country {
-    private long id;
+    private String id;
 
-    @GeneratedValue
     @Id
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -28,16 +27,5 @@ public class Country {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    private String code;
-
-    @Basic
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String iata) {
-        this.code = iata;
     }
 }
