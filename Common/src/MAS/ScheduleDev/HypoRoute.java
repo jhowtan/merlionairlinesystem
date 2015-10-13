@@ -70,7 +70,7 @@ public class HypoRoute {
     public String print() {
         String result = "";
         if (routes.size() > 0) {
-            result = result.concat(route().getOrigin().getName() + " -> " + route().getDestination().getName());
+            result = result.concat(routes.get(0).getOrigin().getName() + " -> " + routes.get(0).getDestination().getName());
             for (int i = 1; i < routes.size(); i++) {
                 result = result.concat(" -> " + routes.get(i).getDestination().getName());
             }

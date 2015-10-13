@@ -122,14 +122,26 @@ public class ScheduleDevelopmentBean {
                 efficientRoutes.add(getCheapestRoute(origin, destination, baseCost, originRoutes));
             }
         }
-        debugAllRoutes(efficientRoutes);
-        //addToSuggestedRoutes(efficientRoutes);
+        addToSuggestedRoutes(efficientRoutes);
     }
 
     private void addToSuggestedRoutes(List<HypoRoute> hypoRoutes) {
         for (int i = 0; i < hypoRoutes.size(); i ++) {
-
+            for (int j = 0; j < hypoRoutes.get(i).routes.size(); j++) {
+                Route route = hypoRoutes.get(i).routes.get(j);
+                if (!suggestedRouteExists(route)) {
+                    suggestedRoutes.add(route);
+                }
+            }
         }
+    }
+
+    private boolean suggestedRouteExists(Route route) {
+        for (int i = 0; i < suggestedRoutes.size(); i++) {
+            if (route.isSame(suggestedRoutes.get(i)))
+                return true;
+        }
+        return false;
     }
 
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
@@ -138,18 +150,12 @@ public class ScheduleDevelopmentBean {
         System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
-            /*if (currRoute.route().getOrigin() == origin && currRoute.route().getDestination() == destination) {
-                if (minCost == baseCost)
-                    result = currRoute;
-            }
-            else {*/
-                //Recursive search for route to destination
-                //Stop if cost of route is > basecost
-                HypoRoute calcRoute = getRouteTo(currRoute.route().getDestination(), minCost, currRoute);
-                if (calcRoute != null) {
-                    result = calcRoute;
-                    minCost = result.costDistance;
-                //}
+            //Recursive search for route to destination
+            //Stop if cost of route is > basecost
+            HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
+            if (calcRoute != null) {
+                result = calcRoute;
+                minCost = result.costDistance;
             }
         }
         return result;
@@ -157,23 +163,21 @@ public class ScheduleDevelopmentBean {
 
     private HypoRoute getRouteTo(Airport destination, double baseCost, HypoRoute calcRoute) {
         List<HypoRoute> branches = getHypoRoutesStarting(calcRoute.latestRoute().getDestination());
-        //HypoRoute calcRoute = new HypoRoute();
-        //calcRoute.copy(startRoute);
+        if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
+            if (calcRoute.costDistance <= baseCost) { //This is the most effective route
+                System.out.println("END : " + calcRoute.print() + " | " + destination.getName());
+                return calcRoute;
+            }
+        }
         for (int i = 0; i < branches.size(); i++) {
-            HypoRoute currRoute = branches.get(i);
-            if (!calcRoute.isOriginAlongRoute(currRoute.route().getDestination())) { //Prevent going backwards
-                if (currRoute.route().getDestination() == destination) { //Reached end
-                    //if (calcRoute.costDistance <= baseCost) { //This is the most effective route
-                        System.out.println("END : " + calcRoute.print());
-                        return calcRoute.addShortRRoute(currRoute);
-                    /*}
-                    else {
-                        return null;
-                    }*/
-                }
-                if (calcRoute.costDistance + currRoute.costDistance <= baseCost) { //More efficient route than baseline so far
+            HypoRoute currBranch = branches.get(i);
+            if (!calcRoute.isOriginAlongRoute(currBranch.route().getDestination())) { //Prevent going backwards
+                if (calcRoute.costDistance + currBranch.costDistance <= baseCost) { //More efficient route than baseline so far
                     System.out.println("FINDING: " + calcRoute.print());
-                    return getRouteTo(destination, baseCost, calcRoute.addShortRRoute(currRoute));
+                    return getRouteTo(destination, baseCost, calcRoute.addShortRRoute(currBranch));
+                }
+                else {
+                    System.out.println("DEAD END: " + calcRoute.print() + " & " + currBranch.print() + " vs " + destination.getName());
                 }
             }
         }
@@ -195,6 +199,13 @@ public class ScheduleDevelopmentBean {
         return false;
     }
 
+    public void saveSuggestedRoutes() {
+        for (int i = 0; i < suggestedRoutes.size(); i++) {
+            em.persist(suggestedRoutes.get(i));
+        }
+        em.flush();
+    }
+
     private void debugAllRoutes(List<HypoRoute> routeList) {
         System.out.println("-----------------------ALL ROUTES-----------------------");
         for (int i = 0; i < routeList.size(); i++) {
@@ -213,6 +224,7 @@ public class ScheduleDevelopmentBean {
         generateRoutes();
         //debugAllRoutes(allRoutes);
         selectGoodRoutes();
+        saveSuggestedRoutes();
         System.gc();
     }
 }
