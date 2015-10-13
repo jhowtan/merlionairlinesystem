@@ -25,27 +25,29 @@ public class BookFlightBean {
     }
 
     public PNR bookFlights(List<BookingClass> bookingClasses, List<String> passengerNames) throws BookingException {
-
         // Ensure enough seats available on all booking class and flights before proceeding
-        em.getTransaction().begin();
         for (BookingClass bookingClass : bookingClasses) {
             if (bookingClass.getAllocation() < passengerNames.size()) {
-                em.getTransaction().rollback();
-                throw new BookingException();
+                throw new BookingException("Not enough seats on booking class.");
             }
-            bookingClass.setAllocation(bookingClass.getAllocation() - passengerNames.size());
-            em.merge(bookingClass);
+            if (!bookingClass.isOpen()) {
+                throw new BookingException("Booking class not open!");
+            }
             SeatConfigObject seatConfigObject = new SeatConfigObject();
             seatConfigObject.parse(bookingClass.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
             int totalSeatsInClass = seatConfigObject.getSeatsInClass(bookingClass.getTravelClass());
-            int seatsBookedInClass = (int) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", bookingClass.getFlight()).setParameter("travelClass", bookingClass.getTravelClass()).getSingleResult();
-            int seatsLeftInClass = totalSeatsInClass - seatsBookedInClass;
+            long seatsBookedInClass = (long) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", bookingClass.getFlight()).setParameter("travelClass", bookingClass.getTravelClass()).getSingleResult();
+            long seatsLeftInClass = totalSeatsInClass - seatsBookedInClass;
             if (seatsLeftInClass < passengerNames.size()) {
-                em.getTransaction().rollback();
-                throw new BookingException();
+                throw new BookingException("Not enough seats on flight.");
             }
         }
-        em.getTransaction().commit();
+
+        // Subtract seats from booking class
+        for (BookingClass bookingClass : bookingClasses) {
+            bookingClass.setAllocation(bookingClass.getAllocation() - passengerNames.size());
+            em.merge(bookingClass);
+        }
 
         PNR pnr = new PNR();
         List<Itinerary> itineraries = new ArrayList<>();
@@ -63,6 +65,7 @@ public class BookFlightBean {
             itinerary.setFlightCode(flight.getCode());
             itineraries.add(itinerary);
         }
+        pnr.setItineraries(itineraries);
 
         // Set passengers
         pnr.setPassengers(passengerNames);
@@ -74,12 +77,13 @@ public class BookFlightBean {
                 eTicket.setBookingClass(bookingClass);
                 eTicket.setFlight(bookingClass.getFlight());
                 eTicket.setPassengerName(passengerName);
+                eTicket.setTravelClass(bookingClass.getTravelClass());
                 em.persist(eTicket);
                 em.flush();
                 try {
                     SpecialServiceRequest ssr = new SpecialServiceRequest();
                     ssr.setPassengerNumber(pnrBean.getPassengerNumber(pnr, passengerName));
-                    ssr.setItineraryNumber(pnrBean.getItineraryNumber(pnr, bookingClass.getFlight()));
+                    ssr.setItineraryNumber(pnrBean.getItineraryNumber(pnr, bookingClass.getFlight().getCode()));
                     ssr.setActionCode("TKNA");
                     ssr.setValue(eTicket.getId().toString());
                     SSRs.add(ssr);
@@ -89,7 +93,6 @@ public class BookFlightBean {
             }
         }
         pnr.setCreated(new Date());
-        pnr.setItineraries(itineraries);
         pnr.setSpecialServiceRequests(SSRs);
         em.persist(pnr);
         em.flush();
