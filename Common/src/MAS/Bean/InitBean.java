@@ -188,9 +188,13 @@ public class InitBean {
                 long ct8Id = routeBean.createCity("Bangkok", ctry8Id);
                 long ap8Id = routeBean.createAirport("Suvarnabhumi Airport", 13.6899991, 100.75011240000003, "BKK", 1, ct8Id);
 
-                long ctry9Id = routeBean.createCountry("China", "CHN");
-                long ct9Id = routeBean.createCity("Beijing", ctry9Id);
-                long ap9Id = routeBean.createAirport("Beijing Capital International Airport", 40.0798573, 116.60311209999997, "HKG", 3, ct9Id);
+//                long ctry9Id = routeBean.createCountry("China", "CHN");
+//                long ct9Id = routeBean.createCity("Beijing", ctry9Id);
+//                long ap9Id = routeBean.createAirport("Beijing Capital International Airport", 40.0798573, 116.60311209999997, "BJS", 3, ct9Id);
+
+                long ctry10Id = routeBean.createCountry("Spain", "SPA");
+                long ct10Id = routeBean.createCity("Barcelona", ctry10Id);
+                long ap10Id = routeBean.createAirport("Barcelona–El Prat Airport", 41.297445, 2.083294099999989, "BCN", 0, ct10Id);
 
                 /*long routeId = routeBean.createRoute(apId, ap2Id);
 
