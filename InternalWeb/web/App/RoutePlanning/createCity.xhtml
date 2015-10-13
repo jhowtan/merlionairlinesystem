@@ -35,6 +35,12 @@
                                         </h:inputText>
                                         <h:message for="cityName" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!cityId.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="cityId">IATA City Code</label>
+                                        <h:inputText id="cityId" binding="#{cityId}" value="#{createCityManagedBean.cityId}" styleClass="form-control" pt:placeholder="e.g. SGP" required="true" requiredMessage="City code is required.">
+                                        </h:inputText>
+                                        <h:message for="cityId" styleClass="help-block" />
+                                    </div>
                                     <div class="form-group col-lg-12">
                                         <label class="control-label" for="country">Country</label>
                                         <br/>
