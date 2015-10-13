@@ -32,8 +32,8 @@ public class PNRBean {
         List<Itinerary> itineraries = pnr.getItineraries();
         for (Itinerary itinerary : itineraries) {
             if (itinerary.getFlightCode().equals(flightCode)) {
+                return itineraries.indexOf(itinerary);
             }
-            return itineraries.indexOf(itinerary);
         }
         throw new NotFoundException();
     }
