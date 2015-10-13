@@ -3,17 +3,17 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
+import MAS.Entity.Airport;
+import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Singleton
 @Startup
@@ -54,22 +54,72 @@ public class InitBean {
                 }
             }
 
-            // INITIALIZE COUNTRIES
-            for (int i = 0; i < Constants.ISO_COUNTRIES_NAME.length; i++) {
-                routeBean.createCountry(Constants.ISO_COUNTRIES_NAME[i], Constants.ISO_COUNTRIES_CODE[i]);
+            // INITIALIZE ALL COUNTRIES
+            for (int i = 0; i < Constants.COUNTRY_CODES.length; i++) {
+                routeBean.createCountry(Constants.COUNTRY_CODES[i], Constants.COUNTRY_NAMES[i]);
             }
 
+            // INITIALIZE SOME CITIES
+            try {
+                routeBean.createCity("BNE", "Brisbane", "AUS", "Australia/Brisbane");
+                routeBean.createCity("MEL", "Melbourne", "AUS", "Australia/Melbourne");
+                routeBean.createCity("PER", "Perth", "AUS", "Australia/Perth");
+                routeBean.createCity("DAC", "Dhaka", "BGD", "Asia/Dhaka");
+                routeBean.createCity("SAO", "Sao Paulo", "BRA", "America/Sao_Paulo");
+                routeBean.createCity("BWN", "Bandar Seri Begawan", "BRN", "Asia/Brunei");
+                routeBean.createCity("BLC", "Bali", "CMR", "Africa/Douala");
+                routeBean.createCity("YTO", "Toronto", "CAN", "America/Toronto");
+                routeBean.createCity("BJS", "Beijing", "CHN", "Asia/Shanghai");
+                routeBean.createCity("KMG", "Kunming", "CHN", "Asia/Shanghai");
+                routeBean.createCity("SHA", "Shanghai", "CHN", "Asia/Shanghai");
+                routeBean.createCity("FRA", "Frankfurt", "DEU", "Europe/Berlin");
+                routeBean.createCity("MUC", "Munich", "DEU", "Europe/Berlin");
+                routeBean.createCity("HKG", "Hong Kong", "HKG", "Asia/Hong_Kong");
+                routeBean.createCity("BOM", "Mumbai", "IND", "Asia/Kolkata");
+                routeBean.createCity("CCU", "Kolkata", "IND", "Asia/Kolkata");
+                routeBean.createCity("DEL", "New Delhi", "IND", "Asia/Kolkata");
+                routeBean.createCity("MAA", "Chennai", "IND", "Asia/Kolkata");
+                routeBean.createCity("JKT", "Jakarta", "IDN", "Asia/Jakarta");
+                routeBean.createCity("SUB", "Surabaya", "IDN", "Asia/Jakarta");
+                routeBean.createCity("MIL", "Milan", "ITA", "Europe/Rome");
+                routeBean.createCity("FUK", "Fukuoka", "JPN", "Asia/Tokyo");
+                routeBean.createCity("TYO", "Tokyo", "JPN", "Asia/Tokyo");
+                routeBean.createCity("KUL", "Kuala Lumpur", "MYS", "Asia/Kuala_Lumpur");
+                routeBean.createCity("RGN", "Yangon", "MMR", "Asia/Rangoon");
+                routeBean.createCity("AMS", "Amsterdam", "NLD", "Europe/Amsterdam");
+                routeBean.createCity("CHC", "Christchurch", "NZL", "Pacific/Auckland");
+                routeBean.createCity("SIN", "Singapore", "SGP", "Asia/Singapore");
+                routeBean.createCity("CPT", "Cape Town", "ZAF", "Africa/Johannesburg");
+                routeBean.createCity("JNB", "Johannesburg", "ZAF", "Africa/Johannesburg");
+                routeBean.createCity("SEL", "Seoul", "KOR", "Asia/Seoul");
+                routeBean.createCity("BCN", "Barcelona", "ESP", "Europe/Madrid");
+                routeBean.createCity("CMB", "Colombo", "LKA", "Asia/Colombo");
+                routeBean.createCity("ZRH", "Zurich", "CHE", "Europe/Zurich");
+                routeBean.createCity("TPE", "Taipei", "TWN", "Asia/Taipei");
+                routeBean.createCity("BKK", "Bangkok", "THA", "Asia/Bangkok");
+                routeBean.createCity("IST", "Istanbul", "TUR", "Europe/Istanbul");
+                routeBean.createCity("DXB", "Dubai", "ARE", "Asia/Dubai");
+                routeBean.createCity("LON", "London", "GBR", "Europe/London");
+                routeBean.createCity("MAN", "Manchester", "GBR", "Europe/London");
+                routeBean.createCity("CHI", "Chicago", "USA", "America/Chicago");
+                routeBean.createCity("HOU", "Houston", "USA", "America/Chicago");
+                routeBean.createCity("MIA", "Miami", "USA", "America/New_York");
+                routeBean.createCity("MXA", "Manila", "USA", "America/Chicago");
+                routeBean.createCity("NYC", "New York", "USA", "America/New_York");
+                routeBean.createCity("OCW", "Washington", "USA", "America/New_York");
+                routeBean.createCity("PHT", "Paris", "USA", "America/Chicago");
+                routeBean.createCity("SFO", "San Francisco", "USA", "America/Los_Angeles");
+                routeBean.createCity("HAN", "Hanoi", "VNM", "Asia/Ho_Chi_Minh");
+                routeBean.createCity("SGN", "Ho Chi Minh City", "VNM", "Asia/Ho_Chi_Minh");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             try {
-                String ctryId = routeBean.createCountry("Singapore", "SGP");
-                String ctId = routeBean.createCity("Singapore", ctryId);
-                String apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
+                Airport changiAirport = routeBean.createAirport("SIN", "Changi Airport", "SIN", 1.3644202, 103.9915308, 5);
+                Airport heathrowAirport = routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 3);
 
-                String ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
-                String ct2Id = routeBean.createCity("London", ctry2Id);
-                String ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
-
-                long routeId = routeBean.createRoute(apId, ap2Id);
+                long routeId = routeBean.createRoute(changiAirport.getId(), heathrowAirport.getId());
 
                 List<Aircraft> allAircraft = fleetBean.getAllAircraft();
                 long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
@@ -198,6 +248,7 @@ public class InitBean {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
     }
 

@@ -13,7 +13,9 @@
                     <h1 class="page-header">Create City</h1>
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation"><h:link outcome="/App/RoutePlanning/cities">Cities</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/countries">Countries</h:link></li>
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/createCity">Create City</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCountry">Create Country</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert alert-info">

@@ -27,8 +27,10 @@ public class CreateCityManagedBean {
     }
     private List<Country> countries;
 
+    private String cityId;
     private String cityName;
     private String countryId;
+    private String timezone;
 
     @PostConstruct
     public void init() {
@@ -36,10 +38,12 @@ public class CreateCityManagedBean {
     }
 
     public void createCity() throws NotFoundException {
-        routeBean.createCity(getCityName(), getCountryId());
+        routeBean.createCity(cityId, cityName, countryId, timezone);
         authManagedBean.createAuditLog("Created new city: " + getCityName(), "create_city");
         setCityName(null);
         setCountryId(null);
+        setTimezone(null);
+        setCityId(null);
         FacesMessage m = new FacesMessage("City created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -71,5 +75,21 @@ public class CreateCityManagedBean {
 
     public void setCountries(List<Country> countries) {
         this.countries = countries;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

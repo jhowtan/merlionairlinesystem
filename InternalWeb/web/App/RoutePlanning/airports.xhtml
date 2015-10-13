@@ -27,7 +27,6 @@
                             <th>Code</th>
                             <th>City</th>
                             <th>Country</th>
-                            <th>Coordinates</th>
                             <th>No. of Hangars</th>
                             <th>Action</th>
                         </tr>
@@ -36,10 +35,9 @@
                         <ui:repeat value="#{airportsManagedBean.getAllAirports()}" var="ap">
                             <tr>
                                 <td>#{ap.name}</td>
-                                <td>#{ap.code}</td>
+                                <td>#{ap.id}</td>
                                 <td>#{ap.city.getName()}</td>
                                 <td>#{ap.city.country.getName()}</td>
-                                <td>#{ap.latitude}, #{ap.longitude}</td>
                                 <td>#{ap.hangars}</td>
                                 <td>
                                     <h:form>

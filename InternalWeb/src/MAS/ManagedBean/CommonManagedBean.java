@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @ManagedBean
 public class CommonManagedBean {
@@ -33,6 +34,19 @@ public class CommonManagedBean {
         }
         try {
             return new SimpleDateFormat(format).format(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String formatDate(String format, String timezone, Date date) {
+        if (date == null) {
+            date = new Date();
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+            return sdf.format(date);
         } catch (Exception e) {
             return null;
         }

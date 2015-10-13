@@ -36,7 +36,7 @@ public class CreateAirportManagedBean {
     }
 
     public void createAirport() throws NotFoundException {
-        routeBean.createAirport(airportName, latitude, longitude, code, hangars, cityId);
+        routeBean.createAirport(code, airportName, cityId, latitude, longitude, hangars);
         authManagedBean.createAuditLog("Created new airport: " + airportName, "create_airport");
         setAirportName(null);
         setCode(null);

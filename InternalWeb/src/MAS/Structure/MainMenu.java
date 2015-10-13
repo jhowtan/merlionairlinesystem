@@ -32,8 +32,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Route Planning", "road",
-                        new MenuEntry("Countries", null, Pages.LIST_COUNTRIES, Pages.CREATE_COUNTRY),
-                        new MenuEntry("Cities", null, Pages.LIST_CITIES, Pages.CREATE_CITY),
+                        new MenuEntry("Cities & Countries", null, Pages.LIST_CITIES, Pages.CREATE_CITY, Pages.LIST_COUNTRIES, Pages.CREATE_COUNTRY),
                         new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS),
                         new MenuEntry("Routes", null, Pages.LIST_ROUTES, Pages.VISUALIZE_ROUTES, Pages.CREATE_ROUTES, Pages.UPDATE_ROUTES),
                         new MenuEntry("Aircraft Assignment", null, Pages.LIST_AIRCRAFT_ASSIGNMENT, Pages.CREATE_AIRCRAFT_ASSIGNMENT, Pages.UPDATE_AIRCRAFT_ASSIGNMENT)

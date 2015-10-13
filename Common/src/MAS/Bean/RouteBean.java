@@ -21,21 +21,24 @@ public class RouteBean {
     public RouteBean() {
     }
 
-    //-----------------AIRPORTS, CITIES, COUNTRIES---------------------------
-    public String createAirport(String name, double latitude,
-                              double longitude, String code, int hangars, String cityCode) throws NotFoundException{
+    public Airport createAirport(String id, String name, String cityId, double latitude, double longitude, int hangars) throws NotFoundException {
         Airport airport = new Airport();
+        airport.setId(id);
         airport.setName(name);
-        City city = em.find(City.class, cityCode);
+        City city = em.find(City.class, cityId);
         if (city == null) throw new NotFoundException();
         airport.setCity(city);
         airport.setHangars(hangars);
-        airport.setId(code);
         airport.setLatitude(latitude);
         airport.setLongitude(longitude);
         em.persist(airport);
         em.flush();
-        return airport.getId();
+        return airport;
+    }
+
+    public void updateAirport(Airport airport) throws NotFoundException {
+        if (airport.getId() == null || em.find(Airport.class, airport.getId()) == null) throw new NotFoundException();
+        em.merge(airport);
     }
 
     public void removeAirport(String id) throws NotFoundException {
@@ -44,32 +47,20 @@ public class RouteBean {
         em.remove(airport);
     }
 
-    public void changeAirportName(String id, String newName) throws NotFoundException {
-        Airport airport = em.find(Airport.class, id);
-        if (airport == null) throw new NotFoundException();
-        airport.setName(newName);
-        em.persist(airport);
-    }
-
-    public void changeHangarCount(String id, int numHangars) throws NotFoundException {
-        Airport airport = em.find(Airport.class, id);
-        if (airport == null) throw new NotFoundException();
-        airport.setHangars(numHangars);
-        em.persist(airport);
-    }
-
     public Airport getAirport(String id) throws NotFoundException {
         Airport airport = em.find(Airport.class, id);
         if (airport == null) throw new NotFoundException();
         return airport;
     }
 
-    public String createCity(String name, String countryId) throws NotFoundException {
+    public String createCity(String id, String name, String countryId, String timezone) throws NotFoundException {
         City city = new City();
+        city.setId(id);
         city.setName(name);
         Country country = em.find(Country.class, countryId);
         if (country == null) throw new NotFoundException();
         city.setCountry(country);
+        city.setTimezone(timezone);
         em.persist(city);
         em.flush();
 
@@ -79,7 +70,7 @@ public class RouteBean {
     public void removeCity(String id) throws NotFoundException {
         City city = em.find(City.class, id);
         if (city == null) throw new NotFoundException();
-        //Check for airports in this city
+        // @TODO: Check for airports in this city
         em.remove(city);
     }
 
@@ -93,19 +84,20 @@ public class RouteBean {
         return em.createQuery("SELECT c from City c", City.class).getResultList();
     }
 
-    public String createCountry(String name, String code) {
+    public Country createCountry(String id, String name) {
         Country country = new Country();
+        country.setId(id);
         country.setName(name);
-        country.setId(code);
         em.persist(country);
         em.flush();
-        return country.getId();
+        return country;
     }
 
+    // @TODO: Refactor
     public void removeCountry(String id) throws NotFoundException {
         Country country = em.find(Country.class, id);
         if (country == null) throw new NotFoundException();
-        //Check for cities in this country
+        // Check for cities in this country
         em.remove(country);
     }
 
