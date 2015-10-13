@@ -3,7 +3,6 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -62,13 +61,13 @@ public class InitBean {
 
 
             try {
-                long ctryId = routeBean.createCountry("Singapore", "SGP");
-                long ctId = routeBean.createCity("Singapore", ctryId);
-                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
+                String ctryId = routeBean.createCountry("Singapore", "SGP");
+                String ctId = routeBean.createCity("Singapore", ctryId);
+                String apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
 
-                long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
-                long ct2Id = routeBean.createCity("London", ctry2Id);
-                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
+                String ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
+                String ct2Id = routeBean.createCity("London", ctry2Id);
+                String ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
 
                 long routeId = routeBean.createRoute(apId, ap2Id);
 

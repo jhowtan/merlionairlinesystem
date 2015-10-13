@@ -33,7 +33,7 @@ public class CreateUserManagedBean {
     private String lastName;
     private String email;
     private String phone;
-    private Long baseAirport;
+    private String baseAirport;
 
     private List<Role> roles;
     private Map<Long, Boolean> rolesMap;
@@ -147,11 +147,11 @@ public class CreateUserManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-    public Long getBaseAirport() {
+    public String getBaseAirport() {
         return baseAirport;
     }
 
-    public void setBaseAirport(Long baseAirport) {
+    public void setBaseAirport(String baseAirport) {
         this.baseAirport = baseAirport;
     }
 }

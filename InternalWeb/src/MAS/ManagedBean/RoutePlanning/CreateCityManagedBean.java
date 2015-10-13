@@ -28,7 +28,7 @@ public class CreateCityManagedBean {
     private List<Country> countries;
 
     private String cityName;
-    private long countryId;
+    private String countryId;
 
     @PostConstruct
     public void init() {
@@ -39,7 +39,7 @@ public class CreateCityManagedBean {
         routeBean.createCity(getCityName(), getCountryId());
         authManagedBean.createAuditLog("Created new city: " + getCityName(), "create_city");
         setCityName(null);
-        setCountryId(0);
+        setCountryId(null);
         FacesMessage m = new FacesMessage("City created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -57,11 +57,11 @@ public class CreateCityManagedBean {
         this.cityName = cityName;
     }
 
-    public long getCountryId() {
+    public String getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(long countryId) {
+    public void setCountryId(String countryId) {
         this.countryId = countryId;
     }
 

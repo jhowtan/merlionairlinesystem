@@ -68,7 +68,7 @@ public class UpdateMaintenanceSlotManagedBean {
         System.out.println(timestamp);
         aircraftMaintenanceSlotBean.changeSlotDuration(slot.getId(), duration);
         aircraftMaintenanceSlotBean.changeSlotStartTime(slot.getId(), timestamp);
-        authManagedBean.createAuditLog("Updated maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getCode() + " @ " + timestamp, "create_maintenance_slot");
+        authManagedBean.createAuditLog("Updated maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
         FacesMessage m = new FacesMessage("Maintenance slot updated successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);

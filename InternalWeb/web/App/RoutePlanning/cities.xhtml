@@ -23,16 +23,20 @@
                     <table class="table" id="cities_table">
                         <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>IATA Code</th>
+                            <th>City</th>
                             <th>Country</th>
+                            <th>Timezone</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <ui:repeat value="#{cityManagedBean.getAllCities()}" var="ct">
                             <tr>
+                                <td>#{ct.id}</td>
                                 <td>#{ct.name}</td>
-                                <td>#{ct.country.getName()}</td>
+                                <td>#{ct.country}</td>
+                                <td>#{ct.timezone}</td>
                                 <td>
                                     <h:form>
                                         <h:commandLink action="#{cityManagedBean.delete(ct.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete city: #{ct.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>

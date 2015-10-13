@@ -23,16 +23,16 @@
                     <table class="table" id="countries_table">
                         <thead>
                         <tr>
+                            <th>ISO Code</th>
                             <th>Name</th>
-                            <th>Code</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <ui:repeat value="#{countryManagedBean.getAllCountries()}" var="ct">
                             <tr>
+                                <td>#{ct.id}</td>
                                 <td>#{ct.name}</td>
-                                <td>#{ct.code}</td>
                                 <td>
                                     <h:form>
                                         <h:commandLink action="#{countryManagedBean.delete(ct.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete country: #{ct.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>

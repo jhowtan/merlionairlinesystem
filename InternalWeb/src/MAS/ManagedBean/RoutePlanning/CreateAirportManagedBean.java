@@ -25,7 +25,7 @@ public class CreateAirportManagedBean {
     private String code;
     private double latitude;
     private double longitude;
-    private long cityId;
+    private String cityId;
     private int hangars;
 
     private List<City> cities;
@@ -42,7 +42,7 @@ public class CreateAirportManagedBean {
         setCode(null);
         setLatitude(0);
         setLongitude(0);
-        setCityId(0);
+        setCityId(null);
         setHangars(0);
         FacesMessage m = new FacesMessage("Airport created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -85,11 +85,11 @@ public class CreateAirportManagedBean {
         this.longitude = longitude;
     }
 
-    public long getCityId() {
+    public String getCityId() {
         return cityId;
     }
 
-    public void setCityId(long cityId) {
+    public void setCityId(String cityId) {
         this.cityId = cityId;
     }
 

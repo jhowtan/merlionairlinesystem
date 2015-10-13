@@ -78,8 +78,8 @@ public class RoutesManagedBean {
         ArrayList<MapRoute> mapRoutes = new ArrayList<>();
         for (Route route : routeBean.getAllRoutes()) {
             MapRoute r = new MapRoute();
-            r.origin = route.getOrigin().getCode();
-            r.destination = route.getDestination().getCode();
+            r.origin = route.getOrigin().getId();
+            r.destination = route.getDestination().getId();
             r.originLat = route.getOrigin().getLatitude();
             r.originLon = route.getOrigin().getLongitude();
             r.destinationLat = route.getDestination().getLatitude();

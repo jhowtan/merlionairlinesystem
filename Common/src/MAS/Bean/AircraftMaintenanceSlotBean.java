@@ -22,7 +22,7 @@ public class AircraftMaintenanceSlotBean {
     }
 
     //-----------------Maintenance slots---------------------------
-    public long createSlot(Date startTime, double duration, long airportId, long aircraftId) throws NotFoundException {
+    public long createSlot(Date startTime, double duration, String airportId, long aircraftId) throws NotFoundException {
         Airport airport = em.find(Airport.class, airportId);
         Aircraft aircraft = em.find(Aircraft.class, aircraftId);
         if (airport == null || aircraft == null) throw new NotFoundException();

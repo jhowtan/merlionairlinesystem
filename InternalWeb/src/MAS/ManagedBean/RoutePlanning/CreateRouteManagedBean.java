@@ -23,8 +23,8 @@ public class CreateRouteManagedBean {
 
     private List<Airport> airports;
 
-    private long originId;
-    private long destinationId;
+    private String originId;
+    private String destinationId;
 
     @PostConstruct
     public void init() {
@@ -35,8 +35,8 @@ public class CreateRouteManagedBean {
         routeBean.createRoute(originId, destinationId);
         authManagedBean.createAuditLog("Created new route: " + routeBean.getAirport(originId).getName() + " - " +
                 routeBean.getAirport(destinationId).getName(), "create_route");
-        setOriginId(0);
-        setDestinationId(0);
+        setOriginId(null);
+        setDestinationId(null);
         FacesMessage m = new FacesMessage("Route created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -46,19 +46,19 @@ public class CreateRouteManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-    public long getOriginId() {
+    public String getOriginId() {
         return originId;
     }
 
-    public void setOriginId(long originId) {
+    public void setOriginId(String originId) {
         this.originId = originId;
     }
 
-    public long getDestinationId() {
+    public String getDestinationId() {
         return destinationId;
     }
 
-    public void setDestinationId(long destinationId) {
+    public void setDestinationId(String destinationId) {
         this.destinationId = destinationId;
     }
 
