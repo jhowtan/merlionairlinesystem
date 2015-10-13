@@ -55,6 +55,14 @@
                                         <h:inputText id="phone" binding="#{phone}" value="#{updateUserManagedBean.phone}" styleClass="form-control" required="true" pt:placeholder="91234567" requiredMessage="Phone is required." />
                                         <h:message for="phone" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!baseAirport.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="baseAirport">Base Airport</label>
+                                        <h:selectOneMenu styleClass="form-control" id="baseAirport" value="#{updateUserManagedBean.baseAirport}" binding="#{baseAirport}">
+                                            <f:selectItems value="#{updateUserManagedBean.retrieveAirports()}" var="ap"
+                                                           itemLabel="#{ap.code} - #{ap.name}" itemValue="#{ap.id}" />
+                                        </h:selectOneMenu>
+                                        <h:message for="baseAirport" styleClass="help-block" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

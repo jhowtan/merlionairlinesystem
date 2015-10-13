@@ -2,10 +2,7 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.Utils;
-import MAS.Entity.Permission;
-import MAS.Entity.Role;
-import MAS.Entity.User;
-import MAS.Entity.Workgroup;
+import MAS.Entity.*;
 import MAS.Exception.InvalidLoginException;
 import MAS.Exception.InvalidResetHashException;
 import MAS.Exception.NotFoundException;
@@ -48,7 +45,7 @@ public class UserBean {
         return role.getId();
     }
 
-    public long createUser(String username, String firstName, String lastName, String email, String phone) {
+    public long createUser(String username, String firstName, String lastName, String email, String phone, Airport baseAirport) {
         User user = new User();
         user.setUsername(username.toLowerCase());
         user.setSalt(Utils.generateSalt());
@@ -60,6 +57,7 @@ public class UserBean {
         user.setDeleted(false);
         user.setResetHash(Utils.generateSalt());
         user.setResetExpiry(Utils.hoursFromNow(72));
+        user.setBaseAirport(baseAirport);
         em.persist(user);
         em.flush();
 
@@ -203,7 +201,7 @@ public class UserBean {
         em.persist(user);
     }
 
-    public long adminUpdateUserInfo(long id, String firstName, String lastName, String email, String phone)
+    public long adminUpdateUserInfo(long id, String firstName, String lastName, String email, String phone, Airport baseAirport)
         throws NotFoundException {
         User user = em.find(User.class, id);
         if (user == null) throw new NotFoundException();
@@ -211,6 +209,7 @@ public class UserBean {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPhone(phone);
+        user.setBaseAirport(baseAirport);
         em.persist(user);
 
         return user.getId();

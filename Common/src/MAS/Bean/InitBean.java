@@ -45,17 +45,67 @@ public class InitBean {
         if (!attributesBean.getBooleanAttribute("DATABASE_INITIALIZED", false)) {
             attributesBean.setBooleanAttribute("DATABASE_INITIALIZED", true);
 
+            // INITIALIZE ALL PERMISSIONS
             List<Long> permissionIds = new ArrayList<>();
-            for(Field permissionField : Permissions.class.getDeclaredFields()) {
+            for (Field permissionField : Permissions.class.getDeclaredFields()) {
                 try {
                     permissionIds.add(roleBean.createPermission((String) permissionField.get(null)));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
+
+            // INITIALIZE COUNTRIES
+            for (int i = 0; i < Constants.ISO_COUNTRIES_NAME.length; i++) {
+                routeBean.createCountry(Constants.ISO_COUNTRIES_NAME[i], Constants.ISO_COUNTRIES_CODE[i]);
+            }
+
+
+            try {
+                long ctryId = routeBean.createCountry("Singapore", "SGP");
+                long ctId = routeBean.createCity("Singapore", ctryId);
+                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
+
+                long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
+                long ct2Id = routeBean.createCity("London", ctry2Id);
+                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
+
+                long routeId = routeBean.createRoute(apId, ap2Id);
+
+                List<Aircraft> allAircraft = fleetBean.getAllAircraft();
+                long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
+                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
+
+                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
+                    String flight1Code = "MA11";
+                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
+                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
+                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
+
+                    String flight2Code = "MA12";
+                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
+                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
+                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
+
+//                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
+//                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
+//                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival1Time, 2.0, ap2Id, ac1Id));
+//                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival2Time, 2.0, ap2Id, ac2Id));
+
+//                    if (bookingClassBean.getAllBookingClasses().size() == 0) {
+//                        bookingClassBean.createBookingClass("Y", 40, 3, fareRuleBean.getAllFareRules().get(0).getId(), flight1Id);
+//                        bookingClassBean.createBookingClass("Z", 20, 2, fareRuleBean.getAllFareRules().get(1).getId(), flight1Id);
+//                        bookingClassBean.createBookingClass("C", 20, 3, fareRuleBean.getAllFareRules().get(2).getId(), flight2Id);
+//                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             try {
                 Long roleId = roleBean.createRole("Super Admin", permissionIds);
-                Long userId = userBean.createUser("admin", "Jonathan", "Lau", "merlionairlines+admin@gmail.com", "+65 6555-7777");
+                Long userId = userBean.createUser("admin", "Jonathan", "Lau", "merlionairlines+admin@gmail.com", "+65 6555-7777", routeBean.findAirportByCode("SIN"));
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
 
@@ -64,7 +114,7 @@ public class InitBean {
                 airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_ROUTES).getId());
                 airlinePlannerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FLIGHT).getId());
                 roleId = roleBean.createRole("Airline Planner", airlinePlannerPermissions);
-                userId = userBean.createUser("daryl", "Daryl", "Ho", "merlionairlines+daryl@gmail.com", "+65 6555-8888");
+                userId = userBean.createUser("daryl", "Daryl", "Ho", "merlionairlines+daryl@gmail.com", "+65 6555-8888", routeBean.findAirportByCode("SIN"));
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
 
@@ -72,7 +122,7 @@ public class InitBean {
                 revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FARE_RULES).getId());
                 revenueManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_BOOKING_CLASSES).getId());
                 roleId = roleBean.createRole("Revenue Manager", revenueManagerPermissions);
-                userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999");
+                userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999", routeBean.findAirportByCode("SIN"));
                 userBean.setPassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
             } catch (Exception e) {
@@ -146,48 +196,6 @@ public class InitBean {
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 200000000, "Misc Fees", -1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                long ctryId = routeBean.createCountry("Singapore", "SGP");
-                long ctId = routeBean.createCity("Singapore", ctryId);
-                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
-
-                long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
-                long ct2Id = routeBean.createCity("London", ctry2Id);
-                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
-
-                long routeId = routeBean.createRoute(apId, ap2Id);
-
-                List<Aircraft> allAircraft = fleetBean.getAllAircraft();
-                long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
-                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
-
-                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
-                    String flight1Code = "MA11";
-                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
-                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
-                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
-
-                    String flight2Code = "MA12";
-                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
-                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
-                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
-
-//                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
-//                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
-//                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival1Time, 2.0, ap2Id, ac1Id));
-//                    System.out.println("maintenance slot: " + aircraftMaintenanceSlotBean.createSlot(arrival2Time, 2.0, ap2Id, ac2Id));
-
-//                    if (bookingClassBean.getAllBookingClasses().size() == 0) {
-//                        bookingClassBean.createBookingClass("Y", 40, 3, fareRuleBean.getAllFareRules().get(0).getId(), flight1Id);
-//                        bookingClassBean.createBookingClass("Z", 20, 2, fareRuleBean.getAllFareRules().get(1).getId(), flight1Id);
-//                        bookingClassBean.createBookingClass("C", 20, 3, fareRuleBean.getAllFareRules().get(2).getId(), flight2Id);
-//                    }
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

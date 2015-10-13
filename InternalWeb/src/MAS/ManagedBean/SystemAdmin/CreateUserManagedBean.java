@@ -1,7 +1,9 @@
 package MAS.ManagedBean.SystemAdmin;
 
 import MAS.Bean.RoleBean;
+import MAS.Bean.RouteBean;
 import MAS.Bean.UserBean;
+import MAS.Entity.Airport;
 import MAS.Entity.Role;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -20,6 +22,8 @@ public class CreateUserManagedBean {
     private UserBean userBean;
     @EJB
     private RoleBean roleBean;
+    @EJB
+    private RouteBean routeBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -29,6 +33,7 @@ public class CreateUserManagedBean {
     private String lastName;
     private String email;
     private String phone;
+    private Long baseAirport;
 
     private List<Role> roles;
     private Map<Long, Boolean> rolesMap;
@@ -36,6 +41,10 @@ public class CreateUserManagedBean {
     @PostConstruct
     public void init() {
         populateRoles();
+    }
+
+    public List<Airport> retrieveAirports() {
+        return routeBean.getAllAirports();
     }
 
     private void populateRoles() {
@@ -57,8 +66,8 @@ public class CreateUserManagedBean {
                 roleIds.add((Long) pair.getKey());
             }
         }
-        Long userId = userBean.createUser(username, firstName, lastName, email, phone);
         try {
+            Long userId = userBean.createUser(username, firstName, lastName, email, phone, routeBean.getAirport(baseAirport));
             userBean.setRoles(userId, roleIds);
         } catch (NotFoundException e) {
         }
@@ -70,7 +79,7 @@ public class CreateUserManagedBean {
         setLastName(null);
         setEmail(null);
         setPhone(null);
-
+        setBaseAirport(null);
         populateRoles();
 
         FacesMessage m = new FacesMessage("User created successfully.");
@@ -136,5 +145,13 @@ public class CreateUserManagedBean {
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public Long getBaseAirport() {
+        return baseAirport;
+    }
+
+    public void setBaseAirport(Long baseAirport) {
+        this.baseAirport = baseAirport;
     }
 }
