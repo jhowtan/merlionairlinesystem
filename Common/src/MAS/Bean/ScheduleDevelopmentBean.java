@@ -147,48 +147,45 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
-        System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
             //Recursive search for route to destination
             //Stop if cost of route is > basecost
             HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
-            if (calcRoute != null) {
+            if (calcRoute != null && calcRoute.costDistance <= minCost) {
                 result = calcRoute;
                 minCost = result.costDistance;
             }
         }
+        //System.out.println("Setting: " + result.print());
         return result;
     }
 
-    private HypoRoute getRouteTo(Airport destination, double baseCost, HypoRoute calcRoute) {
-        List<HypoRoute> allOptions = new ArrayList<>();
-        List<HypoRoute> branches = getHypoRoutesStarting(calcRoute.latestRoute().getDestination());
+    private HypoRoute getRouteTo(Airport destination, double minCost, HypoRoute calcRoute) {
         if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
-            if (calcRoute.costDistance <= baseCost) { //This is the most effective route
-                //System.out.println("END : " + calcRoute.print() + " | " + destination.getName());
-                allOptions.add(calcRoute);
+            if (calcRoute.costDistance <= minCost) { //This is the most effective route
+                //System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
+                return calcRoute;
             }
         }
+        List<HypoRoute> allOptions = new ArrayList<>();
+        List<HypoRoute> branches = getHypoRoutesStarting(calcRoute.latestRoute().getDestination());
         for (int i = 0; i < branches.size(); i++) {
             HypoRoute currBranch = branches.get(i);
             if (!calcRoute.isOriginAlongRoute(currBranch.route().getDestination())) { //Prevent going backwards
-                if (currBranch.route().getDestination() == destination) {
-                    if (calcRoute.costDistance <= baseCost) { //This is the most effective route
-                        System.out.println("END2 : " + calcRoute.print() + " & " + currBranch.print() + " | " + destination.getName());
-                        return calcRoute.addShortRRoute(currBranch);
-                    }
+                if (calcRoute.costDistance + currBranch.costDistance <= minCost) { //More efficient route than baseline so far
+                    //System.out.println("FINDING: " + calcRoute.print());
+                    HypoRoute newRoute = getRouteTo(destination, minCost, calcRoute.addShortRRoute(currBranch));
+                    if (newRoute != null)// && newRoute.costDistance <= minCost)
+                        allOptions.add(newRoute);
                 }
-                if (calcRoute.costDistance + currBranch.costDistance <= baseCost) { //More efficient route than baseline so far
-                    System.out.println("FINDING: " + calcRoute.print());
-                    allOptions.add(getRouteTo(destination, baseCost, calcRoute.addShortRRoute(currBranch)));//TODO: Cannot just return, need to hold and compare
-                }
-                else {
-                    System.out.println("DEAD END: " + calcRoute.print() + " & " + currBranch.print() + " vs " + destination.getName());
-                }
+//                else {
+//                    System.out.println("DEAD END: " + calcRoute.print() + " & " + currBranch.print() + " vs " + destination.getName());
+//                }
             }
         }
-        //http://www.codeproject.com/Articles/817376/Finding-Shortest-Path-Recursively
+
         if (allOptions.size() > 0) {
             HypoRoute bestRoute = minRouteInArray(allOptions);
             return bestRoute;
