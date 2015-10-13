@@ -163,7 +163,7 @@ public class ScheduleDevelopmentBean {
             //Recursive search for route to destination
             //Stop if cost of route is > basecost
             Airport nearHub = nearHub(destination);
-            if (nearHub != null) {
+            if (nearHub != null && nearHub != origin) {
                 return null;
             }
             HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
