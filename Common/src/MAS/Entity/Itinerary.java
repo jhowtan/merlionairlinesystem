@@ -2,6 +2,8 @@ package MAS.Entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Embeddable
@@ -31,6 +33,7 @@ public class Itinerary {
     private Date departureDate;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDepartureDate() {
         return departureDate;
     }
@@ -42,6 +45,7 @@ public class Itinerary {
     private Date arrivalDate;
 
     @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getArrivalDate() {
         return arrivalDate;
     }
