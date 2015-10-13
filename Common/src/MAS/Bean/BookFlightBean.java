@@ -27,7 +27,7 @@ public class BookFlightBean {
     public PNR bookFlights(List<BookingClass> bookingClasses, List<String> passengerNames) throws BookingException {
         // Ensure enough seats available on all booking class and flights before proceeding
         for (BookingClass bookingClass : bookingClasses) {
-            if (bookingClass.getAllocation() < passengerNames.size()) {
+            if (bookingClass.getAllocation() - bookingClass.getOccupied() < passengerNames.size()) {
                 throw new BookingException("Not enough seats on booking class.");
             }
             if (!bookingClass.isOpen()) {
@@ -39,13 +39,13 @@ public class BookFlightBean {
             long seatsBookedInClass = (long) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", bookingClass.getFlight()).setParameter("travelClass", bookingClass.getTravelClass()).getSingleResult();
             long seatsLeftInClass = totalSeatsInClass - seatsBookedInClass;
             if (seatsLeftInClass < passengerNames.size()) {
-                throw new BookingException("Not enough seats on flight.");
+                throw new BookingException("Not enough seats in travel class.");
             }
         }
 
         // Subtract seats from booking class
         for (BookingClass bookingClass : bookingClasses) {
-            bookingClass.setAllocation(bookingClass.getAllocation() - passengerNames.size());
+            bookingClass.setOccupied(bookingClass.getOccupied() + passengerNames.size());
             em.merge(bookingClass);
         }
 
