@@ -28,7 +28,7 @@
                             <th>City</th>
                             <th>Country</th>
                             <th>Timezone</th>
-                            <th>Current Time</th>
+                            <th>Local Time</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -37,7 +37,7 @@
                             <tr>
                                 <td>#{ct.name} (#{ct.id})</td>
                                 <td>#{ct.country.name} (#{ct.country.id})</td>
-                                <td>#{ct.timezone}</td>
+                                <td>#{commonManagedBean.timezoneNiceName(ct.timezone)}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", ct.timezone, null)}</td>
                                 <td>
                                     <h:form>
@@ -57,7 +57,7 @@
             $('#cities_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
                 ]
             });
         </script>

@@ -52,6 +52,10 @@ public class CommonManagedBean {
         }
     }
 
+    public String timezoneNiceName(String timezone) {
+        return TimeZone.getTimeZone(timezone).getDisplayName();
+    }
+
     public String formatMoney(double amount) {
         NumberFormat numberFormat = new DecimalFormat("#,###.00");
         return "$" + numberFormat.format(amount);
