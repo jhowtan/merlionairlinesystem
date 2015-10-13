@@ -10,8 +10,6 @@ import java.util.List;
 @TableGenerator(name = "bookingNumberTable", initialValue=234500000, allocationSize = 5)
 public class PNR {
 
-    private Date createdTimestamp;
-
     private long id;
 
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "bookingNumberTable")
@@ -35,25 +33,16 @@ public class PNR {
         this.id = Utils.convertBookingReference(bookingReference);
     }
 
+    private Date created;
+
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getCreatedTimestamp() {
-        return createdTimestamp;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
-        this.createdTimestamp = createdTimestamp;
-    }
-
-    private List<PNRItem> PNRItems;
-
-    @OneToMany
-    public List<PNRItem> getPNRItems() {
-        return PNRItems;
-    }
-
-    public void setPNRItems(List<PNRItem> PNRItems) {
-        this.PNRItems = PNRItems;
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     private String travelAgent;
@@ -66,4 +55,38 @@ public class PNR {
     public void setTravelAgent(String travelAgent) {
         this.travelAgent = travelAgent;
     }
+
+    private List<Itinerary> itineraries;
+
+    @ElementCollection
+    public List<Itinerary> getItineraries() {
+        return itineraries;
+    }
+
+    public void setItineraries(List<Itinerary> itineraries) {
+        this.itineraries = itineraries;
+    }
+
+    private List<SpecialServiceRequest> specialServiceRequests;
+
+    @ElementCollection
+    public List<SpecialServiceRequest> getSpecialServiceRequests() {
+        return specialServiceRequests;
+    }
+
+    public void setSpecialServiceRequests(List<SpecialServiceRequest> specialServiceRequests) {
+        this.specialServiceRequests = specialServiceRequests;
+    }
+
+    private List<String> passengers;
+
+    @ElementCollection
+    public List<String> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<String> passengers) {
+        this.passengers = passengers;
+    }
+
 }
