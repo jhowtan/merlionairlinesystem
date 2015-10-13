@@ -32,7 +32,7 @@ public class ScheduleDevelopmentBean {
     private List<AircraftMaintenanceSlot> suggestedMaint;
 
     private int reserveAircraft;
-    private double hubSavings = 0.20;
+    private double hubSavings = 0.40;
     private double maxRange = 0;
 
     public ScheduleDevelopmentBean() {
@@ -110,13 +110,50 @@ public class ScheduleDevelopmentBean {
 
     private void selectGoodRoutes() {
         int l = airportsToGo.size();
-        for (int i = 0; i < l; i++) {
+        for (int i = 0; i < l; i++) { //For all airports
             Airport origin = airportsToGo.get(i);
-            for (int j = 0; j < l; j++) {
-                if (j == i) continue;
-                Airport destination = airportsToGo.get(j);
+            List<HypoRoute> originRoutes = getHypoRoutesStarting(origin); //Get the routes starting from this airport
+            for (int j = 0; j < originRoutes.size(); j++) { //Iterate through it
+                HypoRoute baseRoute = originRoutes.get(j);
+                double baseCost = baseRoute.costDistance;
+                Airport destination = baseRoute.route.getDestination();
+                //Check any other more efficient routes vs. baseRoute
+                getCheapestRoute(origin, destination, baseCost, originRoutes);
             }
         }
+    }
+
+    private void addToSuggestedRoutes (List<HypoRoute> hypoRoutes) {
+
+    }
+
+    private List<HypoRoute> getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
+        List<HypoRoute> result = new ArrayList<>();
+        double minCost = baseCost;
+        for (int i = 0; i < startRoutes.size(); i++) {
+            HypoRoute currRoute = startRoutes.get(i);
+            if (currRoute.route.getOrigin() == origin && currRoute.route.getDestination() == destination) {
+                if (minCost == baseCost)
+                    result.add(currRoute);
+            }
+            else {
+
+            }
+        }
+        return result;
+    }
+
+    private List<HypoRoute> getRouteTo(Airport destination, double baseCost, List<HypoRoute> startRoute) {
+        return null;
+    }
+
+    private List<HypoRoute> getHypoRoutesStarting(Airport origin) {
+        List<HypoRoute> result = new ArrayList<>();
+        for (int i = 0; i < allRoutes.size(); i++) {
+            if (allRoutes.get(i).route.getOrigin() == origin)
+                result.add(allRoutes.get(i));
+        }
+        return result;
     }
 
     private boolean isHub(Airport airport) {
