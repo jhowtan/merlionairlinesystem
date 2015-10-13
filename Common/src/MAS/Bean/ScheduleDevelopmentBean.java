@@ -96,7 +96,7 @@ public class ScheduleDevelopmentBean {
                 double distance = Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
                         destination.getLatitude(), destination.getLongitude());
                 route.setDistance(distance);
-                hypoRoute.route = route;
+                hypoRoute.routes.add(route);
                 hypoRoute.actualDistance = distance;
                 hypoRoute.costDistance = distance * Constants.RANGE_INERTIA;
                 if (isHub(origin) || isHub(destination))
@@ -116,41 +116,41 @@ public class ScheduleDevelopmentBean {
             for (int j = 0; j < originRoutes.size(); j++) { //Iterate through it
                 HypoRoute baseRoute = originRoutes.get(j);
                 double baseCost = baseRoute.costDistance;
-                Airport destination = baseRoute.route.getDestination();
+                Airport destination = baseRoute.route().getDestination();
                 //Check any other more efficient routes vs. baseRoute
                 getCheapestRoute(origin, destination, baseCost, originRoutes);
             }
         }
     }
 
-    private void addToSuggestedRoutes (List<HypoRoute> hypoRoutes) {
-
-    }
-
-    private List<HypoRoute> getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
-        List<HypoRoute> result = new ArrayList<>();
+    private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
+        HypoRoute result = new HypoRoute();
         double minCost = baseCost;
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
-            if (currRoute.route.getOrigin() == origin && currRoute.route.getDestination() == destination) {
+            if (currRoute.route().getOrigin() == origin && currRoute.route().getDestination() == destination) {
                 if (minCost == baseCost)
-                    result.add(currRoute);
+                    result = currRoute;
             }
             else {
-
+                //Recursive search for route to destination
+                //Stop if cost of route is > basecost
+                HypoRoute calcRoute = getRouteTo(currRoute.route().getDestination(), currRoute.costDistance, currRoute);
+                if (calcRoute != null)
+                    result = calcRoute;
             }
         }
         return result;
     }
 
-    private List<HypoRoute> getRouteTo(Airport destination, double baseCost, List<HypoRoute> startRoute) {
+    private HypoRoute getRouteTo(Airport destination, double baseCost, HypoRoute startRoute) {
         return null;
     }
 
     private List<HypoRoute> getHypoRoutesStarting(Airport origin) {
         List<HypoRoute> result = new ArrayList<>();
         for (int i = 0; i < allRoutes.size(); i++) {
-            if (allRoutes.get(i).route.getOrigin() == origin)
+            if (allRoutes.get(i).route().getOrigin() == origin)
                 result.add(allRoutes.get(i));
         }
         return result;
@@ -165,7 +165,7 @@ public class ScheduleDevelopmentBean {
     private void debugAllRoutes() {
         System.out.println("ALL ROUTES-----------------------");
         for (int i = 0; i < allRoutes.size(); i++) {
-            System.out.println(allRoutes.get(i).route.getOrigin().getName() + " - " + allRoutes.get(i).route.getDestination().getName() + " : " + allRoutes.get(i).costDistance);
+            System.out.println(allRoutes.get(i).route().getOrigin().getName() + " - " + allRoutes.get(i).route().getDestination().getName() + " : " + allRoutes.get(i).costDistance);
         }
     }
 
