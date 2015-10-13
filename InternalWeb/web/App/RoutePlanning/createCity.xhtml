@@ -45,6 +45,15 @@
                                         </h:selectOneMenu>
                                         <h:message for="country" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!timezone.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="timezone">Timezone</label>
+                                        <h:selectOneMenu styleClass="form-control"
+                                                         id="timezone" binding="#{timezone}" value="#{createCityManagedBean.timezone}">
+                                            <f:selectItems value="#{createCityManagedBean.retrieveTimezone()}" var="tz"
+                                                           itemLabel="#{tz}" itemValue="#{tz}" />
+                                        </h:selectOneMenu>
+                                        <h:message for="timezone" styleClass="help-block" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.util.List;
+import java.util.TimeZone;
 
 @ManagedBean
 public class CreateCityManagedBean {
@@ -55,6 +56,10 @@ public class CreateCityManagedBean {
 
     public String getCityName() {
         return cityName;
+    }
+
+    public String[] retrieveTimezone() {
+        return TimeZone.getAvailableIDs();
     }
 
     public void setCityName(String cityName) {
