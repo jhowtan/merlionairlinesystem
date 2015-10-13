@@ -58,7 +58,7 @@ public class ScheduleDevelopmentBean {
                     maxRange = range;
             }
         }
-        maxRange *= 0.75;
+        maxRange *= 0.6;
     }
 
     public void addAirports(List<Long> apIds) throws NotFoundException {
