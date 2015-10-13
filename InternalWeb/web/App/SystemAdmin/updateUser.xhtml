@@ -59,7 +59,7 @@
                                         <label class="control-label" for="baseAirport">Base Airport</label>
                                         <h:selectOneMenu styleClass="form-control" id="baseAirport" value="#{updateUserManagedBean.baseAirport}" binding="#{baseAirport}">
                                             <f:selectItems value="#{updateUserManagedBean.retrieveAirports()}" var="ap"
-                                                           itemLabel="#{ap.code} - #{ap.name}" itemValue="#{ap.id}" />
+                                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="baseAirport" styleClass="help-block" />
                                     </div>
