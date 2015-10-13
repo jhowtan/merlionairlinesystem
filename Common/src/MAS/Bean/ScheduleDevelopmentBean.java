@@ -90,23 +90,30 @@ public class ScheduleDevelopmentBean {
             for (int j = 0; j < l; j++) {
                 if (j == i) continue;
                 Airport destination = airportsToGo.get(j);
-                HypoRoute hypoRoute = new HypoRoute();
-                Route route = new Route();
-                route.setOrigin(origin);
-                route.setDestination(destination);
-                double distance = Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
-                        destination.getLatitude(), destination.getLongitude());
-                route.setDistance(distance);
-                hypoRoute.routes.add(route);
-                hypoRoute.actualDistance = distance;
-                hypoRoute.costDistance = distance;// * Constants.RANGE_INERTIA;
-                if (isHub(origin) || isHub(destination))
+                HypoRoute hypoRoute = createNewHypoRoute(origin, destination);
+                if (isHub(origin))
                     hypoRoute.costDistance *= hubSavings;
-                if (distance > maxRange)
+                if (isHub(destination))
+                    hypoRoute.costDistance *= hubSavings;
+                if (hypoRoute.actualDistance > maxRange)
                     continue;
                 allRoutes.add(hypoRoute);
             }
         }
+    }
+
+    private HypoRoute createNewHypoRoute (Airport origin, Airport destination) {
+        HypoRoute hypoRoute = new HypoRoute();
+        Route route = new Route();
+        route.setOrigin(origin);
+        route.setDestination(destination);
+        double distance = Utils.calculateDistance(origin.getLatitude(), origin.getLongitude(),
+                destination.getLatitude(), destination.getLongitude());
+        route.setDistance(distance);
+        hypoRoute.routes.add(route);
+        hypoRoute.actualDistance = distance;
+        hypoRoute.costDistance = distance;// * Constants.RANGE_INERTIA;
+        return hypoRoute;
     }
 
     private void selectGoodRoutes() {
@@ -120,7 +127,9 @@ public class ScheduleDevelopmentBean {
                 double baseCost = baseRoute.costDistance;
                 Airport destination = baseRoute.route().getDestination();
                 //Check any other more efficient routes vs. baseRoute
-                efficientRoutes.add(getCheapestRoute(origin, destination, baseCost, originRoutes));
+                HypoRoute cheapRoute = getCheapestRoute(origin, destination, baseCost, originRoutes);
+                if (cheapRoute != null)
+                    efficientRoutes.add(cheapRoute);
             }
         }
         addToSuggestedRoutes(efficientRoutes);
@@ -153,6 +162,10 @@ public class ScheduleDevelopmentBean {
             HypoRoute currRoute = startRoutes.get(i);
             //Recursive search for route to destination
             //Stop if cost of route is > basecost
+            Airport nearHub = nearHub(destination);
+            if (nearHub != null) {
+                return null;
+            }
             HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
             if (calcRoute != null && calcRoute.costDistance <= minCost) {
                 result = calcRoute;
@@ -166,7 +179,7 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getRouteTo(Airport destination, double minCost, HypoRoute calcRoute) {
         if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
             if (calcRoute.costDistance <= minCost) { //This is the most effective route
-                System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
+                //System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
                 return calcRoute;
             }
         }
@@ -176,7 +189,7 @@ public class ScheduleDevelopmentBean {
             HypoRoute currBranch = branches.get(i);
             if (!calcRoute.isOriginAlongRoute(currBranch.route().getDestination())) { //Prevent going backwards
                 if ((calcRoute.costDistance + currBranch.costDistance) * Constants.RANGE_MOMENTUM <= minCost) { //More efficient route than baseline so far
-                    System.out.println("FINDING: " + calcRoute.print());
+                    //System.out.println("FINDING: " + calcRoute.print());
                     HypoRoute newRoute = getRouteTo(destination, minCost, calcRoute.addShortRRoute(currBranch));
                     if (newRoute != null)// && newRoute.costDistance <= minCost)
                         allOptions.add(newRoute);
@@ -204,7 +217,7 @@ public class ScheduleDevelopmentBean {
             if (current.costDistance < result.costDistance)
                 result = current;
         }
-        System.out.println("BEST: " + result.print() + ": " + result.costDistance);
+        //System.out.println("BEST: " + result.print() + ": " + result.costDistance);
         return result;
     }
 
@@ -217,10 +230,32 @@ public class ScheduleDevelopmentBean {
         return result;
     }
 
+    private HypoRoute getHypoRoute(Airport origin, Airport destination) {
+        for (int i = 0; i < allRoutes.size(); i++) {
+            HypoRoute current = allRoutes.get(i);
+            if (current.route().getOrigin() == origin) {
+                if (current.route().getDestination() == destination)
+                    return current;
+            }
+        }
+        return null;
+    }
+
     private boolean isHub(Airport airport) {
         if (hubs.indexOf(airport) != -1)
             return true;
         return false;
+    }
+
+    private Airport nearHub(Airport airport) {
+        for (int i = 0; i < hubs.size(); i++) {
+            List<HypoRoute> routesFromHub = getHypoRoutesStarting(hubs.get(i));
+            for (int j = 0; j < routesFromHub.size(); j++) {
+                if (routesFromHub.get(i).route().getDestination() == airport)
+                    return routesFromHub.get(i).route().getOrigin();
+            }
+        }
+        return null;
     }
 
     public void saveSuggestedRoutes() {
