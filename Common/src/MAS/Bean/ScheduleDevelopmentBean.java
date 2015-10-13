@@ -162,26 +162,51 @@ public class ScheduleDevelopmentBean {
     }
 
     private HypoRoute getRouteTo(Airport destination, double baseCost, HypoRoute calcRoute) {
+        List<HypoRoute> allOptions = new ArrayList<>();
         List<HypoRoute> branches = getHypoRoutesStarting(calcRoute.latestRoute().getDestination());
         if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
             if (calcRoute.costDistance <= baseCost) { //This is the most effective route
-                System.out.println("END : " + calcRoute.print() + " | " + destination.getName());
-                return calcRoute;
+                //System.out.println("END : " + calcRoute.print() + " | " + destination.getName());
+                allOptions.add(calcRoute);
             }
         }
         for (int i = 0; i < branches.size(); i++) {
             HypoRoute currBranch = branches.get(i);
             if (!calcRoute.isOriginAlongRoute(currBranch.route().getDestination())) { //Prevent going backwards
+                if (currBranch.route().getDestination() == destination) {
+                    if (calcRoute.costDistance <= baseCost) { //This is the most effective route
+                        System.out.println("END2 : " + calcRoute.print() + " & " + currBranch.print() + " | " + destination.getName());
+                        return calcRoute.addShortRRoute(currBranch);
+                    }
+                }
                 if (calcRoute.costDistance + currBranch.costDistance <= baseCost) { //More efficient route than baseline so far
                     System.out.println("FINDING: " + calcRoute.print());
-                    return getRouteTo(destination, baseCost, calcRoute.addShortRRoute(currBranch));
+                    allOptions.add(getRouteTo(destination, baseCost, calcRoute.addShortRRoute(currBranch)));//TODO: Cannot just return, need to hold and compare
                 }
                 else {
                     System.out.println("DEAD END: " + calcRoute.print() + " & " + currBranch.print() + " vs " + destination.getName());
                 }
             }
         }
+        //http://www.codeproject.com/Articles/817376/Finding-Shortest-Path-Recursively
+        if (allOptions.size() > 0) {
+            HypoRoute bestRoute = minRouteInArray(allOptions);
+            return bestRoute;
+        }
         return null;
+    }
+
+    private HypoRoute minRouteInArray(List<HypoRoute> routeList) {
+        if (routeList == null) return null;
+        if (routeList.size() < 1) return null;
+
+        HypoRoute result = routeList.get(0);
+        for (int i = 1; i < routeList.size(); i++) {
+            HypoRoute current = routeList.get(i);
+            if (current.costDistance < result.costDistance)
+                result = current;
+        }
+        return result;
     }
 
     private List<HypoRoute> getHypoRoutesStarting(Airport origin) {
