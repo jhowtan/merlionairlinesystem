@@ -58,7 +58,7 @@ public class ScheduleDevelopmentBean {
                     maxRange = range;
             }
         }
-        maxRange *= 0.70;
+        maxRange *= 0.75;
     }
 
     public void addAirports(List<Long> apIds) throws NotFoundException {
@@ -99,7 +99,7 @@ public class ScheduleDevelopmentBean {
                 route.setDistance(distance);
                 hypoRoute.routes.add(route);
                 hypoRoute.actualDistance = distance;
-                hypoRoute.costDistance = distance * Constants.RANGE_INERTIA;
+                hypoRoute.costDistance = distance;// * Constants.RANGE_INERTIA;
                 if (isHub(origin) || isHub(destination))
                     hypoRoute.costDistance *= hubSavings;
                 if (distance > maxRange)
@@ -148,7 +148,7 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
-        //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
             //Recursive search for route to destination
@@ -159,14 +159,14 @@ public class ScheduleDevelopmentBean {
                 minCost = result.costDistance;
             }
         }
-        //System.out.println("Setting: " + result.print());
+        System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
 
     private HypoRoute getRouteTo(Airport destination, double minCost, HypoRoute calcRoute) {
         if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
             if (calcRoute.costDistance <= minCost) { //This is the most effective route
-                //System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
+                System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
                 return calcRoute;
             }
         }
@@ -175,8 +175,8 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < branches.size(); i++) {
             HypoRoute currBranch = branches.get(i);
             if (!calcRoute.isOriginAlongRoute(currBranch.route().getDestination())) { //Prevent going backwards
-                if (calcRoute.costDistance + currBranch.costDistance <= minCost) { //More efficient route than baseline so far
-                    //System.out.println("FINDING: " + calcRoute.print());
+                if ((calcRoute.costDistance + currBranch.costDistance) * Constants.RANGE_MOMENTUM <= minCost) { //More efficient route than baseline so far
+                    System.out.println("FINDING: " + calcRoute.print());
                     HypoRoute newRoute = getRouteTo(destination, minCost, calcRoute.addShortRRoute(currBranch));
                     if (newRoute != null)// && newRoute.costDistance <= minCost)
                         allOptions.add(newRoute);
@@ -204,6 +204,7 @@ public class ScheduleDevelopmentBean {
             if (current.costDistance < result.costDistance)
                 result = current;
         }
+        System.out.println("BEST: " + result.print() + ": " + result.costDistance);
         return result;
     }
 

@@ -1,5 +1,6 @@
 package MAS.ScheduleDev;
 
+import MAS.Common.Constants;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 
@@ -33,6 +34,7 @@ public class HypoRoute {
             if (routeToAdd.route().getOrigin() == latestRoute().getDestination()) {
                 routes.add(routeToAdd.route());
                 costDistance += routeToAdd.costDistance;
+                costDistance *= Constants.RANGE_MOMENTUM;
             }
             else {
                 System.out.println("Unable to link: Destination and new Origin don't match.");
