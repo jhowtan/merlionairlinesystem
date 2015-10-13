@@ -93,4 +93,26 @@ public class ETicket {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    private Flight flight;
+
+    @ManyToOne
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    private int travelClass;
+
+    @Basic
+    public int getTravelClass() {
+        return travelClass;
+    }
+
+    public void setTravelClass(int travelClass) {
+        this.travelClass = travelClass;
+    }
 }

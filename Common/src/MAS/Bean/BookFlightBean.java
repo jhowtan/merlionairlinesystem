@@ -1,5 +1,7 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
+import MAS.Common.SeatConfigObject;
 import MAS.Entity.*;
 import MAS.Exception.BookingException;
 import MAS.Exception.NotFoundException;
@@ -22,32 +24,28 @@ public class BookFlightBean {
     public BookFlightBean() {
     }
 
-    public ETicket ticketFlight(BookingClass bookingClass, String passengerName) {
-        // @TODO: Reduce booking class allocation by 1
-        ETicket eTicket = new ETicket();
-        eTicket.setBookingClass(bookingClass);
-        eTicket.setPassengerName(passengerName);
-        em.persist(eTicket);
-        em.flush();
-        return eTicket;
-    }
-
     public PNR bookFlights(List<BookingClass> bookingClasses, List<String> passengerNames) throws BookingException {
 
-        // Ensure enough seats available on all booking class before proceeding
+        // Ensure enough seats available on all booking class and flights before proceeding
         em.getTransaction().begin();
         for (BookingClass bookingClass : bookingClasses) {
             if (bookingClass.getAllocation() < passengerNames.size()) {
                 em.getTransaction().rollback();
                 throw new BookingException();
             }
-            // Reduce allocation for booking class
             bookingClass.setAllocation(bookingClass.getAllocation() - passengerNames.size());
             em.merge(bookingClass);
+            SeatConfigObject seatConfigObject = new SeatConfigObject();
+            seatConfigObject.parse(bookingClass.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+            int totalSeatsInClass = seatConfigObject.getSeatsInClass(bookingClass.getTravelClass());
+            int seatsBookedInClass = (int) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", bookingClass.getFlight()).setParameter("travelClass", bookingClass.getTravelClass()).getSingleResult();
+            int seatsLeftInClass = totalSeatsInClass - seatsBookedInClass;
+            if (seatsLeftInClass < passengerNames.size()) {
+                em.getTransaction().rollback();
+                throw new BookingException();
+            }
         }
         em.getTransaction().commit();
-
-        // @TODO: Ensure enough seats available on all flights before proceeding
 
         PNR pnr = new PNR();
         List<Itinerary> itineraries = new ArrayList<>();
@@ -74,6 +72,7 @@ public class BookFlightBean {
             for (String passengerName : passengerNames) {
                 ETicket eTicket = new ETicket();
                 eTicket.setBookingClass(bookingClass);
+                eTicket.setFlight(bookingClass.getFlight());
                 eTicket.setPassengerName(passengerName);
                 em.persist(eTicket);
                 em.flush();
