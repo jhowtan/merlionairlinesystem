@@ -4,10 +4,7 @@ import MAS.Common.Cabin;
 import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
-import MAS.Entity.AircraftAssignment;
-import MAS.Entity.BookingClass;
-import MAS.Entity.Flight;
-import MAS.Entity.FlightGroup;
+import MAS.Entity.*;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -17,6 +14,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -262,5 +260,14 @@ public class FlightScheduleBean {
             }
             em.persist(flight);
         }
+    }
+
+    public List<Flight> findDepartingFlightsByAirport(Airport baseAirport) {
+        return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
+                "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.departureTime > current_timestamp " +
+                "AND f.departureTime < :date", Flight.class)
+                .setParameter("baseAirport", baseAirport)
+                .setParameter("date", Utils.hoursFromNow(24), TemporalType.TIMESTAMP)
+                .getResultList();
     }
 }
