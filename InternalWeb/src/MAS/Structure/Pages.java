@@ -1,7 +1,6 @@
 package MAS.Structure;
 
 import MAS.Common.Permissions;
-import MAS.Entity.Permission;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
@@ -72,6 +71,9 @@ public class Pages {
     // Airline Administrative Subsystem: Costs Management
     public static final Page LIST_COSTS = new Page("/App/CostManagement/costs", Permissions.MANAGE_COSTS);
     public static final Page CREATE_COST = new Page("/App/CostManagement/createCost", Permissions.MANAGE_COSTS);
+
+    // DCS: Check In
+    public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);
