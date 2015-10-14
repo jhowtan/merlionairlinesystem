@@ -40,6 +40,7 @@ public class CreateFlightManagedBean {
     private Date recurringEndDate;
     private int[] recurringDays = {};
     private int[] recurringDaysItems = {Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};
+    private boolean createBkClass = true;
 
     @PostConstruct
     public void init() {
@@ -50,7 +51,7 @@ public class CreateFlightManagedBean {
         Date departureDateTime = addTimeToDate(departureDate, departureTime);
         flightScheduleBean.createFlight(code,
                 addTimeToDate(departureDate, departureTime),
-                Utils.minutesLater(departureDateTime, flightDuration), aaId, true);
+                Utils.minutesLater(departureDateTime, flightDuration), aaId, createBkClass);
         authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
         setCode(null);
         setAaId(0);
@@ -64,7 +65,7 @@ public class CreateFlightManagedBean {
 
     public void createRecurringFlight() {
         try {
-            flightScheduleBean.createRecurringFlight(code, aaId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays, true);
+            flightScheduleBean.createRecurringFlight(code, aaId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays, createBkClass);
 
             authManagedBean.createAuditLog("Created new recurring flight: " + code, "create_recurring_flight");
             setCode(null);
@@ -197,5 +198,13 @@ public class CreateFlightManagedBean {
 
     public void setRecurringDaysItems(int[] recurringDaysItems) {
         this.recurringDaysItems = recurringDaysItems;
+    }
+
+    public boolean isCreateBkClass() {
+        return createBkClass;
+    }
+
+    public void setCreateBkClass(boolean createBkClass) {
+        this.createBkClass = createBkClass;
     }
 }
