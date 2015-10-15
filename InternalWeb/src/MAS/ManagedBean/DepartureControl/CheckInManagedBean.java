@@ -94,6 +94,10 @@ public class CheckInManagedBean {
         this.primaryETicket = primaryETicket;
     }
 
+    public List<ETicket> getAllDestinations() {
+        return getPossibleConnections(primaryETicket.getPnr(), primaryETicket);
+    }
+
     public List<ETicket> getPossibleConnections(PNR pnr, ETicket eTicket) {
         return getPossibleConnections(pnr, eTicket, new ArrayList<ETicket>());
     }
