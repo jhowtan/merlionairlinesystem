@@ -162,6 +162,7 @@ public class ScheduleDevelopmentBean {
         Route newRoute = new Route();
         newRoute.setDestination(route.getOrigin());
         newRoute.setOrigin(route.getDestination());
+        newRoute.setDistance(route.getDistance());
         return newRoute;
     }
 
@@ -172,7 +173,7 @@ public class ScheduleDevelopmentBean {
         //Destination is near a hub
         Airport nearHub = nearHub(destination);
         if (nearHub != null && nearHub != origin) {
-            System.out.println("Setting: NONE");
+            //System.out.println("Setting: NONE");
             return null;
         }
         for (int i = 0; i < startRoutes.size(); i++) {
@@ -278,6 +279,13 @@ public class ScheduleDevelopmentBean {
         return null;
     }
 
+    private void allocateAircraft() {
+        //Do routes starting from the hub first
+        //Find cheapest aircraft to allocate going out of the hub.
+        //  If it has been allocated, its priority shifts down a notch
+
+    }
+
     public void saveSuggestedRoutes() {
         for (int i = 0; i < suggestedRoutes.size(); i++) {
             em.persist(suggestedRoutes.get(i));
@@ -303,6 +311,7 @@ public class ScheduleDevelopmentBean {
         generateRoutes();
         //debugAllRoutes(allRoutes);
         selectGoodRoutes();
+        allocateAircraft();
         saveSuggestedRoutes();
         System.gc();
     }

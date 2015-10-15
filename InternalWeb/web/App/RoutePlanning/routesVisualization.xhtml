@@ -41,13 +41,6 @@
                 });
                 $.get('routesVisualizationData.xhtml', function(data) {
                     $.each(data, function(i, route) {
-                        var routePath = new google.maps.Polyline({
-                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
-                            geodesic: true,
-                            strokeColor: '#FFFFFF',
-                            strokeOpacity: 0,
-                            strokeWeight: 50
-                        });
                         var visibleRoutePath = new google.maps.Polyline({
                             path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
                             geodesic: true,
@@ -57,10 +50,18 @@
                             strokeColor: '#'+(Math.floor((Math.random()*100)+56).toString(16))+(Math.floor((Math.random()*106)+50).toString(16))+(Math.floor((Math.random()*106)+50).toString(16)),
                             //]]>
                             strokeOpacity: 0.75,
-                            strokeWeight: 4
+                            strokeWeight: 3
+                        });
+                        var routePath = new google.maps.Polyline({
+                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
+                            geodesic: true,
+                            strokeColor: '#FFFFFF',
+                            strokeOpacity: 0,
+                            strokeWeight: 20
                         });
                         var infoWindow = new google.maps.InfoWindow({
-                            content: route.origin + " - " + route.destination
+                            content: route.origin + " - " + route.destination,
+                            pixelOffset: new google.maps.Size(0, -25)
                         });
                         google.maps.event.addListener(routePath, 'mouseover', function(event) {
                             infoWindow.open(map);
