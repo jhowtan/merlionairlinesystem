@@ -152,6 +152,8 @@ public class SeatConfigObject {
     }
 
     public String convertIntToString(int seatNumber) throws NotFoundException {
+        if (seatNumber > getTotalSeats())
+            throw new NotFoundException();
         int inCabin = findInCabin(seatNumber);
         int row = 0;
         String column = "";
