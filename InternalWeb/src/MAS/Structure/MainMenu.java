@@ -62,7 +62,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Departure Control", "suitcase",
-                        new MenuEntry("Check In", null, Pages.CHECK_IN)
+                        new MenuEntry("Check In", null, Pages.CHECK_IN, Pages.CHECK_IN_2)
                 )
         );
 

@@ -74,6 +74,8 @@ public class Pages {
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
+    public static final Page CHECK_IN_2 = new Page("/App/DepartureControl/checkIn2", Permissions.CHECK_IN);
+
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);
