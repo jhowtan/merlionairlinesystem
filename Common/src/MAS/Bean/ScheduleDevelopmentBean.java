@@ -279,6 +279,13 @@ public class ScheduleDevelopmentBean {
         return null;
     }
 
+    private void allocateAircraft() {
+        //Do routes starting from the hub first
+        //Find cheapest aircraft to allocate going out of the hub.
+        //  If it has been allocated, its priority shifts down a notch
+
+    }
+
     public void saveSuggestedRoutes() {
         for (int i = 0; i < suggestedRoutes.size(); i++) {
             em.persist(suggestedRoutes.get(i));
@@ -304,6 +311,7 @@ public class ScheduleDevelopmentBean {
         generateRoutes();
         //debugAllRoutes(allRoutes);
         selectGoodRoutes();
+        allocateAircraft();
         saveSuggestedRoutes();
         System.gc();
     }
