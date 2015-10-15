@@ -60,7 +60,8 @@
                             strokeWeight: 50
                         });
                         var infoWindow = new google.maps.InfoWindow({
-                            content: route.origin + " - " + route.destination
+                            content: route.origin + " - " + route.destination,
+                            pixelOffset: new google.maps.Size(0, -25)
                         });
                         google.maps.event.addListener(routePath, 'mouseover', function(event) {
                             infoWindow.open(map);
