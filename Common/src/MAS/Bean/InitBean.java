@@ -234,24 +234,28 @@ public class InitBean {
                 e.printStackTrace();
             }
 
-//            List<Long> apIds = new ArrayList<>();
-//            List<Airport> allAp = routeBean.getAllAirports();
-//            for (int i = 0; i < allAp.size(); i++) {
-//                apIds.add(allAp.get(i).getId());
-//            }
-//            List<Long> acIds = new ArrayList<>();
-//            List<Aircraft> allAc = fleetBean.getAllAircraft();
-//            for (int i = 0; i < allAc.size(); i++) {
-//                acIds.add(allAc.get(i).getId());
-//            }
-//            List<Long> hubIds = new ArrayList<>();
-//            hubIds.add(apId);
-//            hubIds.add(ap5Id);
-//            hubIds.add(ap11Id);
-//            scheduleDevelopmentBean.addAirports(apIds);
-//            scheduleDevelopmentBean.addAircrafts(acIds);
-//            scheduleDevelopmentBean.addHubs(hubIds);
-//            scheduleDevelopmentBean.process();
+            try {
+                List<String> apIds = new ArrayList<>();
+                List<Airport> allAp = routeBean.getAllAirports();
+                for (int i = 0; i < allAp.size(); i++) {
+                    apIds.add(allAp.get(i).getId());
+                }
+                List<Long> acIds = new ArrayList<>();
+                List<Aircraft> allAc = fleetBean.getAllAircraft();
+                for (int i = 0; i < allAc.size(); i++) {
+                    acIds.add(allAc.get(i).getId());
+                }
+                List<String> hubIds = new ArrayList<>();
+                hubIds.add(routeBean.findAirportByCode("SIN").getId());
+                hubIds.add(routeBean.findAirportByCode("HKG").getId());
+                hubIds.add(routeBean.findAirportByCode("DXB").getId());
+                scheduleDevelopmentBean.addAirports(apIds);
+                scheduleDevelopmentBean.addAircrafts(acIds);
+                scheduleDevelopmentBean.addHubs(hubIds);
+                scheduleDevelopmentBean.process();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
