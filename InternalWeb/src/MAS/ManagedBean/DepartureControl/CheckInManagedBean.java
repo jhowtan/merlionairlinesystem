@@ -1,7 +1,14 @@
 package MAS.ManagedBean.DepartureControl;
 
 import MAS.Bean.FlightScheduleBean;
+import MAS.Bean.PNRBean;
+import MAS.Common.Constants;
+import MAS.Common.Utils;
 import MAS.Entity.ETicket;
+import MAS.Entity.Flight;
+import MAS.Entity.Itinerary;
+import MAS.Entity.PNR;
+import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -9,9 +16,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ManagedBean
 public class CheckInManagedBean {
@@ -26,6 +31,8 @@ public class CheckInManagedBean {
 
     @EJB
     FlightScheduleBean flightScheduleBean;
+    @EJB
+    PNRBean pnrBean;
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
@@ -78,5 +85,31 @@ public class CheckInManagedBean {
 
     public void setPrimaryETicket(ETicket primaryETicket) {
         this.primaryETicket = primaryETicket;
+    }
+
+    public List<ETicket> getPossibleConnections(PNR pnr, ETicket eTicket) {
+        return getPossibleConnections(pnr, eTicket, new ArrayList<ETicket>());
+    }
+
+    public List<ETicket> getPossibleConnections(PNR pnr, ETicket eTicket, List<ETicket> connections) {
+        Date arrivalTime = eTicket.getFlight().getArrivalTime();
+        String destination = eTicket.getFlight().getAircraftAssignment().getRoute().getDestination().getId();
+        List<Itinerary> itineraries = pnr.getItineraries();
+
+        for (Itinerary itinerary : itineraries) {
+            if (itinerary.getDepartureDate().after(arrivalTime) && itinerary.getDepartureDate().before(Utils.minutesLater(arrivalTime, Constants.MAX_CONNECTION_TIME_MINUTES)) && itinerary.getOrigin().equals(destination)) {
+                try {
+                    int itineraryNumber = pnrBean.getItineraryNumber(pnr, itinerary.getFlightCode());
+                    int passengerNumber = pnrBean.getPassengerNumber(pnr, eTicket.getPassengerName());
+                    String eTicketNumber = pnrBean.getPassengerSpecialServiceRequest(pnr, passengerNumber, itineraryNumber ,Constants.SSR_ACTION_CODE_TICKET_NUMBER).getValue();
+                    ETicket connection = flightScheduleBean.getETicket(Long.parseLong(eTicketNumber));
+                    connections.add(connection);
+                    connections.addAll(getPossibleConnections(pnr, connection, connections));
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return connections;
     }
 }

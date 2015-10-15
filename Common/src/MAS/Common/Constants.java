@@ -47,4 +47,8 @@ public class Constants {
 
     public static final double[] TRAVEL_CLASS_PRICE_MULTIPLIER = {6, 3, 1.5, 1};
     public static final double PROFIT_MARGIN = 1.4;
+
+    public static final String SSR_ACTION_CODE_TICKET_NUMBER = "TKNR";
+
+    public static int MAX_CONNECTION_TIME_MINUTES = 1440;
 }

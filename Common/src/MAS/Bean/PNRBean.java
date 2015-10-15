@@ -61,6 +61,15 @@ public class PNRBean {
         throw new NotFoundException();
     }
 
+    public SpecialServiceRequest getPassengerSpecialServiceRequest(PNR pnr, int passengerNumber, int itineraryNumber, String actionCode) throws NotFoundException {
+        for (SpecialServiceRequest ssr : pnr.getSpecialServiceRequests()) {
+            if (ssr.getPassengerNumber() == passengerNumber && ssr.getItineraryNumber() == itineraryNumber && ssr.getActionCode().equals(actionCode)) {
+                return ssr;
+            }
+        }
+        throw new NotFoundException();
+    }
+
     public void deleteSpecialServiceRequest(PNR pnr, int passengerNumber, String actionCode) {
         Iterator it = pnr.getSpecialServiceRequests().iterator();
         while (it.hasNext()) {

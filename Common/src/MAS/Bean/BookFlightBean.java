@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
 import MAS.Entity.*;
 import MAS.Exception.BookingException;
@@ -85,7 +86,7 @@ public class BookFlightBean {
                     SpecialServiceRequest ssr = new SpecialServiceRequest();
                     ssr.setPassengerNumber(pnrBean.getPassengerNumber(pnr, passengerName));
                     ssr.setItineraryNumber(pnrBean.getItineraryNumber(pnr, bookingClass.getFlight().getCode()));
-                    ssr.setActionCode("TKNA");
+                    ssr.setActionCode(Constants.SSR_ACTION_CODE_TICKET_NUMBER);
                     ssr.setValue(eTicket.getId().toString());
                     SSRs.add(ssr);
                 } catch (NotFoundException e) {
