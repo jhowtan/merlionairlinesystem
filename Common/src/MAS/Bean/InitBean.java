@@ -120,7 +120,7 @@ public class InitBean {
 
             // INITIALIZE SOME AIRPORTS
             try {
-                routeBean.createAirport("SIN", "Changi Airport", "SGP", 1.3644202, 103.9915308, 8);
+                routeBean.createAirport("SIN", "Changi Airport", "SIN", 1.3644202, 103.9915308, 8);
                 routeBean.createAirport("HKG", "Hong Kong International Airport", "HKG", 22.308047, 113.9184808, 3);
                 routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 1);
                 routeBean.createAirport("JFK", "John F. Kennedy International Airport", "NYC", 40.6413111, -73.77813909999998, 1);
