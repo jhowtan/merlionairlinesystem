@@ -1,6 +1,5 @@
 package MAS.Bean;
 
-import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
 import MAS.Entity.*;
 import MAS.Exception.BookingException;
@@ -70,6 +69,8 @@ public class BookFlightBean {
         // Set passengers
         pnr.setPassengers(passengerNames);
 
+        ArrayList<ETicket> eTickets = new ArrayList<>();
+
         // Issue eTicket for each flight
         for (BookingClass bookingClass : bookingClasses) {
             for (String passengerName : passengerNames) {
@@ -90,12 +91,17 @@ public class BookFlightBean {
                 } catch (NotFoundException e) {
                     e.printStackTrace();
                 }
+                eTickets.add(eTicket);
             }
         }
         pnr.setCreated(new Date());
         pnr.setSpecialServiceRequests(SSRs);
         em.persist(pnr);
         em.flush();
+        for (ETicket eTicket : eTickets) {
+            eTicket.setPnr(pnr);
+            em.persist(eTicket);
+        }
         return pnr;
     }
 

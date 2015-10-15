@@ -270,4 +270,23 @@ public class FlightScheduleBean {
                 .setParameter("date", Utils.hoursFromNow(24), TemporalType.TIMESTAMP)
                 .getResultList();
     }
+
+    public List<ETicket> getETicketsForFlight(Flight flight) {
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.flight = :flight")
+                .setParameter("flight", flight)
+                .getResultList();
+    }
+
+    public ETicket getETicket(long id) throws NotFoundException {
+        ETicket eTicket = em.find(ETicket.class, id);
+        if (eTicket == null) throw new NotFoundException();
+        return eTicket;
+    }
+
+    public List<ETicket> getRelatedETickets(ETicket eTicket) {
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.pnr = :pnr AND et.flight = :flight")
+                .setParameter("flight", eTicket.getFlight())
+                .setParameter("pnr", eTicket.getPnr())
+                .getResultList();
+    }
 }
