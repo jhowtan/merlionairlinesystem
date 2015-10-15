@@ -283,7 +283,7 @@ public class ScheduleDevelopmentBean {
         //Do routes starting from the hub first
         //Find cheapest aircraft to allocate going out of the hub.
         //  If it has been allocated, its priority shifts down a notch
-
+        //
     }
 
     public void saveSuggestedRoutes() {
