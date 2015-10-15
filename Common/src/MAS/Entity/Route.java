@@ -48,4 +48,12 @@ public class Route {
     public void setDistance(double distance) {
         this.distance = distance;
     }
+
+    public boolean isSame(Route route) {
+        if (route.getOrigin() == origin) {
+            if (route.getDestination() == destination)
+                return true;
+        }
+        return false;
+    }
 }

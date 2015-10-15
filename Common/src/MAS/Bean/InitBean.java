@@ -3,6 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Entity.Aircraft;
+import MAS.Entity.Airport;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +40,8 @@ public class InitBean {
     AttributesBean attributesBean;
     @EJB
     CostsBean costsBean;
+    @EJB
+    ScheduleDevelopmentBean scheduleDevelopmentBean; //REMOVE THIS AFTER TESTING
 
     @PostConstruct
     public void init() {
@@ -80,7 +83,7 @@ public class InitBean {
             }
 
             try {
-                long acTypeId = fleetBean.createAircraftType("A380 NR", 323546, 30, 2, 0.08, 634, 270000);
+                long acTypeId = fleetBean.createAircraftType("A380 NR", 323546, 30, 2, 0.120, 634, 276800);
                 //long seatConfId = fleetBean.createAircraftSeatConfig("ss|sss|ss/ss|sss|ss/ss|sss|ss/_3e", "A3180 ABC test", 5800, acTypeId);
                 long seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
                         "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
@@ -88,33 +91,33 @@ public class InitBean {
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
-                        "sss|ssss|sss/sss|ssss|sss/_3e", "A380 NR Normal", 2580, acTypeId);
+                        "sss|ssss|sss/sss|ssss|sss/_3e", "A380 NR Normal", 20580, acTypeId);
                 long acId = fleetBean.createAircraft("9V-ABC", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
                 fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/" +
                         "s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/" +
                         "s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
                         "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
-                        "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1e", "A380 NR Luxury", 3200, acTypeId);
+                        "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1e", "A380 NR Luxury", 23200, acTypeId);
 
-                acTypeId = fleetBean.createAircraftType("B747 300-ER", 183380, 20, 2, 0.09, 570, 333400);
+                acTypeId = fleetBean.createAircraftType("B747 400", 183380, 20, 2, 0.090, 570, 184600);
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
-                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B747 300-ER Normal", 2310, acTypeId);
+                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B747 300-ER Normal", 20310, acTypeId);
                 acId = fleetBean.createAircraft("9V-ABD", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
 
-                acTypeId = fleetBean.createAircraftType("B777 300-ER", 171177, 25, 2, 0.085, 590, 245208);
+                acTypeId = fleetBean.createAircraftType("B777 200-ER", 171177, 25, 2, 0.0765, 590, 138100);
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
-                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 2041, acTypeId);
+                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 20041, acTypeId);
                 acId = fleetBean.createAircraft("9V-AET", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
 
-                acTypeId = fleetBean.createAircraftType("B777 400-ER", 174177, 25, 2, 0.085, 590, 245208);
+                acTypeId = fleetBean.createAircraftType("B777 300-ER", 181283, 25, 2, 0.0765, 590, 167800);
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
-                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 3500, acTypeId);
+                        "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 23500, acTypeId);
                 acId = fleetBean.createAircraft("9V-DET", new Date());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
             } catch (Exception e) {
@@ -140,12 +143,12 @@ public class InitBean {
 
             try {
                 costsBean.createCost(Constants.COST_FUEL, 0.38, "Market Fuel Price", 0);
-                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 85000000, "Aircraft Purchase", -1);
+                costsBean.createCost(Constants.COST_PER_AIRCRAFT, 285000000, "Aircraft Purchase", -1);
                 costsBean.createCost(Constants.COST_PER_FLIGHT, 10000, "Food & Beverages", -1);
                 costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
-                costsBean.createCost(Constants.COST_ANNUAL, 200000000, "Misc Fees", -1);
+                costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -153,28 +156,66 @@ public class InitBean {
             try {
                 long ctryId = routeBean.createCountry("Singapore", "SGP");
                 long ctId = routeBean.createCity("Singapore", ctryId);
-                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 3, ctId);
+                long apId = routeBean.createAirport("Changi Airport", 1.3644202, 103.9915308, "SIN", 8, ctId);
+
+                long ctry5Id = routeBean.createCountry("Hong Kong", "HKG");
+                long ct5Id = routeBean.createCity("Hong Kong", ctry5Id);
+                long ap5Id = routeBean.createAirport("Hong Kong International Airport", 22.308047, 113.9184808, "HKG", 3, ct5Id);
 
                 long ctry2Id = routeBean.createCountry("United Kingdom", "GBR");
                 long ct2Id = routeBean.createCity("London", ctry2Id);
-                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 4, ct2Id);
+                long ap2Id = routeBean.createAirport("Heathrow Airport", 51.4700223, -0.4542955, "LHR", 1, ct2Id);
 
-                long routeId = routeBean.createRoute(apId, ap2Id);
+                long ctry3Id = routeBean.createCountry("United States", "USA");
+                long ct3Id = routeBean.createCity("New York", ctry3Id);
+                long ap3Id = routeBean.createAirport("John F. Kennedy International Airport", 40.6413111, -73.77813909999998, "JFK", 1, ct3Id);
+                long ct30Id = routeBean.createCity("San Francisco", ctry3Id);
+                long ap30Id = routeBean.createAirport("San Francisco International Airport", 37.6213129, -122.3789554, "SFO", 4, ct30Id);
+
+                long ctry4Id = routeBean.createCountry("South Korea", "KOR");
+                long ct4Id = routeBean.createCity("Seoul", ctry4Id);
+                long ap4Id = routeBean.createAirport("Incheon International Airport", 37.4601908, 126.44069569999999, "ICN", 2, ct4Id);
+
+                long ctry6Id = routeBean.createCountry("Japan", "JPN");
+                long ct6Id = routeBean.createCity("Tokyo", ctry6Id);
+                long ap6Id = routeBean.createAirport("Narita International Airport", 35.7719867, 140.39285010000003, "NRT", 2, ct6Id);
+
+                long ctry7Id = routeBean.createCountry("Malaysia", "MYS");
+                long ct7Id = routeBean.createCity("Sepang", ctry7Id);
+                long ap7Id = routeBean.createAirport("Kuala Lumpur International Airport", 2.75419, 101.70474000000001, "KUL", 1, ct7Id);
+
+                long ctry8Id = routeBean.createCountry("Thailand", "THA");
+                long ct8Id = routeBean.createCity("Bangkok", ctry8Id);
+                long ap8Id = routeBean.createAirport("Suvarnabhumi Airport", 13.6899991, 100.75011240000003, "BKK", 1, ct8Id);
+
+                long ctry9Id = routeBean.createCountry("China", "CHN");
+                long ct9Id = routeBean.createCity("Beijing", ctry9Id);
+                long ap9Id = routeBean.createAirport("Beijing Capital International Airport", 40.0798573, 116.60311209999997, "BJS", 3, ct9Id);
+
+                long ctry10Id = routeBean.createCountry("Spain", "SPA");
+                long ct10Id = routeBean.createCity("Barcelona", ctry10Id);
+                long ap10Id = routeBean.createAirport("Barcelona-El Prat Airport", 41.297445, 2.083294099999989, "BCN", 0, ct10Id);
+
+                long ctry11Id = routeBean.createCountry("United Arab Emirates", "UAE");
+                long ct11Id = routeBean.createCity("Dubai", ctry11Id);
+                long ap11Id = routeBean.createAirport("Dubai International Airport", 25.2531745, 55.36567279999997, "DXB", 4, ct11Id);
+
+                /*long routeId = routeBean.createRoute(apId, ap2Id);
 
                 List<Aircraft> allAircraft = fleetBean.getAllAircraft();
                 long aa1Id = routeBean.createAircraftAssignment(allAircraft.get(0).getId(), routeId);
-                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);
+                long aa2Id = routeBean.createAircraftAssignment(allAircraft.get(1).getId(), routeId);*/
 
-                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
-                    String flight1Code = "MA11";
-                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
-                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
-                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
-
-                    String flight2Code = "MA12";
-                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
-                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
-                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
+//                if ((flightScheduleBean.getAllFlights().size() == 0) && (aircraftMaintenanceSlotBean.getAllSlots().size() == 0)) {
+//                    String flight1Code = "MA11";
+//                    Date departure1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-09 12:00:00");
+//                    Date arrival1Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-12-10 08:00:00");
+//                    long flight1Id = flightScheduleBean.createFlight(flight1Code, departure1Time, arrival1Time, aa1Id, true);
+//
+//                    String flight2Code = "MA12";
+//                    Date departure2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 02:00:00");
+//                    Date arrival2Time = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-11-12 18:00:00");
+//                    long flight2Id = flightScheduleBean.createFlight(flight2Code, departure2Time, arrival2Time, aa2Id, true);
 
 //                    long ac1Id = fleetBean.getAllAircraft().get(0).getId();
 //                    long ac2Id = fleetBean.getAllAircraft().get(1).getId();
@@ -186,6 +227,28 @@ public class InitBean {
 //                        bookingClassBean.createBookingClass("Z", 20, 2, fareRuleBean.getAllFareRules().get(1).getId(), flight1Id);
 //                        bookingClassBean.createBookingClass("C", 20, 3, fareRuleBean.getAllFareRules().get(2).getId(), flight2Id);
 //                    }
+//                }
+                try {
+                    List<Long> apIds = new ArrayList<>();
+                    List<Airport> allAp = routeBean.getAllAirports();
+                    for (int i = 0; i < allAp.size(); i++) {
+                        apIds.add(allAp.get(i).getId());
+                    }
+                    List<Long> acIds = new ArrayList<>();
+                    List<Aircraft> allAc = fleetBean.getAllAircraft();
+                    for (int i = 0; i < allAc.size(); i++) {
+                        acIds.add(allAc.get(i).getId());
+                    }
+                    List<Long> hubIds = new ArrayList<>();
+                    hubIds.add(apId);
+                    hubIds.add(ap5Id);
+                    hubIds.add(ap11Id);
+                    scheduleDevelopmentBean.addAirports(apIds);
+                    scheduleDevelopmentBean.addAircrafts(acIds);
+                    scheduleDevelopmentBean.addHubs(hubIds);
+                    scheduleDevelopmentBean.process();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             } catch (Exception e) {

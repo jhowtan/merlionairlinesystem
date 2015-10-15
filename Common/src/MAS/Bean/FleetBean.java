@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
@@ -116,6 +117,7 @@ public class FleetBean {
         aircraftType.setFuelEfficiency(fuelEfficiency);
         aircraftType.setSpeed(speed);
         aircraftType.setWeight(weight);
+        aircraftType.setMaxRange(fuelCapacity /(fuelEfficiency * Constants.RANGE_CONST));
         em.persist(aircraftType);
         em.flush();
 
