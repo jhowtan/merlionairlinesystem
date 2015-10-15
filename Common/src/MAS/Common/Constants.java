@@ -18,6 +18,9 @@ public class Constants {
     public static final String FFP_TIER_SILVER_LABEL = "Elite Silver";
     public static final String FFP_TIER_GOLD_LABEL = "Elite Gold";
 
+    public static final String[] FFP_ALLIANCE_LIST_CODE = {"MA", "A3", "AC", "CA", "AI", "NZ", "NH", "OZ", "AV", "O6", "CM", "MS", "ET", "BR", "B6", "LH", "SK", "SQ", "SA", "JJ", "TP", "TG", "TK", "UA", "VX", "VS", "VA", "UK"};
+    public static final String[] FFP_ALLIANCE_LIST_NAME = {"Merlion Airlines - MerlionFlyer Elite", "Aegean Airlines - Miles&Bonus", "Air Canada - Aeroplan", "Air China / Shenzhen Airlines - PhoenixMiles", "Air India - Flying Returns", "Air New Zealand - AirPoints", "ANA - ANA Mileage Club", "Asiana Airlines - Asiana Club", "Avianca - LifeMiles", "Avianca Brazil - Amigo", "Copa Airlines - ConnectMiles", "EgyptAir - EgyptAir Plus", "Ethiopian Airlines - ShebaMiles", "EVA Air - Infinity MileageLands", "JetBlue - TrueBlue", "Lufthansa - Miles & More", "Scandinavian Airlines - EuroBonus", "Singapore Airlines - KrisFlyer", "South African Airways - Voyager", "TAM Airlines - Fidelidade", "TAP Portugal - Victoria", "THAI - Royal Orchid Plus", "Turkish Airlines - Miles&Smiles", "United - MileagePlus", "Virgin America - Elevate", "Virgin Atlantic - Flying Club", "Virgin Australia - Velocity", "Vistara - Club Vistara"};
+
     public static final String[] COSTS = {"Consumables Per Flight", "Aircraft One-Time Cost", "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost"};
 
     public static final int COST_PER_FLIGHT = 0;

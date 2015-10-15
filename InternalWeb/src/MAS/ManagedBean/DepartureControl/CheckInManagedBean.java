@@ -62,6 +62,14 @@ public class CheckInManagedBean {
         baggageList.add(baggage);
     }
 
+    public LinkedHashMap<String, String> getFFPAllianceList() {
+        LinkedHashMap<String, String> ffpAllianceList = new LinkedHashMap<>();
+        for (int i = 0; i < Constants.FFP_ALLIANCE_LIST_CODE.length; i++) {
+            ffpAllianceList.put(Constants.FFP_ALLIANCE_LIST_NAME[i], Constants.FFP_ALLIANCE_LIST_CODE[i]);
+        }
+        return ffpAllianceList;
+    }
+
     public ETicket getPrimaryETicket() {
         return primaryETicket;
     }
@@ -94,28 +102,32 @@ public class CheckInManagedBean {
         this.primaryETicket = primaryETicket;
     }
 
-    public List<ETicket> getAllDestinations() {
-        return getPossibleConnections(primaryETicket.getPnr(), primaryETicket);
+    public List<ETicket> getAllConnectingDestinations() {
+        return getPossibleConnections(primaryETicket);
     }
 
-    public List<ETicket> getPossibleConnections(PNR pnr, ETicket eTicket) {
-        return getPossibleConnections(pnr, eTicket, new ArrayList<ETicket>());
-    }
-
-    public List<ETicket> getPossibleConnections(PNR pnr, ETicket eTicket, List<ETicket> connections) {
+    public List<ETicket> getPossibleConnections(ETicket eTicket) {
+        ArrayList<ETicket> connections = new ArrayList<>(Arrays.asList(eTicket));
+        PNR pnr = eTicket.getPnr();
         Date arrivalTime = eTicket.getFlight().getArrivalTime();
         String destination = eTicket.getFlight().getAircraftAssignment().getRoute().getDestination().getId();
         List<Itinerary> itineraries = pnr.getItineraries();
 
+        HashSet<String> visited = new HashSet<>();
+        for (ETicket connection : connections) {
+            visited.add(connection.getFlight().getAircraftAssignment().getRoute().getOrigin().getId());
+            visited.add(connection.getFlight().getAircraftAssignment().getRoute().getDestination().getId());
+        }
+
         for (Itinerary itinerary : itineraries) {
-            if (itinerary.getDepartureDate().after(arrivalTime) && itinerary.getDepartureDate().before(Utils.minutesLater(arrivalTime, Constants.MAX_CONNECTION_TIME_MINUTES)) && itinerary.getOrigin().equals(destination)) {
+            if (itinerary.getDepartureDate().after(arrivalTime) && itinerary.getDepartureDate().before(Utils.minutesLater(arrivalTime, Constants.MAX_CONNECTION_TIME_MINUTES)) && itinerary.getOrigin().equals(destination) && !visited.contains(itinerary.getDestination())) {
                 try {
                     int itineraryNumber = pnrBean.getItineraryNumber(pnr, itinerary.getFlightCode());
                     int passengerNumber = pnrBean.getPassengerNumber(pnr, eTicket.getPassengerName());
                     String eTicketNumber = pnrBean.getPassengerSpecialServiceRequest(pnr, passengerNumber, itineraryNumber ,Constants.SSR_ACTION_CODE_TICKET_NUMBER).getValue();
                     ETicket connection = flightScheduleBean.getETicket(Long.parseLong(eTicketNumber));
-                    connections.add(connection);
-                    connections.addAll(getPossibleConnections(pnr, connection, connections));
+                    connections.addAll(getPossibleConnections(connection));
+                    return connections;
                 } catch (NotFoundException e) {
                     e.printStackTrace();
                 }
