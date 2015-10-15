@@ -50,13 +50,17 @@ public class Cabin {
     }
 
     public int seatCount() {
+        return getRowLength() * numRows;
+    }
+
+    public int getRowLength() {
         int result = 0;
         for (int i = 0; i < row.length(); i++){
             char c = row.charAt(i);
             if (c == 's')
                 result++;
         }
-        return result * numRows;
+        return result;
     }
 
     public String toString() {

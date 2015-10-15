@@ -1,7 +1,11 @@
 package MAS.Common;
 
 
+import MAS.Exception.NotFoundException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SeatConfigObject {
     /*
@@ -20,11 +24,17 @@ public class SeatConfigObject {
      */
     private ArrayList<Cabin> cabins;
     private int selection;
+    private List<Integer> takenSeats;
+    private static final String[] ALPHABETS = {"A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R"};//No "I"
+    private List<Integer> templateSeats;
+
 
     public SeatConfigObject() {
         cabins = new ArrayList<>();
         addCabin();
         selectCabin(0);
+        takenSeats = new ArrayList<>();
+        templateSeats = new ArrayList<>();
     }
 
     public void parse(String seatConfigString) {
@@ -119,5 +129,89 @@ public class SeatConfigObject {
 
     public int getTotalSeats() {
         return getSeatsInClass(0) + getSeatsInClass(1) + getSeatsInClass(2) + getSeatsInClass(3);
+    }
+
+    public void addTakenSeats(List<Integer> seats) {
+        for (int i = 0; i < seats.size(); i++) {
+            takenSeats.add(seats.get(i));
+        }
+    }
+
+    public List<Integer> getAvailableSeats() {
+        if (templateSeats == null || templateSeats.size() != getTotalSeats()) {
+            templateSeats = new ArrayList<>();
+            int l = getTotalSeats();
+            for (int i = 0; i < l; i++) {
+                templateSeats.add(i);
+            }
+        }
+        List<Integer> result = new ArrayList<>(templateSeats);
+        result.removeAll(takenSeats);
+
+        return result;
+    }
+
+    public String convertIntToString(int seatNumber) throws NotFoundException {
+        int inCabin = findInCabin(seatNumber);
+        int row = 0;
+        String column = "";
+        for (int i = 0; i < inCabin; i++) {
+            seatNumber -= cabins.get(i).seatCount();
+            row += cabins.get(i).getNumRows();
+        }
+        row += (seatNumber / cabins.get(inCabin).getRowLength()) + 1;
+        column = ALPHABETS[seatNumber % cabins.get(inCabin).getRowLength()];
+        return Integer.toString(row).concat(column);
+    }
+
+    public int convertStringToInt(String seatNumber) throws NotFoundException {
+        int result = 0;
+        if (seatNumber.length() > 4) {
+            throw new NotFoundException();
+        }
+        else if (!seatNumber.substring(seatNumber.length() - 1 ,seatNumber.length()).matches("[a-zA-Z]+"))
+        {
+            throw new NotFoundException();
+        }
+        int column = Arrays.asList(ALPHABETS).indexOf(seatNumber.substring(seatNumber.length() - 1 ,seatNumber.length()));
+        int row = 0;
+        if (column == -1)
+            throw new NotFoundException();
+        try {
+            row = Integer.parseInt(seatNumber.substring(0, seatNumber.length() - 1));
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
+        int inCabin = findRowInCabin(row);
+        for (int i = 0; i < inCabin; i++) {
+            result += cabins.get(i).seatCount();
+            row -= cabins.get(i).getNumRows();
+        }
+        result += (row - 1) * cabins.get(inCabin).getRowLength();
+        result += column;
+
+        return result;
+    }
+
+    private int findInCabin(int seatNumber) throws NotFoundException {
+        for (int i = 0; i < cabins.size(); i++) {
+            Cabin currCabin = cabins.get(i);
+            if (seatNumber < currCabin.seatCount())
+                return i;
+            else
+                seatNumber -= currCabin.seatCount();
+        }
+        throw new NotFoundException();
+    }
+
+    private int findRowInCabin(int rowNumber) throws NotFoundException {
+        for (int i = 0; i < cabins.size(); i++) {
+            Cabin currCabin = cabins.get(i);
+            if (rowNumber < currCabin.getNumRows())
+                return i;
+            else
+                rowNumber -= currCabin.getNumRows();
+        }
+        throw new NotFoundException();
     }
 }
