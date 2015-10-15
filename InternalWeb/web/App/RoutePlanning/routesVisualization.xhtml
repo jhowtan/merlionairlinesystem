@@ -44,8 +44,11 @@
                         var routePath = new google.maps.Polyline({
                             path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
                             geodesic: true,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 0.5,
+                            //strokeColor: '#FF0000',
+                            //<![CDATA[
+                            strokeColor: '#'+(Math.random()*0xFFFFFF<<0).toString(16),
+                            //]]>
+                            strokeOpacity: 0.75,
                             strokeWeight: 4
                         });
                         var infoWindow = new google.maps.InfoWindow({
@@ -61,7 +64,7 @@
                         google.maps.event.addListener(routePath, 'mouseout', function(event) {
                             infoWindow.close();
                             routePath.setOptions({
-                                strokeOpacity: 0.5
+                                strokeOpacity: 0.75
                             });
                         });
                         routePath.setMap(map);
