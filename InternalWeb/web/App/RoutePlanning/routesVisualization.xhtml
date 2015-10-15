@@ -46,7 +46,8 @@
                             geodesic: true,
                             //strokeColor: '#FF0000',
                             //<![CDATA[
-                            strokeColor: '#'+(Math.random()*0xFFFFFF<<0).toString(16),
+                            //strokeColor: '#'+(Math.random()*16777215<<0).toString(16),
+                            strokeColor: '#'+(Math.floor((Math.random()*100)+56).toString(16))+(Math.floor((Math.random()*106)+50).toString(16))+(Math.floor((Math.random()*106)+50).toString(16)),
                             //]]>
                             strokeOpacity: 0.75,
                             strokeWeight: 4
