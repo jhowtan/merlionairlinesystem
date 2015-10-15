@@ -28,14 +28,14 @@ public class ETicket {
         this.pnr = pnr;
     }
 
-    private String seatNumber;
+    private int seatNumber;
 
     @Basic
-    public String getSeatNumber() {
+    public int getSeatNumber() {
         return seatNumber;
     }
 
-    public void setSeatNumber(String seatNumber) {
+    public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
     }
 

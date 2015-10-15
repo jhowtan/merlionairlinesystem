@@ -19,6 +19,7 @@ public class CheckInManagedBean {
     @ManagedProperty(value = "#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
+    private ETicket primaryETicket;
     private List<ETicket> relatedPassengers;
     private HashMap<Long, Boolean> relatedPassengersCheck;
     private HashMap<Long, Boolean> relatedPassengersCheckDisable;
@@ -29,8 +30,6 @@ public class CheckInManagedBean {
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
     }
-
-    private ETicket primaryETicket;
 
     @PostConstruct
     public void init() {
@@ -75,5 +74,9 @@ public class CheckInManagedBean {
 
     public void setRelatedPassengersCheckDisable(HashMap<Long, Boolean> relatedPassengersCheckDisable) {
         this.relatedPassengersCheckDisable = relatedPassengersCheckDisable;
+    }
+
+    public void setPrimaryETicket(ETicket primaryETicket) {
+        this.primaryETicket = primaryETicket;
     }
 }
