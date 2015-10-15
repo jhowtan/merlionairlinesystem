@@ -41,13 +41,6 @@
                 });
                 $.get('routesVisualizationData.xhtml', function(data) {
                     $.each(data, function(i, route) {
-                        var routePath = new google.maps.Polyline({
-                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
-                            geodesic: true,
-                            strokeColor: '#FFFFFF',
-                            strokeOpacity: 0,
-                            strokeWeight: 50
-                        });
                         var visibleRoutePath = new google.maps.Polyline({
                             path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
                             geodesic: true,
@@ -58,6 +51,13 @@
                             //]]>
                             strokeOpacity: 0.75,
                             strokeWeight: 4
+                        });
+                        var routePath = new google.maps.Polyline({
+                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
+                            geodesic: true,
+                            strokeColor: '#FFFFFF',
+                            strokeOpacity: 0,
+                            strokeWeight: 50
                         });
                         var infoWindow = new google.maps.InfoWindow({
                             content: route.origin + " - " + route.destination
