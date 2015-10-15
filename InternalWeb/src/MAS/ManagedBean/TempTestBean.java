@@ -1,8 +1,11 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.BookFlightBean;
-import MAS.Bean.BookingClassBean;
+import MAS.Bean.*;
+import MAS.Common.Constants;
+import MAS.Entity.Aircraft;
 import MAS.Entity.BookingClass;
+import MAS.Entity.PNR;
+import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -16,15 +19,20 @@ public class TempTestBean {
     BookFlightBean bookFlightBean;
     @EJB
     BookingClassBean bookingClassBean;
+    @EJB
+    PNRBean pnrBean;
 
     public void book() throws Exception {
         ArrayList<BookingClass> b = new ArrayList<>();
         ArrayList<String> p = new ArrayList<>();
-        b.add(bookingClassBean.getBookingClass(55));
-        p.add("LAU/WEIJIEJONATHAN");
-        p.add("HO/ZEWEIDARYL");
-        p.add("TAN/JYEHOWJONATHAN");
-        bookFlightBean.bookFlights(b, p);
+        b.add(bookingClassBean.getBookingClass(161));
+        b.add(bookingClassBean.getBookingClass(202));
+        b.add(bookingClassBean.getBookingClass(453));
+        b.add(bookingClassBean.getBookingClass(476));
+        p.add("TAN/KELLY");
+        PNR pnr = bookFlightBean.bookFlights(b, p);
+        pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, "TAN/KELLY"), Constants.SSR_ACTION_CODE_FFP, "B6/12345655");
+        pnrBean.updatePNR(pnr);
     }
 
 }

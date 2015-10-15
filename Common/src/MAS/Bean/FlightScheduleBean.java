@@ -272,9 +272,20 @@ public class FlightScheduleBean {
     }
 
     public List<ETicket> getETicketsForFlight(Flight flight) {
-        return em.createQuery("SELECT et FROM ETicket et WHERE et.flight = :flight")
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.flight = :flight", ETicket.class)
                 .setParameter("flight", flight)
                 .getResultList();
+    }
+
+    public List<Integer> getSeatsTakenForFlight(Flight flight) {
+        ArrayList<Integer> seatsTaken = new ArrayList<>();
+        List<ETicket> eTickets = getETicketsForFlight(flight);
+        for (ETicket eTicket : eTickets) {
+            if (eTicket.getSeatNumber() != -1) {
+                seatsTaken.add(eTicket.getSeatNumber());
+            }
+        }
+        return seatsTaken;
     }
 
     public ETicket getETicket(long id) throws NotFoundException {
@@ -284,9 +295,22 @@ public class FlightScheduleBean {
     }
 
     public List<ETicket> getRelatedETickets(ETicket eTicket) {
-        return em.createQuery("SELECT et FROM ETicket et WHERE et.pnr = :pnr AND et.flight = :flight")
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.pnr = :pnr AND et.flight = :flight", ETicket.class)
                 .setParameter("flight", eTicket.getFlight())
                 .setParameter("pnr", eTicket.getPnr())
                 .getResultList();
     }
+
+    public void updateETicket(ETicket eTicket) throws NotFoundException {
+        if (em.find(ETicket.class, eTicket.getId()) == null) throw new NotFoundException();
+        em.merge(eTicket);
+    }
+
+    public boolean isSeatAvailable(Flight flight, int seat) {
+        return em.createQuery("SELECT COUNT(et) FROM ETicket et WHERE et.flight = :flight AND et.seatNumber = :seatNumber", Long.class)
+                .setParameter("flight", flight)
+                .setParameter("seatNumber", seat)
+                .getSingleResult() == 0;
+    }
+
 }

@@ -127,4 +127,15 @@ public class ETicket {
     public void setBaggages(List<Baggage> baggages) {
         this.baggages = baggages;
     }
+
+    private ETicket nextConnection;
+
+    @OneToOne
+    public ETicket getNextConnection() {
+        return nextConnection;
+    }
+
+    public void setNextConnection(ETicket nextConnection) {
+        this.nextConnection = nextConnection;
+    }
 }

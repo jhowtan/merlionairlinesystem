@@ -80,6 +80,7 @@ public class BookFlightBean {
                 eTicket.setFlight(bookingClass.getFlight());
                 eTicket.setPassengerName(passengerName);
                 eTicket.setTravelClass(bookingClass.getTravelClass());
+                eTicket.setSeatNumber(-1);
                 em.persist(eTicket);
                 em.flush();
                 try {

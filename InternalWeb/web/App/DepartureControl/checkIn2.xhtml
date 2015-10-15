@@ -11,32 +11,25 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Passenger Check In</h1>
-                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                        <h:panelGroup layout="block" styleClass="alert alert-info">
-                            #{message.detail}
-                        </h:panelGroup>
-                    </ui:repeat>
                 </div>
                 <div class="col-lg-12">
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="panel panel-default">
+                            <h:panelGroup class="panel panel-default" layout="block" rendered="#{!checkInManagedBean.primaryETicket.checkedIn}">
                                 <div class="panel-heading">Check In</div>
                                 <div class="panel-body">
+                                    <ui:repeat value="#{facesContext.getMessageList('check-in-status')}" var="message">
+                                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                                            #{message.detail}
+                                        </h:panelGroup>
+                                    </ui:repeat>
                                     <h:form>
                                         <p>
                                             <strong>Passenger:</strong>
                                             <br/>
                                             <samp>#{checkInManagedBean.primaryETicket.passengerName}</samp>
                                         </p>
-                                        <div class="form-group #{!seatNumber.valid ? 'has-error' : ''}">
-                                            <label class="control-label" for="seatNumber">Seat: </label>
-                                            <h:selectOneMenu id="seatNumber" binding="#{seatNumber}"
-                                                         styleClass="form-control"
-                                                         required="true" requiredMessage="The passenger needs to be assigned a seat."/>
-                                            <h:message for="seatNumber" styleClass="help-block" />
-                                        </div>
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="form-group #{!ffpProgram.valid ? 'has-error' : ''}">
@@ -44,8 +37,7 @@
                                                     <h:selectOneMenu id="ffpProgram"
                                                                      binding="#{ffpProgram}"
                                                                      value="#{checkInManagedBean.ffpProgram}"
-                                                                     styleClass="form-control"
-                                                                     required="true" requiredMessage="Please select the passenger's FFP program.">
+                                                                     styleClass="form-control">
                                                         <f:selectItems value="#{checkInManagedBean.getFFPAllianceList()}" />
                                                     </h:selectOneMenu>
                                                 </div>
@@ -54,14 +46,13 @@
                                                 <div class="form-group #{!ffpNumber.valid ? 'has-error' : ''}">
                                                     <label class="control-label" for="ffpNumber">FFP Number: </label>
                                                     <h:inputText id="ffpNumber" binding="#{ffpNumber}" value="#{checkInManagedBean.ffpNumber}"
-                                                                 styleClass="form-control" pt:placeholder="e.g. 81790111"
-                                                                 required="true" requiredMessage="Please enter the passenger's FFP number."/>
+                                                                 styleClass="form-control" pt:placeholder="e.g. 81790111" />
                                                     <h:message for="ffpNumber" styleClass="help-block" />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group #{!seatNumber.valid ? 'has-error' : ''}">
-                                            <label class="control-label" for="seatNumber">Final Destination: </label>
+                                        <div class="form-group #{!finalDestination.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="finalDestination">Final Destination: </label>
                                             <h:selectOneMenu id="finalDestination"
                                                              binding="#{finalDestination}"
                                                              value="#{checkInManagedBean.finalDestination}"
@@ -72,18 +63,61 @@
                                                         var="eticket"
                                                         itemLabel="#{eticket.flight.aircraftAssignment.route.destination.name} (#{eticket.flight.aircraftAssignment.route.origin.id} - #{eticket.flight.aircraftAssignment.route.destination.id})"
                                                         itemValue="#{eticket.flight.aircraftAssignment.route.destination.id}" />
+                                                <f:ajax render="seats-selector" />
                                             </h:selectOneMenu>
                                             <h:message for="finalDestination" styleClass="help-block" />
                                         </div>
+
+                                        <h:panelGroup id="seats-selector">
+                                            <ui:repeat value="#{checkInManagedBean.getSelectedConnections()}" var="eticket" varStatus="varStatus">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="seatNumber">Seat for #{eticket.flight.aircraftAssignment.route.origin.id} - #{eticket.flight.aircraftAssignment.route.destination.id} on #{eticket.flight.code}: </label>
+                                                    <h:selectOneMenu id="seatNumber" styleClass="form-control" value="#{checkInManagedBean.seats[varStatus.index]}">
+                                                        <f:selectItems value="#{checkInManagedBean.availableSeatsName(eticket)}" />
+                                                    </h:selectOneMenu>
+                                                    <h:message for="seatNumber" styleClass="help-block" />
+                                                </div>
+                                            </ui:repeat>
+                                        </h:panelGroup>
+
                                         <div class="text-right">
-                                            <div class="btn-group">
-                                                <h:link outcome="/App/DepartureControl/checkIn2" class="btn btn-default" value="Print Boarding Pass" />
-                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Check In" styleClass="btn btn-default btn-success" />
-                                            </div>
+                                            <h:commandButton action="#{checkInManagedBean.checkIn()}" value="Check In" styleClass="btn btn-default btn-success" onclick="return confirm('Confirm check in for passenger #{checkInManagedBean.primaryETicket.passengerName}?')">
+                                                <f:param name="eticket" value="#{checkInManagedBean.primaryETicket.id}" />
+                                            </h:commandButton>
                                         </div>
                                     </h:form>
                                 </div>
-                            </div>
+                            </h:panelGroup>
+
+
+                            <h:panelGroup class="panel panel-default" layout="block" rendered="#{checkInManagedBean.primaryETicket.checkedIn}">
+                                <div class="panel-heading">Check In</div>
+                                <div class="panel-body">
+                                    <h:form>
+                                        <p>
+                                            <strong>Passenger:</strong>
+                                            <samp>#{checkInManagedBean.primaryETicket.passengerName}</samp>
+                                        </p>
+                                        <p>
+                                            <strong>Frequent Flyer Program:</strong>
+                                            <samp>#{checkInManagedBean.primaryETicket.ffpNumber}</samp>
+                                        </p>
+
+                                        <ui:repeat value="#{checkInManagedBean.getLinkedETickets(checkInManagedBean.primaryETicket)}" var="eticket">
+                                        <p>
+                                            <strong>Seat Number (#{eticket.flight.aircraftAssignment.route.origin.id}-#{eticket.flight.aircraftAssignment.route.destination.id} on #{eticket.flight.code}):</strong>
+                                            <samp>#{checkInManagedBean.getNiceSeatName(eticket)}</samp>
+                                        </p>
+                                        </ui:repeat>
+
+                                        <div class="text-right">
+                                            <h:commandButton value="Print Boarding Pass" styleClass="btn btn-default btn-default">
+                                                <f:param name="eticket" value="#{checkInManagedBean.primaryETicket.id}" />
+                                            </h:commandButton>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </h:panelGroup>
                         </div>
 
                         <div class="col-lg-6">
@@ -127,18 +161,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <ui:repeat value="#{checkInManagedBean.relatedPassengers}" var="eticket">
+                                    <ui:repeat value="#{checkInManagedBean.relatedPassengers}" var="eticket" varStatus="varStatus">
                                         <tr>
                                             <td>#{eticket.pnr.bookingReference}</td>
                                             <td>#{eticket.passengerName}</td>
                                             <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
                                             <td>
                                                 <h:form>
-                                                    <h:commandLink outcome="/App/DepartureControl/checkIn2" styleClass="btn btn-default btn-xs btn-info"
-                                                            disabled="#{checkInManagedBean.relatedPassengersCheckDisable[eticket.id]}">
+                                                    <h:link outcome="checkIn2" styleClass="btn btn-default btn-xs btn-info #{checkInManagedBean.relatedPassengersCheckDisable[eticket.id] ? 'disabled' : ''}">
                                                         <i class="fa fa-suitcase"></i> Check In
                                                         <f:param name="eticket" value="#{eticket.id}"/>
-                                                    </h:commandLink>
+                                                    </h:link>
                                                 </h:form>
                                             </td>
                                         </tr>

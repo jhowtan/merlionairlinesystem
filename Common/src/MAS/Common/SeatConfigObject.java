@@ -3,9 +3,7 @@ package MAS.Common;
 
 import MAS.Exception.NotFoundException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SeatConfigObject {
     /*
@@ -35,6 +33,12 @@ public class SeatConfigObject {
         selectCabin(0);
         takenSeats = new ArrayList<>();
         templateSeats = new ArrayList<>();
+    }
+
+    public static SeatConfigObject getInstance(String seatConfigString) {
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(seatConfigString);
+        return seatConfigObject;
     }
 
     public void parse(String seatConfigString) {
@@ -149,6 +153,24 @@ public class SeatConfigObject {
         result.removeAll(takenSeats);
 
         return result;
+    }
+
+    public List<Integer> getAvailableSeatsForTravelClass(int travelClass) {
+        // @TODO: Stub, filter by travel class
+        return getAvailableSeats();
+    }
+
+    public LinkedHashMap<String, Integer> getAvailableSeatsNameForTravelClass(int travelClass) {
+        List<Integer> seats = getAvailableSeatsForTravelClass(travelClass);
+        LinkedHashMap<String, Integer> availableSeatsName = new LinkedHashMap<>();
+        for (Integer seat : seats) {
+            try {
+                availableSeatsName.put(convertIntToString(seat), seat);
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return availableSeatsName;
     }
 
     public String convertIntToString(int seatNumber) throws NotFoundException {
