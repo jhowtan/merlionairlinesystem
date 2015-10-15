@@ -142,6 +142,10 @@ public class ScheduleDevelopmentBean {
                 if (!suggestedRouteExists(route)) {
                     suggestedRoutes.add(route);
                 }
+                Route reverseRoute = reverseRoute(route);
+                if (!suggestedRouteExists(reverseRoute)) {
+                    suggestedRoutes.add(reverseRoute);
+                }
             }
         }
     }
@@ -154,18 +158,29 @@ public class ScheduleDevelopmentBean {
         return false;
     }
 
+    private Route reverseRoute(Route route) {
+        Route newRoute = new Route();
+        newRoute.setDestination(route.getOrigin());
+        newRoute.setOrigin(route.getDestination());
+        return newRoute;
+    }
+
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
         System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        //Destination is near a hub
+        Airport nearHub = nearHub(destination);
+        if (nearHub != null)
+            System.out.println("NEARHUB: " + nearHub.getName());
+        if (nearHub != null && nearHub != origin) {
+            System.out.println("Setting: NONE");
+            return null;
+        }
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
             //Recursive search for route to destination
             //Stop if cost of route is > basecost
-            Airport nearHub = nearHub(destination);
-            if (nearHub != null && nearHub != origin) {
-                return null;
-            }
             HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
             if (calcRoute != null && calcRoute.costDistance <= minCost) {
                 result = calcRoute;
@@ -248,13 +263,21 @@ public class ScheduleDevelopmentBean {
     }
 
     private Airport nearHub(Airport airport) {
+        HypoRoute hubRoute = null;
         for (int i = 0; i < hubs.size(); i++) {
             List<HypoRoute> routesFromHub = getHypoRoutesStarting(hubs.get(i));
             for (int j = 0; j < routesFromHub.size(); j++) {
-                if (routesFromHub.get(i).route().getDestination() == airport)
-                    return routesFromHub.get(i).route().getOrigin();
+                System.out.println(routesFromHub.get(j).route().getDestination().getName() + " | " + airport.getName());
+                if (routesFromHub.get(j).route().getDestination() == airport) {
+                    if (hubRoute == null)
+                        hubRoute = routesFromHub.get(j);
+                    else if (routesFromHub.get(j).actualDistance < hubRoute.actualDistance)
+                        hubRoute = routesFromHub.get(j);
+                }
             }
         }
+        if (hubRoute != null)
+            return hubRoute.route().getOrigin();
         return null;
     }
 
