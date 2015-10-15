@@ -4,15 +4,14 @@ import javax.persistence.*;
 
 @Entity
 public class Airport {
-    private long id;
+    private String id;
 
-    @GeneratedValue
     @Id
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -47,17 +46,6 @@ public class Airport {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    private String code;
-
-    @Basic
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String iata) {
-        this.code = iata;
     }
 
     private City city;

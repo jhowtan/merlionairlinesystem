@@ -1,7 +1,9 @@
 package MAS.ManagedBean.SystemAdmin;
 
 import MAS.Bean.RoleBean;
+import MAS.Bean.RouteBean;
 import MAS.Bean.UserBean;
+import MAS.Entity.Airport;
 import MAS.Entity.Role;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
@@ -24,6 +26,8 @@ public class UpdateUserManagedBean {
     private UserBean userBean;
     @EJB
     private RoleBean roleBean;
+    @EJB
+    private RouteBean routeBean;
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
@@ -35,6 +39,7 @@ public class UpdateUserManagedBean {
     private String lastName;
     private String email;
     private String phone;
+    private String baseAirport;
     private List<Role> roles;
     private Map<Long, Boolean> rolesMap;
 
@@ -44,6 +49,10 @@ public class UpdateUserManagedBean {
         long userId = Long.parseLong(params.get("userId"));
         getUser(userId);
         populateRoles();
+    }
+
+    public List<Airport> retrieveAirports() {
+        return routeBean.getAllAirports();
     }
 
     private void getUser(long id) {
@@ -57,6 +66,7 @@ public class UpdateUserManagedBean {
         lastName = user.getLastName();
         email = user.getEmail();
         phone = user.getPhone();
+        baseAirport = user.getBaseAirport().getId();
     }
 
     private void populateRoles() {
@@ -83,8 +93,8 @@ public class UpdateUserManagedBean {
                 roleIds.add((Long) pair.getKey());
             }
         }
-        Long userId = userBean.adminUpdateUserInfo(user.getId(), firstName, lastName, email, phone);
         try {
+            Long userId = userBean.adminUpdateUserInfo(user.getId(), firstName, lastName, email, phone, routeBean.getAirport(baseAirport));
             userBean.setRoles(userId, roleIds);
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -167,6 +177,14 @@ public class UpdateUserManagedBean {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getBaseAirport() {
+        return baseAirport;
+    }
+
+    public void setBaseAirport(String baseAirport) {
+        this.baseAirport = baseAirport;
     }
 
     public List<Role> getRoles() {

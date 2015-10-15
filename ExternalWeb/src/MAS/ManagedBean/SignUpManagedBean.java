@@ -54,7 +54,7 @@ public class SignUpManagedBean {
         return Constants.NATIONALITIES;
     }
     public String[] getCountries() {
-        return Constants.COUNTRIES;
+        return Constants.COUNTRY_NAMES;
     }
 
 

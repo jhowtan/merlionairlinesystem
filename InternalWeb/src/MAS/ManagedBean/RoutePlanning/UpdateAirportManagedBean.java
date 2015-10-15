@@ -30,7 +30,7 @@ public class UpdateAirportManagedBean {
     private String code;
     private double latitude;
     private double longitude;
-    private long cityId;
+    private String cityId;
     private int hangars;
 
     private List<City> cities;
@@ -38,19 +38,19 @@ public class UpdateAirportManagedBean {
     @PostConstruct
     public void init() {
         params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        long apId = Long.parseLong(params.get("apId"));
+        String apId = params.get("apId");
         getAirport(apId);
         setCities(routeBean.getAllCities());
     }
 
-    private void getAirport(long id) {
+    private void getAirport(String id) {
         try {
             airport = routeBean.getAirport(id);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
         airportName = airport.getName();
-        code = airport.getCode();
+        code = airport.getId();
         latitude = airport.getLatitude();
         longitude = airport.getLongitude();
         cityId = airport.getCity().getId();
@@ -58,9 +58,7 @@ public class UpdateAirportManagedBean {
     }
 
     public void save() throws NotFoundException {
-        routeBean.changeAirportCode(airport.getId(), code);
-        routeBean.changeAirportName(airport.getId(), airportName);
-        routeBean.changeHangarCount(airport.getId(), hangars);
+        routeBean.updateAirport(airport);
         authManagedBean.createAuditLog("Updated Airport: " + airportName, "update_airport");
 
         FacesMessage m = new FacesMessage("Airport changes saved successfully.");
@@ -112,11 +110,11 @@ public class UpdateAirportManagedBean {
         this.longitude = longitude;
     }
 
-    public long getCityId() {
+    public String getCityId() {
         return cityId;
     }
 
-    public void setCityId(long cityId) {
+    public void setCityId(String cityId) {
         this.cityId = cityId;
     }
 

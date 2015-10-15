@@ -33,7 +33,7 @@
                                         <br/>
                                         <h:selectOneMenu styleClass="form-control" id="origin" value="#{createRouteManagedBean.originId}" binding="#{origin}">
                                             <f:selectItems value="#{createRouteManagedBean.airports}" var="ap"
-                                                           itemLabel="#{ap.name}" itemValue="#{ap.id}" />
+                                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
                                             <f:validator validatorId="routeValidator" />
                                             <f:attribute name="destination" value="#{destination}" />
                                         </h:selectOneMenu>
@@ -43,7 +43,7 @@
                                         <br/>
                                         <h:selectOneMenu styleClass="form-control" id="destination" value="#{createRouteManagedBean.destinationId}" binding="#{destination}">
                                             <f:selectItems value="#{createRouteManagedBean.airports}" var="ap"
-                                                           itemLabel="#{ap.name}" itemValue="#{ap.id}" />
+                                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
                                         </h:selectOneMenu>
                                         <h:message for="destination" styleClass="help-block" />
                                     </div>

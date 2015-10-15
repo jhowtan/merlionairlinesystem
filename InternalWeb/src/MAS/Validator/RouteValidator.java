@@ -21,8 +21,8 @@ public class RouteValidator implements Validator {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
         UIInput destinationComponent = (UIInput) uiComponent.getAttributes().get("destination");
-        long destinationValue = Long.parseLong(destinationComponent.getSubmittedValue().toString());
-        long originValue = Long.parseLong(o.toString());
+        String destinationValue = destinationComponent.getSubmittedValue().toString();
+        String originValue = o.toString();
         if (originValue == destinationValue) {
             FacesMessage m = new FacesMessage("The origin and destination cannot be the same.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);

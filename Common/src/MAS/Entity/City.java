@@ -4,15 +4,14 @@ import javax.persistence.*;
 
 @Entity
 public class City {
-    private long id;
+    private String id;
 
-    @GeneratedValue
     @Id
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -36,5 +35,16 @@ public class City {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    private String timezone;
+
+    @Basic
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

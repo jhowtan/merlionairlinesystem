@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.util.List;
+import java.util.TimeZone;
 
 @ManagedBean
 public class CreateCityManagedBean {
@@ -27,8 +28,10 @@ public class CreateCityManagedBean {
     }
     private List<Country> countries;
 
+    private String cityId;
     private String cityName;
-    private long countryId;
+    private String countryId;
+    private String timezone;
 
     @PostConstruct
     public void init() {
@@ -36,10 +39,12 @@ public class CreateCityManagedBean {
     }
 
     public void createCity() throws NotFoundException {
-        routeBean.createCity(getCityName(), getCountryId());
+        routeBean.createCity(cityId, cityName, countryId, timezone);
         authManagedBean.createAuditLog("Created new city: " + getCityName(), "create_city");
         setCityName(null);
-        setCountryId(0);
+        setCountryId(null);
+        setTimezone(null);
+        setCityId(null);
         FacesMessage m = new FacesMessage("City created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -53,15 +58,19 @@ public class CreateCityManagedBean {
         return cityName;
     }
 
+    public String[] retrieveTimezone() {
+        return TimeZone.getAvailableIDs();
+    }
+
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
 
-    public long getCountryId() {
+    public String getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(long countryId) {
+    public void setCountryId(String countryId) {
         this.countryId = countryId;
     }
 
@@ -71,5 +80,21 @@ public class CreateCityManagedBean {
 
     public void setCountries(List<Country> countries) {
         this.countries = countries;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

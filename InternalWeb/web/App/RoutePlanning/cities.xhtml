@@ -13,7 +13,9 @@
                     <h1 class="page-header">Cities</h1>
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/cities">Cities</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/countries">Countries</h:link></li>
                         <li role="presentation"><h:link outcome="/App/RoutePlanning/createCity">Create City</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/RoutePlanning/createCountry">Create Country</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert alert-info">
@@ -23,16 +25,20 @@
                     <table class="table" id="cities_table">
                         <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>City</th>
                             <th>Country</th>
+                            <th>Timezone</th>
+                            <th>Local Time</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <ui:repeat value="#{cityManagedBean.getAllCities()}" var="ct">
                             <tr>
-                                <td>#{ct.name}</td>
-                                <td>#{ct.country.getName()}</td>
+                                <td>#{ct.name} (#{ct.id})</td>
+                                <td>#{ct.country.name} (#{ct.country.id})</td>
+                                <td>#{commonManagedBean.timezoneNiceName(ct.timezone)}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", ct.timezone, null)}</td>
                                 <td>
                                     <h:form>
                                         <h:commandLink action="#{cityManagedBean.delete(ct.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete city: #{ct.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
@@ -51,7 +57,7 @@
             $('#cities_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
                 ]
             });
         </script>
