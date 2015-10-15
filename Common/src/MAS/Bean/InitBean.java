@@ -118,6 +118,24 @@ public class InitBean {
                 e.printStackTrace();
             }
 
+            // INITIALIZE SOME AIRPORTS
+            try {
+                routeBean.createAirport("SIN", "Changi Airport", "SGP", 1.3644202, 103.9915308, 8);
+                routeBean.createAirport("HKG", "Hong Kong International Airport", "HKG", 22.308047, 113.9184808, 3);
+                routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 1);
+                routeBean.createAirport("JFK", "John F. Kennedy International Airport", "NYC", 40.6413111, -73.77813909999998, 1);
+                routeBean.createAirport("SFO", "San Francisco International Airport", "SFO", 37.6213129, -122.3789554, 4);
+                routeBean.createAirport("ICN", "Incheon International Airport", "SEL", 37.4601908, 126.44069569999999, 2);
+                routeBean.createAirport("NRT", "Narita International Airport", "TYO", 35.7719867, 140.39285010000003, 2);
+                routeBean.createAirport("KUL", "Kuala Lumpur International Airport", "KUL", 2.75419, 101.70474000000001, 1);
+                routeBean.createAirport("BKK", "Suvarnabhumi Airport", "BKK", 13.6899991, 100.75011240000003, 1);
+                routeBean.createAirport("BJS", "Beijing Capital International Airport", "BJS", 40.0798573, 116.60311209999997, 3);
+                routeBean.createAirport("BCN", "Barcelona-El Prat Airport", "BCN", 41.297445, 2.083294099999989, 0);
+                routeBean.createAirport("DXB", "Dubai International Airport", "DXB", 25.2531745, 55.36567279999997, 4);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // INITIALIZE SOME USERS
             try {
                 Long roleId = roleBean.createRole("Super Admin", permissionIds);
@@ -212,24 +230,6 @@ public class InitBean {
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // INITIALIZE SOME AIRPORTS
-            try {
-                routeBean.createAirport("SIN", "Changi Airport", "SGP", 1.3644202, 103.9915308, 8);
-                routeBean.createAirport("HKG", "Hong Kong International Airport", "HKG", 22.308047, 113.9184808, 3);
-                routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 1);
-                routeBean.createAirport("JFK", "John F. Kennedy International Airport", "NYC", 40.6413111, -73.77813909999998, 1);
-                routeBean.createAirport("SFO", "San Francisco International Airport", "SFO", 37.6213129, -122.3789554, 4);
-                routeBean.createAirport("ICN", "Incheon International Airport", "SEL", 37.4601908, 126.44069569999999, 2);
-                routeBean.createAirport("NRT", "Narita International Airport", "TYO", 35.7719867, 140.39285010000003, 2);
-                routeBean.createAirport("KUL", "Kuala Lumpur International Airport", "KUL", 2.75419, 101.70474000000001, 1);
-                routeBean.createAirport("BKK", "Suvarnabhumi Airport", "BKK", 13.6899991, 100.75011240000003, 1);
-                routeBean.createAirport("BJS", "Beijing Capital International Airport", "BJS", 40.0798573, 116.60311209999997, 3);
-                routeBean.createAirport("BCN", "Barcelona-El Prat Airport", "BCN", 41.297445, 2.083294099999989, 0);
-                routeBean.createAirport("DXB", "Dubai International Airport", "DXB", 25.2531745, 55.36567279999997, 4);
             } catch (Exception e) {
                 e.printStackTrace();
             }
