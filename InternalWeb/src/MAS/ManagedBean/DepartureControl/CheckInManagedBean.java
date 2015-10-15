@@ -29,6 +29,13 @@ public class CheckInManagedBean {
     private HashMap<Long, Boolean> relatedPassengersCheck;
     private HashMap<Long, Boolean> relatedPassengersCheckDisable;
 
+    private List<ETicket> connections;
+
+    private int seat;
+    private String ffpProgram;
+    private String ffpNumber;
+    private String finalDestination;
+
     @EJB
     FlightScheduleBean flightScheduleBean;
     @EJB
@@ -50,9 +57,23 @@ public class CheckInManagedBean {
                 relatedPassengersCheck.put(eTicket.getId(), eTicket.getId().equals(primaryETicket.getId()));
                 relatedPassengersCheckDisable.put(eTicket.getId(), eTicket.getId().equals(primaryETicket.getId()) || eTicket.isCheckedIn());
             }
+
+            connections = getPossibleConnections(primaryETicket);
+            finalDestination = connections.get(connections.size() - 1).getFlight().getAircraftAssignment().getRoute().getDestination().getId();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            String ffp = pnrBean.getPassengerSpecialServiceRequest(primaryETicket.getPnr(), pnrBean.getPassengerNumber(primaryETicket.getPnr(), primaryETicket.getPassengerName()), Constants.SSR_ACTION_CODE_FFP).getValue();
+            String[] parts = ffp.split("/");
+            if (parts.length != 2) throw new Exception();
+            if (!Arrays.asList(Constants.FFP_ALLIANCE_LIST_CODE).contains(parts[0])) throw new NotFoundException();
+            ffpProgram = parts[0];
+            ffpNumber = parts[1];
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void addBaggageToETicket(double weight) {
@@ -102,10 +123,6 @@ public class CheckInManagedBean {
         this.primaryETicket = primaryETicket;
     }
 
-    public List<ETicket> getAllConnectingDestinations() {
-        return getPossibleConnections(primaryETicket);
-    }
-
     public List<ETicket> getPossibleConnections(ETicket eTicket) {
         ArrayList<ETicket> connections = new ArrayList<>(Arrays.asList(eTicket));
         PNR pnr = eTicket.getPnr();
@@ -134,5 +151,45 @@ public class CheckInManagedBean {
             }
         }
         return connections;
+    }
+
+    public int getSeat() {
+        return seat;
+    }
+
+    public void setSeat(int seat) {
+        this.seat = seat;
+    }
+
+    public String getFfpProgram() {
+        return ffpProgram;
+    }
+
+    public void setFfpProgram(String ffpProgram) {
+        this.ffpProgram = ffpProgram;
+    }
+
+    public String getFfpNumber() {
+        return ffpNumber;
+    }
+
+    public void setFfpNumber(String ffpNumber) {
+        this.ffpNumber = ffpNumber;
+    }
+
+    public String getFinalDestination() {
+        return finalDestination;
+    }
+
+    public void setFinalDestination(String finalDestination) {
+        this.finalDestination = finalDestination;
+    }
+
+    public List<ETicket> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(List<ETicket> connections) {
+        this.connections = connections;
     }
 }

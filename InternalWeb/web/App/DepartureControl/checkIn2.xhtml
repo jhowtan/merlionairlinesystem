@@ -43,6 +43,7 @@
                                                     <label class="control-label" for="ffpProgram">FFP Program: </label>
                                                     <h:selectOneMenu id="ffpProgram"
                                                                      binding="#{ffpProgram}"
+                                                                     value="#{checkInManagedBean.ffpProgram}"
                                                                      styleClass="form-control"
                                                                      required="true" requiredMessage="Please select the passenger's FFP program.">
                                                         <f:selectItems value="#{checkInManagedBean.getFFPAllianceList()}" />
@@ -52,7 +53,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group #{!ffpNumber.valid ? 'has-error' : ''}">
                                                     <label class="control-label" for="ffpNumber">FFP Number: </label>
-                                                    <h:inputText id="ffpNumber" binding="#{ffpNumber}"
+                                                    <h:inputText id="ffpNumber" binding="#{ffpNumber}" value="#{checkInManagedBean.ffpNumber}"
                                                                  styleClass="form-control" pt:placeholder="e.g. 81790111"
                                                                  required="true" requiredMessage="Please enter the passenger's FFP number."/>
                                                     <h:message for="ffpNumber" styleClass="help-block" />
@@ -63,10 +64,11 @@
                                             <label class="control-label" for="seatNumber">Final Destination: </label>
                                             <h:selectOneMenu id="finalDestination"
                                                              binding="#{finalDestination}"
+                                                             value="#{checkInManagedBean.finalDestination}"
                                                              styleClass="form-control"
                                                              required="true" requiredMessage="Please choose the final destination for this passenger.">
                                                 <f:selectItems
-                                                        value="#{checkInManagedBean.getAllConnectingDestinations()}"
+                                                        value="#{checkInManagedBean.connections}"
                                                         var="eticket"
                                                         itemLabel="#{eticket.flight.aircraftAssignment.route.destination.name} (#{eticket.flight.aircraftAssignment.route.origin.id} - #{eticket.flight.aircraftAssignment.route.destination.id})"
                                                         itemValue="#{eticket.flight.aircraftAssignment.route.destination.id}" />

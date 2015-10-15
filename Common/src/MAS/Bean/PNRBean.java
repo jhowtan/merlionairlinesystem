@@ -23,6 +23,11 @@ public class PNRBean {
     public PNRBean() {
     }
 
+    public void updatePNR(PNR pnr) throws NotFoundException {
+        if (em.find(PNR.class, pnr.getId()) == null) throw new NotFoundException();
+        em.merge(pnr);
+    }
+
     public int getPassengerNumber(PNR pnr, String fullName) throws NotFoundException {
         if (!pnr.getPassengers().contains(fullName)) throw new NotFoundException();
         return pnr.getPassengers().indexOf(fullName) + 1;
@@ -32,7 +37,7 @@ public class PNRBean {
         List<Itinerary> itineraries = pnr.getItineraries();
         for (Itinerary itinerary : itineraries) {
             if (itinerary.getFlightCode().equals(flightCode)) {
-                return itineraries.indexOf(itinerary);
+                return itineraries.indexOf(itinerary) + 1;
             }
         }
         throw new NotFoundException();
@@ -89,6 +94,7 @@ public class PNRBean {
         if (itineraryNumber != -1) {
             ssr.setItineraryNumber(itineraryNumber);
         }
+        pnr.getSpecialServiceRequests().add(ssr);
     }
 
     public void setSpecialServiceRequest(PNR pnr, int passengerNumber, String actionCode, String value) {
