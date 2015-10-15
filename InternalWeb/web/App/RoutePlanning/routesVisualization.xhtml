@@ -44,6 +44,13 @@
                         var routePath = new google.maps.Polyline({
                             path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
                             geodesic: true,
+                            strokeColor: '#FFFFFF',
+                            strokeOpacity: 0,
+                            strokeWeight: 50
+                        });
+                        var visibleRoutePath = new google.maps.Polyline({
+                            path: [{lat: route.originLat, lng: route.originLon}, {lat: route.destinationLat, lng: route.destinationLon}],
+                            geodesic: true,
                             //strokeColor: '#FF0000',
                             //<![CDATA[
                             //strokeColor: '#'+(Math.random()*16777215<<0).toString(16),
@@ -59,16 +66,17 @@
                             infoWindow.open(map);
                             infoWindow.setPosition(event.latLng);
                             routePath.setOptions({
-                                strokeOpacity: 1
+                                strokeOpacity: 0.5
                             });
                         });
                         google.maps.event.addListener(routePath, 'mouseout', function(event) {
                             infoWindow.close();
                             routePath.setOptions({
-                                strokeOpacity: 0.75
+                                strokeOpacity: 0
                             });
                         });
                         routePath.setMap(map);
+                        visibleRoutePath.setMap(map);
                     });
                 });
             }
