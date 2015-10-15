@@ -1,6 +1,7 @@
 package MAS.Entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @TableGenerator(name = "eTicketNumberTable", initialValue=51200000, allocationSize = 1)
@@ -83,17 +84,6 @@ public class ETicket {
         this.passengerName = passengerName;
     }
 
-    private Customer customer;
-
-    @ManyToOne
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     private Flight flight;
 
     @ManyToOne
@@ -114,5 +104,27 @@ public class ETicket {
 
     public void setTravelClass(int travelClass) {
         this.travelClass = travelClass;
+    }
+
+    private String ffpNumber;
+
+    @Basic
+    public String getFfpNumber() {
+        return ffpNumber;
+    }
+
+    public void setFfpNumber(String ffpNumber) {
+        this.ffpNumber = ffpNumber;
+    }
+
+    private List<Baggage> baggages;
+
+    @OneToMany
+    public List<Baggage> getBaggages() {
+        return baggages;
+    }
+
+    public void setBaggages(List<Baggage> baggages) {
+        this.baggages = baggages;
     }
 }

@@ -4,8 +4,8 @@ import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.PNRBean;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
+import MAS.Entity.Baggage;
 import MAS.Entity.ETicket;
-import MAS.Entity.Flight;
 import MAS.Entity.Itinerary;
 import MAS.Entity.PNR;
 import MAS.Exception.NotFoundException;
@@ -53,6 +53,13 @@ public class CheckInManagedBean {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void addBaggageToETicket(double weight) {
+        Baggage baggage = new Baggage();
+        baggage.setWeight(weight);
+        List<Baggage> baggageList = primaryETicket.getBaggages();
+        baggageList.add(baggage);
     }
 
     public ETicket getPrimaryETicket() {

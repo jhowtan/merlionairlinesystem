@@ -24,11 +24,40 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">Check In</div>
                                 <div class="panel-body">
-                                    <p><strong>Passenger:</strong> <samp>#{checkInManagedBean.primaryETicket.passengerName}</samp></p>
-                                    <p><strong>Seat:</strong> <samp>#{checkInManagedBean.primaryETicket.seatNumber}</samp></p>
-                                    <p><strong>FFP:</strong> <samp></samp></p>
-                                    <p><strong>FInal Destination:</strong> <samp></samp></p>
-
+                                    <h:form>
+                                        <p>
+                                            <strong>Passenger:</strong>
+                                            <br/>
+                                            <samp>#{checkInManagedBean.primaryETicket.passengerName}</samp>
+                                        </p>
+                                        <div class="form-group #{!seatNumber.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="seatNumber">Seat: </label>
+                                            <h:selectOneMenu id="seatNumber" binding="#{seatNumber}" value="#{checkInManagedBean.primaryETicket.seatNumber}"
+                                                         styleClass="form-control"
+                                                         required="true" requiredMessage="The passenger needs to be assigned a seat."/>
+                                            <h:message for="seatNumber" styleClass="help-block" />
+                                        </div>
+                                        <div class="form-group #{!ffpNumber.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="ffpNumber">FFP Number: </label>
+                                            <h:inputText id="ffpNumber" binding="#{ffpNumber}" value="#{checkInManagedBean.primaryETicket.seatNumber}"
+                                                         styleClass="form-control" pt:placeholder="81790111"
+                                                         required="true" requiredMessage="Please enter the customer's FFP number."/>
+                                            <h:message for="ffpNumber" styleClass="help-block" />
+                                        </div>
+                                        <div class="form-group #{!seatNumber.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="seatNumber">Final Destination: </label>
+                                            <h:selectOneMenu id="finalDestination" binding="#{finalDestination}" value="#{checkInManagedBean.primaryETicket.seatNumber}"
+                                                             styleClass="form-control"
+                                                             required="true" requiredMessage="Please choose the final destination for this passenger."/>
+                                            <h:message for="finalDestination" styleClass="help-block" />
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="btn-group">
+                                                <h:link outcome="/App/DepartureControl/checkIn2" class="btn btn-default" value="Print Boarding Pass" />
+                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Check In" styleClass="btn btn-default btn-success" />
+                                            </div>
+                                        </div>
+                                    </h:form>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +66,22 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">Bag Drop</div>
                                 <div class="panel-body">
-                                    a
+                                    <h:form>
+                                        <!-- BAGGAGE FORM ITEMS -->
+                                        <div class="form-group #{!baggageWeight.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="baggageWeight">Weight for Baggage Item 1: </label>
+                                            <h:inputText id="baggageWeight" binding="#{baggageWeight}" value="#{checkInManagedBean.primaryETicket.seatNumber}"
+                                                             styleClass="form-control"
+                                                             required="true" requiredMessage="Please weigh the baggage item."/>
+                                            <h:message for="baggageWeight" styleClass="help-block" />
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="btn-group">
+                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
+                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Print Baggage Tag" styleClass="btn btn-default btn-success" />
+                                            </div>
+                                        </div>
+                                    </h:form>
                                 </div>
                             </div>
                         </div>
