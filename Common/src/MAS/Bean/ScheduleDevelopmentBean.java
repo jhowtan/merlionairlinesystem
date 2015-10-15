@@ -162,19 +162,18 @@ public class ScheduleDevelopmentBean {
         Route newRoute = new Route();
         newRoute.setDestination(route.getOrigin());
         newRoute.setOrigin(route.getDestination());
+        newRoute.setDistance(route.getDistance());
         return newRoute;
     }
 
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
-        System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         //Destination is near a hub
         Airport nearHub = nearHub(destination);
-        if (nearHub != null)
-            System.out.println("NEARHUB: " + nearHub.getName());
         if (nearHub != null && nearHub != origin) {
-            System.out.println("Setting: NONE");
+            //System.out.println("Setting: NONE");
             return null;
         }
         for (int i = 0; i < startRoutes.size(); i++) {
@@ -187,7 +186,7 @@ public class ScheduleDevelopmentBean {
                 minCost = result.costDistance;
             }
         }
-        System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
+        //System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
 
@@ -267,7 +266,6 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < hubs.size(); i++) {
             List<HypoRoute> routesFromHub = getHypoRoutesStarting(hubs.get(i));
             for (int j = 0; j < routesFromHub.size(); j++) {
-                System.out.println(routesFromHub.get(j).route().getDestination().getName() + " | " + airport.getName());
                 if (routesFromHub.get(j).route().getDestination() == airport) {
                     if (hubRoute == null)
                         hubRoute = routesFromHub.get(j);
