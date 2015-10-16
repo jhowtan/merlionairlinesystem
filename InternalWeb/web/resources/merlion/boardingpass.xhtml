@@ -61,10 +61,10 @@
                     Boarding gate closes 10 minutes before departure.
                 </div>
                 <div class="bottom">
-                    <div class="item">
+                    <h:panelGroup class="item" layout="block" rendered="#{! empty cc.attrs.eticket.ffpNumber}">
                         <div class="label">Frequent Flyer</div>
                         <div class="value">#{cc.attrs.eticket.ffpNumber}</div>
-                    </div>
+                    </h:panelGroup>
                     <div class="barcode">
                         <div id="pdf417-barcode"></div>
                     </div>

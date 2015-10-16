@@ -9,6 +9,7 @@
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-print-color-adjust: exact;
 }
 
 .boarding-pass .top {
