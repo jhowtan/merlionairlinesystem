@@ -76,6 +76,7 @@ public class BookFlightBean {
         for (BookingClass bookingClass : bookingClasses) {
             for (String passengerName : passengerNames) {
                 ETicket eTicket = new ETicket();
+                eTicket.setCreated(new Date());
                 eTicket.setBookingClass(bookingClass);
                 eTicket.setFlight(bookingClass.getFlight());
                 eTicket.setPassengerName(passengerName);
