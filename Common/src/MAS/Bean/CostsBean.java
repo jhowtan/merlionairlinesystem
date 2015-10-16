@@ -130,7 +130,7 @@ public class CostsBean {
         result += Utils.yearsBetween(ac.getManufacturedDate(), new Date()) * Constants.AIRCRAFT_YEARLY_WEAR * result;
         result += acAll;
         result += totalSalary;
-        hypothetical.relativeCost = result;
+        hypothetical.aircraft.setFlyingCost(result);
     }
 
     public double calculateCostPerFlight(long flightId) throws NotFoundException {

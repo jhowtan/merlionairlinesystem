@@ -52,4 +52,26 @@ public class Aircraft {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Basic
+    private double flyingCost;
+
+    public double getFlyingCost() {
+        return flyingCost;
+    }
+
+    public void setFlyingCost(double flyingCost) {
+        this.flyingCost = flyingCost;
+    }
+
+    @Basic
+    private double range;
+
+    public double getRange() {
+        return range;
+    }
+
+    public void setRange(double range) {
+        this.range = range;
+    }
 }

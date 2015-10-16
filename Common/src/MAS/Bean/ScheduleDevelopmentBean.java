@@ -61,12 +61,12 @@ public class ScheduleDevelopmentBean {
             else {
                 HypoAircraft hypoAircraft = new HypoAircraft();
                 hypoAircraft.aircraft = ac;
-                hypoAircraft.range = ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE;
+                hypoAircraft.aircraft.setRange(ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE);
                 hypoAircraft.homeBase = ap;
                 costsBean.calculateCostEstimate(hypoAircraft, 100);
                 aircraftsToFly.add(hypoAircraft);
-                if (hypoAircraft.range > maxRange)
-                    maxRange = hypoAircraft.range;
+                if (hypoAircraft.aircraft.getRange() > maxRange)
+                    maxRange = hypoAircraft.aircraft.getRange();
             }
         }
     }
@@ -187,7 +187,11 @@ public class ScheduleDevelopmentBean {
         Airport nearHub = nearHub(destination);
         if (nearHub != null && nearHub != origin) {
             //System.out.println("Setting: NONE");
-            return null;
+            if (isHub(origin)) {
+                if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub)))
+                    return null;
+            } else
+                return null;
         }
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);

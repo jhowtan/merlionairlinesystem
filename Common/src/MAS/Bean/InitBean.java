@@ -249,7 +249,7 @@ public class InitBean {
                 hubIds.add(routeBean.findAirportByCode("SIN").getId());
                 hubStr.add(0.8);
                 hubIds.add(routeBean.findAirportByCode("HKG").getId());
-                hubStr.add(0.3);
+                hubStr.add(0.7);
                 hubIds.add(routeBean.findAirportByCode("DXB").getId());
                 hubStr.add(0.3);
                 scheduleDevelopmentBean.addAirports(apIds);
