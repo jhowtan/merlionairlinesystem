@@ -26,6 +26,7 @@ public class ScheduleDevelopmentBean {
 
     private List<HypoAircraft> aircraftsToFly;
     private List<Airport> airportsToGo;
+    private List<List<HypoAircraft>> airportBuckets;
     private List<Airport> hubs;
     private List<Double> hubSavings;
     private List<Route> suggestedRoutes;
@@ -49,6 +50,7 @@ public class ScheduleDevelopmentBean {
         hubs = new ArrayList<>();
         hubSavings = new ArrayList<>();
         tierList = new ArrayList<>();
+        airportBuckets = new ArrayList<>();
     }
 
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
@@ -226,9 +228,6 @@ public class ScheduleDevelopmentBean {
                     if (newRoute != null)// && newRoute.costDistance <= minCost)
                         allOptions.add(newRoute);
                 }
-//                else {
-//                    System.out.println("DEAD END: " + calcRoute.print() + " & " + currBranch.print() + " vs " + destination.getName());
-//                }
             }
         }
 
@@ -306,11 +305,44 @@ public class ScheduleDevelopmentBean {
         return null;
     }
 
-    private void createFlightTimetable() {
+    private void addToBucket(HypoAircraft ac, Airport ap) throws Exception {
+        int index = airportsToGo.indexOf(ap);
+        if (index == -1) throw new Exception("Airport is not in list");
+        removeFromBucket(ac);
+        airportBuckets.get(index).add(ac);
+    }
+
+    private void removeFromBucket(HypoAircraft ac) {
+        for (int i = 0; i < airportBuckets.size(); i++) {
+            if (airportBuckets.get(i).indexOf(ac) != -1) {
+                airportBuckets.get(i).remove(ac);
+                return;
+            }
+        }
+    }
+
+    private void createFlightTimetable() throws Exception {
         //Do routes starting from the hub first
         //Find cheapest aircraft to allocate going out of the hub.
-        //  If it has been allocated, its priority shifts down a notch
-        //
+        for (int i = 0; i < airportsToGo.size(); i++) { //Initialize airport buckets
+            airportBuckets.add(new ArrayList<>());
+        }
+        //Add aircraft to hub buckets
+        for (int i = 0; i < aircraftsToFly.size(); i++) {
+            addToBucket(aircraftsToFly.get(i), aircraftsToFly.get(i).homeBase);
+        }
+        int currentTier = 0;
+        boolean done = false;
+        while (!done) {
+            //Find most expensive costRoute out of this place
+            //Find cheapest capable aircraft for the job
+            done = true;
+        }
+    }
+
+    private Aircraft findBestForRoute(List<Aircraft> aircrafts, Route route) {
+        //Find least capable aircraft and cheapest
+        return null;
     }
 
     private void generateTierList() {
@@ -359,6 +391,14 @@ public class ScheduleDevelopmentBean {
         }
     }
 
+    private void debugApList() {
+        String result = "Airports: ";
+        for (int i = 0; i < airportsToGo.size(); i++) {
+            result = result.concat(airportsToGo.get(i).getName()) + ", ";
+        }
+        System.out.println(result);
+    }
+
     private void debugTierList() {
         for (int i = 0; i < tierList.size(); i++) {
             String result = "Tier " + i + ": ";
@@ -369,21 +409,24 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void process1() {
-        System.out.println("Processing:.....");
-        generateRoutes();
-        System.out.println("Done:Generate all routes");
-        //debugAllRoutes(allRoutes);
-        selectGoodRoutes();
-        System.out.println("Done:Select good ones");
-        System.out.println("Hubs: " + hubSavings);
-        saveSuggestedRoutes();
-        System.out.println("Processing2:.....");
-        generateTierList();
-        System.out.println("Done:Create tier list");
-        debugTierList();
-        createFlightTimetable();
-        System.out.println("Done:Create flight timetable");
-        //System.gc();
+    public void process() {
+        try {
+            System.out.println("Processing:.....");
+            generateRoutes();
+            System.out.println("Done:Generate all routes");
+            //debugAllRoutes(allRoutes);
+            selectGoodRoutes();
+            System.out.println("Done:Select good ones");
+            saveSuggestedRoutes();
+            System.out.println("Processing2:.....");
+            generateTierList();
+            System.out.println("Done:Create tier list");
+            createFlightTimetable();
+            System.out.println("Done:Create flight timetable");
+            debugApList();
+            System.gc();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

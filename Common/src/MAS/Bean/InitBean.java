@@ -257,7 +257,7 @@ public class InitBean {
                 scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
                 scheduleDevelopmentBean.addHubs(hubIds, hubStr);
                 System.out.println("Beginning development:.....");
-                scheduleDevelopmentBean.process1();
+                scheduleDevelopmentBean.process();
             } catch (Exception e) {
                 e.printStackTrace();
             }
