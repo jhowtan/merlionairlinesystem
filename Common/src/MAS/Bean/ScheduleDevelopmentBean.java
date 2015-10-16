@@ -27,6 +27,7 @@ public class ScheduleDevelopmentBean {
     private List<HypoAircraft> aircraftsToFly;
     private List<Airport> airportsToGo;
     private List<Airport> hubs;
+    private List<Double> hubSavings;
     private List<Route> suggestedRoutes;
     private List<HypoRoute> allRoutes;
     private List<AircraftAssignment> suggestedAA;
@@ -35,7 +36,7 @@ public class ScheduleDevelopmentBean {
     private List<List<Airport>> tierList;
 
     private int reserveAircraft;
-    private double hubSavings = 0.25;
+    //private double hubSavings = 0.25;
     private double maxRange = 0;
 
     public ScheduleDevelopmentBean() {
@@ -46,6 +47,7 @@ public class ScheduleDevelopmentBean {
         suggestedAA = new ArrayList<>();
         suggestedMaint = new ArrayList<>();
         hubs = new ArrayList<>();
+        hubSavings = new ArrayList<>();
     }
 
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
@@ -80,14 +82,17 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void addHubs(List<String> apIds) throws NotFoundException {
+    public void addHubs(List<String> apIds, List<Double> hubStrength) throws NotFoundException {
+        if (apIds.size() != hubStrength.size()) throw new NotFoundException("Hub strength and airport list must be same length!");
         int l = apIds.size();
         for (int i = 0; i < l; i++) {
             Airport ap = em.find(Airport.class, apIds.get(i));
             if (ap == null)
                 throw new NotFoundException();
-            else if (airportsToGo.indexOf(ap) != -1)
+            else if (airportsToGo.indexOf(ap) != -1) {
                 hubs.add(ap);
+                hubSavings.add(1.0 - hubStrength.get(i));
+            }
         }
     }
 
@@ -100,9 +105,9 @@ public class ScheduleDevelopmentBean {
                 Airport destination = airportsToGo.get(j);
                 HypoRoute hypoRoute = createNewHypoRoute(origin, destination);
                 if (isHub(origin))
-                    hypoRoute.costDistance *= hubSavings;
+                    hypoRoute.costDistance *= hubSavings.get(hubs.indexOf(origin));
                 if (isHub(destination))
-                    hypoRoute.costDistance *= hubSavings;
+                    hypoRoute.costDistance *= hubSavings.get(hubs.indexOf(destination));
                 if (hypoRoute.actualDistance > maxRange)
                     continue;
                 allRoutes.add(hypoRoute);
@@ -292,6 +297,13 @@ public class ScheduleDevelopmentBean {
         //Find cheapest aircraft to allocate going out of the hub.
         //  If it has been allocated, its priority shifts down a notch
         //
+    }
+
+    private void generateTierList() {
+        List<Route> flyRoutes = new ArrayList<>(suggestedRoutes);
+        List<Airport> flyAirports = new ArrayList<>(airportsToGo);
+
+
     }
 
     public void saveSuggestedRoutes() {

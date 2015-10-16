@@ -245,12 +245,16 @@ public class InitBean {
                     homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
                 }
                 List<String> hubIds = new ArrayList<>();
+                List<Double> hubStr = new ArrayList<>();
                 hubIds.add(routeBean.findAirportByCode("SIN").getId());
+                hubStr.add(0.8);
                 hubIds.add(routeBean.findAirportByCode("HKG").getId());
+                hubStr.add(0.3);
                 hubIds.add(routeBean.findAirportByCode("DXB").getId());
+                hubStr.add(0.3);
                 scheduleDevelopmentBean.addAirports(apIds);
                 scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
-                scheduleDevelopmentBean.addHubs(hubIds);
+                scheduleDevelopmentBean.addHubs(hubIds, hubStr);
                 scheduleDevelopmentBean.process();
             } catch (Exception e) {
                 e.printStackTrace();
