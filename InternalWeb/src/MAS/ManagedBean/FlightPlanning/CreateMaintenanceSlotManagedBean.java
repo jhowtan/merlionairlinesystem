@@ -34,7 +34,7 @@ public class CreateMaintenanceSlotManagedBean {
     private List<Airport> airports;
     private List<Aircraft> aircrafts;
 
-    private long airportId;
+    private String airportId;
     private long aircraftId;
 
     private Date startDate;
@@ -53,7 +53,7 @@ public class CreateMaintenanceSlotManagedBean {
         Airport airport = routeBean.getAirport(airportId);
         Aircraft aircraft = fleetBean.getAircraft(aircraftId);
         aircraftMaintenanceSlotBean.createSlot(addTimeToDate(startDate, startTime), duration, airportId, aircraftId);
-        authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getCode() + " @ " + timestamp, "create_maintenance_slot");
+        authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
         FacesMessage m = new FacesMessage("Maintenance slot for " + aircraft.getTailNumber() + " created successfully.");
         m.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage("status", m);
@@ -95,11 +95,11 @@ public class CreateMaintenanceSlotManagedBean {
         this.aircrafts = aircrafts;
     }
 
-    public long getAirportId() {
+    public String getAirportId() {
         return airportId;
     }
 
-    public void setAirportId(long airportId) {
+    public void setAirportId(String airportId) {
         this.airportId = airportId;
     }
 

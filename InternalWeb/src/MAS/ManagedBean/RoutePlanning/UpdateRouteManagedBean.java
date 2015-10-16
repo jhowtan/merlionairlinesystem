@@ -30,8 +30,8 @@ public class UpdateRouteManagedBean {
 
     private Route route;
 
-    private long originId;
-    private long destinationId;
+    private String originId;
+    private String destinationId;
 
     @PostConstruct
     public void init() {
@@ -82,19 +82,19 @@ public class UpdateRouteManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-    public long getOriginId() {
+    public String getOriginId() {
         return originId;
     }
 
-    public void setOriginId(long originId) {
+    public void setOriginId(String originId) {
         this.originId = originId;
     }
 
-    public long getDestinationId() {
+    public String getDestinationId() {
         return destinationId;
     }
 
-    public void setDestinationId(long destinationId) {
+    public void setDestinationId(String destinationId) {
         this.destinationId = destinationId;
     }
 

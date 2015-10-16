@@ -70,7 +70,7 @@ public class ScheduleDevelopmentBean {
         maxRange *= 0.6;
     }
 
-    public void addAirports(List<Long> apIds) throws NotFoundException {
+    public void addAirports(List<String> apIds) throws NotFoundException {
         int l = apIds.size();
         for (int i = 0; i < l; i++) {
             Airport ap = em.find(Airport.class, apIds.get(i));
@@ -81,7 +81,7 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void addHubs(List<Long> apIds) throws NotFoundException {
+    public void addHubs(List<String> apIds) throws NotFoundException {
         int l = apIds.size();
         for (int i = 0; i < l; i++) {
             Airport ap = em.find(Airport.class, apIds.get(i));

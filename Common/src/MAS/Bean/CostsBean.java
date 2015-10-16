@@ -95,7 +95,7 @@ public class CostsBean {
         return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
     }
 
-    public double calculateCostEstimate(HypoAircraftAssignment hypothetical) {
+    public void calculateCostEstimate(HypoAircraftAssignment hypothetical) {
         AircraftAssignment aircraftAssignment = hypothetical.aircraftAssignment;
         long acId = aircraftAssignment.getAircraft().getId();
         double result = 0;
@@ -127,7 +127,7 @@ public class CostsBean {
         result += totalFuelCosts;
         result += allMaint;
         result += totalSalary;
-        return result;
+        hypothetical.cost = result;
     }
 
     public double calculateCostPerFlight(long flightId) throws NotFoundException {

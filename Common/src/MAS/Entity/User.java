@@ -177,4 +177,15 @@ public class User {
     public boolean equals(Object obj) {
         return obj instanceof User && this.id.equals(((User) obj).id);
 	}
+
+    private Airport baseAirport;
+
+    @ManyToOne
+    public Airport getBaseAirport() {
+        return baseAirport;
+    }
+
+    public void setBaseAirport(Airport baseAirport) {
+        this.baseAirport = baseAirport;
+    }
 }

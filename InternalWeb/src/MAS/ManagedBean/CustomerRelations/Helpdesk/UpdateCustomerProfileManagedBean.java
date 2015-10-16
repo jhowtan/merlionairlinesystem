@@ -60,7 +60,7 @@ public class UpdateCustomerProfileManagedBean implements Serializable {
     }
 
     public String[] getCountries() {
-        return Constants.COUNTRIES;
+        return Constants.COUNTRY_NAMES;
     }
 
     public Customer getCustomer() {

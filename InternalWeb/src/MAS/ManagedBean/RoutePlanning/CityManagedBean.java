@@ -25,7 +25,7 @@ public class CityManagedBean {
         return routeBean.getAllCities();
     }
 
-    public void delete(long id) {
+    public void delete(String id) {
         try {
             String cityName = routeBean.getCity(id).getName();
             routeBean.removeCity(id);

@@ -25,7 +25,7 @@ public class CountryManagedBean {
         return routeBean.getAllCountries();
     }
 
-    public void delete(long id) {
+    public void delete(String id) {
         try {
             String countryName = routeBean.getCountry(id).getName();
             routeBean.removeCountry(id);

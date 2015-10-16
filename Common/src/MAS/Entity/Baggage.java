@@ -28,14 +28,4 @@ public class Baggage {
         this.weight = weight;
     }
 
-    private FlightItem flightItem;
-
-    @ManyToOne
-    public FlightItem getFlightItem() {
-        return flightItem;
-    }
-
-    public void setFlightItem(FlightItem flightItem) {
-        this.flightItem = flightItem;
-    }
 }

@@ -25,7 +25,7 @@ public class AirportsManagedBean {
         return routeBean.getAllAirports();
     }
 
-    public void delete(long id) {
+    public void delete(String id) {
         try {
             routeBean.removeAirport(id);
             authManagedBean.createAuditLog("Deleted airport: " + routeBean.getAirport(id).getName(), "delete_airport");
