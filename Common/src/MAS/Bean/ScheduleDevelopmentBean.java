@@ -60,8 +60,8 @@ public class ScheduleDevelopmentBean {
                 HypoAircraft hypoAircraft = new HypoAircraft();
                 hypoAircraft.aircraft = ac;
                 hypoAircraft.range = ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE;
-                System.out.println(hypoAircraft.range + " || " + maxRange);
                 hypoAircraft.homeBase = ap;
+                costsBean.calculateCostEstimate(hypoAircraft, 100);
                 aircraftsToFly.add(hypoAircraft);
                 if (hypoAircraft.range > maxRange)
                     maxRange = hypoAircraft.range;
@@ -98,7 +98,6 @@ public class ScheduleDevelopmentBean {
             for (int j = 0; j < l; j++) {
                 if (j == i) continue;
                 Airport destination = airportsToGo.get(j);
-                System.out.println(origin.getName() + " - " + destination.getName());
                 HypoRoute hypoRoute = createNewHypoRoute(origin, destination);
                 if (isHub(origin))
                     hypoRoute.costDistance *= hubSavings;
@@ -178,7 +177,7 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
-        System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         //Destination is near a hub
         Airport nearHub = nearHub(destination);
         if (nearHub != null && nearHub != origin) {
@@ -195,7 +194,7 @@ public class ScheduleDevelopmentBean {
                 minCost = result.costDistance;
             }
         }
-        System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
+        //System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
 
@@ -322,7 +321,6 @@ public class ScheduleDevelopmentBean {
         selectGoodRoutes();
         allocateAircraft();
         saveSuggestedRoutes();
-        debugAllSuggRoutes();
         System.gc();
     }
 }

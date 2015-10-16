@@ -2,8 +2,10 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
+import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
+import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoAircraftAssignment;
 
 import javax.ejb.EJB;
@@ -95,9 +97,9 @@ public class CostsBean {
         return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
     }
 
-    public void calculateCostEstimate(HypoAircraftAssignment hypothetical) {
-        AircraftAssignment aircraftAssignment = hypothetical.aircraftAssignment;
-        long acId = aircraftAssignment.getAircraft().getId();
+    public void calculateCostEstimate(HypoAircraft hypothetical, int miles) {
+        Aircraft ac = hypothetical.aircraft;
+        long acId = ac.getId();
         double result = 0;
 
         //Aircraft costs divided into per flight
@@ -108,7 +110,7 @@ public class CostsBean {
         acAll = acAll/(attributesBean.getIntAttribute(Constants.AIRCRAFT_EXPECTED_LIFE, 25) * attributesBean.getIntAttribute(Constants.FLIGHTS_PER_YEAR, 100));
 
         //Fuel costs
-        double totalFuelCosts = calculateFuelCost(aircraftAssignment.getAircraft(), aircraftAssignment.getRoute().getDistance());
+        double totalFuelCosts = calculateFuelCost(ac, miles);
 
         //Maintenance costs divided by flights
         List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
@@ -120,14 +122,15 @@ public class CostsBean {
         //Salary considerations
         double cockpitSalary = attributesBean.getDoubleAttribute(Constants.COCKPIT_CREW_SALARY, 200);
         double cabinSalary = attributesBean.getDoubleAttribute(Constants.CABIN_CREW_SALARY, 100);
-        double totalSalary = cockpitSalary * aircraftAssignment.getAircraft().getSeatConfig().getAircraftType().getCockpitCrewReq();
-        totalSalary += cabinSalary * aircraftAssignment.getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
+        double totalSalary = cockpitSalary * ac.getSeatConfig().getAircraftType().getCockpitCrewReq();
+        totalSalary += cabinSalary * ac.getSeatConfig().getAircraftType().getCabinCrewReq();
 
-        result += acAll;
         result += totalFuelCosts;
         result += allMaint;
+        result += Utils.yearsBetween(ac.getManufacturedDate(), new Date()) * Constants.AIRCRAFT_YEARLY_WEAR * result;
+        result += acAll;
         result += totalSalary;
-        hypothetical.cost = result;
+        hypothetical.relativeCost = result;
     }
 
     public double calculateCostPerFlight(long flightId) throws NotFoundException {
@@ -166,11 +169,12 @@ public class CostsBean {
         double totalSalary = cockpitSalary * flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCockpitCrewReq();
         totalSalary += cabinSalary * flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
 
+        result += totalFuelCosts;
+        result += allMaint;
+        result += Utils.yearsBetween(flight.getAircraftAssignment().getAircraft().getManufacturedDate(), new Date()) * Constants.AIRCRAFT_YEARLY_WEAR * result;
         result += aaAll;
         result += acAll;
         result += annualAll;
-        result += totalFuelCosts;
-        result += allMaint;
         result += totalSalary;
         return result;
     }
