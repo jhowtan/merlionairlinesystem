@@ -47,7 +47,7 @@
     opacity: 0.7;
 }
 
-.boarding-pass .bottom .barcode img {
+.boarding-pass .bottom .barcode canvas {
     height: 40px;
     margin-top: 10px;
 }
@@ -65,7 +65,7 @@
 }
 
 .boarding-pass .top > .logo {
-    background-image: url(https://dl.dropboxusercontent.com/s/7qjwhgedu8eph3c/boarding-pass-logo.png);
+    background-image: url(../img/boarding-pass-logo.png);
     background-position: 15px center;
     background-repeat: no-repeat;
     width: 120px;
