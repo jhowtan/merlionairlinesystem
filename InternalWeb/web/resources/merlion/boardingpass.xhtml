@@ -12,7 +12,7 @@
     </composite:interface>
 
     <composite:implementation>
-        <div class="boarding-pass #{cc.attrs.styleClass}">
+        <div class="boarding-pass #{(cc.attrs.eticket.bookingClass.travelClass == 0) ? 'gold' : ''}">
             <div class="main">
                 <div class="top">
                     <div class="logo"></div>
