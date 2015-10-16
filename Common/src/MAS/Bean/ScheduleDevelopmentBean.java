@@ -317,7 +317,6 @@ public class ScheduleDevelopmentBean {
         List<Route> flyRoutes = new ArrayList<>(suggestedRoutes);
         List<Airport> flyAirports = new ArrayList<>(airportsToGo);
         List<Airport> currentTier = new ArrayList<>(hubs); //Hubs are tier 0
-        System.out.println(flyRoutes.size() + " " + flyAirports.size() + " " + hubs.size());
         flyAirports.removeAll(hubs);
         tierList.add(currentTier);
 
