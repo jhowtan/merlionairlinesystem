@@ -87,11 +87,13 @@ public class RemoteManagedBean {
             }
             else {
                 passengerReturn.put("status", "error");
+                passengerReturn.put("error", "ETicket has not been checked in!");
                 System.out.println("ETicket has not been checked in!");
             }
 
         } catch (NotFoundException e) {
             passengerReturn.put("status", "error");
+            passengerReturn.put("error", "Cannot find eTicket with the supplied ID!");
             System.out.println("Cannot find eTicket with the supplied ID!");
         }
 
