@@ -21,9 +21,19 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         aircraftsInTransits.add(hypoTransit);
     }
 
-    public HypoTransit land() {
+    public HypoTransit land(boolean remove) {
+        if (aircraftsInTransits.size() < 1) return null;
         //Find lowest timeleft in aircraftsInTransit
-
-        return null;
+        double lowest = aircraftsInTransits.get(0).timeLeft;
+        HypoTransit landingAc = aircraftsInTransits.get(0);
+        for (int i = 1; i < aircraftsInTransits.size(); i++) {
+            if (aircraftsInTransits.get(i).timeLeft < lowest) {
+                landingAc = aircraftsInTransits.get(i);
+                lowest = landingAc.timeLeft;
+            }
+        }
+        if (remove)
+            aircraftsInTransits.remove(landingAc);
+        return landingAc;
     }
 }
