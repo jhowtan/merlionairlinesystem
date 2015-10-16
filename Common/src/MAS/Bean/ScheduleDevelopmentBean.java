@@ -4,6 +4,7 @@ import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
+import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
 
 import javax.ejb.EJB;
@@ -23,13 +24,15 @@ public class ScheduleDevelopmentBean {
     @EJB
     CostsBean costsBean;
 
-    private List<Aircraft> aircraftsToFly;
+    private List<HypoAircraft> aircraftsToFly;
     private List<Airport> airportsToGo;
     private List<Airport> hubs;
     private List<Route> suggestedRoutes;
     private List<HypoRoute> allRoutes;
     private List<AircraftAssignment> suggestedAA;
     private List<AircraftMaintenanceSlot> suggestedMaint;
+
+    private List<List<Airport>> tierList;
 
     private int reserveAircraft;
     private double hubSavings = 0.25;
@@ -45,16 +48,22 @@ public class ScheduleDevelopmentBean {
         hubs = new ArrayList<>();
     }
 
-    public void addAircrafts(List<Long> acIds) throws NotFoundException {
+    public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
+        if (acIds.size() != apIds.size()) throw new NotFoundException("Aircraft and airport list must be same length!");
         int l = acIds.size();
         double range = 0;
         for (int i = 0; i < l; i++) {
             Aircraft ac = em.find(Aircraft.class, acIds.get(i));
             if (ac == null) throw new NotFoundException();
+            Airport ap = em.find(Airport.class, apIds.get(i));
+            if (ap == null) throw new NotFoundException();
             else {
-                aircraftsToFly.add(ac);
-                range = ac.getSeatConfig().getAircraftType().getMaxRange();
-                if (range > maxRange)
+                HypoAircraft hypoAircraft = new HypoAircraft();
+                hypoAircraft.aircraft = ac;
+                hypoAircraft.range = ac.getSeatConfig().getAircraftType().getMaxRange();
+                hypoAircraft.homeBase = ap;
+                aircraftsToFly.add(hypoAircraft);
+                if (hypoAircraft.range > maxRange)
                     maxRange = range;
             }
         }

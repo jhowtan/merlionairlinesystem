@@ -7,4 +7,5 @@ public class HypoAircraft {
     public Aircraft aircraft;
     public double costPerMile;
     public Airport homeBase;
+    public double range;
 }
