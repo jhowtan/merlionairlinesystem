@@ -1,6 +1,5 @@
 package MAS.Bean;
 
-import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.BookingClass;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="eticket" type="MAS.Entity.ETicket" required="true" />
+        <composite:attribute name="styleClass" type="java.lang.String" />
+    </composite:interface>
+
+    <composite:implementation>
+        <div class="boarding-pass #{cc.attrs.styleClass}">
+            <div class="main">
+                <div class="top">
+                    <div class="logo"></div>
+                    <div class="item">
+                        <div class="label">Boarding Pass</div>
+                        <div class="value">#{cc.attrs.eticket.flight.aircraftAssignment.route.origin.id} &mdash; #{cc.attrs.eticket.flight.aircraftAssignment.route.destination.id}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Your Flight</div>
+                        <div class="value">#{cc.attrs.eticket.flight.code}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Cabin Class</div>
+                        <div class="value">#{bookingClassManagedBean.getTravelClassName(cc.attrs.eticket.bookingClass.travelClass)}</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="label">Passenger</div>
+                        <div class="value">#{cc.attrs.eticket.passengerName}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Departure Date</div>
+                        <div class="value">#{commonManagedBean.formatDate("dd MMM yyyy", cc.attrs.eticket.flight.departureTime)}</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="label">Flight Number</div>
+                        <div class="value">#{cc.attrs.eticket.flight.code}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Departure Time</div>
+                        <div class="value">#{commonManagedBean.formatDate("HH:mm", cc.attrs.eticket.flight.departureTime)}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Gate</div>
+                        <div class="value">A19</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Seat</div>
+                        <div class="value">#{checkInManagedBean.getNiceSeatName(cc.attrs.eticket)}</div>
+                    </div>
+                </div>
+                <div class="note">
+                    Boarding gate closes 10 minutes before departure.
+                </div>
+                <div class="bottom">
+                    <div class="item">
+                        <div class="label">Frequent Flyer</div>
+                        <div class="value">#{cc.attrs.eticket.ffpNumber}</div>
+                    </div>
+                    <div class="barcode">
+                        <img src="http://www.tec-it.com/pics/barcodes/pdf417-sap.jpg" alt="Barcode"/>
+                    </div>
+                </div>
+            </div>
+            <div class="side">
+                <div class="top">
+                    <div class="logo"></div>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="label">Passenger</div>
+                        <div class="value">#{cc.attrs.eticket.passengerName}</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="label">Route</div>
+                        <div class="value">#{cc.attrs.eticket.flight.aircraftAssignment.route.origin.id}-#{cc.attrs.eticket.flight.aircraftAssignment.route.destination.id}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Seat</div>
+                        <div class="value">#{checkInManagedBean.getNiceSeatName(cc.attrs.eticket)}</div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="label">Gate</div>
+                        <div class="value">A17</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Departure Time</div>
+                        <div class="value">#{commonManagedBean.formatDate("HH:mm", cc.attrs.eticket.flight.departureTime)}</div>
+                    </div>
+                </div>
+                <div class="bottom"></div>
+            </div>
+        </div>
+    </composite:implementation>
+
+</html>

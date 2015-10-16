@@ -111,9 +111,10 @@
                                         </ui:repeat>
 
                                         <div class="text-right">
-                                            <h:commandButton value="Print Boarding Pass" styleClass="btn btn-default btn-default">
+                                            <h:link outcome="printBoardingPass" styleClass="btn btn-default btn-default">
+                                                Print Boarding Pass
                                                 <f:param name="eticket" value="#{checkInManagedBean.primaryETicket.id}" />
-                                            </h:commandButton>
+                                            </h:link>
                                         </div>
                                     </h:form>
                                 </div>
