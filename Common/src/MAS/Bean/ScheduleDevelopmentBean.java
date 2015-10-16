@@ -323,12 +323,10 @@ public class ScheduleDevelopmentBean {
 
         do {
             List<Airport> nextTier = new ArrayList<>();
-            System.out.println("CT: " + currentTier.size());
             if (currentTier.size() == 0) break;
             for (int i = 0; i < currentTier.size(); i++) {
                 List<Route> routesOut = getRoutesStarting(currentTier.get(i));
                 for (int j = 0; j < routesOut.size(); j++) {
-                    System.out.println("RO: " + routesOut.size());
                     Airport currAp = routesOut.get(j).getDestination();
                     if (flyAirports.indexOf(currAp) != -1) { //Airport still hasn't been slotted into a tier
                         nextTier.add(currAp);
