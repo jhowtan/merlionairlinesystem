@@ -43,7 +43,7 @@ public class CustomerLogBean {
     public List<CustomerLog> getCustomerLogForCustomer(long customerId) throws NotFoundException {
         Customer customer = em.find(Customer.class, customerId);
         if (customer == null) throw new NotFoundException();
-        return em.createQuery("SELECT cl FROM CustomerLog cl WHERE cl.customer = :customer").setParameter("customer", customer).getResultList();
+        return em.createQuery("SELECT cl FROM CustomerLog cl WHERE cl.customer = :customer", CustomerLog.class).setParameter("customer", customer).getResultList();
     }
 
 }
