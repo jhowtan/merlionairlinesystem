@@ -156,8 +156,19 @@ public class SeatConfigObject {
     }
 
     public List<Integer> getAvailableSeatsForTravelClass(int travelClass) {
-        // @TODO: Stub, filter by travel class
-        return getAvailableSeats();
+        int prevCabins = 0;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < cabins.size(); i++) {
+            Cabin currCabin = cabins.get(i);
+            if (currCabin.getTravelClass() == travelClass) {
+                for (int j = 0; j < currCabin.seatCount(); j++) {
+                    result.add(prevCabins + j);
+                }
+            }
+            prevCabins += currCabin.seatCount();
+        }
+        result.removeAll(takenSeats);
+        return result;
     }
 
     public LinkedHashMap<String, Integer> getAvailableSeatsNameForTravelClass(int travelClass) {
