@@ -51,7 +51,6 @@ public class ScheduleDevelopmentBean {
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
         if (acIds.size() != apIds.size()) throw new NotFoundException("Aircraft and airport list must be same length!");
         int l = acIds.size();
-        double range = 0;
         for (int i = 0; i < l; i++) {
             Aircraft ac = em.find(Aircraft.class, acIds.get(i));
             if (ac == null) throw new NotFoundException();
@@ -60,14 +59,14 @@ public class ScheduleDevelopmentBean {
             else {
                 HypoAircraft hypoAircraft = new HypoAircraft();
                 hypoAircraft.aircraft = ac;
-                hypoAircraft.range = ac.getSeatConfig().getAircraftType().getMaxRange();
+                hypoAircraft.range = ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE;
+                System.out.println(hypoAircraft.range + " || " + maxRange);
                 hypoAircraft.homeBase = ap;
                 aircraftsToFly.add(hypoAircraft);
                 if (hypoAircraft.range > maxRange)
-                    maxRange = range;
+                    maxRange = hypoAircraft.range;
             }
         }
-        maxRange *= 0.6;
     }
 
     public void addAirports(List<String> apIds) throws NotFoundException {
@@ -99,6 +98,7 @@ public class ScheduleDevelopmentBean {
             for (int j = 0; j < l; j++) {
                 if (j == i) continue;
                 Airport destination = airportsToGo.get(j);
+                System.out.println(origin.getName() + " - " + destination.getName());
                 HypoRoute hypoRoute = createNewHypoRoute(origin, destination);
                 if (isHub(origin))
                     hypoRoute.costDistance *= hubSavings;
@@ -178,7 +178,7 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
-        //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
+        System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         //Destination is near a hub
         Airport nearHub = nearHub(destination);
         if (nearHub != null && nearHub != origin) {
@@ -195,7 +195,7 @@ public class ScheduleDevelopmentBean {
                 minCost = result.costDistance;
             }
         }
-        //System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
+        System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
 
@@ -322,6 +322,7 @@ public class ScheduleDevelopmentBean {
         selectGoodRoutes();
         allocateAircraft();
         saveSuggestedRoutes();
+        debugAllSuggRoutes();
         System.gc();
     }
 }

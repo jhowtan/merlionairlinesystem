@@ -52,6 +52,7 @@ public class Constants {
 
     public static final int RANGE_CONST = 300;
     public static final double RANGE_MOMENTUM = 0.85;
+    public static final double OPERATIONAL_RANGE = 0.6;
 
     public static final String SSR_ACTION_CODE_TICKET_NUMBER = "TKNR";
     public static final String SSR_ACTION_CODE_FFP = "FFP";
