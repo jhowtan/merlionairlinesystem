@@ -97,8 +97,8 @@ public class CostsBean {
         return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
     }
 
-    public void calculateCostEstimate(HypoAircraft hypothetical, int miles) {
-        Aircraft ac = hypothetical.aircraft;
+    public void calculateCostEstimate(HypoAircraft hypoAircraft, int miles) {
+        Aircraft ac = hypoAircraft.aircraft;
         long acId = ac.getId();
         double result = 0;
 
@@ -130,7 +130,7 @@ public class CostsBean {
         result += Utils.yearsBetween(ac.getManufacturedDate(), new Date()) * Constants.AIRCRAFT_YEARLY_WEAR * result;
         result += acAll;
         result += totalSalary;
-        hypothetical.aircraft.setFlyingCost(result);
+        hypoAircraft.aircraft.setFlyingCost(result);
     }
 
     public double calculateCostPerFlight(long flightId) throws NotFoundException {

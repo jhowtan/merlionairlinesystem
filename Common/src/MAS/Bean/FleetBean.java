@@ -27,6 +27,8 @@ public class FleetBean {
         Aircraft aircraft = new Aircraft();
         aircraft.setTailNumber(tailNumber);
         aircraft.setManufacturedDate(manufacturedDate);
+        aircraft.setMaxRange(0);
+        aircraft.setFlyingCost(0);
         em.persist(aircraft);
         em.flush();
 

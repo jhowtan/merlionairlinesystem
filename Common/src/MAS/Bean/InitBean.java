@@ -232,6 +232,7 @@ public class InitBean {
             }
 
             try {
+                System.out.println("RUNNING SCHE DEV TEST");
                 List<String> apIds = new ArrayList<>();
                 List<Airport> allAp = routeBean.getAllAirports();
                 for (int i = 0; i < allAp.size(); i++) {
@@ -255,11 +256,11 @@ public class InitBean {
                 scheduleDevelopmentBean.addAirports(apIds);
                 scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
                 scheduleDevelopmentBean.addHubs(hubIds, hubStr);
-                scheduleDevelopmentBean.process();
+                System.out.println("Beginning development:.....");
+                scheduleDevelopmentBean.process1();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 

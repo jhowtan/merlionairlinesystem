@@ -48,6 +48,7 @@ public class ScheduleDevelopmentBean {
         suggestedMaint = new ArrayList<>();
         hubs = new ArrayList<>();
         hubSavings = new ArrayList<>();
+        tierList = new ArrayList<>();
     }
 
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
@@ -61,12 +62,12 @@ public class ScheduleDevelopmentBean {
             else {
                 HypoAircraft hypoAircraft = new HypoAircraft();
                 hypoAircraft.aircraft = ac;
-                hypoAircraft.aircraft.setRange(ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE);
+                hypoAircraft.aircraft.setMaxRange(ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE);
                 hypoAircraft.homeBase = ap;
                 costsBean.calculateCostEstimate(hypoAircraft, 100);
                 aircraftsToFly.add(hypoAircraft);
-                if (hypoAircraft.aircraft.getRange() > maxRange)
-                    maxRange = hypoAircraft.aircraft.getRange();
+                if (hypoAircraft.aircraft.getMaxRange() > maxRange)
+                    maxRange = hypoAircraft.aircraft.getMaxRange();
             }
         }
     }
@@ -261,6 +262,15 @@ public class ScheduleDevelopmentBean {
         return result;
     }
 
+    private List<Route> getRoutesStarting(Airport origin) {
+        List<Route> result = new ArrayList<>();
+        for (int i = 0; i < suggestedRoutes.size(); i++) {
+            if (suggestedRoutes.get(i).getOrigin() == origin)
+                result.add(suggestedRoutes.get(i));
+        }
+        return result;
+    }
+
     private HypoRoute getHypoRoute(Airport origin, Airport destination) {
         for (int i = 0; i < allRoutes.size(); i++) {
             HypoRoute current = allRoutes.get(i);
@@ -296,7 +306,7 @@ public class ScheduleDevelopmentBean {
         return null;
     }
 
-    private void allocateAircraft() {
+    private void createFlightTimetable() {
         //Do routes starting from the hub first
         //Find cheapest aircraft to allocate going out of the hub.
         //  If it has been allocated, its priority shifts down a notch
@@ -306,8 +316,29 @@ public class ScheduleDevelopmentBean {
     private void generateTierList() {
         List<Route> flyRoutes = new ArrayList<>(suggestedRoutes);
         List<Airport> flyAirports = new ArrayList<>(airportsToGo);
+        List<Airport> currentTier = new ArrayList<>(hubs); //Hubs are tier 0
+        System.out.println(flyRoutes.size() + " " + flyAirports.size() + " " + hubs.size());
+        flyAirports.removeAll(hubs);
+        tierList.add(currentTier);
 
-
+        do {
+            List<Airport> nextTier = new ArrayList<>();
+            System.out.println("CT: " + currentTier.size());
+            if (currentTier.size() == 0) break;
+            for (int i = 0; i < currentTier.size(); i++) {
+                List<Route> routesOut = getRoutesStarting(currentTier.get(i));
+                for (int j = 0; j < routesOut.size(); j++) {
+                    System.out.println("RO: " + routesOut.size());
+                    Airport currAp = routesOut.get(j).getDestination();
+                    if (flyAirports.indexOf(currAp) != -1) { //Airport still hasn't been slotted into a tier
+                        nextTier.add(currAp);
+                        flyAirports.remove(currAp);
+                    }
+                }
+            }
+            currentTier = nextTier;
+            tierList.add(currentTier);
+        } while (flyAirports.size() > 0);
     }
 
     public void saveSuggestedRoutes() {
@@ -331,12 +362,31 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    public void process() {
+    private void debugTierList() {
+        for (int i = 0; i < tierList.size(); i++) {
+            String result = "Tier " + i + ": ";
+            for (int j = 0; j < tierList.get(i).size(); j++) {
+                result = result.concat(tierList.get(i).get(j).getName() + ", ");
+            }
+            System.out.println(result);
+        }
+    }
+
+    public void process1() {
+        System.out.println("Processing:.....");
         generateRoutes();
+        System.out.println("Done:Generate all routes");
         //debugAllRoutes(allRoutes);
         selectGoodRoutes();
-        allocateAircraft();
+        System.out.println("Done:Select good ones");
+        System.out.println("Hubs: " + hubSavings);
         saveSuggestedRoutes();
-        System.gc();
+        System.out.println("Processing2:.....");
+        generateTierList();
+        System.out.println("Done:Create tier list");
+        debugTierList();
+        createFlightTimetable();
+        System.out.println("Done:Create flight timetable");
+        //System.gc();
     }
 }

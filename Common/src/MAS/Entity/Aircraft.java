@@ -65,13 +65,13 @@ public class Aircraft {
     }
 
     @Basic
-    private double range;
+    private double maxRange;
 
-    public double getRange() {
-        return range;
+    public double getMaxRange() {
+        return maxRange;
     }
 
-    public void setRange(double range) {
-        this.range = range;
+    public void setMaxRange(double range) {
+        this.maxRange = range;
     }
 }
