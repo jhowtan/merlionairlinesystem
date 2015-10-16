@@ -7,5 +7,4 @@ public class HypoAircraft extends ScheduleDevelopmentClass {
     public Aircraft aircraft;
     public Airport homeBase;
     public Airport location;
-    public double timeInTransit = 0;
 }
