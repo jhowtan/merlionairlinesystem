@@ -19,7 +19,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @ManagedBean
@@ -110,6 +109,7 @@ public class CheckInManagedBean {
         List<ETicket> selectedConnections = getSelectedConnections();
         for (ETicket eTicket : selectedConnections) {
             if (!flightScheduleBean.isSeatAvailable(eTicket.getFlight(), seats[index++])) {
+                authManagedBean.createAuditLog("Checked in passenger: " + eTicket.getPassengerName(), "check_in");
                 FacesMessage m = new FacesMessage("The seat selected on flight " + eTicket.getFlight().getCode() + " is no longer available.");
                 m.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("check-in-status", m);
