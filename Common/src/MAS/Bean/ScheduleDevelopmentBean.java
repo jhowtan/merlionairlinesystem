@@ -331,10 +331,10 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < aircraftsToFly.size(); i++) {
             addToBucket(aircraftsToFly.get(i), aircraftsToFly.get(i).homeBase);
         }
-        int currentTier = 0;
+
         boolean done = false;
         while (!done) {
-            //Find most expensive costRoute out of this place
+            //Find most expensive actual distance out of this place
             //Find cheapest capable aircraft for the job
             done = true;
         }
