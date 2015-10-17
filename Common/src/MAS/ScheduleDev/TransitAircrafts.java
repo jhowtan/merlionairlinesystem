@@ -13,7 +13,7 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         aircraftsInTransits = new ArrayList<>();
     }
 
-    public void fly(HypoAircraft hypoAircraft, double duration, Airport destination) {
+    public void fly(HypoAircraft hypoAircraft, double duration, Airport destination, double startTime) {
         HypoTransit hypoTransit = new HypoTransit();
         hypoTransit.acLocation = destination;
         hypoTransit.hypoAircraft = hypoAircraft;
@@ -35,5 +35,13 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         if (remove)
             aircraftsInTransits.remove(landingAc);
         return landingAc;
+    }
+
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
+            result = result.concat("\n" + aircraftsInTransits.get(i).hypoAircraft.aircraft.getTailNumber() + " | " + aircraftsInTransits.get(i).acLocation.getName() + " : " + aircraftsInTransits.get(i).timeLeft);
+        }
+        return result;
     }
 }

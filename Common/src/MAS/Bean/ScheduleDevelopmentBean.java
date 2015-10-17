@@ -6,6 +6,8 @@ import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
+import MAS.ScheduleDev.TransitAircrafts;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -39,6 +41,7 @@ public class ScheduleDevelopmentBean {
 
     private List<List<Airport>> tierList;
     private double timeAfterZero;
+    private TransitAircrafts ta;
 
     private int reserveAircraft;
     //private double hubSavings = 0.25;
@@ -329,14 +332,48 @@ public class ScheduleDevelopmentBean {
         //Find cheapest aircraft to allocate going out of the hub.
         prepareApBuckets();
         prepareApRoutes();
-        boolean done = true;
+        timeAfterZero = 0;
+        ta = new TransitAircrafts();
+        boolean done = false;
         while (!done) {
             //Find most expensive actual distance out of this place
             //Get all routes out of this place
             for (int i = 0; i < airportsToGo.size(); i++) {//Each airport
                 List<HypoAircraft> planesHere = airportBuckets.get(i);
                 if (planesHere.size() == 0) continue; //Nothing here, move along
+                List<Route> routesHere = airportRoutesOut.get(i);
+                for (int j = 0; j < planesHere.size(); j++) {
+                    HypoAircraft aircraft = planesHere.get(j);
+                    Route routeOut = routesHere.get(0);
+                    System.out.println(j + ": " + routeOut.getDestination().getName() + "_" + routeOut.getDistance() + "/" + aircraft.aircraft.getMaxRange());
+                    while (routeOut.getDistance() > aircraft.aircraft.getMaxRange()) { //Get first route this plane is capable of flying
+                        int index = routesHere.indexOf(routeOut);
+                        if (index + 1 < routesHere.size())
+                            routeOut = routesHere.get( index + 1 );
+                        else {
+                            routeOut = null;
+                            break;
+                        }
+                    }
+                    System.out.println(j + ": " + routeOut.getDestination().getName());
+                    if (routeOut == null) {
+                        ta.fly(aircraft, 1, airportsToGo.get(i), timeAfterZero); //Keep plane stationary for 1 minute
+                        planesHere.remove(aircraft);
+                        j--;
+                        continue;
+                    }
+                    double duration = routeOut.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
+                    System.out.println(routeOut.getDistance() + "/" + (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60));
+                    duration = (int)duration + 40;
+                    ta.fly(aircraft, duration, routeOut.getDestination(), timeAfterZero); //Fly cheapest aircraft for most expensive route
+                    planesHere.remove(aircraft);
+                    j--;
+                    routesHere.remove(routeOut);
+                    routesHere.add(routeOut); //Move route to back of the line
+                }
+                done = true;
             }
+            
             //Find cheapest capable aircraft for the job
             done = true;
         }
@@ -452,6 +489,7 @@ public class ScheduleDevelopmentBean {
                          "(" + airportRoutesOut.get(i).get(j).getDistance() + ")" + "], ";
             }
         }
+        result += ta.toString();
         System.out.println(result);
     }
 
