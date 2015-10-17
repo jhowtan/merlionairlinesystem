@@ -382,6 +382,9 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < aircraftStillFlying.size(); i++) {
             addToBucket(aircraftStillFlying.get(i), aircraftStillFlying.get(i).homeBase);
         }
+        for (int i = 0; i < airportsToGo.size(); i++) { //Initialize airport buckets
+            Collections.sort(airportBuckets.get(i));
+        }
     }
     private void prepareApRoutes() {
         airportRoutesOut = new ArrayList<>();
@@ -389,6 +392,7 @@ public class ScheduleDevelopmentBean {
             Airport airport = airportsToGo.get(i);
             List<Route> routesOut = getRoutesStarting(airport);
             Collections.sort(routesOut);
+            Collections.reverse(routesOut);
             airportRoutesOut.add(routesOut);
         }
     }
@@ -433,16 +437,19 @@ public class ScheduleDevelopmentBean {
     }
 
     private void debugFlightState() {
+        String format = "%-40s%s%n";
         String result = "-----------FLIGHT STATE-----------";
         for (int i = 0; i < airportsToGo.size(); i++) {
             Airport airport = airportsToGo.get(i);
             result += "\n" + airport.getName() + ": ";
             for (int j = 0; j < airportBuckets.get(i).size(); j++) {
-                result += "[AC: " + airportBuckets.get(i).get(j).aircraft.getTailNumber() + "], ";
+                result += "[AC: " + airportBuckets.get(i).get(j).aircraft.getTailNumber() +"(" +
+                        airportBuckets.get(i).get(j).aircraft.getFlyingCost() + ")" + "], ";
             }
             result += " _ ";
             for (int j = 0; j < airportRoutesOut.get(i).size(); j++) {
-                result += "[RO: " + airportRoutesOut.get(i).get(j).getDestination().getName() + "], ";
+                result += "[RO: " + airportRoutesOut.get(i).get(j).getDestination().getName() +
+                         "(" + airportRoutesOut.get(i).get(j).getDistance() + ")" + "], ";
             }
         }
         System.out.println(result);
