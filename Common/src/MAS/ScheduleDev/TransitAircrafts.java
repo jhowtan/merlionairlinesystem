@@ -2,6 +2,7 @@ package MAS.ScheduleDev;
 
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
+import MAS.Entity.Route;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,17 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         aircraftsInTransits = new ArrayList<>();
     }
 
-    public void fly(HypoAircraft hypoAircraft, double duration, Airport destination, double startTime) {
+    public void fly(HypoAircraft hypoAircraft, double duration, Route route, double startTime, boolean saveHistory) {
         HypoTransit hypoTransit = new HypoTransit();
-        hypoTransit.acLocation = destination;
         hypoTransit.hypoAircraft = hypoAircraft;
         hypoTransit.timeLeft = duration;
+        if (saveHistory) {
+            hypoTransit.acLocation = route.getDestination();
+            hypoTransit.pathHistory.add(route);
+            hypoTransit.pathTimes.add(duration);
+        } else {
+            hypoTransit.acLocation = route.getOrigin();
+        }
         aircraftsInTransits.add(hypoTransit);
     }
 

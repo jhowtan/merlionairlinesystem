@@ -357,7 +357,7 @@ public class ScheduleDevelopmentBean {
                     }
                     System.out.println(j + ": " + routeOut.getDestination().getName());
                     if (routeOut == null) {
-                        ta.fly(aircraft, 1, airportsToGo.get(i), timeAfterZero); //Keep plane stationary for 1 minute
+                        ta.fly(aircraft, 1, routeOut, timeAfterZero, false); //Keep plane stationary for 1 minute
                         planesHere.remove(aircraft);
                         j--;
                         continue;
@@ -365,12 +365,14 @@ public class ScheduleDevelopmentBean {
                     double duration = routeOut.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
                     System.out.println(routeOut.getDistance() + "/" + (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60));
                     duration = (int)duration + 40;
-                    ta.fly(aircraft, duration, routeOut.getDestination(), timeAfterZero); //Fly cheapest aircraft for most expensive route
+                    ta.fly(aircraft, duration, routeOut, timeAfterZero, true); //Fly cheapest aircraft for most expensive route
                     planesHere.remove(aircraft);
                     j--;
                     routesHere.remove(routeOut);
                     routesHere.add(routeOut); //Move route to back of the line
                 }
+                //Land aircrafts that are flying
+
                 done = true;
             }
             

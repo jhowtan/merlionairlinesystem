@@ -12,8 +12,10 @@ public class HypoTransit extends ScheduleDevelopmentClass {
     Airport acLocation;
     double accumulatedMiles;
     List<Route> pathHistory;
+    List<Double> pathTimes;
 
     public HypoTransit() {
         pathHistory = new ArrayList<>();
+        pathTimes = new ArrayList<>();
     }
 }
