@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TransitAircrafts extends ScheduleDevelopmentClass {
     List<HypoTransit> aircraftsInTransits;
+    public double lastTime;
 
     public TransitAircrafts() {
         aircraftsInTransits = new ArrayList<>();
@@ -20,21 +21,20 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         try {
             hypoTransit = getTransitWithAc(hypoAircraft);
         } catch (NotFoundException e) {
-
             hypoTransit = new HypoTransit();
             hypoTransit.hypoAircraft = hypoAircraft;
+            aircraftsInTransits.add(hypoTransit);
         }
         hypoTransit.timeLeft = duration;
         if (saveHistory) {
             hypoTransit.hypoAircraft.location = route.getDestination();
             hypoTransit.pathHistory.add(route);
-            hypoTransit.pathTimes.add(duration);
+            hypoTransit.pathTimes.add(startTime);
             hypoTransit.flying = true;
         } else {
             hypoTransit.hypoAircraft.location = route.getOrigin();
             hypoTransit.flying = false;
         }
-        aircraftsInTransits.add(hypoTransit);
     }
 
     private HypoTransit getTransitWithAc(HypoAircraft hypoAircraft) throws NotFoundException {
@@ -72,6 +72,7 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
             selTransits.get(i).timeLeft = 0;
             selTransits.get(i).flying = false;
         }
+        lastTime = lowest;
         //Process the timelefts
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
             if (aircraftsInTransits.get(i).flying) {

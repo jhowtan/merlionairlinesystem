@@ -335,8 +335,8 @@ public class ScheduleDevelopmentBean {
         prepareApRoutes();
         timeAfterZero = 0;
         ta = new TransitAircrafts();
-        boolean done = false;
-        while (!done) {
+        int done = 0;
+        while (done < 3) {
             //Find most expensive actual distance out of this place
             //Get all routes out of this place
             for (int i = 0; i < airportsToGo.size(); i++) {//Each airport
@@ -370,7 +370,6 @@ public class ScheduleDevelopmentBean {
                     routesHere.remove(routeOut);
                     routesHere.add(routeOut); //Move route to back of the line
                 }
-                done = true;
             }
             //Land aircrafts that are flying
             List<HypoAircraft> landingAircrafts = ta.land();
@@ -378,9 +377,9 @@ public class ScheduleDevelopmentBean {
                 System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber());
                 addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
             }
+            timeAfterZero += ta.lastTime; //This amount of time has past
 
-            //Find cheapest capable aircraft for the job
-            done = true;
+            done++;
         }
     }
 
@@ -494,6 +493,7 @@ public class ScheduleDevelopmentBean {
                          "(" + airportRoutesOut.get(i).get(j).getDistance() + ")" + "], ";
             }
         }
+        result += "\n Flying aircraft: ";
         result += ta.toString();
         System.out.println(result);
     }
