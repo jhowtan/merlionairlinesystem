@@ -3,6 +3,7 @@ package MAS.ScheduleDev;
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
+import MAS.Exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,39 +16,76 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
     }
 
     public void fly(HypoAircraft hypoAircraft, double duration, Route route, double startTime, boolean saveHistory) {
-        HypoTransit hypoTransit = new HypoTransit();
-        hypoTransit.hypoAircraft = hypoAircraft;
+        HypoTransit hypoTransit;
+        try {
+            hypoTransit = getTransitWithAc(hypoAircraft);
+        } catch (NotFoundException e) {
+
+            hypoTransit = new HypoTransit();
+            hypoTransit.hypoAircraft = hypoAircraft;
+        }
         hypoTransit.timeLeft = duration;
         if (saveHistory) {
-            hypoTransit.acLocation = route.getDestination();
+            hypoTransit.hypoAircraft.location = route.getDestination();
             hypoTransit.pathHistory.add(route);
             hypoTransit.pathTimes.add(duration);
+            hypoTransit.flying = true;
         } else {
-            hypoTransit.acLocation = route.getOrigin();
+            hypoTransit.hypoAircraft.location = route.getOrigin();
+            hypoTransit.flying = false;
         }
         aircraftsInTransits.add(hypoTransit);
     }
 
-    public HypoTransit land(boolean remove) {
+    private HypoTransit getTransitWithAc(HypoAircraft hypoAircraft) throws NotFoundException {
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
+            if (aircraftsInTransits.get(i).hypoAircraft == hypoAircraft)
+                return aircraftsInTransits.get(i);
+        }
+        throw new NotFoundException();
+    }
+
+    public List<HypoAircraft> land() {
         if (aircraftsInTransits.size() < 1) return null;
         //Find lowest timeleft in aircraftsInTransit
+        List<HypoAircraft> result = new ArrayList<>();
+        List<HypoTransit> selTransits = new ArrayList<>();
         double lowest = aircraftsInTransits.get(0).timeLeft;
         HypoTransit landingAc = aircraftsInTransits.get(0);
+        result.add(landingAc.hypoAircraft);
+        selTransits.add(landingAc);
         for (int i = 1; i < aircraftsInTransits.size(); i++) {
+            if (!aircraftsInTransits.get(i).flying) continue;
             if (aircraftsInTransits.get(i).timeLeft < lowest) {
                 landingAc = aircraftsInTransits.get(i);
                 lowest = landingAc.timeLeft;
+                result = new ArrayList<>();
+                selTransits = new ArrayList<>();
+                result.add(landingAc.hypoAircraft);
+                selTransits.add(landingAc);
+            } else if (aircraftsInTransits.get(i).timeLeft == lowest) {
+                result.add(aircraftsInTransits.get(i).hypoAircraft);
+                selTransits.add(aircraftsInTransits.get(i));
             }
         }
-        if (remove)
-            aircraftsInTransits.remove(landingAc);
-        return landingAc;
+        for (int i = 0; i < selTransits.size(); i++) {
+            selTransits.get(i).timeLeft = 0;
+            selTransits.get(i).flying = false;
+        }
+        //Process the timelefts
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
+            if (aircraftsInTransits.get(i).flying) {
+                aircraftsInTransits.get(i).timeLeft -= lowest;
+            }
+        }
+        return result;
     }
 
     public String toString() {
         String result = "";
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
-            result = result.concat("\n" + aircraftsInTransits.get(i).hypoAircraft.aircraft.getTailNumber() + " | " + aircraftsInTransits.get(i).acLocation.getName() + " : " + aircraftsInTransits.get(i).timeLeft);
+            if (aircraftsInTransits.get(i).flying)
+                result = result.concat("\n" + aircraftsInTransits.get(i).hypoAircraft.aircraft.getTailNumber() + " | " + aircraftsInTransits.get(i).hypoAircraft.location.getName() + " : " + aircraftsInTransits.get(i).timeLeft);
         }
         return result;
     }

@@ -6,6 +6,7 @@ import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
+import MAS.ScheduleDev.HypoTransit;
 import MAS.ScheduleDev.TransitAircrafts;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
@@ -345,7 +346,7 @@ public class ScheduleDevelopmentBean {
                 for (int j = 0; j < planesHere.size(); j++) {
                     HypoAircraft aircraft = planesHere.get(j);
                     Route routeOut = routesHere.get(0);
-                    System.out.println(j + ": " + routeOut.getDestination().getName() + "_" + routeOut.getDistance() + "/" + aircraft.aircraft.getMaxRange());
+                    //System.out.println(j + ": " + routeOut.getDestination().getName() + "_" + routeOut.getDistance() + "/" + aircraft.aircraft.getMaxRange());
                     while (routeOut.getDistance() > aircraft.aircraft.getMaxRange()) { //Get first route this plane is capable of flying
                         int index = routesHere.indexOf(routeOut);
                         if (index + 1 < routesHere.size())
@@ -355,7 +356,6 @@ public class ScheduleDevelopmentBean {
                             break;
                         }
                     }
-                    System.out.println(j + ": " + routeOut.getDestination().getName());
                     if (routeOut == null) {
                         ta.fly(aircraft, 1, routeOut, timeAfterZero, false); //Keep plane stationary for 1 minute
                         planesHere.remove(aircraft);
@@ -363,7 +363,6 @@ public class ScheduleDevelopmentBean {
                         continue;
                     }
                     double duration = routeOut.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
-                    System.out.println(routeOut.getDistance() + "/" + (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60));
                     duration = (int)duration + 40;
                     ta.fly(aircraft, duration, routeOut, timeAfterZero, true); //Fly cheapest aircraft for most expensive route
                     planesHere.remove(aircraft);
@@ -371,11 +370,15 @@ public class ScheduleDevelopmentBean {
                     routesHere.remove(routeOut);
                     routesHere.add(routeOut); //Move route to back of the line
                 }
-                //Land aircrafts that are flying
-
                 done = true;
             }
-            
+            //Land aircrafts that are flying
+            List<HypoAircraft> landingAircrafts = ta.land();
+            for (int i = 0; i < landingAircrafts.size(); i++) {
+                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber());
+                addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
+            }
+
             //Find cheapest capable aircraft for the job
             done = true;
         }

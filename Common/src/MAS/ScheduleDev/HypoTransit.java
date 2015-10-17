@@ -8,8 +8,8 @@ import java.util.List;
 
 public class HypoTransit extends ScheduleDevelopmentClass {
     HypoAircraft hypoAircraft;
+    boolean flying;
     double timeLeft;
-    Airport acLocation;
     double accumulatedMiles;
     List<Route> pathHistory;
     List<Double> pathTimes;
@@ -17,5 +17,6 @@ public class HypoTransit extends ScheduleDevelopmentClass {
     public HypoTransit() {
         pathHistory = new ArrayList<>();
         pathTimes = new ArrayList<>();
+        flying = false;
     }
 }
