@@ -54,6 +54,8 @@ public class Constants {
     public static final double RANGE_MOMENTUM = 0.85;
     public static final double OPERATIONAL_RANGE = 0.6;
     public static final double AIRCRAFT_YEARLY_WEAR = 0.01;
+    public static final double OPERATIONAL_SPEED = 0.9;
+    public static final double MILES_BEFORE_MAINTENANCE = 10000;
 
     public static final String SSR_ACTION_CODE_TICKET_NUMBER = "TKNR";
     public static final String SSR_ACTION_CODE_FFP = "FFP";

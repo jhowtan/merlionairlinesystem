@@ -243,7 +243,12 @@ public class InitBean {
                 List<String> homeBaseIds = new ArrayList<>();
                 for (int i = 0; i < allAc.size(); i++) {
                     acIds.add(allAc.get(i).getId());
-                    homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
+                    if (i < 2)
+                        homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
+                    else if (i < 4)
+                        homeBaseIds.add(routeBean.findAirportByCode("HKG").getId());
+                    else
+                        homeBaseIds.add(routeBean.findAirportByCode("DXB").getId());
                 }
                 List<String> hubIds = new ArrayList<>();
                 List<Double> hubStr = new ArrayList<>();
