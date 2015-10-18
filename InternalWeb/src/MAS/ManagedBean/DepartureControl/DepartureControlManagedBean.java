@@ -34,14 +34,15 @@ public class DepartureControlManagedBean {
         return null;
     }
 
-    public void openGateForFlight(Flight flight) {
+    public void changeGateStatus(Flight flight, int status) {
         try {
-            flight.setStatus(Flight.GATE_OPEN);
+            flight.setStatus(status);
             flightScheduleBean.updateSingleFlight(flight);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-        authManagedBean.createAuditLog("Gate opened for " + flight.getCode() + ": " + flight.getGateNumber(), "gate_check");
+        authManagedBean.createAuditLog("Gate status " + flight.getCode() + "-" +
+                flight.getGateNumber() + ": " + showStatusName(flight), "gate_check");
     }
 
     public void changeGateNumber(Flight flight) {
@@ -59,19 +60,19 @@ public class DepartureControlManagedBean {
 
     public String showStatusName(Flight flight) {
         switch (flight.getStatus()) {
-            case 0:
+            case Flight.NO_STATUS:
                 return "NO STATUS";
-            case 1:
+            case Flight.GATE_OPEN:
                 return "GATE OPEN";
-            case 2:
+            case Flight.BOARDING:
                 return "BOARDING";
-            case 3:
+            case Flight.GATE_CLOSING:
                 return "GATE CLOSING";
-            case 4:
+            case Flight.LAST_CALL:
                 return "LAST CALL";
-            case 5:
+            case Flight.GATE_CLOSED:
                 return "GATE CLOSED";
-            case 6:
+            case Flight.DEPARTED:
                 return "DEPARTED";
             default:
                 return "";
