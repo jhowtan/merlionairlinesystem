@@ -98,6 +98,12 @@ public class Utils {
         return dist;
     }
 
+    public static double calculateDuration(double distance, double speed) {
+        double duration = distance / (speed * Constants.OPERATIONAL_SPEED / 60);
+        duration = (int)duration + Constants.TAKE_OFF_AND_LAND_TIME;
+        return duration;
+    }
+
     public static String convertBookingReference(long BookingReferenceLong) {
         return Long.toString(BookingReferenceLong, 36).toUpperCase();
     }

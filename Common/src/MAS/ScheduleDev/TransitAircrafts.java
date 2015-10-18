@@ -124,4 +124,8 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         }
         return result;
     }
+
+    public List<HypoTransit> getAllHistory() {
+        return aircraftsInTransits;
+    }
 }

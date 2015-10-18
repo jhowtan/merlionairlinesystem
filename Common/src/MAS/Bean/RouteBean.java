@@ -160,6 +160,18 @@ public class RouteBean {
         em.remove(route);
     }
 
+    public Route matchRoute(Route route) throws NotFoundException {
+        Airport origin = route.getOrigin();
+        Airport destination = route.getDestination();
+        Route result = em.createQuery("SELECT r from Route r WHERE r.origin = :origin AND r.destination = :destination", Route.class)
+                .setParameter("origin", origin)
+                .setParameter("destination", destination).setMaxResults(1).getResultList().get(0);
+        if (result == null)
+            throw new NotFoundException();
+        else
+            return result;
+    }
+
     public List<Route> findRouteByOrigin(String airportId) throws NotFoundException {
         Airport airport = em.find(Airport.class, airportId);
         if (airport == null) throw new NotFoundException();
@@ -219,8 +231,24 @@ public class RouteBean {
         }
     }
 
+    public AircraftAssignment findAAByAcAndRoute(long aircraftId, long routeId) throws NotFoundException {
+        Aircraft aircraft = em.find(Aircraft.class, aircraftId);
+        if (aircraft == null) throw new NotFoundException();
+        Route route = em.find(Route.class, routeId);
+        if (route == null) throw new NotFoundException();
+        List<AircraftAssignment> result = em.createQuery("SELECT a from AircraftAssignment a WHERE a.aircraft = :aircraft AND a.route = :route", AircraftAssignment.class)
+                .setParameter("aircraft", aircraft)
+                .setParameter("route", route).setMaxResults(1).getResultList();
+        if (result.size() == 0)
+            throw new NotFoundException();
+        else
+            return result.get(0);
+    }
+
     public List<AircraftAssignment> findAAByAircraft(long aircraftId) throws NotFoundException {
-        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.aircraft = :aircraftId", AircraftAssignment.class).setParameter("aircraftId", aircraftId).getResultList();
+        Aircraft aircraft = em.find(Aircraft.class, aircraftId);
+        if (aircraft == null) throw new NotFoundException();
+        return em.createQuery("SELECT a from AircraftAssignment a WHERE a.aircraft = :aircraft", AircraftAssignment.class).setParameter("aircraft", aircraftId).getResultList();
     }
 
     public List<AircraftAssignment> findAAByRoute(long routeId) throws NotFoundException {
@@ -243,10 +271,6 @@ public class RouteBean {
         AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aaId);
         if (aircraftAssignment == null) throw new NotFoundException();
         return (int)((aircraftAssignment.getRoute().getDistance() / aircraftAssignment.getAircraft().getSeatConfig().getAircraftType().getSpeed()) * 60);
-    }
-
-    public void autoAssign() {
-        
     }
 
 }

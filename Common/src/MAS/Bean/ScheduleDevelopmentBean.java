@@ -6,6 +6,7 @@ import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
+import MAS.ScheduleDev.HypoTransit;
 import MAS.ScheduleDev.TransitAircrafts;
 
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "ScheduleDevelopmentEJB")
@@ -25,6 +27,12 @@ public class ScheduleDevelopmentBean {
 
     @EJB
     CostsBean costsBean;
+    @EJB
+    RouteBean routeBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
+    @EJB
+    AircraftMaintenanceSlotBean aircraftMaintenanceSlotBean;
 
     private List<HypoAircraft> aircraftsToFly;
     private List<HypoAircraft> aircraftStillFlying;
@@ -35,11 +43,8 @@ public class ScheduleDevelopmentBean {
     private List<Double> hubSavings;
     private List<Route> suggestedRoutes;
     private List<HypoRoute> allRoutes;
-    private List<AircraftAssignment> suggestedAA;
-    private List<AircraftMaintenanceSlot> suggestedMaint;
 
     private List<List<Airport>> tierList;
-    private double timeAfterZero;
     private TransitAircrafts ta;
 
     private int reserveAircraft;
@@ -54,8 +59,6 @@ public class ScheduleDevelopmentBean {
         airportsToGo = new ArrayList<>();
         allRoutes = new ArrayList<>();
         suggestedRoutes = new ArrayList<>();
-        suggestedAA = new ArrayList<>();
-        suggestedMaint = new ArrayList<>();
         hubs = new ArrayList<>();
         hubSavings = new ArrayList<>();
         airportBuckets = new ArrayList<>();
@@ -361,15 +364,14 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    private void createFlightTimetable() throws Exception {
+    private void createFlightTimetable(int forTime) throws Exception {
         //Do routes starting from the hub first
         //Find cheapest aircraft to allocate going out of the hub.
         prepareApBuckets();
         prepareApRoutes();
-        timeAfterZero = 0;
+        int timeAfterZero = 0;
         ta = new TransitAircrafts();
-        int done = 0;
-        while (timeAfterZero < 10080) { //40320
+        while (timeAfterZero < forTime) {
             //Find most expensive actual distance out of this place
             //Get all routes out of this place
             for (int i = 0; i < airportsToGo.size(); i++) {//Each airport
@@ -384,8 +386,7 @@ public class ScheduleDevelopmentBean {
                             //ROUTE THIS PLANE TO NEAREST HUB
                             try {
                                 Route rtb = routeBackToHub(currentAirport);
-                                double duration = rtb.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
-                                duration = (int) duration + Constants.TAKE_OFF_AND_LAND_TIME;
+                                double duration = Utils.calculateDuration(rtb.getDistance(), aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed());
                                 ta.fly(aircraft, duration, rtb, timeAfterZero);
                                 planesHere.remove(aircraft);
                                 j--;
@@ -394,7 +395,6 @@ public class ScheduleDevelopmentBean {
                                 continue;
                             } catch (Exception e) {
                                 //Plane needs maint, but can't find hub nearby -> fly till you get there
-                                System.out.println("DELAY MAINT: " + aircraft.aircraft.getTailNumber() + " _ " + timeAfterZero);
                             }
                         } else {
                             ta.maintenance(aircraft, acMaintTime, currentAirport, timeAfterZero, true);
@@ -417,8 +417,7 @@ public class ScheduleDevelopmentBean {
                         j--;
                         continue;
                     }
-                    double duration = routeOut.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
-                    duration = (int)duration + Constants.TAKE_OFF_AND_LAND_TIME;
+                    double duration = Utils.calculateDuration(routeOut.getDistance(), aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed());
                     ta.fly(aircraft, duration, routeOut, timeAfterZero); //Fly cheapest aircraft for most expensive route
                     planesHere.remove(aircraft);
                     j--;
@@ -449,7 +448,6 @@ public class ScheduleDevelopmentBean {
                 }
             }
 
-            done++;
         }
     }
 
@@ -494,7 +492,7 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < airportsToGo.size(); i++) { //Initialize airport buckets
             airportBuckets.add(new ArrayList<>());
         }
-        //Add aircraft to hub buckets
+        //Add aircraft to starting points
         for (int i = 0; i < aircraftStillFlying.size(); i++) {
             addToBucket(aircraftStillFlying.get(i), aircraftStillFlying.get(i).homeBase);
         }
@@ -520,83 +518,118 @@ public class ScheduleDevelopmentBean {
         em.flush();
     }
 
-    public List<Route> findRouteTo(Airport origin, Airport destination, List<Route> routeList) throws NotFoundException {
-        List<Route> result = new ArrayList<>();
-        List<Route> routesOut = getRoutesStarting(origin, routeList);
-        double shortestDist = Double.MAX_VALUE;
-        for (int i = 0; i < routesOut.size(); i++) {
-            Route currRoute = routesOut.get(i);
-            List<Route> calcRoute = recursiveFindRouteTo(destination, routeList, new ArrayList<Route>(){{add(currRoute);}} );
-            if (calcRoute != null) {
-                double dist = calcDistanceOfRouteList(calcRoute);
-                if (dist < shortestDist) {
-                    result = calcRoute;
-                    shortestDist = dist;
+    public void saveSuggestedFlights(Date startTime) {
+        List<HypoTransit> allHappenings = ta.getAllHistory();
+        for (int i = 0; i < allHappenings.size(); i++) {
+            HypoTransit happenings = allHappenings.get(i);
+            Aircraft aircraft = happenings.hypoAircraft.aircraft;
+            for (int j = 0; j < happenings.pathHistory.size(); j++) {
+                double relativeTime = happenings.pathTimes.get(j);
+                Date dateTime = Utils.minutesLater(startTime, (int)relativeTime);
+                Route route = happenings.pathHistory.get(j);
+                AircraftAssignment aircraftAssignment;
+                try {
+                    route = routeBean.matchRoute(route);
+                    try {
+                        aircraftAssignment = routeBean.findAAByAcAndRoute(aircraft.getId(), route.getId());
+                    } catch (NotFoundException e) {
+                        aircraftAssignment = routeBean.getAircraftAssignment( routeBean.createAircraftAssignment(aircraft.getId(), route.getId()) );
+                    }
+                    flightScheduleBean.createFlight("MA"+aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int)Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
+                            aircraftAssignment.getId(), true);
+                } catch (NotFoundException e) {
+                    continue;
+                }
+            }
+            for (int j = 0; j <happenings.maintHistory.size(); j++) {
+                double relativeTime = happenings.maintTimes.get(j);
+                Date dateTime = Utils.minutesLater(startTime, (int)relativeTime);
+                try {
+                    aircraftMaintenanceSlotBean.createSlot(dateTime, acMaintTime, happenings.maintHistory.get(j).getId(), aircraft.getId());
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
-        if (result.size() > 0)
-            return result;
-        else
-            throw new NotFoundException();
     }
-
-    private List<Route> recursiveFindRouteTo(Airport destination, List<Route> routeList, List<Route> calcRoute) {
-        Airport latest = calcRoute.get(calcRoute.size() - 1).getDestination();
-        if (latest == destination) {
-            return calcRoute;
-        }
-        List<List<Route>> allOptions = new ArrayList<>();
-        List<Route> branches = getRoutesStarting(latest, routeList);
-        for (int i = 0; i < branches.size(); i++) {
-            Route currBranch = branches.get(i);
-            if (!isOriginAlongRoute(currBranch.getDestination(), calcRoute)) {
-                List<Route> routeAddBranch = new ArrayList<>(calcRoute);
-                routeAddBranch.add(currBranch);
-                List<Route> newRoute = recursiveFindRouteTo(destination, routeList, routeAddBranch);
-                if (newRoute != null && newRoute.size() > 0)
-                    allOptions.add(newRoute);
-            }
-        }
-
-        if (allOptions.size() > 0) {
-            List<Route> bestRoute = minRouteInArray(allOptions);
-            return bestRoute;
-        }
-        return null;
-    }
-
-    private boolean isOriginAlongRoute(Airport airport, List<Route> routeList) {
-        for (int i = 0; i < routeList.size(); i++) {
-            if (routeList.get(i).getOrigin() == airport)
-                return true;
-        }
-        return false;
-    }
-
-    private List<Route> minRouteInArray(List<List<Route>> routeList) {
-        if (routeList == null) return null;
-        if (routeList.size() < 1) return null;
-
-        List<Route> result = new ArrayList<>();
-        double shortestDist = Double.MAX_VALUE;
-        for (int i = 1; i < routeList.size(); i++) {
-            List<Route> current = routeList.get(i);
-            double dist = calcDistanceOfRouteList(current);
-            if (dist < shortestDist) {
-                result = current;
-                shortestDist = dist;
-            }
-        }
-        return result;
-    }
-
-    public double calcDistanceOfRouteList(List<Route> routeList) {
-        double result = 0;
-        for (int i = 0; i < routeList.size(); i++)
-            result += routeList.get(i).getDistance();
-        return result;
-    }
+//    ----------UNUSED-----------------
+//    public List<Route> findRouteTo(Airport origin, Airport destination, List<Route> routeList) throws NotFoundException {
+//        List<Route> result = new ArrayList<>();
+//        List<Route> routesOut = getRoutesStarting(origin, routeList);
+//        double shortestDist = Double.MAX_VALUE;
+//        for (int i = 0; i < routesOut.size(); i++) {
+//            Route currRoute = routesOut.get(i);
+//            List<Route> calcRoute = recursiveFindRouteTo(destination, routeList, new ArrayList<Route>(){{add(currRoute);}} );
+//            if (calcRoute != null) {
+//                double dist = calcDistanceOfRouteList(calcRoute);
+//                if (dist < shortestDist) {
+//                    result = calcRoute;
+//                    shortestDist = dist;
+//                }
+//            }
+//        }
+//        if (result.size() > 0)
+//            return result;
+//        else
+//            throw new NotFoundException();
+//    }
+//
+//    private List<Route> recursiveFindRouteTo(Airport destination, List<Route> routeList, List<Route> calcRoute) {
+//        Airport latest = calcRoute.get(calcRoute.size() - 1).getDestination();
+//        if (latest == destination) {
+//            return calcRoute;
+//        }
+//        List<List<Route>> allOptions = new ArrayList<>();
+//        List<Route> branches = getRoutesStarting(latest, routeList);
+//        for (int i = 0; i < branches.size(); i++) {
+//            Route currBranch = branches.get(i);
+//            if (!isOriginAlongRoute(currBranch.getDestination(), calcRoute)) {
+//                List<Route> routeAddBranch = new ArrayList<>(calcRoute);
+//                routeAddBranch.add(currBranch);
+//                List<Route> newRoute = recursiveFindRouteTo(destination, routeList, routeAddBranch);
+//                if (newRoute != null && newRoute.size() > 0)
+//                    allOptions.add(newRoute);
+//            }
+//        }
+//
+//        if (allOptions.size() > 0) {
+//            List<Route> bestRoute = minRouteInArray(allOptions);
+//            return bestRoute;
+//        }
+//        return null;
+//    }
+//
+//    private boolean isOriginAlongRoute(Airport airport, List<Route> routeList) {
+//        for (int i = 0; i < routeList.size(); i++) {
+//            if (routeList.get(i).getOrigin() == airport)
+//                return true;
+//        }
+//        return false;
+//    }
+//
+//    private List<Route> minRouteInArray(List<List<Route>> routeList) {
+//        if (routeList == null) return null;
+//        if (routeList.size() < 1) return null;
+//
+//        List<Route> result = new ArrayList<>();
+//        double shortestDist = Double.MAX_VALUE;
+//        for (int i = 1; i < routeList.size(); i++) {
+//            List<Route> current = routeList.get(i);
+//            double dist = calcDistanceOfRouteList(current);
+//            if (dist < shortestDist) {
+//                result = current;
+//                shortestDist = dist;
+//            }
+//        }
+//        return result;
+//    }
+//
+//    public double calcDistanceOfRouteList(List<Route> routeList) {
+//        double result = 0;
+//        for (int i = 0; i < routeList.size(); i++)
+//            result += routeList.get(i).getDistance();
+//        return result;
+//    }
 
     private void debugAllRoutes(List<HypoRoute> routeList) {
         System.out.println("-----------------------ALL ROUTES-----------------------");
@@ -663,9 +696,10 @@ public class ScheduleDevelopmentBean {
             System.out.println("Processing2:.....");
             generateTierList();
             System.out.println("Done:Create tier list");
-            createFlightTimetable();
+            createFlightTimetable(40320);
             debugFlightState();
             System.out.println("Done:Create flight timetable");
+            saveSuggestedFlights(new Date());
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();

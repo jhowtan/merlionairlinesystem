@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HypoTransit extends ScheduleDevelopmentClass {
-    HypoAircraft hypoAircraft;
-    boolean flying;
-    boolean underMaint;
-    double timeLeft;
-    double accumulatedMiles;
-    List<Route> pathHistory;
-    List<Double> pathTimes;
-    List<Airport> maintHistory;
-    List<Double> maintTimes;
+    public HypoAircraft hypoAircraft;
+    public boolean flying;
+    public boolean underMaint;
+    public double timeLeft;
+    public double accumulatedMiles;
+    public List<Route> pathHistory;
+    public List<Double> pathTimes;
+    public List<Airport> maintHistory;
+    public List<Double> maintTimes;
 
     public HypoTransit() {
         pathHistory = new ArrayList<>();
