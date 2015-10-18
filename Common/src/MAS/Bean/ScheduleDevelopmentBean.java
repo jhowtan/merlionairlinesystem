@@ -47,6 +47,7 @@ public class ScheduleDevelopmentBean {
     private int reserveAircraft;
     //private double hubSavings = 0.25;
     private double maxRange = 0;
+    private double acRestTime = 180;
 
     public ScheduleDevelopmentBean() {
         aircraftsToFly = new ArrayList<>();
@@ -336,7 +337,7 @@ public class ScheduleDevelopmentBean {
         timeAfterZero = 0;
         ta = new TransitAircrafts();
         int done = 0;
-        while (done < 3) {
+        while (done < 20) {
             //Find most expensive actual distance out of this place
             //Get all routes out of this place
             for (int i = 0; i < airportsToGo.size(); i++) {//Each airport
@@ -373,15 +374,18 @@ public class ScheduleDevelopmentBean {
             }
             //Land aircrafts that are flying
             List<HypoAircraft> landingAircrafts = ta.land();
-            for (int i = 0; i < landingAircrafts.size(); i++) {
-                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber() + " from " + landingAircrafts.get(i).prevLocation.getName() + " @ " +landingAircrafts.get(i).location.getName());
-                addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
-                //Check if plane needs maintenance
-                //Augment routes to shift priority @TODO:Only if the plane flew here
-                if (landingAircrafts.get(i).location != landingAircrafts.get(i).prevLocation)
-                    shiftRoute(landingAircrafts.get(i));
-            }
             timeAfterZero += ta.lastTime; //This amount of time has past
+            for (int i = 0; i < landingAircrafts.size(); i++) {
+                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber() +  " @ " +landingAircrafts.get(i).location.getName() + " from " + landingAircrafts.get(i).prevLocation.getName());
+                //@TODO: Check if plane needs maintenance
+                if (landingAircrafts.get(i).location != landingAircrafts.get(i).prevLocation) {
+                    shiftRoute(landingAircrafts.get(i));
+                    //Let plane rest
+                    ta.maintenance(landingAircrafts.get(i), acRestTime, landingAircrafts.get(i).location, timeAfterZero, false);
+                } else {
+                    addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
+                }
+            }
 
             done++;
         }

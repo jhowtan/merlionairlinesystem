@@ -25,4 +25,12 @@ public class HypoTransit extends ScheduleDevelopmentClass {
         maintHistory = new ArrayList<>();
         maintTimes = new ArrayList<>();
     }
+
+    public String printPath() {
+        String result = hypoAircraft.aircraft.getTailNumber() + " = ";
+        for (int i = 0; i < pathHistory.size(); i++) {
+            result = result.concat("{"+pathTimes.get(i)+"}: " + pathHistory.get(i).getOrigin().getName() + " - " + pathHistory.get(i).getDestination().getName() + ", ");
+        }
+        return result;
+    }
 }
