@@ -56,6 +56,7 @@ public class Constants {
     public static final double AIRCRAFT_YEARLY_WEAR = 0.01;
     public static final double OPERATIONAL_SPEED = 0.9;
     public static final double MILES_BEFORE_MAINTENANCE = 10000;
+    public static final double TAKE_OFF_AND_LAND_TIME = 30;
 
     public static final String SSR_ACTION_CODE_TICKET_NUMBER = "TKNR";
     public static final String SSR_ACTION_CODE_FFP = "FFP";
