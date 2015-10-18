@@ -73,7 +73,7 @@ public class FlightScheduleBean {
         double totalCost = costsBean.calculateCostPerFlight(flightId);
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-        double costPerSeat = totalCost/seatConfigObject.getTotalSeats();
+        double costPerSeat = totalCost/(seatConfigObject.getTotalSeats() * Constants.OPERATIONAL_OCCUPANCY);
         costPerSeat *= Constants.PROFIT_MARGIN;
 
         for (int i = 0; i < Cabin.TRAVEL_CLASSES.length; i++) {
