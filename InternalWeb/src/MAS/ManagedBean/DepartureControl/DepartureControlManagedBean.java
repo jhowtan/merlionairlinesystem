@@ -82,6 +82,29 @@ public class DepartureControlManagedBean {
         return flightScheduleBean.getETicketsForFlight(flight);
     }
 
+    public int countCheckedInPassengers() {
+        int count = 0;
+        for (ETicket passenger : retrievePassengersFromFlight()) {
+           if (passenger.isCheckedIn())
+               count++;
+        }
+        return count;
+    }
+
+    public int countBoardedPassengers() {
+        int count = 0;
+        for (ETicket passenger : retrievePassengersFromFlight()) {
+            if (passenger.isCheckedIn() && passenger.isGateChecked()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void removeBaggageForPassenger(ETicket eticket) {
+        //@TODO: Decide how we want to remove baggages
+    }
+
     public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
         return flightScheduleBean.findDepartingFlightsByAirport(retrieveBaseAirport());
     }
