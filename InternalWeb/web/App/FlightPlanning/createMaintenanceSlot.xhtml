@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!duration.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="duration">Estimated Duration (in hours)</label>
+                                        <label class="control-label" for="duration">Estimated Duration (in minutes)</label>
                                         <h:inputText binding="#{duration}" id="duration" value="#{createMaintenanceSlotManagedBean.duration}" styleClass="form-control"
                                                      pt:placeholder="e.g. 2.5" required="true" requiredMessage="Estimated duration of maintenance is required." validatorMessage="A duration between 1 and 100 hours is required." converterMessage="A duration between 1 and 100 hours is required.">
                                             <f:validateLongRange minimum="1" maximum="100" />

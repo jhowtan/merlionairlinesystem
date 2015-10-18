@@ -52,6 +52,10 @@ public class CommonManagedBean {
         }
     }
 
+    public String formateDoubleRounded(double val) {
+        return Integer.toString((int)val);
+    }
+
     public String timezoneNiceName(String timezone) {
         return TimeZone.getTimeZone(timezone).getDisplayName();
     }

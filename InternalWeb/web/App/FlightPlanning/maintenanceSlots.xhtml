@@ -36,7 +36,7 @@
                                 <td>#{ms.aircraft.getTailNumber()}</td>
                                 <td>#{ms.airport.getName()}</td>
                                 <td>#{ms.getStartTime()}</td>
-                                <td>#{ms.duration} hours</td>
+                                <td>#{commonManagedBean.formateDoubleRounded(ms.duration)} minutes</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
