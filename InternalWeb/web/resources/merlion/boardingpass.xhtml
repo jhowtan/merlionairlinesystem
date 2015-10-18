@@ -50,7 +50,7 @@
                     </div>
                     <div class="item">
                         <div class="label">Gate</div>
-                        <div class="value">A19</div>
+                        <div class="value">#{(cc.attrs.eticket.flight.gateNumber != null) ? cc.attrs.eticket.flight.gateNumber : 'Unavailable'}</div>
                     </div>
                     <div class="item">
                         <div class="label">Seat</div>
@@ -93,7 +93,7 @@
                 <div class="content">
                     <div class="item">
                         <div class="label">Gate</div>
-                        <div class="value">A17</div>
+                        <div class="value">#{(cc.attrs.eticket.flight.gateNumber != null) ? cc.attrs.eticket.flight.gateNumber : 'Unavailable'}</div>
                     </div>
                     <div class="item">
                         <div class="label">Departure Time</div>
