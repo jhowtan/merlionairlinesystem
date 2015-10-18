@@ -34,8 +34,48 @@ public class DepartureControlManagedBean {
         return null;
     }
 
+    public void openGateForFlight(Flight flight) {
+        try {
+            flight.setStatus(Flight.GATE_OPEN);
+            flightScheduleBean.updateSingleFlight(flight);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        authManagedBean.createAuditLog("Gate opened for " + flight.getCode() + ": " + flight.getGateNumber(), "gate_check");
+    }
+
+    public void changeGateNumber(Flight flight) {
+        try {
+            flightScheduleBean.updateSingleFlight(flight);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        authManagedBean.createAuditLog("Gate number changed for " + flight.getCode() + ": " + flight.getGateNumber(), "gate_check");
+    }
+
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+
+    public String showStatusName(Flight flight) {
+        switch (flight.getStatus()) {
+            case 0:
+                return "NO STATUS";
+            case 1:
+                return "GATE OPEN";
+            case 2:
+                return "BOARDING";
+            case 3:
+                return "GATE CLOSING";
+            case 4:
+                return "LAST CALL";
+            case 5:
+                return "GATE CLOSED";
+            case 6:
+                return "DEPARTED";
+            default:
+                return "";
+        }
     }
 
     public List<ETicket> retrievePassengersFromFlight() {
@@ -44,10 +84,6 @@ public class DepartureControlManagedBean {
 
     public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
         return flightScheduleBean.findDepartingFlightsByAirport(retrieveBaseAirport());
-    }
-
-    public void updatePassengerCheckIn(ETicket eTicket) {
-        eTicket.setCheckedIn(true);
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
