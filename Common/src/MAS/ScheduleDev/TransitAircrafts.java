@@ -24,6 +24,7 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         } catch (NotFoundException e) {
             hypoTransit = new HypoTransit();
             hypoTransit.hypoAircraft = hypoAircraft;
+            hypoTransit.accumulatedMiles = hypoAircraft.aircraft.getMilesSinceLastMaint();
             aircraftsInTransits.add(hypoTransit);
         }
         hypoTransit.timeLeft = duration;

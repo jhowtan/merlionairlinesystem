@@ -74,4 +74,15 @@ public class Aircraft {
     public void setMaxRange(double range) {
         this.maxRange = range;
     }
+
+    @Basic
+    private int milesSinceLastMaint;
+
+    public int getMilesSinceLastMaint() {
+        return milesSinceLastMaint;
+    }
+
+    public void setMilesSinceLastMaint(int milesSinceLastMaint) {
+        this.milesSinceLastMaint = milesSinceLastMaint;
+    }
 }
