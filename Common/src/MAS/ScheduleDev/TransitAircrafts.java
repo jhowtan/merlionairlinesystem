@@ -113,9 +113,13 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
             if (aircraftsInTransits.get(i).flying)
                 result = result.concat("\n" + aircraftsInTransits.get(i).hypoAircraft.aircraft.getTailNumber() + " | " +  aircraftsInTransits.get(i).hypoAircraft.prevLocation.getName() + " -> " + aircraftsInTransits.get(i).hypoAircraft.location.getName() + " : " + aircraftsInTransits.get(i).timeLeft);
         }
-        result = result.concat("\n-------------PATHS-----------------");
+        result = result.concat("\n-------------FLIGHTS-----------------");
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
             result = result.concat("\n" + aircraftsInTransits.get(i).printPath());
+        }
+        result = result.concat("\n-------------MAINTS-----------------");
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
+            result = result.concat("\n" + aircraftsInTransits.get(i).printMaint());
         }
         return result;
     }

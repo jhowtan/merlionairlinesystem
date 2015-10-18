@@ -33,4 +33,12 @@ public class HypoTransit extends ScheduleDevelopmentClass {
         }
         return result;
     }
+
+    public String printMaint() {
+        String result = hypoAircraft.aircraft.getTailNumber() + " = ";
+        for (int i = 0; i < maintHistory.size(); i++) {
+            result = result.concat("{"+maintTimes.get(i)+"}: " + maintHistory.get(i).getName() +  ", ");
+        }
+        return result;
+    }
 }
