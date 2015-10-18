@@ -92,7 +92,7 @@ public class CostsBean {
     }
 
     public List<Cost> getAllCostOfType(int type) {
-        return em.createQuery("SELECT c from Cost c WHERE c.type = :type").setParameter("type", type).getResultList();
+        return em.createQuery("SELECT c from Cost c WHERE c.type = :type", Cost.class).setParameter("type", type).getResultList();
     }
 
     public void calculateCostEstimate(HypoAircraftAssignment hypothetical) {
@@ -101,7 +101,7 @@ public class CostsBean {
         double result = 0;
 
         //Aircraft costs divided into per flight
-        List<Cost> acDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
+        List<Cost> acDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1", Cost.class)
                 .setParameter("type", Constants.COST_PER_AIRCRAFT)
                 .setParameter("acId", acId).getResultList();
         double acAll = addAllInList(acDLife);
@@ -111,7 +111,7 @@ public class CostsBean {
         double totalFuelCosts = calculateFuelCost(aircraftAssignment.getAircraft(), aircraftAssignment.getRoute().getDistance());
 
         //Maintenance costs divided by flights
-        List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1")
+        List<Cost> maintDLife = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :acId OR c.type = :type AND c.assocId = -1", Cost.class)
                 .setParameter("type", Constants.COST_PER_MAINTENANCE)
                 .setParameter("acId", acId).getResultList();
         double allMaint = addAllInList(maintDLife) * attributesBean.getIntAttribute(Constants.MAINTENANCE_PER_YEAR, 15);
