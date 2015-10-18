@@ -1,5 +1,6 @@
 package MAS.ScheduleDev;
 
+import MAS.Common.Constants;
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
@@ -16,7 +17,7 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         aircraftsInTransits = new ArrayList<>();
     }
 
-    public void fly(HypoAircraft hypoAircraft, double duration, Route route, double startTime, boolean saveHistory) {
+    public void fly(HypoAircraft hypoAircraft, double duration, Route route, double startTime) {
         HypoTransit hypoTransit;
         try {
             hypoTransit = getTransitWithAc(hypoAircraft);
@@ -26,16 +27,38 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
             aircraftsInTransits.add(hypoTransit);
         }
         hypoTransit.timeLeft = duration;
-        if (saveHistory) {
-            hypoTransit.hypoAircraft.location = route.getDestination();
-            hypoTransit.pathHistory.add(route);
-            hypoTransit.pathTimes.add(startTime);
-            hypoTransit.flying = true;
-        } else {
-            hypoTransit.hypoAircraft.location = route.getOrigin();
-            hypoTransit.flying = true;
-        }
+
+        hypoTransit.hypoAircraft.location = route.getDestination();
+        hypoTransit.pathHistory.add(route);
+        hypoTransit.pathTimes.add(startTime);
+        hypoTransit.accumulatedMiles += route.getDistance();
+        if (hypoTransit.accumulatedMiles >= Constants.MILES_BEFORE_MAINTENANCE)
+            hypoAircraft.reqMaint = true;
+        hypoTransit.flying = true;
+
         hypoTransit.hypoAircraft.prevLocation = route.getOrigin();
+    }
+
+    public void maintenance(HypoAircraft hypoAircraft, double duration, Airport airport, double startTime, boolean saveHistory) {
+        HypoTransit hypoTransit;
+        try {
+            hypoTransit = getTransitWithAc(hypoAircraft);
+        } catch (NotFoundException e) {
+            hypoTransit = new HypoTransit();
+            hypoTransit.hypoAircraft = hypoAircraft;
+            aircraftsInTransits.add(hypoTransit);
+        }
+        hypoTransit.timeLeft = duration;
+
+        if (saveHistory) {
+            hypoTransit.maintHistory.add(airport);
+            hypoTransit.maintTimes.add(startTime);
+            hypoTransit.accumulatedMiles = 0;
+            hypoTransit.hypoAircraft.reqMaint = false;
+        }
+        hypoTransit.hypoAircraft.location = hypoTransit.hypoAircraft.prevLocation = airport;
+
+        hypoTransit.underMaint = true;
     }
 
     private HypoTransit getTransitWithAc(HypoAircraft hypoAircraft) throws NotFoundException {
@@ -56,7 +79,7 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         //result.add(landingAc.hypoAircraft);
         //selTransits.add(landingAc);
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
-            if (!aircraftsInTransits.get(i).flying) continue;
+            if (!aircraftsInTransits.get(i).flying && !aircraftsInTransits.get(i).underMaint) continue; //Not flying or under maintenance
             if (aircraftsInTransits.get(i).timeLeft < lowest) {
                 landingAc = aircraftsInTransits.get(i);
                 lowest = landingAc.timeLeft;
@@ -72,11 +95,12 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         for (int i = 0; i < selTransits.size(); i++) {
             selTransits.get(i).timeLeft = 0;
             selTransits.get(i).flying = false;
+            selTransits.get(i).underMaint = false;
         }
         lastTime = lowest;
         //Process the timelefts
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
-            if (aircraftsInTransits.get(i).flying) {
+            if (aircraftsInTransits.get(i).flying || aircraftsInTransits.get(i).underMaint) {
                 aircraftsInTransits.get(i).timeLeft -= lowest;
             }
         }

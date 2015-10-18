@@ -8,6 +8,7 @@ public class HypoAircraft extends ScheduleDevelopmentClass implements Comparable
     public Airport homeBase;
     public Airport location;
     public Airport prevLocation;
+    public boolean reqMaint = false;
 
     @Override
     public int compareTo(HypoAircraft another) {

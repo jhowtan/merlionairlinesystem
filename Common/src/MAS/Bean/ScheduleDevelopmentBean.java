@@ -357,14 +357,14 @@ public class ScheduleDevelopmentBean {
                         }
                     }
                     if (routeOut == null) {
-                        ta.fly(aircraft, 1, routeOut, timeAfterZero, false); //Keep plane stationary for 1 minute
+                        ta.maintenance(aircraft, 1, airportsToGo.get(i), timeAfterZero, false); //Keep plane stationary for 1 minute
                         planesHere.remove(aircraft);
                         j--;
                         continue;
                     }
                     double duration = routeOut.getDistance() / (aircraft.aircraft.getSeatConfig().getAircraftType().getSpeed() * Constants.OPERATIONAL_SPEED / 60);
                     duration = (int)duration + 40;
-                    ta.fly(aircraft, duration, routeOut, timeAfterZero, true); //Fly cheapest aircraft for most expensive route
+                    ta.fly(aircraft, duration, routeOut, timeAfterZero); //Fly cheapest aircraft for most expensive route
                     planesHere.remove(aircraft);
                     j--;
                     routesHere.remove(routeOut);
@@ -374,10 +374,12 @@ public class ScheduleDevelopmentBean {
             //Land aircrafts that are flying
             List<HypoAircraft> landingAircrafts = ta.land();
             for (int i = 0; i < landingAircrafts.size(); i++) {
-                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber() + " from " + landingAircrafts.get(i).prevLocation + " @ " +landingAircrafts.get(i).location);
+                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber() + " from " + landingAircrafts.get(i).prevLocation.getName() + " @ " +landingAircrafts.get(i).location.getName());
                 addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
-                //Augment routes to shift priority
-                shiftRoute(landingAircrafts.get(i));
+                //Check if plane needs maintenance
+                //Augment routes to shift priority @TODO:Only if the plane flew here
+                if (landingAircrafts.get(i).location != landingAircrafts.get(i).prevLocation)
+                    shiftRoute(landingAircrafts.get(i));
             }
             timeAfterZero += ta.lastTime; //This amount of time has past
 
