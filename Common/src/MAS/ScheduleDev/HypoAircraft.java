@@ -7,6 +7,7 @@ public class HypoAircraft extends ScheduleDevelopmentClass implements Comparable
     public Aircraft aircraft;
     public Airport homeBase;
     public Airport location;
+    public Airport prevLocation;
 
     @Override
     public int compareTo(HypoAircraft another) {

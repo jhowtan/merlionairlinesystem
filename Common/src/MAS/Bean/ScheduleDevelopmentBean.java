@@ -374,8 +374,10 @@ public class ScheduleDevelopmentBean {
             //Land aircrafts that are flying
             List<HypoAircraft> landingAircrafts = ta.land();
             for (int i = 0; i < landingAircrafts.size(); i++) {
-                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber());
+                System.out.println("Landing: " + landingAircrafts.get(i).aircraft.getTailNumber() + " from " + landingAircrafts.get(i).prevLocation + " @ " +landingAircrafts.get(i).location);
                 addToBucket(landingAircrafts.get(i), landingAircrafts.get(i).location);
+                //Augment routes to shift priority
+                shiftRoute(landingAircrafts.get(i));
             }
             timeAfterZero += ta.lastTime; //This amount of time has past
 
@@ -383,9 +385,14 @@ public class ScheduleDevelopmentBean {
         }
     }
 
-    private Aircraft findBestForRoute(List<Aircraft> aircrafts, Route route) {
-        //Find least capable aircraft and cheapest
-        return null;
+    private void shiftRoute(HypoAircraft hypoAircraft) {
+        List<Route> routesHere = airportRoutesOut.get(airportsToGo.indexOf(hypoAircraft.location));
+        for (int i = 0; i <  routesHere.size(); i++) {
+            if (routesHere.get(i).getDestination() == hypoAircraft.prevLocation) {
+                routesHere.add(routesHere.remove(i));
+                return;
+            }
+        }
     }
 
     private void generateTierList() {

@@ -33,8 +33,9 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
             hypoTransit.flying = true;
         } else {
             hypoTransit.hypoAircraft.location = route.getOrigin();
-            hypoTransit.flying = false;
+            hypoTransit.flying = true;
         }
+        hypoTransit.hypoAircraft.prevLocation = route.getOrigin();
     }
 
     private HypoTransit getTransitWithAc(HypoAircraft hypoAircraft) throws NotFoundException {
@@ -50,11 +51,11 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         //Find lowest timeleft in aircraftsInTransit
         List<HypoAircraft> result = new ArrayList<>();
         List<HypoTransit> selTransits = new ArrayList<>();
-        double lowest = aircraftsInTransits.get(0).timeLeft;
-        HypoTransit landingAc = aircraftsInTransits.get(0);
-        result.add(landingAc.hypoAircraft);
-        selTransits.add(landingAc);
-        for (int i = 1; i < aircraftsInTransits.size(); i++) {
+        double lowest = Double.MAX_VALUE;
+        HypoTransit landingAc;// = aircraftsInTransits.get(0);
+        //result.add(landingAc.hypoAircraft);
+        //selTransits.add(landingAc);
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
             if (!aircraftsInTransits.get(i).flying) continue;
             if (aircraftsInTransits.get(i).timeLeft < lowest) {
                 landingAc = aircraftsInTransits.get(i);
