@@ -544,7 +544,8 @@ public class ScheduleDevelopmentBean {
         em.flush();
     }
 
-    public void saveSuggestedFlights(Date startTime) {
+    public int saveSuggestedFlights(Date startTime) {
+        int result = 0;
         List<HypoTransit> allHappenings = ta.getAllHistory();
         for (int i = 0; i < allHappenings.size(); i++) {
             HypoTransit happenings = allHappenings.get(i);
@@ -563,6 +564,7 @@ public class ScheduleDevelopmentBean {
                     }
                     flightScheduleBean.createFlight("MA"+aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int)Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
                             aircraftAssignment.getId(), true);
+                    result ++;
                 } catch (NotFoundException e) {
                     continue;
                 }
@@ -577,6 +579,7 @@ public class ScheduleDevelopmentBean {
                 }
             }
         }
+        return result;
     }
 //    ----------UNUSED-----------------
 //    public List<Route> findRouteTo(Airport origin, Airport destination, List<Route> routeList) throws NotFoundException {
@@ -749,8 +752,7 @@ public class ScheduleDevelopmentBean {
 
     public int processFlights(Date startTime, int duration) throws Exception {
         createFlightTimetable(duration);
-        saveSuggestedFlights(startTime);
-        return 0;
+        return saveSuggestedFlights(startTime);
     }
 
     public void testProcess(Date startTime, int duration) {

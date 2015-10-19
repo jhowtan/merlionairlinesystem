@@ -48,10 +48,13 @@ public class scheduleDevManagedBean {
     private List<Route> allRoutes;
     private List<String> selectRoutesId;
 
+    private int duration;
     private Date startDate;
     private String startTime;
     private Date start;
     private int step = 0;
+
+    private int flightsCreated;
 
     @PostConstruct
     private void init() {
@@ -207,7 +210,7 @@ public class scheduleDevManagedBean {
     public void saveDateTime() {
         start = Utils.addTimeToDate(startDate, startTime);
         try {
-            scheduleDevelopmentBean.processFlights(start, 40320);
+            flightsCreated = scheduleDevelopmentBean.processFlights(start, duration * 60 * 24);
             step = 4;
         } catch (Exception e) {
             e.printStackTrace();
@@ -342,5 +345,21 @@ public class scheduleDevManagedBean {
 
     public void setSelectRoutesId(List<String> selectRoutesId) {
         this.selectRoutesId = selectRoutesId;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getFlightsCreated() {
+        return flightsCreated;
+    }
+
+    public void setFlightsCreated(int flightsCreated) {
+        this.flightsCreated = flightsCreated;
     }
 }
