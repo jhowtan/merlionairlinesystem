@@ -12,7 +12,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Schedule Development, Step #{scheduleDevManagedBean.step + 1}</h1>
+                    <h1 class="page-header">Schedule Development</h1>
+                    <ol class="breadcrumb">
+                        <ui:repeat var="step" value="#{scheduleDevManagedBean.breadcrumbs}">
+                            <li>#{step.toString()}</li>
+                        </ui:repeat>
+                    </ol>
+
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-danger">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
 
                     <h:panelGroup class="panel panel-primary animated fadeIn" id="airportEntryPanel" layout="block" rendered="#{scheduleDevManagedBean.displayAp()}">
                         <div class="panel-heading">
@@ -116,15 +127,15 @@
                                                     <p>Select location of aircraft</p>
                                                 </blockquote>
                                                 <ui:repeat value="#{scheduleDevManagedBean.selectAircrafts}" var="ac" varStatus="varStatus">
-                                                        <div class="input-group">
+                                                        <div class="input-group #{!acLocation.valid ? 'has-error' : ''}">
                                                             <span class="input-group-addon">Location of #{ac.tailNumber} </span>
-                                                            <h:selectOneMenu id="acLocation" required="true" requiredMessage="Aircraft location is required." value="#{scheduleDevManagedBean.acLocInputs[varStatus.index]}" styleClass="form-control">
+                                                            <h:selectOneMenu id="acLocation" required="true" binding="#{acLocation}" requiredMessage="Aircraft location is required." value="#{scheduleDevManagedBean.acLocInputs[varStatus.index]}" styleClass="form-control">
                                                                 <f:selectItem itemLabel="---"/>
                                                                 <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ac"
                                                                                itemLabel="#{ac.name}" itemValue="#{ac.id}" />
                                                             </h:selectOneMenu>
+                                                            <h:message for="acLocation" styleClass="help-block" />
                                                         </div>
-                                                        <h:message for="acLocation" styleClass="help-block" />
                                                     <br/>
                                                 </ui:repeat>
                                             </h:panelGroup>
@@ -161,14 +172,14 @@
                                     <div class="form-group form-group-lg">
                                         <h:form>
                                             <h:panelGroup id="routeList">
-                                                <div class="input-group">
+                                                <div class="input-group #{!routes.valid ? 'has-error' : ''}">
                                                     <span class="input-group-addon">Routes</span>
-                                                    <h:selectManyListbox id="routes" styleClass="form-control"  required="true" requiredMessage="Routes are required" value="#{scheduleDevManagedBean.selectRoutesId}">
+                                                    <h:selectManyListbox id="routes" binding="#{routes}" styleClass="form-control" required="true" requiredMessage="Routes are required" value="#{scheduleDevManagedBean.selectRoutesId}">
                                                         <f:selectItems value="#{scheduleDevManagedBean.allRoutes}" var="rt"
                                                                        itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.origin.id.concat(' '.concat(rt.destination.id))}" />
                                                     </h:selectManyListbox>
+                                                    <h:message for="routes" styleClass="help-block" />
                                                 </div>
-                                                <h:message for="routes" styleClass="help-block" />
                                             </h:panelGroup>
                                             <h:panelGroup id="customRoute">
                                                 <br/>
@@ -176,9 +187,9 @@
                                                     <p>Add any routes not already on list</p>
                                                 </blockquote>
                                                 <div class="row">
-                                                    <div class="form-group col-lg-6">
+                                                    <div class="form-group col-lg-6 #{!origin.valid ? 'has-error' : ''}">
                                                         <label class="control-label" for="origin">Choose Origin Airport</label>
-                                                        <h:selectOneMenu id="origin" value="#{scheduleDevManagedBean.customRouteOriginId}" styleClass="form-control"
+                                                        <h:selectOneMenu id="origin" binding="#{origin}" value="#{scheduleDevManagedBean.customRouteOriginId}" styleClass="form-control"
                                                                         required="false" requiredMessage="Route origin required">
                                                             <f:selectItem itemLabel="---"/>
                                                             <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
@@ -187,9 +198,9 @@
                                                         </h:selectOneMenu>
                                                         <h:message for="origin" styleClass="help-block" />
                                                     </div>
-                                                    <div class="form-group col-lg-6">
+                                                    <div class="form-group col-lg-6 #{!destination.valid ? 'has-error' : ''}">
                                                         <label class="control-label" for="destination">Choose Destination Airport</label>
-                                                        <h:selectOneMenu id="destination" value="#{scheduleDevManagedBean.customRouteDestinationId}" styleClass="form-control"
+                                                        <h:selectOneMenu id="destination" binding="#{destination}" value="#{scheduleDevManagedBean.customRouteDestinationId}" styleClass="form-control"
                                                                         required="false" requiredMessage="Route destination required">
                                                             <f:selectItem itemLabel="---"/>
                                                             <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
@@ -325,6 +336,19 @@
                 </div>
             </div>
         </div>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var addBreadcrumb = function() {
+                var breadcrumb = $('.breadcrumb');
+                // <![CDATA[
+                var liEl = $('<li></li>');
+                liEl.html('Step #{scheduleDevManagedBean.step + 1}');
+                breadcrumb.append(liEl);
+                // ]]>
+            }
+        </script>
     </ui:define>
 
 </ui:composition>
