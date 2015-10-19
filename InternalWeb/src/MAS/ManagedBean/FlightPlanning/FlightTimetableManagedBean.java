@@ -51,7 +51,6 @@ public class FlightTimetableManagedBean {
     public void selectAircraft() {
         try {
             aircraft = fleetBean.getAircraft(aircraftId);
-            System.out.println(aircraftId);
         } catch (NotFoundException e) {
             //No aircraft
         }
