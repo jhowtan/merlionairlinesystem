@@ -5,7 +5,7 @@ import MAS.Entity.Airport;
 
 public class HypoAircraft extends ScheduleDevelopmentClass implements Comparable<HypoAircraft> {
     public Aircraft aircraft;
-    public Airport homeBase;
+    public Airport startingAp;
     public Airport location;
     public Airport prevLocation;
     public boolean reqMaint = false;

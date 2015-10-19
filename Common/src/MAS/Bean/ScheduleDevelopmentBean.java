@@ -75,7 +75,7 @@ public class ScheduleDevelopmentBean {
                 HypoAircraft hypoAircraft = new HypoAircraft();
                 hypoAircraft.aircraft = ac;
                 hypoAircraft.aircraft.setMaxRange(ac.getSeatConfig().getAircraftType().getMaxRange() * Constants.OPERATIONAL_RANGE);
-                hypoAircraft.homeBase = ap;
+                hypoAircraft.startingAp = ap;
                 costsBean.calculateCostEstimate(hypoAircraft, 100);
                 aircraftsToFly.add(hypoAircraft);
                 if (hypoAircraft.aircraft.getMaxRange() > maxRange)
@@ -493,7 +493,7 @@ public class ScheduleDevelopmentBean {
         }
         //Add aircraft to starting points
         for (int i = 0; i < aircraftStillFlying.size(); i++) {
-            addToBucket(aircraftStillFlying.get(i), aircraftStillFlying.get(i).homeBase);
+            addToBucket(aircraftStillFlying.get(i), aircraftStillFlying.get(i).startingAp);
         }
         for (int i = 0; i < airportsToGo.size(); i++) { //Initialize airport buckets
             Collections.sort(airportBuckets.get(i));
