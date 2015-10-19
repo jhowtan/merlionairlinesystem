@@ -8,15 +8,15 @@ import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
-import MAS.ManagedBean.CommonManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.lang.model.type.NoType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,12 +60,16 @@ public class scheduleDevManagedBean {
     private int flightsCreated;
     private List<String[]> routeOutputTable;
 
+    private List<String> breadcrumbs;
+
     @PostConstruct
     private void init() {
         setAllAirports(routeBean.getAllAirports());
         setAllAircrafts(fleetBean.getAllAircraft());
         selectAirportsId = new ArrayList<>();
         selectAircraftsId = new ArrayList<>();
+        breadcrumbs = new ArrayList<>();
+        breadcrumbs.add("Select Airports");
     }
 
     public void selectAirportAjaxListener(AjaxBehaviorEvent event) {
@@ -107,11 +111,12 @@ public class scheduleDevManagedBean {
     }
 
     public void saveAirports() {
-        hubStrengths = new ArrayList<>();
-        for (int i = 0; i < hubStrInputs.length; i++) {
-            hubStrengths.add(Double.parseDouble(hubStrInputs[i]));
-        }
         try {
+            hubStrengths = new ArrayList<>();
+            for (int i = 0; i < hubStrInputs.length; i++) {
+                hubStrengths.add(Double.parseDouble(hubStrInputs[i]));
+            }
+
             List<String> apIds = new ArrayList<>();
             for (int i = 0; i < selectAirports.size(); i++) {
                 apIds.add(selectAirports.get(i).getId());
@@ -123,8 +128,19 @@ public class scheduleDevManagedBean {
             scheduleDevelopmentBean.addAirports(apIds);
             scheduleDevelopmentBean.addHubs(hubIds, hubStrengths);
             step = 1;
-        } catch (Exception e) {
-            e.printStackTrace();
+            breadcrumbs.add("Aircraft Entry");
+        } catch (NullPointerException e) {
+            FacesMessage m = new FacesMessage("Flights between spoke airports require a hub airport to be present, please choose a hub airport if any.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("The airports you have chosen are no longer found on the system.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (EJBException e) {
+            FacesMessage m = new FacesMessage("There are airport data dependencies that exist in the system that restrict you from proceeding.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
@@ -182,9 +198,20 @@ public class scheduleDevManagedBean {
                 selectRoutesId.add(((Long)allRoutes.get(i).getId()).toString());
             }
             step = 2;
-        } catch (Exception e) {
-            //Schedule development failed
-            e.printStackTrace();
+            breadcrumbs.add("Route Selection");
+
+        } catch (NullPointerException e) {
+            FacesMessage m = new FacesMessage("Please enter the location of these aircraft you have chosen.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("The aircraft you have chosen are no longer found on the system.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (EJBException e) {
+            FacesMessage m = new FacesMessage("There are aircraft data dependencies that exist in the system that restrict you from proceeding.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
@@ -220,8 +247,15 @@ public class scheduleDevManagedBean {
             }
             scheduleDevelopmentBean.updateRoutes(acceptedRoutes);
             step = 3;
-        } catch (Exception e) {
-            e.printStackTrace();
+            breadcrumbs.add("Start Time Entry");
+        } catch (NullPointerException e) {
+            FacesMessage m = new FacesMessage("Please select viable routes from the list displayed.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (EJBException e) {
+            FacesMessage m = new FacesMessage("There are route data dependencies that exist in the system that restrict you from proceeding.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
@@ -239,6 +273,7 @@ public class scheduleDevManagedBean {
         try {
             flightsCreated = scheduleDevelopmentBean.processFlights(start, duration * 60 * 24);
             step = 4;
+            breadcrumbs.add("End");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -412,5 +447,13 @@ public class scheduleDevManagedBean {
 
     public void setRouteOutputTable(List<String[]> routeOutputTable) {
         this.routeOutputTable = routeOutputTable;
+    }
+
+    public List<String> getBreadcrumbs() {
+        return breadcrumbs;
+    }
+
+    public void setBreadcrumbs(List<String> breadcrumbs) {
+        this.breadcrumbs = breadcrumbs;
     }
 }
