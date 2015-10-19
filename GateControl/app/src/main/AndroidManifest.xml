@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".GateCheckActivity" >
         </activity>
+        <activity android:name=".SetHostActivity" >
+        </activity>
     </application>
 
 </manifest>

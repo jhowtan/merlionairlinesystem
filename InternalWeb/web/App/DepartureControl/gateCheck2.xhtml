@@ -7,6 +7,12 @@
     <ui:define name="title">Gate Control - Merlion Airline System</ui:define>
 
     <ui:define name="content">
+        <h:form>
+            <h:commandButton binding="#{refreshTrigger}" styleClass="hidden">
+                <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
+                <f:ajax render="flight-passengers boarded-stats" onevent="refreshOnEventListener" />
+            </h:commandButton>
+        </h:form>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -70,33 +76,36 @@
                     </div>
                 </div>
 
-                <h:panelGroup styleClass="col-lg-8" layout="block" id="flight-passengers">
-                    <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty gateCheckManagedBean.flight}">
-                        <div class="panel-heading">Passenger List for Flight #{gateCheckManagedBean.flight.code}</div>
-                        <div class="panel-body">
-                            <table class="table" id="passenger_table">
-                                <thead>
-                                <tr>
-                                    <th>Booking Reference</th>
-                                    <th>Passenger Name</th>
-                                    <th>Check In Status</th>
-                                    <th>Gate Check Status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <ui:repeat value="#{gateCheckManagedBean.retrievePassengersFromFlight()}" var="eticket">
+                <div class="col-lg-8">
+                    <h:panelGroup layout="block" id="flight-passengers">
+                        <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty gateCheckManagedBean.flight}">
+                            <div class="panel-heading">Passenger List for Flight #{gateCheckManagedBean.flight.code}</div>
+                            <div class="panel-body">
+                                <table class="table" id="passenger_table">
+                                    <thead>
                                     <tr>
-                                        <td>#{eticket.pnr.bookingReference}</td>
-                                        <td>#{eticket.passengerName}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
+                                        <th>Booking Reference</th>
+                                        <th>Passenger Name</th>
+                                        <th>Check In Status</th>
+                                        <th>Gate Check Status</th>
                                     </tr>
-                                </ui:repeat>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{gateCheckManagedBean.retrievePassengersFromFlight()}" var="eticket">
+                                        <tr>
+                                            <td>#{eticket.pnr.bookingReference}</td>
+                                            <td>#{eticket.passengerName}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </h:panelGroup>
                     </h:panelGroup>
-                </h:panelGroup>
+                    <div id="liveNotices"></div>
+                </div>
                 <h:panelGroup styleClass="col-lg-4" layout="block" id="boarded-stats">
                     <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty gateCheckManagedBean.flight}">
                         <div class="panel-heading">#{gateCheckManagedBean.flight.code}: Boarding Status at #{commonManagedBean.formatDate("dd MMM, hh:mm a", null)}</div>
@@ -150,12 +159,61 @@
 
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#passenger_table').DataTable({
-                "stateSave": true,
-                "aoColumnDefs": [
-                    {'bSortable': false, 'bSearchable': false, 'aTargets': [4]}
-                ]
-            });
+            var passengerTableLoad = function() {
+                if (!$.fn.DataTable.isDataTable("#passenger_table")) {
+                    $('#passenger_table').DataTable({
+                        "stateSave": true
+                    });
+                }
+            };
+            passengerTableLoad();
+
+            var refreshOnEventListener = function() {
+                passengerTableLoad();
+            };
+
+            var refreshTrigger = $("[id='#{refreshTrigger.clientId}']");
+
+            //<![CDATA[
+
+            var wSocket = new WebSocket("ws://localhost:8080/InternalWeb_war_exploded/websocket/gateCheckUpdate");
+            wSocket.onmessage = function(event) {
+                refreshTrigger.click();
+                var data = $.parseJSON(event.data);
+                if (data.boarded) {
+                    showLiveNotice("<strong>Passenger Boarded: </strong>" + data.passenger);
+                }
+                if (data.checkedIn) {
+                    showLiveNotice("<strong>Passenger Checked In: </strong>" + data.passenger);
+                }
+            };
+
+            var liveNoticesEl = $('#liveNotices');
+            var showLiveNotice = function(message) {
+                var noticeEl = $('<div />');
+                noticeEl.addClass("alert");
+                noticeEl.addClass("alert-success");
+                noticeEl.addClass("animated");
+                noticeEl.addClass("fadeIn");
+                var noticeIconEl = $('<i />');
+                noticeIconEl.addClass("fa");
+                noticeIconEl.addClass("fa-check");
+                noticeIconEl.addClass("fa-fw");
+                var noticeMessageEl = $('<span />');
+                noticeMessageEl.html(message);
+                noticeEl.append(noticeIconEl);
+                noticeEl.append(noticeMessageEl);
+                liveNoticesEl.prepend(noticeEl);
+                setTimeout(function() {
+                    noticeEl.addClass("fadeOutDown");
+                    noticeEl.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                        console.log("X");
+                        noticeEl.css("display", "none");
+                    });
+                }, 5000);
+            };
+            //]]>
+
         </script>
     </ui:define>
 </ui:composition>
