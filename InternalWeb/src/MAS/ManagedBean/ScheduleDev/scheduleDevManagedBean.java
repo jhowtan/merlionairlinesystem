@@ -139,6 +139,10 @@ public class scheduleDevManagedBean {
             }
         }
         acLocInputs = new String[selectAircrafts.size()];
+        for (int i = 0; i < acLocInputs.length; i++) {
+            if (selectAircrafts.get(i).getCurrentLocation() != null)
+                acLocInputs[i] = selectAircrafts.get(i).getCurrentLocation().getId();
+        }
     }
     public boolean showAcButtons() {
         if (selectAircrafts == null)
