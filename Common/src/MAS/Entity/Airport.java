@@ -72,6 +72,8 @@ public class Airport {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Airport && this.id.equals(((Airport) obj).id);
+        if (!(obj instanceof Airport))
+            return false;
+        return this.getId().equals(((Airport)obj).getId());
     }
 }

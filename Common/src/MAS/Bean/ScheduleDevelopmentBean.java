@@ -113,7 +113,7 @@ public class ScheduleDevelopmentBean {
             Airport ap = em.find(Airport.class, apIds.get(i));
             if (ap == null)
                 throw new NotFoundException();
-            else if (airportsToGo.indexOf(ap) != -1) { //@TODO: Here's your problem
+            else if (airportsToGo.indexOf(ap) != -1) {
                 hubs.add(ap);
                 hubSavings.add(1.0 - hubStrength.get(i));
             }
@@ -232,7 +232,7 @@ public class ScheduleDevelopmentBean {
     }
 
     private HypoRoute getRouteTo(Airport destination, double minCost, HypoRoute calcRoute) {
-        if (calcRoute.latestRoute().getDestination() == destination) {//Reached end
+        if (calcRoute.latestRoute().getDestination().equals(destination)) {//Reached end
             if (calcRoute.costDistance <= minCost) { //This is the most effective route
                 //System.out.println("END : " + calcRoute.print() + " | " + destination.getName() + " (" + calcRoute.costDistance + ")");
                 return calcRoute;
@@ -276,7 +276,7 @@ public class ScheduleDevelopmentBean {
     private List<HypoRoute> getHypoRoutesStarting(Airport origin) {
         List<HypoRoute> result = new ArrayList<>();
         for (int i = 0; i < allRoutes.size(); i++) {
-            if (allRoutes.get(i).route().getOrigin() == origin)
+            if (allRoutes.get(i).route().getOrigin().equals(origin))
                 result.add(allRoutes.get(i));
         }
         return result;
@@ -285,7 +285,7 @@ public class ScheduleDevelopmentBean {
     private List<Route> getRoutesStarting(Airport origin, List<Route> routeList) {
         List<Route> result = new ArrayList<>();
         for (int i = 0; i < routeList.size(); i++) {
-            if (routeList.get(i).getOrigin() == origin)
+            if (routeList.get(i).getOrigin().equals(origin))
                 result.add(routeList.get(i));
         }
         return result;
@@ -293,8 +293,8 @@ public class ScheduleDevelopmentBean {
 
     private Route getRouteToFrom(Airport origin, Airport destination) throws NotFoundException {
         for (int i = 0; i < suggestedRoutes.size(); i++) {
-            if (suggestedRoutes.get(i).getOrigin() == origin)
-                if (suggestedRoutes.get(i).getDestination() == destination)
+            if (suggestedRoutes.get(i).getOrigin().equals(origin))
+                if (suggestedRoutes.get(i).getDestination().equals(destination))
                     return suggestedRoutes.get(i);
         }
         throw new NotFoundException();
@@ -303,8 +303,8 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getHypoRoute(Airport origin, Airport destination) throws NotFoundException{
         for (int i = 0; i < allRoutes.size(); i++) {
             HypoRoute current = allRoutes.get(i);
-            if (current.route().getOrigin() == origin) {
-                if (current.route().getDestination() == destination)
+            if (current.route().getOrigin().equals(origin)) {
+                if (current.route().getDestination().equals(destination))
                     return current;
             }
         }
@@ -322,7 +322,7 @@ public class ScheduleDevelopmentBean {
         for (int i = 0; i < hubs.size(); i++) {
             List<HypoRoute> routesFromHub = getHypoRoutesStarting(hubs.get(i));
             for (int j = 0; j < routesFromHub.size(); j++) {
-                if (routesFromHub.get(j).route().getDestination() == airport) {
+                if (routesFromHub.get(j).route().getDestination().equals(airport)) {
                     if (hubRoute == null)
                         hubRoute = routesFromHub.get(j);
                     else if (routesFromHub.get(j).actualDistance < hubRoute.actualDistance)
@@ -464,7 +464,7 @@ public class ScheduleDevelopmentBean {
     private void shiftRoute(HypoAircraft hypoAircraft) {
         List<Route> routesHere = airportRoutesOut.get(airportsToGo.indexOf(hypoAircraft.location));
         for (int i = 0; i <  routesHere.size(); i++) {
-            if (routesHere.get(i).getDestination() == hypoAircraft.prevLocation) {
+            if (routesHere.get(i).getDestination().equals(hypoAircraft.prevLocation)) {
                 routesHere.add(routesHere.remove(i));
                 return;
             }
@@ -523,7 +523,7 @@ public class ScheduleDevelopmentBean {
 
     public void saveSuggestedRoutes() {
         for (int i = 0; i < suggestedRoutes.size(); i++) {
-            em.persist(suggestedRoutes.get(i));
+            em.persist(suggestedRoutes.get(i)); //@TODO: check whether route exists, and update suggroutes
         }
         em.flush();
     }
@@ -699,29 +699,17 @@ public class ScheduleDevelopmentBean {
             System.out.println("Processing:.....");
             generateRoutes();
             System.out.println("Done:Generate all routes");
-            String apString = "Airports: ";
-            for (int i = 0; i < airportsToGo.size(); i ++) {
-                apString = apString.concat(airportsToGo.get(i).getName() + ", ");
-            }
-            String hubString = "Hubs: ";
-            for (int i = 0; i < hubs.size(); i++) {
-                hubString = hubString.concat(hubs.get(i).getName() + ", ");
-            }
-            String acString = "Aircraft: ";
-            for (int i = 0; i < aircraftsToFly.size(); i++) {
-                acString = acString.concat(aircraftsToFly.get(i).aircraft.getTailNumber() + ", ");
-            }
-            System.out.println(apString + "\n" + hubString + "\n" + acString);
             selectGoodRoutes();
             System.out.println("Done:Select good ones");
             saveSuggestedRoutes();
-//            System.out.println("Processing2:.....");
-//            generateTierList();
-//            System.out.println("Done:Create tier list");
-//            createFlightTimetable(40320);
-//            debugFlightState();
-//            System.out.println("Done:Create flight timetable");
-//            saveSuggestedFlights(new Date());
+            System.out.println("Processing2:.....");
+            generateTierList();
+            System.out.println("Done:Create tier list");
+            createFlightTimetable(40320);
+            debugFlightState();
+            System.out.println("Done:Create flight timetable");
+            saveSuggestedFlights(new Date());
+
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();
