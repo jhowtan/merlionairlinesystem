@@ -6,6 +6,7 @@ import MAS.Bean.ScheduleDevelopmentBean;
 import MAS.Common.Utils;
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
+import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +43,9 @@ public class scheduleDevManagedBean {
     private List<Aircraft> selectAircrafts;
     private String[] acLocInputs;
     private List<Airport> acLocations;
+
+    private List<Route> allRoutes;
+    private List<String> selectRoutesId;
 
     private Date startDate;
     private String startTime;
@@ -159,6 +163,7 @@ public class scheduleDevManagedBean {
                 startingApIds.add(acLocations.get(i).getId());
             }
             scheduleDevelopmentBean.addAircrafts(acIds, startingApIds);
+            allRoutes = scheduleDevelopmentBean.processRoutes();
             step = 2;
         } catch (Exception e) {
             //Schedule development failed
@@ -166,18 +171,31 @@ public class scheduleDevManagedBean {
         }
     }
 
+    public void saveRoutes() {
+        step = 3;
+    }
+
+    public boolean displayRt() {
+        if (step == 2) return true;
+        return false;
+    }
+
+    public boolean showRtButtons() {
+        return true;
+    }
+
     public void saveDateTime() {
         start = Utils.addTimeToDate(startDate, startTime);
         try {
             scheduleDevelopmentBean.testProcess(start, 40320);
-            step = 3;
+            step = 4;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public boolean displayDate(){
-        if (step == 2) return true;
+        if (step == 3) return true;
         return false;
     }
 
@@ -283,5 +301,21 @@ public class scheduleDevManagedBean {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public List<Route> getAllRoutes() {
+        return allRoutes;
+    }
+
+    public void setAllRoutes(List<Route> allRoutes) {
+        this.allRoutes = allRoutes;
+    }
+
+    public List<String> getSelectRoutesId() {
+        return selectRoutesId;
+    }
+
+    public void setSelectRoutesId(List<String> selectRoutesId) {
+        this.selectRoutesId = selectRoutesId;
     }
 }

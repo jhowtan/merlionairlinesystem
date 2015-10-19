@@ -49,6 +49,8 @@ public class ScheduleDevelopmentBean {
     private List<List<Airport>> tierList;
     private TransitAircrafts ta;
 
+    private List<String[]> routeOutputTable;
+
     private int reserveAircraft;
     private double maxRange = 0;
     private double acRestTime = 180;
@@ -68,6 +70,7 @@ public class ScheduleDevelopmentBean {
         hubs = new ArrayList<>();
         hubSavings = new ArrayList<>();
         airportBuckets = new ArrayList<>();
+        routeOutputTable = new ArrayList<>();
     }
 
     public void reset() {
@@ -206,27 +209,41 @@ public class ScheduleDevelopmentBean {
     private HypoRoute getCheapestRoute(Airport origin, Airport destination, double baseCost, List<HypoRoute> startRoutes) {
         HypoRoute result = new HypoRoute();
         double minCost = baseCost;
+        String[] routeOutput = new String[3];
+        routeOutput[0] = origin.getName() + " to " + destination.getName();
         //System.out.println("--------------- " + origin.getName() + " to "+ destination.getName() + " -----------------------");
         //Destination is near a hub
         Airport nearHub = nearHub(destination);
         if (nearHub != null && nearHub != origin) {
             //System.out.println("Setting: NONE");
             if (isHub(origin)) {
-                if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub)))
+                if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub))) {
+                    routeOutput[1] = "Routing to this destination not required.";
+                    routeOutput[2] = "None";
+                    routeOutputTable.add(routeOutput);
                     return null;
-            } else
+                }
+
+            } else {
+                routeOutput[1] = "Routing to this destination not required.";
+                routeOutput[2] = "None";
+                routeOutputTable.add(routeOutput);
                 return null;
+            }
         }
+        routeOutput[1] = "";
         for (int i = 0; i < startRoutes.size(); i++) {
             HypoRoute currRoute = startRoutes.get(i);
             //Recursive search for route to destination
             //Stop if cost of route is > basecost
             HypoRoute calcRoute = getRouteTo(destination, minCost, currRoute);
             if (calcRoute != null && calcRoute.costDistance <= minCost) {
+                routeOutput[1] = routeOutput[1].concat("\n" + calcRoute.print() + " (" + calcRoute.costDistance + ")");
                 result = calcRoute;
                 minCost = result.costDistance;
             }
         }
+        routeOutput[2] = result.print() + " (" + result.costDistance + ")";
         //System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
@@ -694,6 +711,18 @@ public class ScheduleDevelopmentBean {
         System.out.println(result);
     }
 
+    public List<Route> processRoutes() {
+        try {
+            generateRoutes();
+            selectGoodRoutes();
+            System.gc();
+            return suggestedRoutes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void testProcess(Date startTime, int duration) {
         try {
             System.out.println("Processing:.....");
@@ -708,7 +737,6 @@ public class ScheduleDevelopmentBean {
             createFlightTimetable(duration);
             debugFlightState();
             System.out.println("Done:Create flight timetable");
-            System.out.print(startTime);
             saveSuggestedFlights(startTime);
 
             System.gc();
