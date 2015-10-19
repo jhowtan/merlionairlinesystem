@@ -218,14 +218,14 @@ public class ScheduleDevelopmentBean {
             //System.out.println("Setting: NONE");
             if (isHub(origin)) {
                 if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub))) {
-                    routeOutput[1] = "Routing to this destination not required.";
+                    routeOutput[1] = "Destination is a near a hub, routing not required.";
                     routeOutput[2] = "None";
                     routeOutputTable.add(routeOutput);
                     return null;
                 }
 
             } else {
-                routeOutput[1] = "Routing to this destination not required.";
+                routeOutput[1] = "Destination is a near a hub, routing not required.";
                 routeOutput[2] = "None";
                 routeOutputTable.add(routeOutput);
                 return null;
@@ -244,6 +244,7 @@ public class ScheduleDevelopmentBean {
             }
         }
         routeOutput[2] = result.print() + " (" + result.costDistance + ")";
+        routeOutputTable.add(routeOutput);
         //System.out.println("Setting: " + result.print() + "(" + result.costDistance + ")");
         return result;
     }
@@ -789,4 +790,11 @@ public class ScheduleDevelopmentBean {
     }
 
 
+    public List<String[]> getRouteOutputTable() {
+        return routeOutputTable;
+    }
+
+    public void setRouteOutputTable(List<String[]> routeOutputTable) {
+        this.routeOutputTable = routeOutputTable;
+    }
 }

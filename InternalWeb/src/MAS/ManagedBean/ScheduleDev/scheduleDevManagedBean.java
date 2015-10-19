@@ -58,6 +58,7 @@ public class scheduleDevManagedBean {
     private int step = 0;
 
     private int flightsCreated;
+    private List<String[]> routeOutputTable;
 
     @PostConstruct
     private void init() {
@@ -175,6 +176,7 @@ public class scheduleDevManagedBean {
             }
             scheduleDevelopmentBean.addAircrafts(acIds, startingApIds);
             allRoutes = scheduleDevelopmentBean.processRoutes();
+            routeOutputTable = scheduleDevelopmentBean.getRouteOutputTable();
             selectRoutesId = new ArrayList<>();
             for (int i = 0; i < allRoutes.size(); i++) {
                 selectRoutesId.add(((Long)allRoutes.get(i).getId()).toString());
@@ -402,5 +404,13 @@ public class scheduleDevManagedBean {
 
     public void setCustomRouteDestinationId(String customRouteDestinationId) {
         this.customRouteDestinationId = customRouteDestinationId;
+    }
+
+    public List<String[]> getRouteOutputTable() {
+        return routeOutputTable;
+    }
+
+    public void setRouteOutputTable(List<String[]> routeOutputTable) {
+        this.routeOutputTable = routeOutputTable;
     }
 }
