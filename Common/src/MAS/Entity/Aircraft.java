@@ -90,4 +90,15 @@ public class Aircraft {
     public boolean equals(Object obj) {
         return obj instanceof Aircraft && this.id == ((Aircraft) obj).id;
     }
+
+    @ManyToOne
+    private Airport currentLocation;
+
+    public Airport getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Airport currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 }

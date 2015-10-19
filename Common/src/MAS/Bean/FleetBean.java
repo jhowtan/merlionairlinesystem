@@ -4,6 +4,7 @@ import MAS.Common.Constants;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
+import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -23,12 +24,15 @@ public class FleetBean {
     public FleetBean() {
     }
     //-----------------AIRCRAFT---------------------------
-    public long createAircraft(String tailNumber, Date manufacturedDate) {
+    public long createAircraft(String tailNumber, Date manufacturedDate, String currentAirportId) throws NotFoundException {
+        Airport airport = em.find(Airport.class, currentAirportId);
+        if (airport == null) throw new NotFoundException();
         Aircraft aircraft = new Aircraft();
         aircraft.setTailNumber(tailNumber);
         aircraft.setManufacturedDate(manufacturedDate);
         aircraft.setMaxRange(0);
         aircraft.setFlyingCost(0);
+        aircraft.setCurrentLocation(airport);
         em.persist(aircraft);
         em.flush();
 
@@ -60,6 +64,16 @@ public class FleetBean {
             aircraft.setSeatConfig(seatConfig);
         } else
             throw new NotFoundException();
+        em.persist(aircraft);
+    }
+
+    public void changeAircraftLocation(long id, String currentAirportId) throws NotFoundException {
+        Aircraft aircraft = em.find(Aircraft.class, id);
+        if (aircraft == null) throw new NotFoundException();
+        Airport airport = em.find(Airport.class, currentAirportId);
+        if (airport == null) throw new NotFoundException();
+        else
+            aircraft.setCurrentLocation(airport);
         em.persist(aircraft);
     }
 

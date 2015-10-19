@@ -1,8 +1,10 @@
 package MAS.ManagedBean.FleetPlanning;
 
 import MAS.Bean.FleetBean;
+import MAS.Bean.RouteBean;
 import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
+import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
@@ -22,6 +24,8 @@ import java.util.List;
 public class CreateAircraftManagedBean {
     @EJB
     FleetBean fleetBean;
+    @EJB
+    RouteBean routeBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -30,27 +34,30 @@ public class CreateAircraftManagedBean {
     private Date manDate;
     private long acType;
     private long seatConfig;
+    private String currentApId;
     private List<AircraftType> acTypeList;
     private List<AircraftSeatConfig> seatConfigList;
+    private List<Airport> airportList;
 
     @PostConstruct
     public void init() {
         acTypeList = fleetBean.getAllAircraftTypes();
+        airportList = routeBean.getAllAirports();
     }
 
     public void createAircraft() {
-        long aircraftId = fleetBean.createAircraft(tailNum, manDate);
         try {
+            long aircraftId = fleetBean.createAircraft(tailNum, manDate, currentApId);
             fleetBean.changeAircraftConfig(aircraftId, seatConfig);
+            authManagedBean.createAuditLog("Created new aircraft: " + tailNum, "create_aircraft");
+            setTailNum(null);
+            setManDate(null);
+            FacesMessage m = new FacesMessage("Aircraft created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-        authManagedBean.createAuditLog("Created new aircraft: " + tailNum, "create_aircraft");
-        setTailNum(null);
-        setManDate(null);
-        FacesMessage m = new FacesMessage("Aircraft created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
     public void acTypeChangeListener(AjaxBehaviorEvent event) {
@@ -107,5 +114,21 @@ public class CreateAircraftManagedBean {
 
     public void setAcTypeList(List<AircraftType> acTypeList) {
         this.acTypeList = acTypeList;
+    }
+
+    public List<Airport> getAirportList() {
+        return airportList;
+    }
+
+    public void setAirportList(List<Airport> airportList) {
+        this.airportList = airportList;
+    }
+
+    public String getCurrentApId() {
+        return currentApId;
+    }
+
+    public void setCurrentApId(String currentApId) {
+        this.currentApId = currentApId;
     }
 }

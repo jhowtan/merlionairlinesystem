@@ -63,6 +63,15 @@
                                         </h:selectOneMenu>
                                         <h:message for="seatConfig" styleClass="help-block" />
                                     </div>
+                                    <div class="form-group col-lg-12 #{!location.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="location">Current Airport</label>
+                                        <br/>
+                                        <h:selectOneMenu styleClass="form-control" id="location" value="#{createAircraftManagedBean.currentApId}" binding="#{location}">
+                                            <f:selectItems value="#{createAircraftManagedBean.airportList}" var="ap"
+                                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
+                                            <f:attribute name="location" value="#{location}" />
+                                        </h:selectOneMenu>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,9 +1,11 @@
 package MAS.ManagedBean.FleetPlanning;
 
 import MAS.Bean.FleetBean;
+import MAS.Bean.RouteBean;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftSeatConfig;
 import MAS.Entity.AircraftType;
+import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
@@ -20,12 +22,16 @@ import java.util.Map;
 public class UpdateAircraftManagedBean {
     @EJB
     private FleetBean fleetBean;
+    @EJB
+    private RouteBean routeBean;
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
     private Aircraft aircraft;
     private long seatConfig;
+    private String currentApId;
     private List<AircraftSeatConfig> seatConfigList;
+    private List<Airport> airportList;
 
     @PostConstruct
     public void init() {
@@ -41,12 +47,15 @@ public class UpdateAircraftManagedBean {
             e.printStackTrace();
         }
         seatConfig = aircraft.getSeatConfig().getId();
+        currentApId = aircraft.getCurrentLocation().getId();
         seatConfigList = fleetBean.findSeatConfigByType(aircraft.getSeatConfig().getAircraftType().getId());
+        airportList = routeBean.getAllAirports();
     }
 
     public void save() throws NotFoundException {
         try {
             fleetBean.changeAircraftConfig(aircraft.getId(), seatConfig);
+            fleetBean.changeAircraftLocation(aircraft.getId(), currentApId);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -92,5 +101,21 @@ public class UpdateAircraftManagedBean {
 
     public void setSeatConfigList(List<AircraftSeatConfig> seatConfigList) {
         this.seatConfigList = seatConfigList;
+    }
+
+    public String getCurrentApId() {
+        return currentApId;
+    }
+
+    public void setCurrentApId(String currentApId) {
+        this.currentApId = currentApId;
+    }
+
+    public List<Airport> getAirportList() {
+        return airportList;
+    }
+
+    public void setAirportList(List<Airport> airportList) {
+        this.airportList = airportList;
     }
 }
