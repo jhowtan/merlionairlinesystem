@@ -95,8 +95,8 @@
                                         <tr>
                                             <td>#{eticket.pnr.bookingReference}</td>
                                             <td>#{eticket.passengerName}</td>
-                                            <td>#{commonManagedBean.random()} #{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
-                                            <td>#{commonManagedBean.random()} #{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
                                         </tr>
                                     </ui:repeat>
                                     </tbody>
