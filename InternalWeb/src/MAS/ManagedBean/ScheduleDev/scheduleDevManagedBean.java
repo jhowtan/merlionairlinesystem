@@ -189,8 +189,8 @@ public class scheduleDevManagedBean {
     public void addCustomRoute() {
         Route route = new Route();
         try {
-            System.out.println(customRouteOriginId);
-            System.out.println(customRouteDestinationId);
+            route.setOrigin(routeBean.getAirport(customRouteOriginId));
+            route.setDestination(routeBean.getAirport(customRouteDestinationId));
             double distance = Utils.calculateDistance(route.getOrigin().getLatitude(), route.getOrigin().getLongitude(), route.getDestination().getLatitude(), route.getDestination().getLongitude());
             route.setDistance(distance);
             for (int i = 0; i < allRoutes.size(); i++) {
@@ -199,7 +199,7 @@ public class scheduleDevManagedBean {
                 }
             }
             allRoutes.add(route);
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
             e.printStackTrace();
         }
     }
