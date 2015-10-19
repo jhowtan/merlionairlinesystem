@@ -29,6 +29,7 @@
                                 <thead>
                                 <tr>
                                     <th>Flight Code</th>
+                                    <th>Route</th>
                                     <th>Departure Time</th>
                                     <th>Status</th>
                                     <th>Gate Number</th>
@@ -39,22 +40,18 @@
                                 <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirport()}" var="flight">
                                     <tr>
                                         <td>#{flight.code}</td>
+                                        <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
                                         <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", departureControlManagedBean.retrieveBaseAirport().city.timezone, flight.departureTime)}</td>
                                         <td>#{departureControlManagedBean.showStatusName(flight)}</td>
-                                        <h:form>
-                                        <td>
-                                            <h:inputText id="gateNumber" binding="#{gateNumber}" value="#{flight.gateNumber}"
-                                                         readonly="#{flight.status >= 2}" styleClass="form-control" pt:placeholder="e.g. A19"/>
-                                        </td>
+                                        <td>#{!empty flight.gateNumber ? flight.gateNumber : 'Unassigned'}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <h:link outcome="gateCheck2" styleClass="btn btn-default btn-xs btn-primary">
+                                                <h:form><h:link outcome="gateCheck2" styleClass="btn btn-default btn-xs btn-primary">
                                                     <i class="fa fa-sign-in fw"></i> Manage Gate
                                                     <f:param name="flight" value="#{flight.id}"/>
-                                                </h:link>
+                                                </h:link></h:form>
                                             </div>
                                         </td>
-                                        </h:form>
                                     </tr>
                                 </ui:repeat>
                                 </tbody>
