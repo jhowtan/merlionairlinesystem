@@ -59,7 +59,6 @@
                                                     <p>Enter strength of hubs (0.1 - 1.0)</p>
                                                 </blockquote>
                                                 <ui:repeat value="#{scheduleDevManagedBean.hubAirports}" var="ap" varStatus="varStatus">
-                                                    <br/>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">Strength of #{ap.name} </span>
                                                         <h:inputText id="hubStr" styleClass="form-control" value="#{scheduleDevManagedBean.hubStrInputs[varStatus.index]}"
@@ -68,6 +67,7 @@
                                                         </h:inputText>
                                                     </div>
                                                     <h:message for="hubStr" styleClass="help-block" />
+                                                    <br/>
                                                 </ui:repeat>
                                             </h:panelGroup>
                                             <h:panelGroup id="apSaveButtons">
