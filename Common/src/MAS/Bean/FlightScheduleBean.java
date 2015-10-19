@@ -37,6 +37,8 @@ public class FlightScheduleBean {
     CostsBean costsBean;
     @EJB
     AttributesBean attributesBean;
+    @EJB
+    FleetBean fleetBean;
 
     public FlightScheduleBean() {
     }
@@ -142,6 +144,12 @@ public class FlightScheduleBean {
         Flight flight = em.find(Flight.class, id);
         if (flight == null) throw new NotFoundException();
         return flight;
+    }
+
+    public List<Flight> getFlightOfAc(long acId) throws NotFoundException {
+        Aircraft aircraft = em.find(Aircraft.class, acId);
+        if (aircraft == null) throw new NotFoundException();
+        return em.createQuery("SELECT f from Flight f WHERE f.aircraftAssignment.aircraft = :aircraft", Flight.class).setParameter("aircraft", aircraft).getResultList();
     }
 
     public List<Flight> getAllFlights() {

@@ -39,10 +39,18 @@
                 </h:form>
             </div>
         </div>
+        <style type="text/css">
+            .calendar-red-event {
+                background: indianred;
+            }
+            .calendar-blue-event {
+                background: deepskyblue;
+            }
+        </style>
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $.get("getAircraftTimetable.xhtml?aircraftId=123", function(data) {
+            $.get("getAircraftTimetable.xhtml?aircraftId=#{flightTimetableManagedBean.aircraftId}", function(data) {
                 $(document).ready(function() {
                     $('#calendar').fullCalendar({
                         //height: 420,

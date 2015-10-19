@@ -3,6 +3,7 @@ package MAS.ManagedBean.FlightPlanning;
 import MAS.Bean.AircraftMaintenanceSlotBean;
 import MAS.Bean.FleetBean;
 import MAS.Bean.FlightScheduleBean;
+import MAS.Common.Utils;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftMaintenanceSlot;
 import MAS.Entity.Flight;
@@ -79,30 +80,42 @@ public class FlightTimetableManagedBean {
         public Date end;
         public ArrayList<String> className;
         public String info;
+        public String color;
     }
 
     public void getAircraftTimetable() {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         try {
             long aircraftId = Long.parseLong(params.get("aircraftId"));
-
-            // @TODO: do stuff
-
-            List<Flight> resultFlights = flightScheduleBean.getAllFlights();
-            List<AircraftMaintenanceSlot> resultMaint;
+            List<Flight> resultFlights = flightScheduleBean.getFlightOfAc(aircraftId);
+            List<AircraftMaintenanceSlot> resultMaint = aircraftMaintenanceSlotBean.findSlotByAircraft(aircraftId);
 
             ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
 
             for (Flight f : resultFlights) {
                 CalendarEntry c = new CalendarEntry();
-                c.title = f.getCode();
+                c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
+                        f.getAircraftAssignment().getRoute().getDestination().getId();
                 c.start = f.getDepartureTime();
                 c.end = f.getArrivalTime();
+                //c.color = "#378006";
                 c.className = new ArrayList<>();
-                c.className.add("b-success");
-                // @TODO
-                c.className.add("another-class-here-replace-this");
-                c.info = "origin dest replace this";
+                //c.className.add("b-success");
+                //c.className.add("b-info");
+                c.className.add("calendar-blue-event");
+                c.info = f.getCode();
+                calendarEntries.add(c);
+            }
+
+            for (AircraftMaintenanceSlot m : resultMaint) {
+                CalendarEntry c = new CalendarEntry();
+                c.title = m.getAirport().getId();
+                c.start = m.getStartTime();
+                c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
+                c.className = new ArrayList<>();
+                //c.className.add("b-warning");
+                //c.className.add("b-info");
+                c.className.add("calendar-red-event");
                 calendarEntries.add(c);
             }
 
@@ -131,26 +144,6 @@ public class FlightTimetableManagedBean {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        List<User> users = userBean.searchForUser(query);
-//        List<Workgroup> workgroups = workgroupBean.searchForWorkgroup(query);
-//
-//        ArrayList<SearchResult> searchResults = new ArrayList<>();
-//
-//        for (User user : users) {
-//            SearchResult r = new SearchResult();
-//            r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + ")";
-//            r.value = "user:" + user.getId() + ":" + r.label;
-//            searchResults.add(r);
-//        }
-//
-//        for (Workgroup workgroup : workgroups) {
-//            SearchResult r = new SearchResult();
-//            r.label = workgroup.getName();
-//            r.value = "workgroup:" + workgroup.getId() + ":" + r.label;
-//            searchResults.add(r);
-//        }
-        //{title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'}
 
     }
 
