@@ -95,5 +95,13 @@
     </ui:define>
 
     <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#flight_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [2]}
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>

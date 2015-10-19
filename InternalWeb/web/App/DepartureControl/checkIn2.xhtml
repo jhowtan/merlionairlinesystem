@@ -187,5 +187,13 @@
     </ui:define>
 
     <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#passenger_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [3]}
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>
