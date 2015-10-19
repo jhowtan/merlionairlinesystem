@@ -3,6 +3,7 @@ package MAS.ManagedBean;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
+import MAS.Entity.Route;
 import MAS.Entity.User;
 
 import javax.faces.bean.ManagedBean;
@@ -50,6 +51,14 @@ public class CommonManagedBean {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String formatRoute(Route route) {
+        return route.getOrigin().getId() + " - " + route.getDestination().getId();
+    }
+
+    public String formateDoubleRounded(double val) {
+        return Integer.toString((int)val);
     }
 
     public String timezoneNiceName(String timezone) {

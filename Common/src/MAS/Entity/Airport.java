@@ -12,7 +12,7 @@ public class Airport {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id.toUpperCase();
     }
 
     private String name;
@@ -68,5 +68,12 @@ public class Airport {
 
     public void setHangars(int hangars) {
         this.hangars = hangars;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Airport))
+            return false;
+        return this.getId().equals(((Airport)obj).getId());
     }
 }

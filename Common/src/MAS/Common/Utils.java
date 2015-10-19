@@ -4,8 +4,10 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,39 @@ public class Utils {
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, minutes);
         return calendar.getTime();
+    }
+
+    public static int yearsBetween(Date first, Date last) {
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+        return diff;
+    }
+
+    public static Date addTimeToDate(Date date, String time) {
+        if (time.length() != 5)
+            return null;
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            String dateString = Integer.toString(cal.get(Calendar.YEAR)) + "-" +
+                    Integer.toString(cal.get(Calendar.MONTH)+1) + "-" +
+                    Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateString + " " + time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance(Locale.US);
+        cal.setTime(date);
+        return cal;
     }
 
     public static String hash(String plaintext) {
@@ -78,6 +113,12 @@ public class Utils {
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
         return dist;
+    }
+
+    public static double calculateDuration(double distance, double speed) {
+        double duration = distance / (speed * Constants.OPERATIONAL_SPEED / 60);
+        duration = (int)duration + Constants.TAKE_OFF_AND_LAND_TIME;
+        return duration;
     }
 
     public static String convertBookingReference(long BookingReferenceLong) {

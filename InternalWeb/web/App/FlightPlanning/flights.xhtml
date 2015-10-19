@@ -28,7 +28,7 @@
                             <th>Route</th>
                             <th>Departure Time</th>
                             <th>Arrival Time</th>
-                            <th>Estimated Cost Per Flight</th>
+                            <th>Estimated Cost Per Mile</th>
                             <th>Recurring Group</th>
                             <th>Action</th>
                         </tr>
@@ -42,7 +42,7 @@
 
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.departureTime)}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.arrivalTime)}</td>
-                                <td>#{commonManagedBean.formatMoney(flightsManagedBean.estimatedCost(fl.id))}</td>
+                                <td>#{commonManagedBean.formatMoney(flightsManagedBean.estimatedCost(fl.id)/fl.aircraftAssignment.getRoute().getDistance())}</td>
                                 <td>
                                     <h:link outcome="/App/FlightPlanning/updateFlightGroup" styleClass="btn btn-default btn-xs btn-primary #{fl.flightGroup == null ? 'disabled' : ''}"><f:param name="flightGroupId" value="#{fl.flightGroup != null ? fl.flightGroup.id : -1}"><i class="fa fa-pencil"></i> Edit Group #{fl.flightGroup.id}</f:param></h:link>
                                 </td>

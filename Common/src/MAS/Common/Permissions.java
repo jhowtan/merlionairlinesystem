@@ -10,6 +10,7 @@ public class Permissions {
     public static final String MANAGE_FLEET = "MANAGE_FLEET";
     public static final String MANAGE_ROUTES = "MANAGE_ROUTES";
     public static final String MANAGE_FLIGHT = "MANAGE_FLIGHT";
+    public static final String MANAGE_AIRCRAFT_SCHEDULE = "MANAGE_AIRCRAFT_SCHEDULE";
 
     public static final String MANAGE_FARE_RULES = "MANAGE_FARE_RULES";
     public static final String MANAGE_BOOKING_CLASSES = "MANAGE_BOOKING_CLASSES";

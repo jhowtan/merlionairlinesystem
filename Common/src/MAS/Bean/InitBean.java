@@ -10,11 +10,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Singleton
 @Startup
@@ -39,8 +35,6 @@ public class InitBean {
     AttributesBean attributesBean;
     @EJB
     CostsBean costsBean;
-    @EJB
-    ScheduleDevelopmentBean scheduleDevelopmentBean; //REMOVE THIS AFTER TESTING
 
     @PostConstruct
     public void init() {
@@ -120,18 +114,18 @@ public class InitBean {
 
             // INITIALIZE SOME AIRPORTS
             try {
-                routeBean.createAirport("SIN", "Changi Airport", "SIN", 1.3644202, 103.9915308, 8);
-                routeBean.createAirport("HKG", "Hong Kong International Airport", "HKG", 22.308047, 113.9184808, 3);
-                routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 1);
-                routeBean.createAirport("JFK", "John F. Kennedy International Airport", "NYC", 40.6413111, -73.77813909999998, 1);
-                routeBean.createAirport("SFO", "San Francisco International Airport", "SFO", 37.6213129, -122.3789554, 4);
-                routeBean.createAirport("ICN", "Incheon International Airport", "SEL", 37.4601908, 126.44069569999999, 2);
-                routeBean.createAirport("NRT", "Narita International Airport", "TYO", 35.7719867, 140.39285010000003, 2);
-                routeBean.createAirport("KUL", "Kuala Lumpur International Airport", "KUL", 2.75419, 101.70474000000001, 1);
-                routeBean.createAirport("BKK", "Suvarnabhumi Airport", "BKK", 13.6899991, 100.75011240000003, 1);
-                routeBean.createAirport("BJS", "Beijing Capital International Airport", "BJS", 40.0798573, 116.60311209999997, 3);
+                routeBean.createAirport("SIN", "Changi Airport", "SIN", 1.3644202, 103.9915308, 10);
+                routeBean.createAirport("HKG", "Hong Kong International Airport", "HKG", 22.308047, 113.9184808, 5);
+                routeBean.createAirport("LHR", "Heathrow Airport", "LON", 51.4700223, -0.4542955, 0);
+                routeBean.createAirport("JFK", "John F. Kennedy International Airport", "NYC", 40.6413111, -73.77813909999998, 0);
+                routeBean.createAirport("SFO", "San Francisco International Airport", "SFO", 37.6213129, -122.3789554, 0);
+                routeBean.createAirport("ICN", "Incheon International Airport", "SEL", 37.4601908, 126.44069569999999, 0);
+                routeBean.createAirport("NRT", "Narita International Airport", "TYO", 35.7719867, 140.39285010000003, 0);
+                routeBean.createAirport("KUL", "Kuala Lumpur International Airport", "KUL", 2.75419, 101.70474000000001, 0);
+                routeBean.createAirport("BKK", "Suvarnabhumi Airport", "BKK", 13.6899991, 100.75011240000003, 0);
+                routeBean.createAirport("BJS", "Beijing Capital International Airport", "BJS", 40.0798573, 116.60311209999997, 0);
                 routeBean.createAirport("BCN", "Barcelona-El Prat Airport", "BCN", 41.297445, 2.083294099999989, 0);
-                routeBean.createAirport("DXB", "Dubai International Airport", "DXB", 25.2531745, 55.36567279999997, 4);
+                routeBean.createAirport("DXB", "Dubai International Airport", "DXB", 25.2531745, 55.36567279999997, 8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -199,7 +193,7 @@ public class InitBean {
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 23500, acTypeId);
-                acId = fleetBean.createAircraft("9V-DET", new Date());
+                acId = fleetBean.createAircraft("9V-DET", new GregorianCalendar(2005, 05, 05).getTime());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -234,29 +228,41 @@ public class InitBean {
                 e.printStackTrace();
             }
 
-            try {
-                List<String> apIds = new ArrayList<>();
-                List<Airport> allAp = routeBean.getAllAirports();
-                for (int i = 0; i < allAp.size(); i++) {
-                    apIds.add(allAp.get(i).getId());
-                }
-                List<Long> acIds = new ArrayList<>();
-                List<Aircraft> allAc = fleetBean.getAllAircraft();
-                for (int i = 0; i < allAc.size(); i++) {
-                    acIds.add(allAc.get(i).getId());
-                }
-                List<String> hubIds = new ArrayList<>();
-                hubIds.add(routeBean.findAirportByCode("SIN").getId());
-                hubIds.add(routeBean.findAirportByCode("HKG").getId());
-                hubIds.add(routeBean.findAirportByCode("DXB").getId());
-                scheduleDevelopmentBean.addAirports(apIds);
-                scheduleDevelopmentBean.addAircrafts(acIds);
-                scheduleDevelopmentBean.addHubs(hubIds);
-                scheduleDevelopmentBean.process();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+//            try {
+//                System.out.println("RUNNING SCHE DEV TEST");
+//                List<String> apIds = new ArrayList<>();
+//                List<Airport> allAp = routeBean.getAllAirports();
+//                for (int i = 0; i < allAp.size(); i++) {
+//                    apIds.add(allAp.get(i).getId());
+//                }
+//                List<Long> acIds = new ArrayList<>();
+//                List<Aircraft> allAc = fleetBean.getAllAircraft();
+//                List<String> homeBaseIds = new ArrayList<>();
+//                for (int i = 0; i < allAc.size(); i++) {
+//                    acIds.add(allAc.get(i).getId());
+//                    if (i < 2)
+//                        homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
+//                    else if (i < 4)
+//                        homeBaseIds.add(routeBean.findAirportByCode("HKG").getId());
+//                    else
+//                        homeBaseIds.add(routeBean.findAirportByCode("DXB").getId());
+//                }
+//                List<String> hubIds = new ArrayList<>();
+//                List<Double> hubStr = new ArrayList<>();
+//                hubIds.add(routeBean.findAirportByCode("SIN").getId());
+//                hubStr.add(0.8);
+//                hubIds.add(routeBean.findAirportByCode("HKG").getId());
+//                hubStr.add(0.7);
+//                hubIds.add(routeBean.findAirportByCode("DXB").getId());
+//                hubStr.add(0.3);
+//                scheduleDevelopmentBean.addAirports(apIds);
+//                scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
+//                scheduleDevelopmentBean.addHubs(hubIds, hubStr);
+//                System.out.println("Beginning development:.....");
+//                scheduleDevelopmentBean.testProcess();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

@@ -3,9 +3,6 @@ package MAS.Entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Daryl Ho on 10/10/2015.
- */
 @Entity
 public class Cost {
 

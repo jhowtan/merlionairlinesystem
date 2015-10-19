@@ -52,4 +52,42 @@ public class Aircraft {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Basic
+    private double flyingCost;
+
+    public double getFlyingCost() {
+        return flyingCost;
+    }
+
+    public void setFlyingCost(double flyingCost) {
+        this.flyingCost = flyingCost;
+    }
+
+    @Basic
+    private double maxRange;
+
+    public double getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(double range) {
+        this.maxRange = range;
+    }
+
+    @Basic
+    private int milesSinceLastMaint;
+
+    public int getMilesSinceLastMaint() {
+        return milesSinceLastMaint;
+    }
+
+    public void setMilesSinceLastMaint(int milesSinceLastMaint) {
+        this.milesSinceLastMaint = milesSinceLastMaint;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Aircraft && this.id == ((Aircraft) obj).id;
+    }
 }

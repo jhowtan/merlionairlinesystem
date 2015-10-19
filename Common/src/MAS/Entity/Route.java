@@ -3,7 +3,7 @@ package MAS.Entity;
 import javax.persistence.*;
 
 @Entity
-public class Route {
+public class Route implements Comparable<Route>{
     private long id;
 
     @GeneratedValue
@@ -55,5 +55,23 @@ public class Route {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Route another) {
+        if (this.getDistance() < another.getDistance())
+            return -1;
+        else if (this.getDistance() > another.getDistance())
+            return 1;
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Route && this.origin == ((Route)obj).getOrigin() && this.destination == ((Route)obj).getDestination();
+    }
+
+    public boolean equalsReversed(Object obj) {
+        return obj instanceof Route && this.origin == ((Route)obj).getDestination() && this.destination == ((Route)obj).getOrigin();
     }
 }

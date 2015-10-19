@@ -56,7 +56,6 @@ public class RoutesManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-
     private class MapRoute {
         public String origin;
         public String destination;

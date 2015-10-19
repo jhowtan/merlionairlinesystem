@@ -7,7 +7,7 @@ import MAS.Entity.Route;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HypoRoute {
+public class HypoRoute extends ScheduleDevelopmentClass {
     public List<Route> routes;
     public double actualDistance;
     public double costDistance;
