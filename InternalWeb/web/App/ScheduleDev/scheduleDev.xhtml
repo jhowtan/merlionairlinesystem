@@ -31,12 +31,13 @@
                                         <h:form>
                                             <div class="input-group">
                                                 <span class="input-group-addon">Airport Names</span>
-                                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.selectAirportsId}">
+                                                <h:selectManyListbox id="apNames" styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.selectAirportsId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allAirports}" var="ap"
                                                                    itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                                     <f:ajax event="change" render="hubSelection hubStrength apSaveButtons" listener="#{scheduleDevManagedBean.selectAirportAjaxListener}" />
                                                 </h:selectManyListbox>
                                             </div>
+                                            <h:message for="apNames" styleClass="help-block" />
                                             <h:panelGroup id="hubSelection" layout="block">
                                                 <br/>
                                                 <blockquote>
@@ -44,22 +45,26 @@
                                                 </blockquote>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">Airport Names</span>
-                                                    <h:selectManyListbox styleClass="form-control" value="#{scheduleDevManagedBean.hubAirportsId}">
+                                                    <h:selectManyListbox id="hubNames" styleClass="form-control" value="#{scheduleDevManagedBean.hubAirportsId}">
                                                         <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
                                                                        itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                                         <f:ajax event="change" render="hubStrength" listener="#{scheduleDevManagedBean.hubAirportAjaxListener}" />
                                                     </h:selectManyListbox>
                                                 </div>
+                                                <h:message for="hubNames" styleClass="help-block" />
                                             </h:panelGroup>
                                             <h:panelGroup id="hubStrength" layout="block">
-                                                <ui:repeat value="#{scheduleDevManagedBean.hubAirports}" var="ap">
+                                                <ui:repeat value="#{scheduleDevManagedBean.hubAirports}" var="ap" varStatus="varStatus">
                                                     <br/>
                                                     <blockquote>
                                                         <div class="input-group">
                                                             <span class="input-group-addon">Strength of #{ap.name} </span>
-                                                            <h:inputText styleClass="form-control" pt:type="number" pt:step="0.1" pt:min="0.1" pt:max="1.0" pt:placeholder="0.5">
+                                                            <h:inputText id="hubStr" styleClass="form-control" value="#{scheduleDevManagedBean.hubStrInputs[varStatus.index]}"
+                                                                         pt:type="number" pt:step="0.1" pt:min="0.1" pt:max="1.0" pt:placeholder="e.g. 0.5"
+                                                                         required="true" requiredMessage="Strength of hub required.">
                                                             </h:inputText>
                                                         </div>
+                                                        <h:message for="hubStr" styleClass="help-block" />
                                                     </blockquote>
                                                 </ui:repeat>
                                             </h:panelGroup>
@@ -68,7 +73,7 @@
                                                     <br/>
                                                     <div class="col-lg-12 text-right">
                                                         <div class="btn-group">
-                                                            <h:commandButton action="#{scheduleDevManagedBean.saveAirports()}" value="Save Airports" styleClass="btn btn-success"/>
+                                                            <h:commandButton action="#{scheduleDevManagedBean.saveAirports()}" value="Next - Aircrafts" styleClass="btn btn-success"/>
                                                         </div>
                                                     </div>
                                                 </h:panelGroup>
@@ -97,23 +102,37 @@
                                         <h:form>
                                             <div class="input-group">
                                                 <span class="input-group-addon">Tail Numbers</span>
-                                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aicrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
+                                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allAircrafts}" var="ac"
                                                                    itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
-                                                    <f:ajax event="change" render="aircraftLocation" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
+                                                    <f:ajax event="change" render="aircraftLocation acSaveButtons" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
                                                 </h:selectManyListbox>
                                             </div>
                                             <h:panelGroup id="aircraftLocation">
-                                                <ui:repeat value="#{scheduleDevManagedBean.selectAircrafts}" var="ac">
+                                                <ui:repeat value="#{scheduleDevManagedBean.selectAircrafts}" var="ac" varStatus="varStatus">
                                                     <br/>
                                                     <blockquote>
                                                         <div class="input-group">
                                                             <span class="input-group-addon">Location of #{ac.tailNumber} </span>
-                                                            <h:inputText styleClass="form-control" pt:type="number" pt:step="0.1" pt:min="0.1" pt:max="1.0" pt:placeholder="0.5">
-                                                            </h:inputText>
+                                                            <h:selectOneMenu id="acLocation" required="true" requiredMessage="Aircraft location is required." value="#{scheduleDevManagedBean.acLocInputs[varStatus.index]}" styleClass="form-control">
+                                                                <f:selectItem itemLabel="---"/>
+                                                                <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ac"
+                                                                               itemLabel="#{ac.name}" itemValue="#{ac.id}" />
+                                                            </h:selectOneMenu>
                                                         </div>
+                                                        <h:message for="acLocation" styleClass="help-block" />
                                                     </blockquote>
                                                 </ui:repeat>
+                                            </h:panelGroup>
+                                            <h:panelGroup id="acSaveButtons">
+                                                <h:panelGroup  rendered="#{scheduleDevManagedBean.showAcButtons()}">
+                                                    <br/>
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="btn-group">
+                                                            <h:commandButton action="#{scheduleDevManagedBean.saveAircraft()}" value="Next - Routes" styleClass="btn btn-success"/>
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
                                             </h:panelGroup>
                                         </h:form>
                                     </div>

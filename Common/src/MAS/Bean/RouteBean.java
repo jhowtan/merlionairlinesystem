@@ -48,6 +48,7 @@ public class RouteBean {
     }
 
     public Airport getAirport(String id) throws NotFoundException {
+        id = id.toUpperCase();
         Airport airport = em.find(Airport.class, id);
         if (airport == null) throw new NotFoundException();
         return airport;

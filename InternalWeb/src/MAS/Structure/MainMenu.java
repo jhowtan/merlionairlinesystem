@@ -49,7 +49,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Schedule Development", "plane",
-                        new MenuEntry("Create schedule", null, Pages.SCHEDULE_DEVELOPMENT)
+                        new MenuEntry("Create Schedule", null, Pages.SCHEDULE_DEVELOPMENT)
                 )
         );
 

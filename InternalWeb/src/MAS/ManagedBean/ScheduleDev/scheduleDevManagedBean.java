@@ -12,10 +12,9 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.lang.model.type.NoType;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @ManagedBean
 @ViewScoped
@@ -32,16 +31,22 @@ public class scheduleDevManagedBean {
     private List<Airport> selectAirports;
     private List<String> hubAirportsId;
     private List<Airport> hubAirports;
+    private List<Double> hubStrengths;
+    private String[] hubStrInputs;
 
     private List<Aircraft> allAircrafts;
-    private List<Long> selectAircraftsId;
+    private List<String> selectAircraftsId;
     private List<Aircraft> selectAircrafts;
+    private String[] acLocInputs;
+    private List<Airport> acLocations;
     private int step = 0;
 
     @PostConstruct
     private void init() {
         setAllAirports(routeBean.getAllAirports());
         setAllAircrafts(fleetBean.getAllAircraft());
+        selectAirportsId = new ArrayList<>();
+        selectAircraftsId = new ArrayList<>();
     }
 
     public void selectAirportAjaxListener(AjaxBehaviorEvent event) {
@@ -64,6 +69,7 @@ public class scheduleDevManagedBean {
                 //Airport not found
             }
         }
+        hubStrInputs = new String[hubAirports.size()];
     }
 
     public boolean showApButtons() {
@@ -80,7 +86,10 @@ public class scheduleDevManagedBean {
     }
 
     public void saveAirports() {
-        //Save hub str
+        hubStrengths = new ArrayList<>();
+        for (int i = 0; i < hubStrInputs.length; i++) {
+            hubStrengths.add(Double.parseDouble(hubStrInputs[i]));
+        }
         step = 1;
     }
 
@@ -93,12 +102,32 @@ public class scheduleDevManagedBean {
         selectAircrafts = new ArrayList<>();
         for (int i = 0; i < selectAircraftsId.size(); i++) {
             try {
-                Aircraft ac = fleetBean.getAircraft(selectAircraftsId.get(i));
-                selectAircrafts.add(ac);
+                selectAircrafts.add(fleetBean.getAircraft(Long.parseLong(selectAircraftsId.get(i))));
             } catch (NotFoundException e) {
                 //Aircraft not found
             }
         }
+        acLocInputs = new String[selectAircrafts.size()];
+    }
+    public boolean showAcButtons() {
+        if (selectAircrafts == null)
+            return false;
+        else if (selectAircrafts.size() >= 1)
+            return true;
+        return false;
+    }
+
+    public void saveAircraft() {
+        acLocations = new ArrayList<>();
+        for (int i = 0; i < acLocInputs.length; i++) {
+            try {
+                Airport ap = routeBean.getAirport(acLocInputs[i]);
+                acLocations.add(ap);
+            } catch (NotFoundException e) {
+                //Cannot find airport using the code
+            }
+        }
+        step = 2;
     }
 
     public List<Airport> getAllAirports() {
@@ -157,11 +186,11 @@ public class scheduleDevManagedBean {
         this.allAircrafts = allAircrafts;
     }
 
-    public List<Long> getSelectAircraftsId() {
+    public List<String> getSelectAircraftsId() {
         return selectAircraftsId;
     }
 
-    public void setSelectAircraftsId(List<Long> selectAircraftsId) {
+    public void setSelectAircraftsId(List<String> selectAircraftsId) {
         this.selectAircraftsId = selectAircraftsId;
     }
 
@@ -171,5 +200,21 @@ public class scheduleDevManagedBean {
 
     public void setSelectAircrafts(List<Aircraft> selectAircrafts) {
         this.selectAircrafts = selectAircrafts;
+    }
+
+    public String[] getHubStrInputs() {
+        return hubStrInputs;
+    }
+
+    public void setHubStrInputs(String[] hubStrInputs) {
+        this.hubStrInputs = hubStrInputs;
+    }
+
+    public String[] getAcLocInputs() {
+        return acLocInputs;
+    }
+
+    public void setAcLocInputs(String[] acLocInputs) {
+        this.acLocInputs = acLocInputs;
     }
 }
