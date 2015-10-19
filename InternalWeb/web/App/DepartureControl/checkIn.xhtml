@@ -29,6 +29,7 @@
                                 <thead>
                                 <tr>
                                     <th>Flight Code</th>
+                                    <th>Route</th>
                                     <th>Departure Time</th>
                                     <th>Action</th>
                                 </tr>
@@ -37,6 +38,7 @@
                                     <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirport()}" var="flight">
                                         <tr>
                                             <td>#{flight.code}</td>
+                                            <td>#{flight.aircraftAssignment.route.origin.city.name} (#{flight.aircraftAssignment.route.origin.id}) - #{flight.aircraftAssignment.route.destination.city.name} (#{flight.aircraftAssignment.route.destination.id})</td>
                                             <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", "Asia/Singapore", flight.departureTime)}</td>
                                             <td>
                                                 <h:form>
@@ -44,7 +46,7 @@
                                                         <h:commandLink action="#{departureControlManagedBean.setFlight(flight)}"
                                                                        styleClass="btn btn-default btn-xs btn-primary">
                                                             <i class="fa fa-users"></i> View Passengers
-                                                            <f:ajax render="flight-passengers" />
+                                                            <f:ajax render="flight-passengers" onevent="loadPassengerTableListener"/>
                                                         </h:commandLink>
                                                     </div>
                                                 </h:form>
@@ -99,9 +101,20 @@
             $('#flight_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    {'bSortable': false, 'bSearchable': false, 'aTargets': [2]}
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [3]}
                 ]
             });
+
+            var loadPassengerTableListener = function(data){
+                if (data.status === 'success') {
+                    $('#passenger_table').DataTable({
+                        "stateSave": true,
+                        "aoColumnDefs": [
+                            {'bSortable': false, 'bSearchable': false, 'aTargets': [3]}
+                        ]
+                    });
+                }
+            };
         </script>
     </ui:define>
 </ui:composition>
