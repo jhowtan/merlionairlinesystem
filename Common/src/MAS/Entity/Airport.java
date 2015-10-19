@@ -69,4 +69,9 @@ public class Airport {
     public void setHangars(int hangars) {
         this.hangars = hangars;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Airport && this.id.equals(((Airport) obj).id);
+    }
 }

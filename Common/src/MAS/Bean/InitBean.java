@@ -10,7 +10,6 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Singleton
@@ -36,8 +35,6 @@ public class InitBean {
     AttributesBean attributesBean;
     @EJB
     CostsBean costsBean;
-    @EJB
-    ScheduleDevelopmentBean scheduleDevelopmentBean; //REMOVE THIS AFTER TESTING
 
     @PostConstruct
     public void init() {
@@ -231,41 +228,41 @@ public class InitBean {
                 e.printStackTrace();
             }
 
-            try {
-                System.out.println("RUNNING SCHE DEV TEST");
-                List<String> apIds = new ArrayList<>();
-                List<Airport> allAp = routeBean.getAllAirports();
-                for (int i = 0; i < allAp.size(); i++) {
-                    apIds.add(allAp.get(i).getId());
-                }
-                List<Long> acIds = new ArrayList<>();
-                List<Aircraft> allAc = fleetBean.getAllAircraft();
-                List<String> homeBaseIds = new ArrayList<>();
-                for (int i = 0; i < allAc.size(); i++) {
-                    acIds.add(allAc.get(i).getId());
-                    if (i < 2)
-                        homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
-                    else if (i < 4)
-                        homeBaseIds.add(routeBean.findAirportByCode("HKG").getId());
-                    else
-                        homeBaseIds.add(routeBean.findAirportByCode("DXB").getId());
-                }
-                List<String> hubIds = new ArrayList<>();
-                List<Double> hubStr = new ArrayList<>();
-                hubIds.add(routeBean.findAirportByCode("SIN").getId());
-                hubStr.add(0.8);
-                hubIds.add(routeBean.findAirportByCode("HKG").getId());
-                hubStr.add(0.7);
-                hubIds.add(routeBean.findAirportByCode("DXB").getId());
-                hubStr.add(0.3);
-                scheduleDevelopmentBean.addAirports(apIds);
-                scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
-                scheduleDevelopmentBean.addHubs(hubIds, hubStr);
-                System.out.println("Beginning development:.....");
-                scheduleDevelopmentBean.process();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                System.out.println("RUNNING SCHE DEV TEST");
+//                List<String> apIds = new ArrayList<>();
+//                List<Airport> allAp = routeBean.getAllAirports();
+//                for (int i = 0; i < allAp.size(); i++) {
+//                    apIds.add(allAp.get(i).getId());
+//                }
+//                List<Long> acIds = new ArrayList<>();
+//                List<Aircraft> allAc = fleetBean.getAllAircraft();
+//                List<String> homeBaseIds = new ArrayList<>();
+//                for (int i = 0; i < allAc.size(); i++) {
+//                    acIds.add(allAc.get(i).getId());
+//                    if (i < 2)
+//                        homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
+//                    else if (i < 4)
+//                        homeBaseIds.add(routeBean.findAirportByCode("HKG").getId());
+//                    else
+//                        homeBaseIds.add(routeBean.findAirportByCode("DXB").getId());
+//                }
+//                List<String> hubIds = new ArrayList<>();
+//                List<Double> hubStr = new ArrayList<>();
+//                hubIds.add(routeBean.findAirportByCode("SIN").getId());
+//                hubStr.add(0.8);
+//                hubIds.add(routeBean.findAirportByCode("HKG").getId());
+//                hubStr.add(0.7);
+//                hubIds.add(routeBean.findAirportByCode("DXB").getId());
+//                hubStr.add(0.3);
+//                scheduleDevelopmentBean.addAirports(apIds);
+//                scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
+//                scheduleDevelopmentBean.addHubs(hubIds, hubStr);
+//                System.out.println("Beginning development:.....");
+//                scheduleDevelopmentBean.testProcess();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

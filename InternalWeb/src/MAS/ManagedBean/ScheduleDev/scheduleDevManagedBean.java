@@ -10,6 +10,7 @@ import MAS.Exception.NotFoundException;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.lang.model.type.NoType;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class scheduleDevManagedBean {
     @EJB
     ScheduleDevelopmentBean scheduleDevelopmentBean;
@@ -128,6 +129,30 @@ public class scheduleDevManagedBean {
             } catch (NotFoundException e) {
                 //Cannot find airport using the code
             }
+        }
+
+        List<String> apIds = new ArrayList<>();
+        for (int i = 0; i < selectAirports.size(); i++) {
+            apIds.add(selectAirports.get(i).getId());
+        }
+        List<Long> acIds = new ArrayList<>();
+        List<String> startingApIds = new ArrayList<>();
+        for (int i = 0; i < selectAircrafts.size(); i++) {
+            acIds.add(selectAircrafts.get(i).getId());
+            startingApIds.add(acLocations.get(i).getId());
+        }
+        List<String> hubIds = new ArrayList<>();
+        for (int i = 0; i < hubAirports.size(); i++) {
+            hubIds.add(hubAirports.get(i).getId());
+        }
+        try {
+            scheduleDevelopmentBean.addAirports(apIds);
+            scheduleDevelopmentBean.addAircrafts(acIds, startingApIds);
+            scheduleDevelopmentBean.addHubs(hubIds, hubStrengths);
+            scheduleDevelopmentBean.testProcess();
+        } catch (Exception e) {
+            //Schedule development failed
+            e.printStackTrace();
         }
         step = 2;
     }

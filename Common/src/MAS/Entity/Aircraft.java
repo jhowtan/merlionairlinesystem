@@ -85,4 +85,9 @@ public class Aircraft {
     public void setMilesSinceLastMaint(int milesSinceLastMaint) {
         this.milesSinceLastMaint = milesSinceLastMaint;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Aircraft && this.id == ((Aircraft) obj).id;
+    }
 }

@@ -9,8 +9,10 @@ import MAS.ScheduleDev.HypoRoute;
 import MAS.ScheduleDev.HypoTransit;
 import MAS.ScheduleDev.TransitAircrafts;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,7 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-@Stateless(name = "ScheduleDevelopmentEJB")
+@Stateful(name = "ScheduleDevelopmentEJB")
 @LocalBean
 public class ScheduleDevelopmentBean {
     @PersistenceContext
@@ -54,6 +56,11 @@ public class ScheduleDevelopmentBean {
     private int processCycle = 1;
 
     public ScheduleDevelopmentBean() {
+
+    }
+
+    @PostConstruct
+    private void init() {
         aircraftsToFly = new ArrayList<>();
         airportsToGo = new ArrayList<>();
         allRoutes = new ArrayList<>();
@@ -61,6 +68,10 @@ public class ScheduleDevelopmentBean {
         hubs = new ArrayList<>();
         hubSavings = new ArrayList<>();
         airportBuckets = new ArrayList<>();
+    }
+
+    public void reset() {
+        //STUB
     }
 
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
@@ -102,7 +113,7 @@ public class ScheduleDevelopmentBean {
             Airport ap = em.find(Airport.class, apIds.get(i));
             if (ap == null)
                 throw new NotFoundException();
-            else if (airportsToGo.indexOf(ap) != -1) {
+            else if (airportsToGo.indexOf(ap) != -1) { //@TODO: Here's your problem
                 hubs.add(ap);
                 hubSavings.add(1.0 - hubStrength.get(i));
             }
@@ -683,25 +694,39 @@ public class ScheduleDevelopmentBean {
         System.out.println(result);
     }
 
-    public void process() {
+    public void testProcess() {
         try {
             System.out.println("Processing:.....");
             generateRoutes();
             System.out.println("Done:Generate all routes");
-            //debugAllRoutes(allRoutes);
+            String apString = "Airports: ";
+            for (int i = 0; i < airportsToGo.size(); i ++) {
+                apString = apString.concat(airportsToGo.get(i).getName() + ", ");
+            }
+            String hubString = "Hubs: ";
+            for (int i = 0; i < hubs.size(); i++) {
+                hubString = hubString.concat(hubs.get(i).getName() + ", ");
+            }
+            String acString = "Aircraft: ";
+            for (int i = 0; i < aircraftsToFly.size(); i++) {
+                acString = acString.concat(aircraftsToFly.get(i).aircraft.getTailNumber() + ", ");
+            }
+            System.out.println(apString + "\n" + hubString + "\n" + acString);
             selectGoodRoutes();
             System.out.println("Done:Select good ones");
             saveSuggestedRoutes();
-            System.out.println("Processing2:.....");
-            generateTierList();
-            System.out.println("Done:Create tier list");
-            createFlightTimetable(40320);
-            debugFlightState();
-            System.out.println("Done:Create flight timetable");
-            saveSuggestedFlights(new Date());
+//            System.out.println("Processing2:.....");
+//            generateTierList();
+//            System.out.println("Done:Create tier list");
+//            createFlightTimetable(40320);
+//            debugFlightState();
+//            System.out.println("Done:Create flight timetable");
+//            saveSuggestedFlights(new Date());
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }
