@@ -1,5 +1,5 @@
 html {
-  background-color: #293a4b;
+  background-color: #f0f3f4;
 }
 
 body {
@@ -9,6 +9,10 @@ body {
   line-height: 1.42857143;
   color: #58666e;
   background-color: transparent;
+}
+
+#wrapper {
+  background-color: #293a4b;
 }
 
 body #page-wrapper {
