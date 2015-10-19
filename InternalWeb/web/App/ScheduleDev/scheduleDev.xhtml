@@ -141,6 +141,57 @@
                         </h:panelGroup>
                     </h:panelGroup>
 
+                    <h:panelGroup class="panel panel-primary" id="dateEntry" layout="block" rendered="#{scheduleDevManagedBean.displayDate()}">
+                        <div class="panel-heading">
+                            <i class="fa fa-user fa-fw"></i>
+                            Start Time Entry
+                        </div>
+
+                        <h:panelGroup class="panel-body" layout="block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <blockquote>
+                                        <p>Select date and time at which schedule starts.</p>
+                                    </blockquote>
+
+                                    <div class="form-group form-group-lg">
+                                        <h:form>
+                                            <div class="row">//SNAPSHOT HERE
+                                                <div class="form-group col-lg-6 #{!departure.valid ? 'has-error' : ''}">
+                                                    <label class="control-label" for="departure">Departure Date</label>
+                                                    <h:inputText binding="#{departure}" id="departure" value="#{createFlightManagedBean.departureDate}" styleClass="form-control"
+                                                                 pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                                 size="20" required="true" requiredMessage="Departure Date of the flight is required.">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    </h:inputText>
+                                                    <h:message for="departure" styleClass="help-block" />
+                                                </div>
+                                                <div class="form-group col-lg-6 #{!departureTime.valid ? 'has-error' : ''}">
+                                                    <label class="control-label" for="departureTime">Departure Time</label>
+                                                    <h:inputText binding="#{departureTime}" id="departureTime" value="#{createFlightManagedBean.departureTime}" styleClass="form-control"
+                                                                 pt:placeholder="e.g. 00:00" size="20" required="true" requiredMessage="Departure Time of the flight is required.">
+                                                        <f:validator validatorId="timeValidator" />
+                                                    </h:inputText>
+                                                    <h:message for="departureTime" styleClass="help-block" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group col-lg-12 #{!flightDuration.valid ? 'has-error' : ''}">
+                                                    <label class="control-label" for="flightDuration">Flight Duration</label>
+                                                    <h:inputText binding="#{flightDuration}" id="flightDuration" value="#{createFlightManagedBean.flightDuration}" styleClass="form-control"
+                                                                 pt:placeholder="e.g. 7:32" size="20" required="true" requiredMessage="Flight duration is required.">
+                                                        <f:converter converterId="durationConverter" />
+                                                    </h:inputText>
+                                                    <h:message for="flightDuration" styleClass="help-block" />
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
                 </div>
             </div>
         </div>
