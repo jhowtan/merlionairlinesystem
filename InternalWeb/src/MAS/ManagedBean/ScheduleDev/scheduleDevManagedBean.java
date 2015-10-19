@@ -70,6 +70,8 @@ public class scheduleDevManagedBean {
             }
         }
         hubStrInputs = new String[hubAirports.size()];
+        for (int i = 0; i < hubStrInputs.length; i++)
+            hubStrInputs[i] = "0.5";
     }
 
     public boolean showApButtons() {
