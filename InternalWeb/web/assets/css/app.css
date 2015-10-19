@@ -1958,3 +1958,22 @@ fieldset[disabled] .btn-black.active {
     padding-left: 15px;
   }
 }
+
+/* sbadmin2 overrides */
+
+@media(min-width:768px) {
+  .navbar-top-links .dropdown-messages,
+  .navbar-top-links .dropdown-tasks,
+  .navbar-top-links .dropdown-alerts {
+    margin-left: auto;
+    color: #f1f1f1;
+  }
+}
+
+.sidebar ul li {
+  border-bottom: 1px solid #394a5d;
+}
+
+.sidebar ul li a.active {
+  background-color: #425569;
+}
