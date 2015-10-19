@@ -61,6 +61,9 @@ public class Pages {
     public static final Page CREATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/createMaintenanceSlot", Permissions.MANAGE_FLIGHT);
     public static final Page UPDATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/updateMaintenanceSlot", Permissions.MANAGE_FLIGHT);
 
+    // Airline Planning System: Schedule Development Pages
+    public static final Page SCHEDULE_DEVELOPMENT = new Page("/App/ScheduleDev/scheduleDev", Permissions.MANAGE_AIRCRAFT_SCHEDULE);
+
     // Airline Inventory Subsystem: Price Management Module
     public static final Page LIST_FARE_RULES = new Page("/App/PriceManagement/fareRules", Permissions.MANAGE_FARE_RULES);
     public static final Page CREATE_FARE_RULE = new Page("/App/PriceManagement/createFareRule", Permissions.MANAGE_FARE_RULES);

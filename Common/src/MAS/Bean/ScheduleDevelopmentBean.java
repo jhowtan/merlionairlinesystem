@@ -48,10 +48,9 @@ public class ScheduleDevelopmentBean {
     private TransitAircrafts ta;
 
     private int reserveAircraft;
-    //private double hubSavings = 0.25;
     private double maxRange = 0;
     private double acRestTime = 180;
-    private double acMaintTime = 300;
+    private double acMaintTime = 1440;
     private int processCycle = 1;
 
     public ScheduleDevelopmentBean() {

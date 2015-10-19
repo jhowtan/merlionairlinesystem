@@ -48,6 +48,12 @@ public class MainMenu {
         );
 
         entries.add(
+                new MenuEntry("Schedule Development", "plane",
+                        new MenuEntry("Create schedule", null, Pages.SCHEDULE_DEVELOPMENT)
+                )
+        );
+
+        entries.add(
                 new MenuEntry("Price Management", "usd",
                         new MenuEntry("Fare Rules", null, Pages.LIST_FARE_RULES, Pages.CREATE_FARE_RULE),
                         new MenuEntry("Booking Classes", null, Pages.LIST_BOOKING_CLASSES, Pages.CREATE_BOOKING_CLASS)
