@@ -93,7 +93,8 @@ public class scheduleDevManagedBean {
         selectAircrafts = new ArrayList<>();
         for (int i = 0; i < selectAircraftsId.size(); i++) {
             try {
-                selectAircrafts.add(fleetBean.getAircraft(selectAircraftsId.get(i)));
+                Aircraft ac = fleetBean.getAircraft(selectAircraftsId.get(i));
+                selectAircrafts.add(ac);
             } catch (NotFoundException e) {
                 //Aircraft not found
             }

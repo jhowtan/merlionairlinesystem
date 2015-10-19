@@ -95,14 +95,26 @@
 
                                     <div class="form-group form-group-lg">
                                         <h:form>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">Tail Numbers</span>
-                                            <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aicrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
-                                                <f:selectItems value="#{scheduleDevManagedBean.allAircrafts}" var="ac"
-                                                               itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
-                                                <f:ajax event="change" render="" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
-                                            </h:selectManyListbox>
-                                        </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Tail Numbers</span>
+                                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aicrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
+                                                    <f:selectItems value="#{scheduleDevManagedBean.allAircrafts}" var="ac"
+                                                                   itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                                    <f:ajax event="change" render="aircraftLocation" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
+                                                </h:selectManyListbox>
+                                            </div>
+                                            <h:panelGroup id="aircraftLocation">
+                                                <ui:repeat value="#{scheduleDevManagedBean.selectAircrafts}" var="ac">
+                                                    <br/>
+                                                    <blockquote>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">Location of #{ac.tailNumber} </span>
+                                                            <h:inputText styleClass="form-control" pt:type="number" pt:step="0.1" pt:min="0.1" pt:max="1.0" pt:placeholder="0.5">
+                                                            </h:inputText>
+                                                        </div>
+                                                    </blockquote>
+                                                </ui:repeat>
+                                            </h:panelGroup>
                                         </h:form>
                                     </div>
                                 </div>
