@@ -25,7 +25,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Departing Flights from #{departureControlManagedBean.retrieveBaseAirport().name}</div>
                         <div class="panel-body">
-                            <table class="table" id="flight_table">
+                            <table class="table table-striped" id="flight_table">
                                 <thead>
                                 <tr>
                                     <th>Flight Code</th>
@@ -60,7 +60,7 @@
                     <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty departureControlManagedBean.flight}">
                         <div class="panel-heading">Passengers Departing on Flight #{departureControlManagedBean.flight.code}</div>
                         <div class="panel-body">
-                            <table class="table" id="passenger_table">
+                            <table class="table table-striped" id="passenger_table">
                                 <thead>
                                 <tr>
                                     <th>Booking Reference</th>
