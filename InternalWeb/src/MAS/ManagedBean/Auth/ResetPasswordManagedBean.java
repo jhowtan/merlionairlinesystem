@@ -1,17 +1,11 @@
 package MAS.ManagedBean.Auth;
 
 import MAS.Bean.UserBean;
-import MAS.Entity.User;
-import MAS.Exception.NotFoundException;
-import org.jboss.weld.context.http.Http;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 @ManagedBean
@@ -23,7 +17,7 @@ public class ResetPasswordManagedBean {
     private boolean processed = false;
     private boolean processedSuccess;
     private long userId;
-    private String hash;
+    private String resetHash;
 
     @PostConstruct
     public void init() {
@@ -31,8 +25,8 @@ public class ResetPasswordManagedBean {
         if (params.containsKey("u") && params.containsKey("h")) {
             try {
                 userId = Long.valueOf(params.get("u"));
-                hash = (String) params.get("h");
-                resetHashValid = userBean.isResetHashValid(userId, hash);
+                resetHash = (String) params.get("h");
+                resetHashValid = userBean.isResetHashValid(userId, resetHash);
             } catch (NumberFormatException e) {
             }
         }
@@ -41,7 +35,7 @@ public class ResetPasswordManagedBean {
     public void resetPassword(String newPassword) {
         try {
             processed = true;
-            userBean.resetPassword(userId, hash, newPassword);
+            userBean.resetPassword(userId, resetHash, newPassword);
             processedSuccess = true;
         } catch (Exception e) {
             processedSuccess = false;
