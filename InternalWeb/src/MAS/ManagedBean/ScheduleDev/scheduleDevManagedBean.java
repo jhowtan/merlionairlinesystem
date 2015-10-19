@@ -48,6 +48,9 @@ public class scheduleDevManagedBean {
     private List<Route> allRoutes;
     private List<String> selectRoutesId;
 
+    private String customRouteOriginId;
+    private String customRouteDestinationId;
+
     private int duration;
     private Date startDate;
     private String startTime;
@@ -179,6 +182,24 @@ public class scheduleDevManagedBean {
             step = 2;
         } catch (Exception e) {
             //Schedule development failed
+            e.printStackTrace();
+        }
+    }
+
+    public void addCustomRoute() {
+        Route route = new Route();
+        try {
+            System.out.println(customRouteOriginId);
+            System.out.println(customRouteDestinationId);
+            double distance = Utils.calculateDistance(route.getOrigin().getLatitude(), route.getOrigin().getLongitude(), route.getDestination().getLatitude(), route.getDestination().getLongitude());
+            route.setDistance(distance);
+            for (int i = 0; i < allRoutes.size(); i++) {
+                if (allRoutes.get(i).equals(route) || allRoutes.get(i).equalsReversed(route)) {
+                    return;
+                }
+            }
+            allRoutes.add(route);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -365,5 +386,21 @@ public class scheduleDevManagedBean {
 
     public void setFlightsCreated(int flightsCreated) {
         this.flightsCreated = flightsCreated;
+    }
+
+    public String getCustomRouteOriginId() {
+        return customRouteOriginId;
+    }
+
+    public void setCustomRouteOriginId(String customRouteOriginId) {
+        this.customRouteOriginId = customRouteOriginId;
+    }
+
+    public String getCustomRouteDestinationId() {
+        return customRouteDestinationId;
+    }
+
+    public void setCustomRouteDestinationId(String customRouteDestinationId) {
+        this.customRouteDestinationId = customRouteDestinationId;
     }
 }
