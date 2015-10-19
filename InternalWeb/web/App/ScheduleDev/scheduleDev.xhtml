@@ -179,7 +179,7 @@
                                                     <div class="form-group col-lg-6">
                                                         <label class="control-label" for="origin">Choose Origin Airport</label>
                                                         <h:selectOneMenu id="origin" value="#{scheduleDevManagedBean.customRouteOriginId}" styleClass="form-control"
-                                                                        required="true" requiredMessage="Route origin required">
+                                                                        required="false" requiredMessage="Route origin required">
                                                             <f:selectItem itemLabel="---"/>
                                                             <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
                                                                            itemLabel="#{ap.id.concat(' - ').concat(ap.name)}" itemValue="#{ap.id}" />
@@ -190,7 +190,7 @@
                                                     <div class="form-group col-lg-6">
                                                         <label class="control-label" for="destination">Choose Destination Airport</label>
                                                         <h:selectOneMenu id="destination" value="#{scheduleDevManagedBean.customRouteDestinationId}" styleClass="form-control"
-                                                                        required="true" requiredMessage="Route destination required">
+                                                                        required="false" requiredMessage="Route destination required">
                                                             <f:selectItem itemLabel="---"/>
                                                             <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
                                                                            itemLabel="#{ap.id.concat(' - ').concat(ap.name)}" itemValue="#{ap.id}" />
