@@ -48,27 +48,10 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <h:commandLink action="#{departureControlManagedBean.setFlight(flight)}"
-                                                               styleClass="btn btn-default btn-xs btn-primary">
-                                                    <i class="fa fa-users fw"></i> View Passengers
-                                                    <f:ajax render="flight-passengers boarded-stats"
-                                                            onevent="function(data) {
-                                                                        if (data.status == 'success') { passengerTableLoad();
-                                                                    }}"/>
-                                                </h:commandLink>
-                                                <h:commandLink action="#{departureControlManagedBean.changeGateStatus(flight, 1)}"
-                                                               rendered="#{flight.status == 0}" disabled="#{flight.status >= 2}"
-                                                               styleClass="btn btn-default btn-xs #{(flight.status >= 2) ? 'disabled' : ''}">
-                                                    <i class="fa fa-sign-in fw"></i> Open Gate
-                                                </h:commandLink>
-                                                <h:commandLink action="#{departureControlManagedBean.changeGateStatus(flight, 2)}"
-                                                               styleClass="btn btn-success btn-xs #{(flight.status >= 2) ? 'disabled' : ''}">
-                                                    <i class="fa fa-sign-in fw"></i> Begin Boarding
-                                                </h:commandLink>
-                                                <h:commandLink action="#{departureControlManagedBean.changeGateNumber(flight)}"
-                                                               styleClass="btn btn-default btn-xs #{(flight.status >= 2) ? 'disabled' : ''}">
-                                                    <i class="fa fa-sign-in fw"></i> Change Gate
-                                                </h:commandLink>
+                                                <h:link outcome="gateCheck2" styleClass="btn btn-default btn-xs btn-primary">
+                                                    <i class="fa fa-sign-in fw"></i> Manage Gate
+                                                    <f:param name="flight" value="#{flight.id}"/>
+                                                </h:link>
                                             </div>
                                         </td>
                                         </h:form>
@@ -79,104 +62,18 @@
                         </div>
                     </div>
                 </div>
-                <h:panelGroup styleClass="col-lg-8" layout="block" id="flight-passengers">
-                    <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty departureControlManagedBean.flight}">
-                        <div class="panel-heading">Passengers Departing on Flight #{departureControlManagedBean.flight.code}</div>
-                        <div class="panel-body">
-                            <table class="table" id="passenger_table">
-                                <thead>
-                                    <tr>
-                                        <th>Booking Reference</th>
-                                        <th>Passenger Name</th>
-                                        <th>Check In Status</th>
-                                        <th>Gate Check Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <ui:repeat value="#{departureControlManagedBean.retrievePassengersFromFlight()}" var="eticket">
-                                    <tr>
-                                        <td>#{eticket.pnr.bookingReference}</td>
-                                        <td>#{eticket.passengerName}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
-                                        <td>
-                                            <h:form>
-                                                <h:commandLink action="#{departureControlManagedBean.removeBaggageForPassenger(eticket)}"
-                                                        rendered="#{(eticket.flight.status > 4) &amp;&amp; (eticket.checkedIn)}"
-                                                        styleClass="btn btn-default btn-xs btn-danger #{(eticket.gateChecked) ? 'disabled' : ''}">
-                                                    <i class="fa fa-ban"/> Unload Baggage
-                                                </h:commandLink>
-                                            </h:form>
-                                        </td>
-                                    </tr>
-                                </ui:repeat>
-                                </tbody>
-                            </table>
-                        </div>
-                    </h:panelGroup>
-                </h:panelGroup>
-                <h:panelGroup styleClass="col-lg-4" layout="block" id="boarded-stats">
-                    <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty departureControlManagedBean.flight}">
-                        <div class="panel-heading">#{departureControlManagedBean.flight.code}: Boarding Status at #{commonManagedBean.formatDate("dd MMM, hh:mm a", null)}</div>
-                        <div class="panel-body">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
-                                     aria-valuemin="0"
-                                     aria-valuemax="#{departureControlManagedBean.countCheckedInPassengers()}"
-                                     aria-valuenow="#{departureControlManagedBean.countBoardedPassengers()}"
-                                     style="width: #{departureControlManagedBean.countPercentageBoarded()}%">
-                                    <span>#{departureControlManagedBean.countPercentageBoarded()}% Boarded</span>
-                                </div>
-                            </div>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Passengers Boarded</th>
-                                        <th>Passengers Checked In</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <p class="text-center">#{departureControlManagedBean.countBoardedPassengers()}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-center">#{departureControlManagedBean.countCheckedInPassengers()}</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <h:form>
-                                <h:commandLink action="#{departureControlManagedBean.changeGateStatus(flight, 4)}"
-                                               disabled="#{departureControlManagedBean.flight.status != 3}"
-                                               styleClass="btn btn-warning btn-block #{(departureControlManagedBean.flight.status != 3) ? 'disabled' : ''}">
-                                    <i class="fa fa-clock-o"/> Last Call
-                                </h:commandLink>
-                                <h:commandLink action="#{departureControlManagedBean.changeGateStatus(flight, 5)}"
-                                               onclick="return confirm('Are you sure you want to close the gate? This is irreversible.');"
-                                               disabled="#{departureControlManagedBean.flight.status != 4}"
-                                               styleClass="btn btn-danger btn-block #{(departureControlManagedBean.flight.status != 4) ? 'disabled' : ''}">
-                                    <i class="fa fa-times-circle-o"/> Close Gate
-                                </h:commandLink>
-                            </h:form>
-                        </div>
-                    </h:panelGroup>
-                </h:panelGroup>
             </div>
         </div> <!-- end container -->
     </ui:define>
 
     <ui:define name="javascript">
         <script type="text/javascript">
-            var passengerTableLoad = function() {
-                $('#passenger_table').DataTable({
-                    "stateSave": true,
-                    "aoColumnDefs": [
-                        {'bSortable': false, 'bSearchable': false, 'aTargets': [4]}
-                    ]
-                });
-            }
+            $('#flight_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [4]}
+                ]
+            });
         </script>
     </ui:define>
 </ui:composition>

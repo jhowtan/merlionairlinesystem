@@ -34,24 +34,8 @@ public class DepartureControlManagedBean {
         return null;
     }
 
-    public void changeGateStatus(Flight flight, int status) {
-        try {
-            flight.setStatus(status);
-            flightScheduleBean.updateSingleFlight(flight);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
-        authManagedBean.createAuditLog("Gate status " + flight.getCode() + "-" +
-                flight.getGateNumber() + ": " + showStatusName(flight), "gate_check");
-    }
-
-    public void changeGateNumber(Flight flight) {
-        try {
-            flightScheduleBean.updateSingleFlight(flight);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
-        authManagedBean.createAuditLog("Gate number changed for " + flight.getCode() + ": " + flight.getGateNumber(), "gate_check");
+    public List<ETicket> retrievePassengersFromFlight() {
+        return flightScheduleBean.getETicketsForFlight(flight);
     }
 
     public void setFlight(Flight flight) {
@@ -77,40 +61,6 @@ public class DepartureControlManagedBean {
             default:
                 return "";
         }
-    }
-
-    public List<ETicket> retrievePassengersFromFlight() {
-        return flightScheduleBean.getETicketsForFlight(flight);
-    }
-
-    public int countCheckedInPassengers() {
-        int count = 0;
-        for (ETicket passenger : retrievePassengersFromFlight()) {
-           if (passenger.isCheckedIn())
-               count++;
-        }
-        return count;
-    }
-
-    public int countBoardedPassengers() {
-        int count = 0;
-        for (ETicket passenger : retrievePassengersFromFlight()) {
-            if (passenger.isCheckedIn() && passenger.isGateChecked()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public double countPercentageBoarded() {
-        if (countCheckedInPassengers() != 0) {
-            return (double) countBoardedPassengers() / countCheckedInPassengers() * 100;
-        }
-        return 0;
-    }
-
-    public void removeBaggageForPassenger(ETicket eticket) {
-        //@TODO: Decide how we want to remove baggages
     }
 
     public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
