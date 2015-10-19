@@ -1,5 +1,5 @@
 html {
-  background-color: #293a4b;
+  background-color: #f0f3f4;
 }
 
 body {
@@ -9,6 +9,10 @@ body {
   line-height: 1.42857143;
   color: #58666e;
   background-color: transparent;
+}
+
+#wrapper {
+  background-color: #293a4b;
 }
 
 body #page-wrapper {
@@ -1953,4 +1957,23 @@ fieldset[disabled] .btn-black.active {
     padding-right: 15px;
     padding-left: 15px;
   }
+}
+
+/* sbadmin2 overrides */
+
+@media(min-width:768px) {
+  .navbar-top-links .dropdown-messages,
+  .navbar-top-links .dropdown-tasks,
+  .navbar-top-links .dropdown-alerts {
+    margin-left: auto;
+    color: #f1f1f1;
+  }
+}
+
+.sidebar ul li {
+  border-bottom: 1px solid #394a5d;
+}
+
+.sidebar ul li a.active {
+  background-color: #425569;
 }
