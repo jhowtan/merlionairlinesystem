@@ -129,7 +129,7 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <p class="text-center">#{commonManagedBean.random()} #{gateCheckManagedBean.countBoardedPassengers()}</p>
+                                        <p class="text-center">#{gateCheckManagedBean.countBoardedPassengers()}</p>
                                     </td>
                                     <td>
                                         <p class="text-center">#{gateCheckManagedBean.countCheckedInPassengers()}</p>
@@ -182,6 +182,9 @@
                 var data = $.parseJSON(event.data);
                 if (data.boarded) {
                     showLiveNotice("<strong>Passenger Boarded: </strong>" + data.passenger);
+                }
+                if (data.checkedIn) {
+                    showLiveNotice("<strong>Passenger Checked In: </strong>" + data.passenger);
                 }
             };
 
