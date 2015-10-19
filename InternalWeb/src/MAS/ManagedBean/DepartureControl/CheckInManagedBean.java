@@ -11,6 +11,7 @@ import MAS.Entity.Itinerary;
 import MAS.Entity.PNR;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
+import MAS.WebSocket.WebSocketMessage;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,7 +20,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.util.*;
 
 @ManagedBean
@@ -110,6 +111,7 @@ public class CheckInManagedBean {
         List<ETicket> selectedConnections = getSelectedConnections();
         for (ETicket eTicket : selectedConnections) {
             if (!flightScheduleBean.isSeatAvailable(eTicket.getFlight(), seats[index++])) {
+                authManagedBean.createAuditLog("Checked in passenger: " + eTicket.getPassengerName(), "check_in");
                 FacesMessage m = new FacesMessage("The seat selected on flight " + eTicket.getFlight().getCode() + " is no longer available.");
                 m.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("check-in-status", m);
@@ -130,7 +132,8 @@ public class CheckInManagedBean {
             } catch (IndexOutOfBoundsException e) {}
             try {
                 flightScheduleBean.updateETicket(eTicket);
-            } catch (NotFoundException e) {
+                WebSocketMessage.broadcastToChannel("gateCheckUpdate", "{\"checkedIn\": true, \"passenger\": \"" + eTicket.getPassengerName() + "\"}");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             index++;

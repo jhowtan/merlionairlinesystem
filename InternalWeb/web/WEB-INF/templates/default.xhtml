@@ -20,9 +20,14 @@
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/css/dataTables.bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/animate.css/animate.min.css" />
-    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/typeahead.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/open-sans/css/open-sans.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/fullcalendar/dist/fullcalendar.min.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/typeahead.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/font.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/cards.css" />
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/app.css" />
+
+
 </h:head>
 
 <h:body>
@@ -36,7 +41,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h:link styleClass="navbar-brand" outcome="/App/index">Merlion Airline System</h:link>
+                <h:link styleClass="navbar-brand" outcome="/App/index">
+                    <img src="#{commonManagedBean.getRoot()}/assets/img/boarding-pass-logo.png"/>
+                </h:link>
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
@@ -131,6 +138,8 @@
     </div>
 
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/fullcalendar/dist/fullcalendar.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/metisMenu/dist/metisMenu.min.js"></script>
     <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>

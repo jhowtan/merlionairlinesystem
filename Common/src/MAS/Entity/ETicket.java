@@ -1,6 +1,7 @@
 package MAS.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -137,5 +138,17 @@ public class ETicket {
 
     public void setNextConnection(ETicket nextConnection) {
         this.nextConnection = nextConnection;
+    }
+
+    private Date created;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

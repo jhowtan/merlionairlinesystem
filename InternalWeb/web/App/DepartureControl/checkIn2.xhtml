@@ -111,9 +111,10 @@
                                         </ui:repeat>
 
                                         <div class="text-right">
-                                            <h:commandButton value="Print Boarding Pass" styleClass="btn btn-default btn-default">
+                                            <h:link outcome="printBoardingPass" styleClass="btn btn-default btn-default" target="_blank">
+                                                Print Boarding Pass
                                                 <f:param name="eticket" value="#{checkInManagedBean.primaryETicket.id}" />
-                                            </h:commandButton>
+                                            </h:link>
                                         </div>
                                     </h:form>
                                 </div>
@@ -186,5 +187,13 @@
     </ui:define>
 
     <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#passenger_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [3]}
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>

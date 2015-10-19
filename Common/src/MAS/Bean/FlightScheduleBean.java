@@ -306,6 +306,11 @@ public class FlightScheduleBean {
         em.merge(eTicket);
     }
 
+    public void updateSingleFlight(Flight flight) throws NotFoundException {
+        if (em.find(Flight.class, flight.getId()) == null) throw new NotFoundException();
+        em.merge(flight);
+    }
+
     public boolean isSeatAvailable(Flight flight, int seat) {
         return em.createQuery("SELECT COUNT(et) FROM ETicket et WHERE et.flight = :flight AND et.seatNumber = :seatNumber", Long.class)
                 .setParameter("flight", flight)

@@ -5,6 +5,14 @@ import java.util.Date;
 
 @Entity
 public class Flight {
+    public static final int NO_STATUS = 0;
+    public static final int GATE_OPEN = 1;
+    public static final int BOARDING = 2;
+    public static final int GATE_CLOSING = 3;
+    public static final int LAST_CALL = 4;
+    public static final int GATE_CLOSED = 5;
+    public static final int DEPARTED = 6;
+
     private long id;
 
     @GeneratedValue
@@ -84,5 +92,27 @@ public class Flight {
 
     public void setActualDepartureTime(Date actualDepartureTime) {
         this.actualDepartureTime = actualDepartureTime;
+    }
+
+    private String gateNumber;
+
+    @Basic
+    public String getGateNumber() {
+        return gateNumber;
+    }
+
+    public void setGateNumber(String gateNumber) {
+        this.gateNumber = gateNumber;
+    }
+
+    private int status;
+
+    @Basic
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

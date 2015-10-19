@@ -34,20 +34,37 @@ public class DepartureControlManagedBean {
         return null;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
-    }
-
     public List<ETicket> retrievePassengersFromFlight() {
         return flightScheduleBean.getETicketsForFlight(flight);
     }
 
-    public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
-        return flightScheduleBean.findDepartingFlightsByAirport(retrieveBaseAirport());
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
-    public void updatePassengerCheckIn(ETicket eTicket) {
-        eTicket.setCheckedIn(true);
+    public String showStatusName(Flight flight) {
+        switch (flight.getStatus()) {
+            case Flight.NO_STATUS:
+                return "NO STATUS";
+            case Flight.GATE_OPEN:
+                return "GATE OPEN";
+            case Flight.BOARDING:
+                return "BOARDING";
+            case Flight.GATE_CLOSING:
+                return "GATE CLOSING";
+            case Flight.LAST_CALL:
+                return "LAST CALL";
+            case Flight.GATE_CLOSED:
+                return "GATE CLOSED";
+            case Flight.DEPARTED:
+                return "DEPARTED";
+            default:
+                return "";
+        }
+    }
+
+    public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
+        return flightScheduleBean.findDepartingFlightsByAirport(retrieveBaseAirport());
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

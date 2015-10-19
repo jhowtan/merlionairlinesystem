@@ -1,0 +1,219 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Gate Control - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:commandButton binding="#{refreshTrigger}" styleClass="hidden">
+                <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
+                <f:ajax render="flight-passengers boarded-stats" onevent="refreshOnEventListener" />
+            </h:commandButton>
+        </h:form>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Gate Control Management</h1>
+                    <!--<ul class="nav nav-tabs nav-justified">-->
+                    <!--<li role="presentation" class="active"><h:link outcome="/App/CostManagement/costs">Costs</h:link></li>-->
+                    <!--<li role="presentation"><h:link outcome="/App/CostManagement/createCost">Create Cost</h:link></li>-->
+                    <!--</ul><br />-->
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Departure Status for #{gateCheckManagedBean.flight.code} </div>
+                        <div class="panel-body">
+                            <table class="table" id="flight_table">
+                                <thead>
+                                <tr>
+                                    <th>Flight Code</th>
+                                    <th>Departure Time</th>
+                                    <th>Status</th>
+                                    <th>Gate Number</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#{gateCheckManagedBean.flight.code}</td>
+                                        <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", gateCheckManagedBean.retrieveBaseAirport().city.timezone, gateCheckManagedBean.flight.departureTime)}</td>
+                                        <td>#{gateCheckManagedBean.showStatusName(gateCheckManagedBean.flight)}</td>
+                                        <h:form>
+                                            <td>
+                                                <h:inputText id="gateNumber" binding="#{gateNumber}" value="#{gateCheckManagedBean.flight.gateNumber}"
+                                                             readonly="#{gateCheckManagedBean.flight.status >= 2}" styleClass="form-control" pt:placeholder="e.g. A19"/>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 1)}"
+                                                                   rendered="#{gateCheckManagedBean.flight.status == 0}" disabled="#{gateCheckManagedBean.flight.status >= 2}"
+                                                                   styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
+                                                        <i class="fa fa-sign-in fw"></i> Open Gate
+                                                    </h:commandLink>
+                                                    <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 2)}"
+                                                                   styleClass="btn btn-success btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
+                                                        <i class="fa fa-sign-in fw"></i> Begin Boarding
+                                                    </h:commandLink>
+                                                    <h:commandLink action="#{gateCheckManagedBean.changeGateNumber(gateCheckManagedBean.flight)}"
+                                                                   styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
+                                                        <i class="fa fa-sign-in fw"></i> Change Gate
+                                                    </h:commandLink>
+                                                </div>
+                                            </td>
+                                        </h:form>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <h:panelGroup layout="block" id="flight-passengers">
+                        <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty gateCheckManagedBean.flight}">
+                            <div class="panel-heading">Passenger List for Flight #{gateCheckManagedBean.flight.code}</div>
+                            <div class="panel-body">
+                                <table class="table" id="passenger_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Booking Reference</th>
+                                        <th>Passenger Name</th>
+                                        <th>Check In Status</th>
+                                        <th>Gate Check Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{gateCheckManagedBean.retrievePassengersFromFlight()}" var="eticket">
+                                        <tr>
+                                            <td>#{eticket.pnr.bookingReference}</td>
+                                            <td>#{eticket.passengerName}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
+                                            <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <div id="liveNotices"></div>
+                </div>
+                <h:panelGroup styleClass="col-lg-4" layout="block" id="boarded-stats">
+                    <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty gateCheckManagedBean.flight}">
+                        <div class="panel-heading">#{gateCheckManagedBean.flight.code}: Boarding Status at #{commonManagedBean.formatDate("dd MMM, hh:mm a", null)}</div>
+                        <div class="panel-body">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                                     aria-valuemin="0"
+                                     aria-valuemax="#{gateCheckManagedBean.countCheckedInPassengers()}"
+                                     aria-valuenow="#{gateCheckManagedBean.countBoardedPassengers()}"
+                                     style="width: #{gateCheckManagedBean.countPercentageBoarded()}%">
+                                    <span>#{gateCheckManagedBean.countPercentageBoarded()}% Boarded</span>
+                                </div>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Passengers Boarded</th>
+                                    <th>Passengers Checked In</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <p class="text-center">#{gateCheckManagedBean.countBoardedPassengers()}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">#{gateCheckManagedBean.countCheckedInPassengers()}</p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <h:form>
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(flight, 4)}"
+                                               disabled="#{gateCheckManagedBean.flight.status != 3}"
+                                               styleClass="btn btn-warning btn-block #{(gateCheckManagedBean.flight.status != 3) ? 'disabled' : ''}">
+                                    <i class="fa fa-clock-o"/> Last Call
+                                </h:commandLink>
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(flight, 5)}"
+                                               onclick="return confirm('Are you sure you want to close the gate? This is irreversible.');"
+                                               disabled="#{gateCheckManagedBean.flight.status != 4}"
+                                               styleClass="btn btn-danger btn-block #{(gateCheckManagedBean.flight.status != 4) ? 'disabled' : ''}">
+                                    <i class="fa fa-times-circle-o"/> Close Gate
+                                </h:commandLink>
+                            </h:form>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </div>
+        </div> <!-- end container -->
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var passengerTableLoad = function() {
+                if (!$.fn.DataTable.isDataTable("#passenger_table")) {
+                    $('#passenger_table').DataTable({
+                        "stateSave": true
+                    });
+                }
+            };
+            passengerTableLoad();
+
+            var refreshOnEventListener = function() {
+                passengerTableLoad();
+            };
+
+            var refreshTrigger = $("[id='#{refreshTrigger.clientId}']");
+
+            //<![CDATA[
+
+            var wSocket = new WebSocket("ws://localhost:8080/InternalWeb_war_exploded/websocket/gateCheckUpdate");
+            wSocket.onmessage = function(event) {
+                refreshTrigger.click();
+                var data = $.parseJSON(event.data);
+                if (data.boarded) {
+                    showLiveNotice("<strong>Passenger Boarded: </strong>" + data.passenger);
+                }
+                if (data.checkedIn) {
+                    showLiveNotice("<strong>Passenger Checked In: </strong>" + data.passenger);
+                }
+            };
+
+            var liveNoticesEl = $('#liveNotices');
+            var showLiveNotice = function(message) {
+                var noticeEl = $('<div />');
+                noticeEl.addClass("alert");
+                noticeEl.addClass("alert-success");
+                noticeEl.addClass("animated");
+                noticeEl.addClass("fadeIn");
+                var noticeIconEl = $('<i />');
+                noticeIconEl.addClass("fa");
+                noticeIconEl.addClass("fa-check");
+                noticeIconEl.addClass("fa-fw");
+                var noticeMessageEl = $('<span />');
+                noticeMessageEl.html(message);
+                noticeEl.append(noticeIconEl);
+                noticeEl.append(noticeMessageEl);
+                liveNoticesEl.prepend(noticeEl);
+                setTimeout(function() {
+                    noticeEl.addClass("fadeOutDown");
+                    noticeEl.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                        console.log("X");
+                        noticeEl.css("display", "none");
+                    });
+                }, 5000);
+            };
+            //]]>
+
+        </script>
+    </ui:define>
+</ui:composition>

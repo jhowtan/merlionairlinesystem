@@ -1,0 +1,141 @@
+.boarding-pass {
+    width: 750px;
+    height: 300px;
+    position: relative;
+    font-family: "Lucida Console", Monaco, monospace;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-print-color-adjust: exact;
+}
+
+.boarding-pass .top {
+    height: 60px;
+    width: 100%;
+    background-color: #1e779c;
+    overflow: hidden;
+}
+
+.boarding-pass.gold .top {
+    background-color: #b18544;
+}
+
+.boarding-pass .top > .item > .label {
+    color: rgba(255, 255, 255, 0.8)
+}
+
+.boarding-pass .top > .item > .value {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.boarding-pass .bottom {
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #e7e8e9;
+    overflow: hidden;
+}
+
+.boarding-pass .bottom .barcode {
+    float: right;
+    margin-right: 10px;
+    opacity: 0.7;
+}
+
+.boarding-pass .bottom .barcode canvas {
+    height: 40px;
+    margin-top: 10px;
+}
+
+.boarding-pass .top > .item,
+.boarding-pass .bottom > .item {
+    float: left;
+    margin-top: 15px;
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
+.boarding-pass .top > .item ~ .item {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.boarding-pass .top > .logo {
+    background-image: url(../img/boarding-pass-logo.png);
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    width: 120px;
+    height: 100%;
+    float: left;
+}
+
+.boarding-pass > .main {
+    height: 100%;
+    width: 530px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.boarding-pass > .main > .content {
+    margin-left: 22px;
+    margin-top: 22px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    clear: both;
+}
+
+.boarding-pass > .main > .note {
+    padding: 20px;
+    font-size: 12px;
+    color: #999;
+    clear: both;
+}
+
+.boarding-pass > .main > .content .item {
+    float: left;
+    margin-right: 50px;
+}
+
+.boarding-pass > .side {
+    height: 100%;
+    width: 220px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 1px dashed #ccc;
+}
+
+.boarding-pass > .side > .content {
+    margin: 25px 10px 0px 10px;
+    clear: both;
+}
+
+.boarding-pass > .side > .content .item {
+    float: left;
+    margin-right: 30px;
+}
+
+.boarding-pass .item {
+    margin-bottom: 15px;
+}
+
+.boarding-pass .label {
+    text-transform: uppercase;
+    color: #888;
+    font-size: 11px;
+}
+
+.boarding-pass .value {
+    text-transform: uppercase;
+    color: #333;
+    font-size: 15px;
+    margin-top: 5px;
+}

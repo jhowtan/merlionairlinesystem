@@ -35,19 +35,21 @@
                                 </thead>
                                 <tbody>
                                     <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirport()}" var="flight">
-                                        <td>#{flight.code}</td>
-                                        <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", "Asia/Singapore", flight.departureTime)}</td>
-                                        <td>
-                                            <h:form>
-                                                <div class="btn-group">
-                                                    <h:commandLink action="#{departureControlManagedBean.setFlight(flight)}"
-                                                                   styleClass="btn btn-default btn-xs btn-primary">
-                                                        <i class="fa fa-users"></i> View Passengers
-                                                        <f:ajax render="flight-passengers" />
-                                                    </h:commandLink>
-                                                </div>
-                                            </h:form>
-                                        </td>
+                                        <tr>
+                                            <td>#{flight.code}</td>
+                                            <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", "Asia/Singapore", flight.departureTime)}</td>
+                                            <td>
+                                                <h:form>
+                                                    <div class="btn-group">
+                                                        <h:commandLink action="#{departureControlManagedBean.setFlight(flight)}"
+                                                                       styleClass="btn btn-default btn-xs btn-primary">
+                                                            <i class="fa fa-users"></i> View Passengers
+                                                            <f:ajax render="flight-passengers" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </h:form>
+                                            </td>
+                                        </tr>
                                     </ui:repeat>
                                 </tbody>
                             </table>
@@ -93,5 +95,13 @@
     </ui:define>
 
     <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#flight_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [2]}
+                ]
+            });
+        </script>
     </ui:define>
 </ui:composition>
