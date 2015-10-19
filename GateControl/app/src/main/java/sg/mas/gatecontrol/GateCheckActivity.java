@@ -64,7 +64,7 @@ public class GateCheckActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
-                URL url = new URL(Constants.REMOTE_API + "gateCheck.xhtml?eticket=" + URLEncoder.encode(mETicketNumber, "UTF-8"));
+                URL url = new URL(Utils.getRemoteApi(getApplicationContext()) + "gateCheck.xhtml?eticket=" + URLEncoder.encode(mETicketNumber, "UTF-8"));
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
 

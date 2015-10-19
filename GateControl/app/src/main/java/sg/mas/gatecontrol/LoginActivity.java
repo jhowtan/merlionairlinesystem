@@ -86,6 +86,12 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
+        if (username.equals("#sethost")) {
+            Intent intent = new Intent(this, SetHostActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         // Check for a valid password
         if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -173,9 +179,10 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
             HttpURLConnection httpURLConnection = null;
             try {
-                URL url = new URL(Constants.REMOTE_API + "auth.xhtml?username=" + URLEncoder.encode(mUsername, "UTF-8") + "&password=" + URLEncoder.encode(mPassword, "UTF-8"));
+                URL url = new URL(Utils.getRemoteApi(getApplicationContext()) + "auth.xhtml?username=" + URLEncoder.encode(mUsername, "UTF-8") + "&password=" + URLEncoder.encode(mPassword, "UTF-8"));
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(5000);
 
                 httpURLConnection.connect();
                 if(httpURLConnection.getResponseCode() == httpURLConnection.HTTP_OK) {
