@@ -34,7 +34,7 @@
                                                 <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.selectAirportsId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allAirports}" var="ap"
                                                                    itemLabel="#{ap.name}" itemValue="#{ap.id}" />
-                                                    <f:ajax event="change" render="hubSelection apSaveButtons" listener="#{scheduleDevManagedBean.selectAirportAjaxListener}" />
+                                                    <f:ajax event="change" render="hubSelection hubStrength apSaveButtons" listener="#{scheduleDevManagedBean.selectAirportAjaxListener}" />
                                                 </h:selectManyListbox>
                                             </div>
                                             <h:panelGroup id="hubSelection" layout="block">
@@ -44,7 +44,7 @@
                                                 </blockquote>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">Airport Names</span>
-                                                    <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.hubAirportsId}">
+                                                    <h:selectManyListbox styleClass="form-control" value="#{scheduleDevManagedBean.hubAirportsId}">
                                                         <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
                                                                        itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                                         <f:ajax event="change" render="hubStrength" listener="#{scheduleDevManagedBean.hubAirportAjaxListener}" />
@@ -92,6 +92,19 @@
                                     <blockquote>
                                         <p>Select which aircraft to consider in schedule development</p>
                                     </blockquote>
+
+                                    <div class="form-group form-group-lg">
+                                        <h:form>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Tail Numbers</span>
+                                            <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aicrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
+                                                <f:selectItems value="#{scheduleDevManagedBean.allAircrafts}" var="ac"
+                                                               itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                                <f:ajax event="change" render="" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
+                                            </h:selectManyListbox>
+                                        </div>
+                                        </h:form>
+                                    </div>
                                 </div>
                             </div>
                         </h:panelGroup>
