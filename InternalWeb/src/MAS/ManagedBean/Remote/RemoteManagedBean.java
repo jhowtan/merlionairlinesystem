@@ -7,6 +7,7 @@ import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import MAS.ManagedBean.DepartureControl.CheckInManagedBean;
+import MAS.WebSocket.WebSocketMessage;
 import com.google.gson.Gson;
 
 import javax.ejb.EJB;
@@ -84,6 +85,13 @@ public class RemoteManagedBean {
                 eticket.setGateChecked(true);
                 flightScheduleBean.updateETicket(eticket);
                 authManagedBean.createAuditLog("Processed passenger for boarding: " + eticket.getPassengerName(), "gate_check");
+
+
+                try {
+                    WebSocketMessage.broadcastToChannel("gateCheckUpdate", "{\"boarded\": true, \"passenger\": \"" + eticket.getPassengerName() + "\"}");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else {
                 passengerReturn.put("status", "error");

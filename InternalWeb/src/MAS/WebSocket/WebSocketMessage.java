@@ -17,6 +17,12 @@ public class WebSocketMessage {
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private static ConcurrentHashMap<String, Set<Session>> channels = new ConcurrentHashMap<>();
 
+    public static void broadcastToChannel(String channelId, String message) throws IOException {
+        for (Session peer : channels.get(channelId)) {
+            peer.getBasicRemote().sendText(message);
+        }
+    }
+
     @OnOpen
     public void onOpen(Session peer, @PathParam("channel-id") String channelId) throws IOException {
         if (channels.get(channelId) == null) {
