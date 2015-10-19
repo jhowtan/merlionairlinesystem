@@ -181,7 +181,7 @@
                         </h:panelGroup>
                     </h:panelGroup>
 
-                    <h:panelGroup class="panel panel-primary" id="dateEntry" layout="block" rendered="#{scheduleDevManagedBean.displayDate()}">
+                    <h:panelGroup class="panel panel-primary" id="dateEntryPanel" layout="block" rendered="#{scheduleDevManagedBean.displayDate()}">
                         <div class="panel-heading">
                             <i class="fa fa-user fa-fw"></i>
                             Start Time Entry
@@ -223,6 +223,23 @@
                                             </div>
                                         </h:form>
                                     </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup class="panel panel-primary" id="endPanel" layout="block" rendered="#{scheduleDevManagedBean.displayEnd()}">
+                        <div class="panel-heading">
+                            <i class="fa fa-user fa-fw"></i>
+                            End
+                        </div>
+
+                        <h:panelGroup class="panel-body" layout="block">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <blockquote>
+                                        <p>Success!</p>
+                                    </blockquote>
                                 </div>
                             </div>
                         </h:panelGroup>

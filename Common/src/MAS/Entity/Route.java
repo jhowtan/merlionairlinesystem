@@ -70,4 +70,8 @@ public class Route implements Comparable<Route>{
     public boolean equals(Object obj) {
         return obj instanceof Route && this.origin == ((Route)obj).getOrigin() && this.destination == ((Route)obj).getDestination();
     }
+
+    public boolean equalsReversed(Object obj) {
+        return obj instanceof Route && this.origin == ((Route)obj).getDestination() && this.destination == ((Route)obj).getOrigin();
+    }
 }

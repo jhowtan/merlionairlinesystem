@@ -164,6 +164,10 @@ public class scheduleDevManagedBean {
             }
             scheduleDevelopmentBean.addAircrafts(acIds, startingApIds);
             allRoutes = scheduleDevelopmentBean.processRoutes();
+            selectRoutesId = new ArrayList<>();
+            for (int i = 0; i < allRoutes.size(); i++) {
+                selectRoutesId.add(((Long)allRoutes.get(i).getId()).toString());
+            }
             step = 2;
         } catch (Exception e) {
             //Schedule development failed
@@ -172,7 +176,20 @@ public class scheduleDevManagedBean {
     }
 
     public void saveRoutes() {
-        step = 3;
+        try {
+            List<Route> acceptedRoutes = new ArrayList<>();
+            for (int i = 0; i < selectRoutesId.size(); i++) {
+                for (int j = 0; j < allRoutes.size(); j++) {
+                    if (allRoutes.get(j).getId() == Long.parseLong(selectRoutesId.get(i))) {
+                        acceptedRoutes.add(allRoutes.get(j));
+                    }
+                }
+            }
+            scheduleDevelopmentBean.updateRoutes(acceptedRoutes);
+            step = 3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean displayRt() {
@@ -187,7 +204,7 @@ public class scheduleDevManagedBean {
     public void saveDateTime() {
         start = Utils.addTimeToDate(startDate, startTime);
         try {
-            scheduleDevelopmentBean.testProcess(start, 40320);
+            scheduleDevelopmentBean.processFlights(start, 40320);
             step = 4;
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,6 +213,11 @@ public class scheduleDevManagedBean {
 
     public boolean displayDate(){
         if (step == 3) return true;
+        return false;
+    }
+
+    public boolean displayEnd() {
+        if (step == 4) return true;
         return false;
     }
 

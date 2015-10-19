@@ -716,11 +716,42 @@ public class ScheduleDevelopmentBean {
             generateRoutes();
             selectGoodRoutes();
             System.gc();
-            return suggestedRoutes;
+            List<Route> prunedRoundTrips = new ArrayList<>(suggestedRoutes);
+            for (int i = 0; i < prunedRoundTrips.size(); i++) {
+                for (int j = i; j < prunedRoundTrips.size(); j++) {
+                    if (prunedRoundTrips.get(i).equalsReversed(prunedRoundTrips.get(j))) {
+                        //Is a round trip of the other
+                        prunedRoundTrips.remove(j);
+                        j--;
+                    }
+                }
+            }
+            return prunedRoundTrips;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void updateRoutes(List<Route> routeList) {
+        suggestedRoutes = new ArrayList<>();
+        for (int i = 0; i < routeList.size(); i ++) {
+            Route route = routeList.get(i);
+            if (!suggestedRouteExists(route)) {
+                suggestedRoutes.add(route);
+            }
+            Route reverseRoute = reverseRoute(route);
+            if (!suggestedRouteExists(reverseRoute)) {
+                suggestedRoutes.add(reverseRoute);
+            }
+        }
+        saveSuggestedRoutes();
+    }
+
+    public int processFlights(Date startTime, int duration) throws Exception {
+        createFlightTimetable(duration);
+        saveSuggestedFlights(startTime);
+        return 0;
     }
 
     public void testProcess(Date startTime, int duration) {
