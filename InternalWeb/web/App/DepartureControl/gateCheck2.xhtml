@@ -7,6 +7,12 @@
     <ui:define name="title">Gate Control - Merlion Airline System</ui:define>
 
     <ui:define name="content">
+        <h:form>
+            <h:commandButton binding="#{refreshTrigger}">
+                <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
+                <f:ajax render="flight-passengers boarded-stats"/>
+            </h:commandButton>
+        </h:form>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -88,8 +94,8 @@
                                     <tr>
                                         <td>#{eticket.pnr.bookingReference}</td>
                                         <td>#{eticket.passengerName}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
-                                        <td>#{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
+                                        <td>#{commonManagedBean.random()} #{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Checked In' : 'Not Checked In'}</td>
+                                        <td>#{commonManagedBean.random()} #{eticket.gateChecked ? 'Boarded' : eticket.checkedIn ? 'Waiting to Board' : 'Not Checked In'}</td>
                                     </tr>
                                 </ui:repeat>
                                 </tbody>
@@ -120,7 +126,7 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <p class="text-center">#{gateCheckManagedBean.countBoardedPassengers()}</p>
+                                        <p class="text-center">#{commonManagedBean.random()} #{gateCheckManagedBean.countBoardedPassengers()}</p>
                                     </td>
                                     <td>
                                         <p class="text-center">#{gateCheckManagedBean.countCheckedInPassengers()}</p>
@@ -150,12 +156,17 @@
 
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#passenger_table').DataTable({
-                "stateSave": true,
-                "aoColumnDefs": [
-                    {'bSortable': false, 'bSearchable': false, 'aTargets': [4]}
-                ]
-            });
+            var passengerTableLoad = function() {
+                $('#passenger_table').DataTable({
+                    "stateSave": true
+                });
+            };
+            passengerTableLoad();
+            var refreshTrigger = $("[id='#{refreshTrigger.clientId}']");
+            setTimeout(function() {
+                refreshTrigger.click();
+                passengerTableLoad();
+            }, 500);
         </script>
     </ui:define>
 </ui:composition>
