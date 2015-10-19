@@ -12,7 +12,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ManagedBean
 @ViewScoped
@@ -34,10 +36,6 @@ public class scheduleDevManagedBean {
     @PostConstruct
     private void init() {
         setAllAirports(routeBean.getAllAirports());
-    }
-
-    public void selectedAirports() {
-        step = 1;
     }
 
     public void selectAirportAjaxListener(AjaxBehaviorEvent event) {
@@ -69,8 +67,19 @@ public class scheduleDevManagedBean {
         return false;
     }
 
-    public void saveAirports() {
+    public boolean displayAp(){
+        if (step == 0) return true;
+        return false;
+    }
 
+    public boolean displayAc(){
+        if (step == 1) return true;
+        return false;
+    }
+
+    public void saveAirports() {
+        //Save hub str
+        step = 1;
     }
 
     public List<Airport> getAllAirports() {
