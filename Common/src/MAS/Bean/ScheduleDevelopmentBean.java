@@ -694,7 +694,7 @@ public class ScheduleDevelopmentBean {
         System.out.println(result);
     }
 
-    public void testProcess() {
+    public void testProcess(Date startTime, int duration) {
         try {
             System.out.println("Processing:.....");
             generateRoutes();
@@ -705,10 +705,11 @@ public class ScheduleDevelopmentBean {
             System.out.println("Processing2:.....");
             generateTierList();
             System.out.println("Done:Create tier list");
-            createFlightTimetable(40320);
+            createFlightTimetable(duration);
             debugFlightState();
             System.out.println("Done:Create flight timetable");
-            saveSuggestedFlights(new Date());
+            System.out.print(startTime);
+            saveSuggestedFlights(startTime);
 
             System.gc();
         } catch (Exception e) {

@@ -48,9 +48,9 @@ public class CreateFlightManagedBean {
     }
 
     public void createFlight() throws NotFoundException {
-        Date departureDateTime = addTimeToDate(departureDate, departureTime);
+        Date departureDateTime = Utils.addTimeToDate(departureDate, departureTime);
         flightScheduleBean.createFlight(code,
-                addTimeToDate(departureDate, departureTime),
+                Utils.addTimeToDate(departureDate, departureTime),
                 Utils.minutesLater(departureDateTime, flightDuration), aaId, createBkClass);
         authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
         setCode(null);
@@ -88,21 +88,21 @@ public class CreateFlightManagedBean {
         }
     }
 
-    private Date addTimeToDate(Date date, String time) {
-        if (time.length() != 5)
-            return null;
-        try {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            String dateString = Integer.toString(cal.get(Calendar.YEAR)) + "-" +
-                    Integer.toString(cal.get(Calendar.MONTH)+1) + "-" +
-                    Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
-            return new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString + " " + time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    private Date addTimeToDate(Date date, String time) {
+//        if (time.length() != 5)
+//            return null;
+//        try {
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(date);
+//            String dateString = Integer.toString(cal.get(Calendar.YEAR)) + "-" +
+//                    Integer.toString(cal.get(Calendar.MONTH)+1) + "-" +
+//                    Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+//            return new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString + " " + time);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public void acTypeChangeListener(AjaxBehaviorEvent event) {
         try {

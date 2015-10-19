@@ -3,6 +3,7 @@ package MAS.ManagedBean.ScheduleDev;
 import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
 import MAS.Bean.ScheduleDevelopmentBean;
+import MAS.Common.Utils;
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
@@ -15,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.lang.model.type.NoType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean
@@ -40,6 +42,10 @@ public class scheduleDevManagedBean {
     private List<Aircraft> selectAircrafts;
     private String[] acLocInputs;
     private List<Airport> acLocations;
+
+    private Date startDate;
+    private String startTime;
+    private Date start;
     private int step = 0;
 
     @PostConstruct
@@ -93,7 +99,21 @@ public class scheduleDevManagedBean {
         for (int i = 0; i < hubStrInputs.length; i++) {
             hubStrengths.add(Double.parseDouble(hubStrInputs[i]));
         }
-        step = 1;
+        try {
+            List<String> apIds = new ArrayList<>();
+            for (int i = 0; i < selectAirports.size(); i++) {
+                apIds.add(selectAirports.get(i).getId());
+            }
+            List<String> hubIds = new ArrayList<>();
+            for (int i = 0; i < hubAirports.size(); i++) {
+                hubIds.add(hubAirports.get(i).getId());
+            }
+            scheduleDevelopmentBean.addAirports(apIds);
+            scheduleDevelopmentBean.addHubs(hubIds, hubStrengths);
+            step = 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean displayAc(){
@@ -131,30 +151,34 @@ public class scheduleDevManagedBean {
             }
         }
 
-        List<String> apIds = new ArrayList<>();
-        for (int i = 0; i < selectAirports.size(); i++) {
-            apIds.add(selectAirports.get(i).getId());
-        }
-        List<Long> acIds = new ArrayList<>();
-        List<String> startingApIds = new ArrayList<>();
-        for (int i = 0; i < selectAircrafts.size(); i++) {
-            acIds.add(selectAircrafts.get(i).getId());
-            startingApIds.add(acLocations.get(i).getId());
-        }
-        List<String> hubIds = new ArrayList<>();
-        for (int i = 0; i < hubAirports.size(); i++) {
-            hubIds.add(hubAirports.get(i).getId());
-        }
         try {
-            scheduleDevelopmentBean.addAirports(apIds);
+            List<Long> acIds = new ArrayList<>();
+            List<String> startingApIds = new ArrayList<>();
+            for (int i = 0; i < selectAircrafts.size(); i++) {
+                acIds.add(selectAircrafts.get(i).getId());
+                startingApIds.add(acLocations.get(i).getId());
+            }
             scheduleDevelopmentBean.addAircrafts(acIds, startingApIds);
-            scheduleDevelopmentBean.addHubs(hubIds, hubStrengths);
-            scheduleDevelopmentBean.testProcess();
+            step = 2;
         } catch (Exception e) {
             //Schedule development failed
             e.printStackTrace();
         }
-        step = 2;
+    }
+
+    public void saveDateTime() {
+        start = Utils.addTimeToDate(startDate, startTime);
+        try {
+            scheduleDevelopmentBean.testProcess(start, 40320);
+            step = 3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean displayDate(){
+        if (step == 2) return true;
+        return false;
     }
 
     public List<Airport> getAllAirports() {
@@ -243,5 +267,21 @@ public class scheduleDevManagedBean {
 
     public void setAcLocInputs(String[] acLocInputs) {
         this.acLocInputs = acLocInputs;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }

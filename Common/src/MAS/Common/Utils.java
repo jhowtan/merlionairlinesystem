@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -49,6 +50,22 @@ public class Utils {
             diff--;
         }
         return diff;
+    }
+
+    public static Date addTimeToDate(Date date, String time) {
+        if (time.length() != 5)
+            return null;
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            String dateString = Integer.toString(cal.get(Calendar.YEAR)) + "-" +
+                    Integer.toString(cal.get(Calendar.MONTH)+1) + "-" +
+                    Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateString + " " + time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Calendar getCalendar(Date date) {
