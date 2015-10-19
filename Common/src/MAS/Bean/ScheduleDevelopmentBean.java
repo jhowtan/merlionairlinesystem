@@ -539,7 +539,18 @@ public class ScheduleDevelopmentBean {
 
     public void saveSuggestedRoutes() {
         for (int i = 0; i < suggestedRoutes.size(); i++) {
-            em.persist(suggestedRoutes.get(i)); //@TODO: check whether route exists, and update suggroutes
+            Route route = suggestedRoutes.get(i);
+            try {
+                route = routeBean.findRouteByOriginAndDestination(route.getOrigin().getId(), route.getDestination().getId());
+                suggestedRoutes.set(i, route);
+            } catch (Exception e) {
+                try {
+                    route = routeBean.getRoute( routeBean.createRoute(route.getOrigin().getId(), route.getDestination().getId()) );
+                    suggestedRoutes.set(i, route);
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
+            }
         }
         em.flush();
     }
