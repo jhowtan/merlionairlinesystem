@@ -8,6 +8,7 @@ import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
+import MAS.ManagedBean.CommonManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -21,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class scheduleDevManagedBean {
     @EJB
     ScheduleDevelopmentBean scheduleDevelopmentBean;
@@ -179,10 +180,12 @@ public class scheduleDevManagedBean {
         try {
             List<Route> acceptedRoutes = new ArrayList<>();
             for (int i = 0; i < selectRoutesId.size(); i++) {
+                String originId = selectRoutesId.get(i).split("\\s+")[0];
+                String destinationId = selectRoutesId.get(i).split("\\s+")[1];
                 for (int j = 0; j < allRoutes.size(); j++) {
-                    if (allRoutes.get(j).getId() == Long.parseLong(selectRoutesId.get(i))) {
-                        acceptedRoutes.add(allRoutes.get(j));
-                    }
+                    if (allRoutes.get(j).getOrigin().getId().equals(originId))
+                        if (allRoutes.get(j).getDestination().getId().equals(destinationId))
+                            acceptedRoutes.add(allRoutes.get(j));
                 }
             }
             scheduleDevelopmentBean.updateRoutes(acceptedRoutes);

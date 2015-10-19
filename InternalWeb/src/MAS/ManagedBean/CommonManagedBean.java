@@ -53,7 +53,7 @@ public class CommonManagedBean {
         }
     }
 
-    public String formatRoute(Route route) {
+    public static String formatRoute(Route route) {
         return route.getOrigin().getId() + " - " + route.getDestination().getId();
     }
 

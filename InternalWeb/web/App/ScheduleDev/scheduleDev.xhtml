@@ -160,7 +160,7 @@
                                                 <span class="input-group-addon">Routes</span>
                                                 <h:selectManyListbox id="routes" styleClass="form-control"  required="true" requiredMessage="Routes are required" value="#{scheduleDevManagedBean.selectRoutesId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allRoutes}" var="rt"
-                                                                   itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.id}" />
+                                                                   itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.origin.id.concat(' '.concat(rt.destination.id))}" />
                                                 </h:selectManyListbox>
                                             </div>
                                             <h:message for="routes" styleClass="help-block" />
@@ -169,7 +169,7 @@
                                                     <br/>
                                                     <div class="col-lg-12 text-right">
                                                         <div class="btn-group">
-                                                            <h:commandButton action="#{scheduleDevManagedBean.saveRoutes()}" value="Next - Starting Time And Date" styleClass="btn btn-success"/>
+                                                            <h:commandButton action="#{scheduleDevManagedBean.saveRoutes()}" value="Next - Time" styleClass="btn btn-success"/>
                                                         </div>
                                                     </div>
                                                 </h:panelGroup>
@@ -218,7 +218,7 @@
                                             <br/>
                                             <div class="col-lg-12 text-right">
                                                 <div class="btn-group">
-                                                    <h:commandButton action="#{scheduleDevManagedBean.saveDateTime()}" value="Next - Routes" styleClass="btn btn-success"/>
+                                                    <h:commandButton action="#{scheduleDevManagedBean.saveDateTime()}" value="Next - Create Flight Schedule" styleClass="btn btn-success"/>
                                                 </div>
                                             </div>
                                         </h:form>

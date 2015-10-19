@@ -457,7 +457,6 @@ public class ScheduleDevelopmentBean {
             timeAfterZero += ta.lastTime; //This amount of time has past
             for (int i = 0; i < landingAircrafts.size(); i++) {
                 HypoAircraft landingAc = landingAircrafts.get(i);
-                //System.out.println("Landing: " + landingAc.aircraft.getTailNumber() +  " @ " + landingAc.location.getName() + " from " + landingAc.prevLocation.getName());
                 if (landingAc.location != landingAc.prevLocation) {
                     shiftRoute(landingAc);
                     if (landingAc.reqMaint) {
