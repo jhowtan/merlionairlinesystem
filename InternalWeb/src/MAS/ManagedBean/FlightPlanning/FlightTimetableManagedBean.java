@@ -4,9 +4,12 @@ import MAS.Bean.AircraftMaintenanceSlotBean;
 import MAS.Bean.FleetBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Entity.Aircraft;
+import MAS.Entity.AircraftMaintenanceSlot;
+import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -17,6 +20,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,9 +73,64 @@ public class FlightTimetableManagedBean {
         public String label;
     }
 
-    public void search() {
+    private class CalendarEntry {
+        public String title;
+        public Date start;
+        public Date end;
+        public ArrayList<String> className;
+        public String info;
+    }
+
+    public void getAircraftTimetable() {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String query = params.get("q");
+        try {
+            long aircraftId = Long.parseLong(params.get("aircraftId"));
+
+            // @TODO: do stuff
+
+            List<Flight> resultFlights = flightScheduleBean.getAllFlights();
+            List<AircraftMaintenanceSlot> resultMaint;
+
+            ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
+
+            for (Flight f : resultFlights) {
+                CalendarEntry c = new CalendarEntry();
+                c.title = f.getCode();
+                c.start = f.getDepartureTime();
+                c.end = f.getArrivalTime();
+                c.className = new ArrayList<>();
+                c.className.add("b-success");
+                // @TODO
+                c.className.add("another-class-here-replace-this");
+                c.info = "origin dest replace this";
+                calendarEntries.add(c);
+            }
+
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+            String json = gson.toJson(calendarEntries);
+
+            if(!authManagedBean.isAuthenticated()) {
+                json = "[]";
+            }
+
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
+            response.setContentLength(json.length());
+            response.setContentType("application/json");
+
+            try {
+                response.getOutputStream().write(json.getBytes());
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ctx.responseComplete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        List<User> users = userBean.searchForUser(query);
 //        List<Workgroup> workgroups = workgroupBean.searchForWorkgroup(query);
@@ -91,28 +150,8 @@ public class FlightTimetableManagedBean {
 //            r.value = "workgroup:" + workgroup.getId() + ":" + r.label;
 //            searchResults.add(r);
 //        }
+        //{title:'Family', start: new Date(y, m, 9, 19, 30), end: new Date(y, m, 9, 20, 30), className: ['b-l b-2x b-success'], info:'Family party'}
 
-        Gson gson = new Gson();
-        String json = gson.toJson(null);//searchResults);
-
-        if(!authManagedBean.isAuthenticated()) {
-            json = "[]";
-        }
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
-        response.setContentLength(json.length());
-        response.setContentType("application/json");
-
-        try {
-            response.getOutputStream().write(json.getBytes());
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ctx.responseComplete();
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
