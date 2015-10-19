@@ -111,7 +111,14 @@ a:hover .caret-white {
 }
 
 .progress {
-  background-color: #edf1f2;
+  background-color: #b1b2b3;
+  position: relative;
+}
+
+.progress span {
+  position: absolute;
+  display: block;
+  width: 100%;
 }
 
 .progress-xxs {

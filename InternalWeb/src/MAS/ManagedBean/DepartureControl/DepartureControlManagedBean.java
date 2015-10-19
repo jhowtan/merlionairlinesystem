@@ -102,6 +102,13 @@ public class DepartureControlManagedBean {
         return count;
     }
 
+    public double countPercentageBoarded() {
+        if (countCheckedInPassengers() != 0) {
+            return (double) countBoardedPassengers() / countCheckedInPassengers() * 100;
+        }
+        return 0;
+    }
+
     public void removeBaggageForPassenger(ETicket eticket) {
         //@TODO: Decide how we want to remove baggages
     }
