@@ -1,6 +1,7 @@
 package MAS.Structure;
 
 import MAS.Common.Permissions;
+import MAS.Entity.Permission;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
@@ -60,6 +61,8 @@ public class Pages {
     public static final Page LIST_MAINTENANCE_SLOTS = new Page("/App/FlightPlanning/maintenanceSlots", Permissions.MANAGE_FLIGHT);
     public static final Page CREATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/createMaintenanceSlot", Permissions.MANAGE_FLIGHT);
     public static final Page UPDATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/updateMaintenanceSlot", Permissions.MANAGE_FLIGHT);
+
+    public static final Page FLIGHT_TIMETABLE = new Page("/App/FlightPlanning/flightTimetable", Permissions.MANAGE_FLIGHT);
 
     // Airline Planning System: Schedule Development Pages
     public static final Page SCHEDULE_DEVELOPMENT = new Page("/App/ScheduleDev/scheduleDev", Permissions.MANAGE_AIRCRAFT_SCHEDULE);
