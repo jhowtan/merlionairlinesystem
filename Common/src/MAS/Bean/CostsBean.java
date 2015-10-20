@@ -6,7 +6,6 @@ import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ScheduleDev.HypoAircraft;
-import MAS.ScheduleDev.HypoAircraftAssignment;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

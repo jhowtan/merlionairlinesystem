@@ -73,10 +73,6 @@ public class ScheduleDevelopmentBean {
         routeOutputTable = new ArrayList<>();
     }
 
-    public void reset() {
-        //STUB
-    }
-
     public void addAircrafts(List<Long> acIds, List<String> apIds) throws NotFoundException {
         if (acIds.size() != apIds.size()) throw new NotFoundException("Aircraft and airport list must be same length!");
         int l = acIds.size();
@@ -218,7 +214,7 @@ public class ScheduleDevelopmentBean {
             //System.out.println("Setting: NONE");
             if (isHub(origin)) {
                 if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub))) {
-                    routeOutput[1] = "Destination is a near a hub, routing not required.";
+                    routeOutput[1] = "Destination is a nearer to another hub, routing not required.";
                     routeOutput[2] = "None";
                     routeOutputTable.add(routeOutput);
                     return null;
@@ -425,7 +421,13 @@ public class ScheduleDevelopmentBean {
                                 //Plane needs maint, but can't find hub nearby -> fly till you get there
                             }
                         } else {
-                            ta.maintenance(aircraft, acMaintTime, currentAirport, timeAfterZero, true);
+                            List<HypoTransit> acUnderMaint = ta.maintAtAirport(currentAirport);
+                            if (acUnderMaint.size() < currentAirport.getHangars()) {
+                                ta.maintenance(aircraft, acMaintTime, currentAirport, timeAfterZero, true);
+                            } else {
+                                //Get plane with lowest time left for maint
+                                ta.maintenance(aircraft, ta.getShortestTimeLeft(acUnderMaint), currentAirport, timeAfterZero, false);
+                            }
                         }
                     }
                     Route routeOut = routesHere.get(0);
@@ -461,9 +463,15 @@ public class ScheduleDevelopmentBean {
                 if (landingAc.location != landingAc.prevLocation) {
                     shiftRoute(landingAc);
                     if (landingAc.reqMaint) {
-                        //@TODO: Check if hangar here & free space
-                        if (isHub(landingAc.location))
-                            ta.maintenance(landingAc, acMaintTime, landingAc.location, timeAfterZero, true);
+                        if (isHub(landingAc.location)) {
+                            List<HypoTransit> acUnderMaint = ta.maintAtAirport(landingAc.location);
+                            if (acUnderMaint.size() < landingAc.location.getHangars()) {
+                                ta.maintenance(landingAc, acMaintTime, landingAc.location, timeAfterZero, true);
+                            } else {
+                                //Get plane with lowest time left for maint
+                                ta.maintenance(landingAc, ta.getShortestTimeLeft(acUnderMaint), landingAc.location, timeAfterZero, false);
+                            }
+                        }
                         else
                             ta.maintenance(landingAc, acRestTime, landingAc.location, timeAfterZero, false);
                     } else {

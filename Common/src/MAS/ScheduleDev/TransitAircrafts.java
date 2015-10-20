@@ -108,6 +108,27 @@ public class TransitAircrafts extends ScheduleDevelopmentClass {
         return result;
     }
 
+    public List<HypoTransit> maintAtAirport (Airport airport) {
+        List<HypoTransit> result = new ArrayList<>();
+        for (int i = 0; i < aircraftsInTransits.size(); i++) {
+            if (aircraftsInTransits.get(i).underMaint) {
+                if (aircraftsInTransits.get(i).hypoAircraft.location.equals(airport))
+                    result.add(aircraftsInTransits.get(i));
+            }
+        }
+        return result;
+    }
+
+    public double getShortestTimeLeft(List<HypoTransit> transitList) {
+        double shortest = Double.MAX_VALUE;
+        for (int i = 0; i < transitList.size(); i++) {
+            if (transitList.get(i).timeLeft < shortest) {
+                shortest = transitList.get(i).timeLeft;
+            }
+        }
+        return shortest;
+    }
+
     public String toString() {
         String result = "";
         for (int i = 0; i < aircraftsInTransits.size(); i++) {
