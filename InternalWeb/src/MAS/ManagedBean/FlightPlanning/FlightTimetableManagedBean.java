@@ -37,7 +37,8 @@ public class FlightTimetableManagedBean {
     private AuthManagedBean authManagedBean;
 
     private List<Aircraft> aircrafts;
-    private long aircraftId;
+    private List<String> aircraftIdInputs;
+    private String aircraftIds;
     private Aircraft aircraft;
 
     @PostConstruct
@@ -45,33 +46,19 @@ public class FlightTimetableManagedBean {
         aircrafts = fleetBean.getAllAircraft();
     }
 
-    public long getAircraftId() {
-        return aircraftId;
-    }
-
-    public void setAircraftId(long aircraftId) {
-        this.aircraftId = aircraftId;
-    }
-
-    public void selectAircraft() {
-        try {
-            aircraft = fleetBean.getAircraft(aircraftId);
-        } catch (NotFoundException e) {
-            //No aircraft
+    public void saveAircraft() {
+        aircraftIds = "";
+        for (int i = 0; i < aircraftIdInputs.size(); i++) {
+            aircraftIds = aircraftIds.concat(aircraftIdInputs.get(i)).concat("-");
         }
     }
 
-    public Aircraft getAircraft() {
-        return aircraft;
+    public String getAircraftIds() {
+        return aircraftIds;
     }
 
-    public void setAircraft(Aircraft aircraft) {
-        this.aircraft = aircraft;
-    }
-
-    private class SearchResult {
-        public String value;
-        public String label;
+    public void setAircraftIds(String aircraftIds) {
+        this.aircraftIds = aircraftIds;
     }
 
     public class CalendarData {
@@ -172,7 +159,22 @@ public class FlightTimetableManagedBean {
         } catch (Exception e) {
             //e.printStackTrace();
         }
+    }
 
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
+
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
+    }
+
+    public List<String> getAircraftIdInputs() {
+        return aircraftIdInputs;
+    }
+
+    public void setAircraftIdInputs(List<String> aircraftIdInputs) {
+        this.aircraftIdInputs = aircraftIdInputs;
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

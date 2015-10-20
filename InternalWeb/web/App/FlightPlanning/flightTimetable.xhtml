@@ -13,20 +13,22 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Aircraft Timetable</h1>
                     <div class="form-group col-lg-12">
-                        <label class="control-label" for="aircraft">Select Aircraft</label>
-                        <br/>
-                            <h:selectOneMenu styleClass="form-control"
-                                             id="aircraft" value="#{flightTimetableManagedBean.aircraftId}">
-                                <f:selectItem itemLabel="---"/>
-                                <f:selectItems value="#{flightTimetableManagedBean.aircrafts}" var="ac"
-                                               itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
-                            </h:selectOneMenu>
-                            <h:message for="aircraft" styleClass="help-block" />
-
-                            <div class="btn-group">
-                                <br/>
-                                <p><h:commandButton action="#{flightTimetableManagedBean.selectAircraft()}" value="Select Aircraft" styleClass="btn btn-success"/></p>
+                        <label class="control-label">Select Aircraft</label>
+                        <h:form>
+                            <div class="input-group">
+                                <span class="input-group-addon">Tail Numbers</span>
+                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{flightTimetableManagedBean.aircraftIdInputs}">
+                                    <f:selectItems value="#{flightTimetableManagedBean.aircrafts}" var="ac"
+                                                   itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                </h:selectManyListbox>
                             </div>
+                            <br/>
+                            <div class="col-lg-12">
+                                <div class="btn-group">
+                                    <h:commandButton action="#{flightTimetableManagedBean.saveAircraft()}" value="Select Aircraft" styleClass="btn btn-success"/>
+                                </div>
+                            </div>
+                        </h:form>
                     </div>
                 </div>
                 <h:panelGroup id="acTimetable">
@@ -50,7 +52,7 @@
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $.get("getAircraftTimetable.xhtml?aircraftIds=#{flightTimetableManagedBean.aircraftId}", function(data) {
+            $.get("getAircraftTimetable.xhtml?aircraftIds=#{flightTimetableManagedBean.aircraftIds}", function(data) {
                 $(document).ready(function() {
                     $('#calendar').fullCalendar({
                         //height: 420,
@@ -60,7 +62,7 @@
                         header: {
                             left: 'prev,next, today',
                             center: 'title',
-                            right: 'timelineMonth,timelineWeek'
+                            right: 'timelineWeek,timelineMonth,timelineYear'
                         },
                         buttonText: {
                             next: 'Next',
@@ -75,13 +77,12 @@
                         resourceAreaWidth: "10%",
                         defaultView: 'timelineMonth',
                         allDaySlot: false,
-                        slotDuration: '01:00:00',
-                        theme: true,
                         eventAfterRender: function(event, element, view) {
                             $(element).tooltip({
                                 title: event.info + ": " + event.title,
                                 trigger: 'hover',
-                                placement: 'bottom'
+                                placement: 'bottom',
+                                container: 'body'
                             });
                         },
                         eventResourceField: 'aircraftId',
