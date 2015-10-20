@@ -6,6 +6,7 @@ import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ScheduleDev.HypoAircraft;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -176,6 +177,33 @@ public class CostsBean {
         result += annualAll;
         result += totalSalary;
         return result;
+    }
+
+    public double calculateCostPerSeat(long flightId) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw  new NotFoundException();
+        double totalCost = calculateCostPerFlight(flightId);
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        double costPerSeat = totalCost/(seatConfigObject.getTotalSeats() * Constants.OPERATIONAL_OCCUPANCY);
+        costPerSeat *= Constants.PROFIT_MARGIN;
+        return costPerSeat;
+    }
+
+    public int getSeatTraffic(int totalSeats, double basePrice, double price) {
+        NormalDistribution normalDistb = new NormalDistribution(0.5, attributesBean.getDoubleAttribute(Constants.DEMAND_STDEV, 0.20));
+        double Z = price / (basePrice * 2);
+        double prob = 1 - normalDistb.cumulativeProbability(Z);
+        return (int) (prob * totalSeats);
+    }
+
+    public int getSeatAllocation(long flightId, int travelClass, double basePrice, double price) throws NotFoundException{
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        int totalSeats = seatConfigObject.getSeatsInClass(travelClass);
+        return totalSeats - getSeatTraffic(totalSeats, basePrice, price);
     }
 
     private double calculateFuelCost(Aircraft aircraft, double distanceTraveled) {

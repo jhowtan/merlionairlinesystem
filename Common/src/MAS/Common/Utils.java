@@ -129,4 +129,16 @@ public class Utils {
         return Long.parseLong(BookingReferenceString, 36);
     }
 
+    public static double makeNiceMoney(double amount) {
+        //Round up or down
+        double round = amount % 10;
+        amount = ((int)amount/10) * 10;
+        if (round >= 5) {
+            amount += 9.99;
+        } else {
+            amount -= 0.01;
+        }
+        return amount;
+    }
+
 }

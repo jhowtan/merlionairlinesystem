@@ -1,9 +1,12 @@
 package MAS.ManagedBean.PriceManagement;
 
 import MAS.Bean.BookingClassBean;
+import MAS.Bean.CostsBean;
 import MAS.Bean.FareRuleBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Common.Cabin;
+import MAS.Common.Constants;
+import MAS.Common.Utils;
 import MAS.Entity.FareRule;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
@@ -14,12 +17,14 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import java.util.Arrays;
 import java.util.List;
 
 @ManagedBean
+@ViewScoped
 public class CreateBookingClassManagedBean {
     @EJB
     BookingClassBean bookingClassBean;
@@ -27,6 +32,8 @@ public class CreateBookingClassManagedBean {
     FlightScheduleBean flightScheduleBean;
     @EJB
     FareRuleBean fareRuleBean;
+    @EJB
+    CostsBean costsBean;
 
     private List<Flight> flights;
     private List<FareRule> fareRules;
@@ -44,6 +51,10 @@ public class CreateBookingClassManagedBean {
     private int travelClass;
     private boolean openStatus;
     private double price;
+
+    private double cps;
+    private double fareMul;
+    private double classMul;
 
     public CreateBookingClassManagedBean() {
         resetFields();
@@ -64,20 +75,6 @@ public class CreateBookingClassManagedBean {
 
     public void createBookingClass() {
         try {
-            /*SeatConfigObject seatConfigObject = new SeatConfigObject();
-            seatConfigObject.parse(flightScheduleBean.findSeatConfigOfFlight(flightId));
-            int totalSeats = seatConfigObject.getSeatsInClass(travelClass);
-            List<BookingClass> sameFlightAndClass = bookingClassBean.findBookingClassByFlightAndClass(flightId, travelClass);
-            int allocatedSeats = 0;
-            for (int i = 0;i < sameFlightAndClass.size(); i++) {
-                allocatedSeats += sameFlightAndClass.get(i).getAllocation();
-            }
-            if (allocatedSeats + allocation > totalSeats) {
-                FacesMessage m = new FacesMessage("There are too many seats allocated to this travel class of the flight.");
-                m.setSeverity(FacesMessage.SEVERITY_INFO);
-                FacesContext.getCurrentInstance().addMessage("status", m);
-                return;
-            }*/
             bookingClassBean.createBookingClass(name, allocation, getTravelClass(), fareRuleId, flightId, getPrice());
 
             getAuthManagedBean().createAuditLog("Created new booking class: " + getName(), "create_booking_class");
@@ -92,8 +89,43 @@ public class CreateBookingClassManagedBean {
         }
     }
 
-    public void fareRuleChangeListener(AjaxBehaviorEvent event) throws NotFoundException {
-        fareRule = fareRuleBean.getFareRule(fareRuleId);
+    public void fareRuleChangeListener(AjaxBehaviorEvent event) {
+        try {
+            fareRule = fareRuleBean.getFareRule(fareRuleId);
+            fareMul = fareRule.getPriceMul();
+            recalculateSuggPrice();
+        } catch (NotFoundException e) {
+            fareRule = null;
+        }
+    }
+
+    public void flightCodeChangeListener(AjaxBehaviorEvent event) {
+        try {
+            cps = costsBean.calculateCostPerSeat(flightId);
+            recalculateSuggPrice();
+        } catch (NotFoundException e) {
+            //Cannot find flight
+        }
+    }
+
+    public void travelClassChangeListener(AjaxBehaviorEvent event) {
+        recalculateSuggPrice();
+    }
+
+    public void priceChangeListener(AjaxBehaviorEvent event) {
+        double baseprice = cps * classMul;
+        try {
+            allocation = costsBean.getSeatAllocation(flightId, travelClass, baseprice, price);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            allocation = 0;
+        }
+    }
+
+    public void recalculateSuggPrice() {
+        classMul = Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[travelClass];
+        price = Utils.makeNiceMoney(cps * classMul * fareMul);
+        if (price < 0) price = 0;
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
