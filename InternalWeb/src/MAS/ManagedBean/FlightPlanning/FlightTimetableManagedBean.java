@@ -74,6 +74,11 @@ public class FlightTimetableManagedBean {
         public String label;
     }
 
+    public class CalendarData {
+        public List<CalendarEntry> entries;
+        public List<CalendarResource> resources;
+    }
+
     private class CalendarEntry {
         public String title;
         public Date start;
@@ -81,46 +86,69 @@ public class FlightTimetableManagedBean {
         public ArrayList<String> className;
         public String info;
         public String color;
+        public String aircraftId;
+    }
+
+    private class CalendarResource {
+        public String id;
+        public String tailNumber;
     }
 
     public void getAircraftTimetable() {
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         try {
-            long aircraftId = Long.parseLong(params.get("aircraftId"));
-            List<Flight> resultFlights = flightScheduleBean.getFlightOfAc(aircraftId);
-            List<AircraftMaintenanceSlot> resultMaint = aircraftMaintenanceSlotBean.findSlotByAircraft(aircraftId);
+            String[] aircraftIdsString = params.get("aircraftIds").split("-");
 
             ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
+            ArrayList<CalendarResource> calendarResources = new ArrayList<>();
+            for (String aircraftIdString : aircraftIdsString) {
+                long aircraftId = Long.parseLong(aircraftIdString);
 
-            for (Flight f : resultFlights) {
-                CalendarEntry c = new CalendarEntry();
-                c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
-                        f.getAircraftAssignment().getRoute().getDestination().getId();
-                c.start = f.getDepartureTime();
-                c.end = f.getArrivalTime();
-                //c.color = "#378006";
-                c.className = new ArrayList<>();
-                //c.className.add("b-success");
-                //c.className.add("b-info");
-                c.className.add("calendar-blue-event");
-                c.info = f.getCode();
-                calendarEntries.add(c);
+                Aircraft ac = fleetBean.getAircraft(aircraftId);
+                CalendarResource cr = new CalendarResource();
+                cr.id = aircraftIdString;
+                cr.tailNumber = ac.getTailNumber();
+                calendarResources.add(cr);
+
+                List<Flight> resultFlights = flightScheduleBean.getFlightOfAc(aircraftId);
+                List<AircraftMaintenanceSlot> resultMaint = aircraftMaintenanceSlotBean.findSlotByAircraft(aircraftId);
+
+                for (Flight f : resultFlights) {
+                    CalendarEntry c = new CalendarEntry();
+                    c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
+                            f.getAircraftAssignment().getRoute().getDestination().getId();
+                    c.start = f.getDepartureTime();
+                    c.end = f.getArrivalTime();
+                    //c.color = "#378006";
+                    c.className = new ArrayList<>();
+                    //c.className.add("b-success");
+                    //c.className.add("b-info");
+                    c.className.add("calendar-blue-event");
+                    c.info = f.getCode();
+                    c.aircraftId = String.valueOf(aircraftId);
+                    calendarEntries.add(c);
+                }
+
+                for (AircraftMaintenanceSlot m : resultMaint) {
+                    CalendarEntry c = new CalendarEntry();
+                    c.title = m.getAirport().getId();
+                    c.start = m.getStartTime();
+                    c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
+                    c.className = new ArrayList<>();
+                    //c.className.add("b-warning");
+                    //c.className.add("b-info");
+                    c.className.add("calendar-red-event");
+                    c.aircraftId = String.valueOf(aircraftId);
+                    calendarEntries.add(c);
+                }
             }
 
-            for (AircraftMaintenanceSlot m : resultMaint) {
-                CalendarEntry c = new CalendarEntry();
-                c.title = m.getAirport().getId();
-                c.start = m.getStartTime();
-                c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
-                c.className = new ArrayList<>();
-                //c.className.add("b-warning");
-                //c.className.add("b-info");
-                c.className.add("calendar-red-event");
-                calendarEntries.add(c);
-            }
+            CalendarData cd = new CalendarData();
+            cd.entries = calendarEntries;
+            cd.resources = calendarResources;
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-            String json = gson.toJson(calendarEntries);
+            String json = gson.toJson(cd);
 
             if(!authManagedBean.isAuthenticated()) {
                 json = "[]";

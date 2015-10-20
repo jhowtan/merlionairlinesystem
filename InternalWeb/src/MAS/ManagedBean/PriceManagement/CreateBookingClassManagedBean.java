@@ -52,7 +52,7 @@ public class CreateBookingClassManagedBean {
     private boolean openStatus;
     private double price;
 
-    private double cps;
+    private double costPerSeat;
     private double fareMul;
     private double classMul;
 
@@ -101,7 +101,7 @@ public class CreateBookingClassManagedBean {
 
     public void flightCodeChangeListener(AjaxBehaviorEvent event) {
         try {
-            cps = costsBean.calculateCostPerSeat(flightId);
+            costPerSeat = costsBean.calculateCostPerSeat(flightId);
             recalculateSuggPrice();
         } catch (NotFoundException e) {
             //Cannot find flight
@@ -113,7 +113,7 @@ public class CreateBookingClassManagedBean {
     }
 
     public void priceChangeListener(AjaxBehaviorEvent event) {
-        double baseprice = cps * classMul;
+        double baseprice = costPerSeat * classMul;
         try {
             allocation = costsBean.getSeatAllocation(flightId, travelClass, baseprice, price);
         } catch (NotFoundException e) {
@@ -124,7 +124,7 @@ public class CreateBookingClassManagedBean {
 
     public void recalculateSuggPrice() {
         classMul = Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[travelClass];
-        price = Utils.makeNiceMoney(cps * classMul * fareMul);
+        price = Utils.makeNiceMoney(costPerSeat * classMul * fareMul);
         if (price < 0) price = 0;
     }
 

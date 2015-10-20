@@ -50,25 +50,43 @@
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $.get("getAircraftTimetable.xhtml?aircraftId=#{flightTimetableManagedBean.aircraftId}", function(data) {
+            $.get("getAircraftTimetable.xhtml?aircraftIds=#{flightTimetableManagedBean.aircraftId}", function(data) {
                 $(document).ready(function() {
                     $('#calendar').fullCalendar({
                         //height: 420,
+                        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                         aspectRatio: 1.35,
                         editable: false,
                         header: {
                             left: 'prev,next, today',
                             center: 'title',
-                            right: 'month,agendaWeek'
+                            right: 'timelineMonth,timelineWeek'
                         },
                         buttonText: {
                             next: 'Next',
                             prev: 'Prev'
                         },
+                        resourceColumns: [
+                            {
+                                labelText: 'Aircraft',
+                                field: 'tailNumber'
+                            }
+                        ],
+                        resourceAreaWidth: "10%",
+                        defaultView: 'timelineMonth',
                         allDaySlot: false,
-                        slotDuration: '00:30:00',
+                        slotDuration: '01:00:00',
                         theme: true,
-                        events: data
+                        eventAfterRender: function(event, element, view) {
+                            $(element).tooltip({
+                                title: event.info + ": " + event.title,
+                                trigger: 'hover',
+                                placement: 'bottom'
+                            });
+                        },
+                        eventResourceField: 'aircraftId',
+                        events: data.entries,
+                        resources: data.resources
                     });
                 });
             });
