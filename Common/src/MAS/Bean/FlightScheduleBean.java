@@ -71,11 +71,6 @@ public class FlightScheduleBean {
         FareRule fareL = fareRuleBean.getFareRuleByName(Constants.FARE_LATE);
         FareRule fareD = fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE);
         FareRule fareEx = fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE);
-//        double totalCost = costsBean.calculateCostPerFlight(flightId);
-//        SeatConfigObject seatConfigObject = new SeatConfigObject();
-//        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-//        double costPerSeat = totalCost/(seatConfigObject.getTotalSeats() * Constants.OPERATIONAL_OCCUPANCY);
-//        costPerSeat *= Constants.PROFIT_MARGIN;
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
         double costPerSeat = costsBean.calculateCostPerSeat(flightId);
