@@ -215,14 +215,24 @@ public class ScheduleDevelopmentBean {
             if (isHub(origin)) {
                 if (hubSavings.get(hubs.indexOf(origin)) > hubSavings.get(hubs.indexOf(nearHub))) {
                     routeOutput[1] = "Destination is a nearer to another hub, routing not required.";
-                    routeOutput[2] = "None";
+                    try {
+                        HypoRoute hubRoute = getHypoRoute(nearHub, destination);
+                        routeOutput[2] = hubRoute.print() + "(" + hubRoute.costDistance + ")";
+                    } catch (Exception e) {
+                        routeOutput[2] = "None";
+                    }
                     routeOutputTable.add(routeOutput);
                     return null;
                 }
 
             } else {
                 routeOutput[1] = "Destination is a near a hub, routing not required.";
-                routeOutput[2] = "None";
+                try {
+                    HypoRoute hubRoute = getHypoRoute(nearHub, destination);
+                    routeOutput[2] = hubRoute.print() + "(" + hubRoute.costDistance + ")";
+                } catch (Exception e) {
+                    routeOutput[2] = "None";
+                }
                 routeOutputTable.add(routeOutput);
                 return null;
             }
@@ -352,20 +362,6 @@ public class ScheduleDevelopmentBean {
     private Route routeBackToHub(Airport airport) throws  NotFoundException {
         if (isHub(airport)) throw new NotFoundException("This airport is already a hub!");
         Airport nearestHub = nearHub(airport);
-//        if (nearestHub == null) {
-//            double nearestDist = Double.MAX_VALUE;
-//            for (int i = 0; i < hubs.size(); i++) {
-//                double dist = Utils.calculateDistance(airport.getLatitude(), airport.getLongitude(), hubs.get(i).getLatitude(), hubs.get(i).getLongitude());
-//                if (dist < nearestDist) {
-//                    nearestHub = hubs.get(i);
-//                }
-//                List<Route> routesToHub = findRouteTo(airport, nearestHub, suggestedRoutes);
-//                return routesToHub.get(0);
-//            }
-//            //Get route to this hub
-//        } else {
-//            return getRouteToFrom(airport, nearestHub);
-//        }
         if (nearestHub != null)
             return getRouteToFrom(airport, nearestHub);
 
@@ -418,7 +414,7 @@ public class ScheduleDevelopmentBean {
                                 routesHere.add(rtb);
                                 continue;
                             } catch (Exception e) {
-                                //Plane needs maint, but can't find hub nearby -> fly till you get there
+                                //Plane needs maint
                             }
                         } else {
                             List<HypoTransit> acUnderMaint = ta.maintAtAirport(currentAirport);
