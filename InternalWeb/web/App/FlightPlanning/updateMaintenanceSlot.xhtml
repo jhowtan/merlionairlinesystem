@@ -37,7 +37,7 @@
                                     <div class="form-group col-lg-12">
                                         <label class="control-label" for="airport">Airport</label>
                                         <br/>
-                                        <h:inputText styleClass="form-control" id="airport" value="#{updateMaintenanceSlotManagedBean.airport.getCode()}" readonly="true"/>
+                                        <h:inputText styleClass="form-control" id="airport" value="#{updateMaintenanceSlotManagedBean.airport.getId()}" readonly="true"/>
                                         <h:message for="airport" styleClass="help-block" />
                                     </div>
                                 </div>
@@ -62,10 +62,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-12 #{!duration.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="duration">Estimated Duration (in hours)</label>
+                                        <label class="control-label" for="duration">Estimated Duration (in minutes)</label>
                                         <h:inputText binding="#{duration}" id="duration" value="#{updateMaintenanceSlotManagedBean.duration}" styleClass="form-control"
-                                                     pt:placeholder="e.g. 2.5" required="true" requiredMessage="Estimated duration of maintenance is required." validatorMessage="A duration between 1 and 100 hours is required." converterMessage="A duration between 1 and 100 hours is required.">
-                                            <f:validateLongRange minimum="1" maximum="100" />
+                                                     pt:placeholder="e.g. 60" required="true" requiredMessage="Estimated duration of maintenance is required." validatorMessage="Duration must be a number longer than 60 minutes." converterMessage="Duration must be a number longer than 60 minutes.">
+                                            <f:validateLongRange minimum="60" />
                                         </h:inputText>
                                         <h:message for="duration" styleClass="help-block" />
                                     </div>
