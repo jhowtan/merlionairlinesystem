@@ -38,7 +38,7 @@
                                     <label class="control-label" for="flight">Choose Flight Code</label>
                                     <h:selectOneMenu styleClass="form-control" id="flight" value="#{createBookingClassManagedBean.flightId}" binding="#{flight}">
                                         <f:selectItems value="#{createBookingClassManagedBean.flights}" var="fl"
-                                                       itemLabel="#{fl.getCode()} (#{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
+                                                       itemLabel="#{fl.getCode()} (#{fl.aircraftAssignment.route.origin.id} - #{fl.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
                                         <f:ajax event="change" render="price" listener="#{createBookingClassManagedBean.flightCodeChangeListener}"/>
                                     </h:selectOneMenu>
                                     <h:message for="flight" styleClass="help-block" />

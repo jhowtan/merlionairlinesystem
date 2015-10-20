@@ -117,7 +117,7 @@ public class CreateBookingClassManagedBean {
         try {
             allocation = costsBean.getSeatAllocation(flightId, travelClass, baseprice, price);
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             allocation = 0;
         }
     }

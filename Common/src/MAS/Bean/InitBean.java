@@ -223,7 +223,7 @@ public class InitBean {
                 costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
-                costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
+                //costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
