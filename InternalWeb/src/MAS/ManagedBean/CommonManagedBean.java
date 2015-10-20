@@ -135,4 +135,13 @@ public class CommonManagedBean {
     public static double random() {
         return Math.random();
     }
+
+
+    public static String padRight(String s, int n) {
+        return Utils.padRight(s, n);
+    }
+
+    public static String padLeft(String s, int n) {
+        return Utils.padLeft(s, n);
+    }
 }

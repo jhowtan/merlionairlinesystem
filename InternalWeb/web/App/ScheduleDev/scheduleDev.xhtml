@@ -71,7 +71,7 @@
                                                 </blockquote>
                                                 <ui:repeat value="#{scheduleDevManagedBean.hubAirports}" var="ap" varStatus="varStatus">
                                                     <div class="input-group">
-                                                        <span class="input-group-addon">Strength of #{ap.name} </span>
+                                                        <span class="input-group-addon">#{ap.name}</span>
                                                         <h:inputText id="hubStr" styleClass="form-control" value="#{scheduleDevManagedBean.hubStrInputs[varStatus.index]}"
                                                                      pt:type="number" pt:step="0.1" pt:min="0.1" pt:max="1.0" pt:placeholder="e.g. 0.5"
                                                                      required="true" requiredMessage="Strength of hub required.">
