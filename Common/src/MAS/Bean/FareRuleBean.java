@@ -30,7 +30,7 @@ public class FareRuleBean {
         em.remove(fareRule);
     }
 
-    public long createFareRule(String name, int minimumStay, int maximumStay, int advancePurchase, int minimumPassengers, int milesAccrual, boolean freeCancellation) {
+    public long createFareRule(String name, int minimumStay, int maximumStay, int advancePurchase, int minimumPassengers, int milesAccrual, boolean freeCancellation, double priceMul) {
         FareRule fareRule = new FareRule();
         fareRule.setName(name.toUpperCase());
         fareRule.setMinimumStay(minimumStay);
@@ -39,6 +39,7 @@ public class FareRuleBean {
         fareRule.setMinimumPassengers(minimumPassengers);
         fareRule.setMilesAccrual(milesAccrual);
         fareRule.setFreeCancellation(freeCancellation);
+        fareRule.setPriceMul(priceMul);
         em.persist(fareRule);
         em.flush();
         return fareRule.getId();

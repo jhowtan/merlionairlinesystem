@@ -85,6 +85,12 @@
                                             <h:message for="freeCancellation" styleClass="help-block" />
                                         </div>
 
+                                        <div class="form-group col-lg-12 #{!priceMultiplier.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="priceMultiplier">Suggested Price Multiplier</label>
+                                            <h:inputText pt:type="number" pt:step="0.1" pt:min="0.1" id="priceMultiplier" binding="#{priceMultiplier}" value="#{createFareRuleManagedBean.priceMul}" styleClass="form-control" />
+                                            <h:message for="priceMultiplier" styleClass="help-block" />
+                                        </div>
+
                                     </div>
                             </div>
                         </div>

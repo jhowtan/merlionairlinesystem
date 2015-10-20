@@ -56,7 +56,7 @@
                                         <f:selectItem itemLabel="Please Choose"/>
                                         <f:selectItems value="#{createBookingClassManagedBean.fareRules}" var="fr"
                                                        itemLabel="#{fr.getName()}" itemValue="#{fr.id}" />
-                                        <f:ajax event="change" listener="#{createBookingClassManagedBean.fareRuleChangeListener}" render="minimumStay maximumStay advancePurchase milesAccrual minimumPassengers freeCancellation" />
+                                        <f:ajax event="change" listener="#{createBookingClassManagedBean.fareRuleChangeListener}" render="minimumStay maximumStay advancePurchase milesAccrual minimumPassengers freeCancellation priceMultiplier" />
                                     </h:selectOneMenu>
                                     <h:message for="fareRule" styleClass="help-block" />
                                 </div>
@@ -120,6 +120,10 @@
                                 <div class="form-group col-lg-12">
                                     <label class="control-label" for="freeCancellation">Free Cancellation</label>
                                     <h:inputText id="freeCancellation" binding="#{freeCancellation}" pt:placeholder="-" readonly="true" value="#{createBookingClassManagedBean.fareRule.freeCancellation ? 'Yes' : 'No'}" styleClass="form-control"/>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="priceMultiplier">Suggested Price Multiplier</label>
+                                    <h:inputText pt:type="number" id="priceMultiplier" pt:placeholder="-" readonly="true" binding="#{priceMultiplier}" value="#{createBookingClassManagedBean.fareRule.priceMul}" styleClass="form-control" />
                                 </div>
                             </div>
                         </div>

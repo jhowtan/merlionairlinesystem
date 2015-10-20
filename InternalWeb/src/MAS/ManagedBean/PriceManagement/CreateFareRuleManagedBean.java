@@ -25,6 +25,7 @@ public class CreateFareRuleManagedBean {
     private int minimumPassengers;
     private int milesAccrual;
     private boolean freeCancellation;
+    private double priceMul;
 
     public CreateFareRuleManagedBean() {
         resetFields();
@@ -41,7 +42,7 @@ public class CreateFareRuleManagedBean {
     }
 
     public void createFareRule() {
-        fareRuleBean.createFareRule(name, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, freeCancellation);
+        fareRuleBean.createFareRule(name, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, freeCancellation, priceMul);
 
         authManagedBean.createAuditLog("Created new fare rule: " + name, "create_fare_rule");
 
@@ -110,5 +111,13 @@ public class CreateFareRuleManagedBean {
 
     public void setFreeCancellation(boolean freeCancellation) {
         this.freeCancellation = freeCancellation;
+    }
+
+    public double getPriceMul() {
+        return priceMul;
+    }
+
+    public void setPriceMul(double priceMul) {
+        this.priceMul = priceMul;
     }
 }

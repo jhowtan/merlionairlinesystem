@@ -95,4 +95,15 @@ public class FareRule {
     public void setMinimumPassengers(int minimumPassengers) {
         this.minimumPassengers = minimumPassengers;
     }
+
+    private double priceMul;
+
+    @Basic
+    public double getPriceMul() {
+        return priceMul;
+    }
+
+    public void setPriceMul(double priceMul) {
+        this.priceMul = priceMul;
+    }
 }
