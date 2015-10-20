@@ -426,7 +426,7 @@ public class ScheduleDevelopmentBean {
                                 ta.maintenance(aircraft, acMaintTime, currentAirport, timeAfterZero, true);
                             } else {
                                 //Get plane with lowest time left for maint
-                                ta.maintenance(aircraft, ta.getShortestTimeLeft(acUnderMaint), currentAirport, timeAfterZero, false);
+                                ta.maintenance(aircraft, ta.getShortestTimeLeft(acUnderMaint)+1, currentAirport, timeAfterZero, false);
                             }
                         }
                     }
@@ -469,7 +469,7 @@ public class ScheduleDevelopmentBean {
                                 ta.maintenance(landingAc, acMaintTime, landingAc.location, timeAfterZero, true);
                             } else {
                                 //Get plane with lowest time left for maint
-                                ta.maintenance(landingAc, ta.getShortestTimeLeft(acUnderMaint), landingAc.location, timeAfterZero, false);
+                                ta.maintenance(landingAc, ta.getShortestTimeLeft(acUnderMaint)+1, landingAc.location, timeAfterZero, false);
                             }
                         }
                         else
