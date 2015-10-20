@@ -57,10 +57,15 @@
                         aspectRatio: 1.35,
                         editable: false,
                         header: {
-                            left: 'prev, next, today',
+                            left: 'prev,next, today',
                             center: 'title',
-                            right: 'month, agendaWeek'
+                            right: 'month,agendaWeek'
                         },
+                        buttonText: {
+                            next: 'Next',
+                            prev: 'Prev'
+                        },
+                        theme: true,
                         events: data
                     });
                 });

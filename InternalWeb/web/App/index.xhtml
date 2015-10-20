@@ -50,13 +50,18 @@
             $(document).ready(function() {
                 // page is now ready, initialize the calendar...
                 $('#calendar').fullCalendar({
-                    height: 420,
+                    //height: 420,
                     editable: false,
                     header: {
-                        left: 'prev',
+                        left: 'prev,next today',
                         center: 'title',
-                        right: 'next'
+                        right: 'month,week,year'
                     },
+                    buttonText: {
+                        next: 'Next',
+                        prev: 'Prev'
+                    },
+                    theme: true,
                     events: [
                         {title:'All Day Event', start: new Date(y, m, 1), className: ['b-l b-2x b-info'], location:'New York', info:'This a all day event that will start from 9:00 am to 9:00 pm, have fun!'},
                         {title:'Dance class', start: new Date(y, m, 3), end: new Date(y, m, 4, 9, 30), allDay: false, className: ['b-l b-2x b-danger'], location:'London', info:'Two days dance training class.'},
