@@ -106,10 +106,7 @@ public class FlightTimetableManagedBean {
                             f.getAircraftAssignment().getRoute().getDestination().getId();
                     c.start = f.getDepartureTime();
                     c.end = f.getArrivalTime();
-                    //c.color = "#378006";
                     c.className = new ArrayList<>();
-                    //c.className.add("b-success");
-                    //c.className.add("b-info");
                     c.className.add("calendar-blue-event");
                     c.info = f.getCode();
                     c.aircraftId = String.valueOf(aircraftId);
@@ -122,10 +119,9 @@ public class FlightTimetableManagedBean {
                     c.start = m.getStartTime();
                     c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
                     c.className = new ArrayList<>();
-                    //c.className.add("b-warning");
-                    //c.className.add("b-info");
                     c.className.add("calendar-red-event");
                     c.aircraftId = String.valueOf(aircraftId);
+                    c.info = "Maintenance";
                     calendarEntries.add(c);
                 }
             }
