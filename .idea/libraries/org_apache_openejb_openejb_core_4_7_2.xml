@@ -1,0 +1,73 @@
+<component name="libraryTable">
+  <library name="org.apache.openejb:openejb-core:4.7.2" type="repository">
+    <properties maven-id="org.apache.openejb:openejb-core:4.7.2" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/openejb-core-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/mbean-annotation-api-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-jpa-integration-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javaee-api-6.0-6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geronimo-annotation_1.1_spec-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-lang3-3.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-api-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-loader-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-javaagent-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-jee-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jaxb-impl-2.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jaxb-core-2.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/istack-commons-runtime-2.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/FastInfoset-1.2.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openejb-jee-accessors-4.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/sxc-jaxb-core-0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/sxc-runtime-0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-4.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-ra-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-broker-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-client-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hawtbuf-1.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-openwire-legacy-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-kahadb-store-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-protobuf-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-finder-shaded-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-asm5-shaded-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-cli-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/activemq-jdbc-store-5.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geronimo-connector-3.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geronimo-transaction-3.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geronimo-j2ee-connector_1.6_spec-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/howl-1.0.1-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geronimo-javamail_1.4_mail-1.8.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-reflect-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-naming-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xbean-bundleutils-4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/testng-6.8.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/bsh-2.0b4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jcommander-1.27.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hsqldb-2.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-dbcp-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-pool-1.5.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/swizzle-stream-1.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/quartz-openejb-shade-2.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-jdk14-1.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-impl-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-spi-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-ejb-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-ee-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-ee-common-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-web-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openwebbeans-el22-1.2.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/openjpa-2.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-lang-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-collections-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/serp-1.15.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/bval-core-0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-beanutils-core-1.8.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/bval-jsr303-0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jansi-1.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

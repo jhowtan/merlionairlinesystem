@@ -37,7 +37,7 @@
     <orderEntry type="library" name="javax.mail" level="project" />
     <orderEntry type="library" name="joda-time:joda-time:2.8.2" level="project" />
     <orderEntry type="library" name="org.apache.commons:commons-math3:3.5" level="project" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" scope="TEST">
       <library name="JUnit4">
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.11.jar!/" />
@@ -48,5 +48,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="TEST" name="org.apache.openejb:openejb-core:4.7.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="mysql-connector-java-5.1.36-bin" level="project" />
   </component>
 </module>
