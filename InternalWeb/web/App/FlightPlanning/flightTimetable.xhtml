@@ -62,11 +62,13 @@
                         header: {
                             left: 'prev,next, today',
                             center: 'title',
-                            right: 'timelineWeek,timelineMonth,timelineYear'
+                            right: 'timelineDay,timelineWeek,timelineMonth,timelineYear'
                         },
                         buttonText: {
                             next: 'Next',
                             prev: 'Prev'
+                        },
+                        views: {
                         },
                         resourceColumns: [
                             {
@@ -75,7 +77,7 @@
                             }
                         ],
                         resourceAreaWidth: "10%",
-                        defaultView: 'timelineMonth',
+                        defaultView: 'timelineWeek',
                         allDaySlot: false,
                         eventAfterRender: function(event, element, view) {
                             $(element).tooltip({
