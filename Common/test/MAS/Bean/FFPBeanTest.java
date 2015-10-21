@@ -39,7 +39,7 @@ public class FFPBeanTest {
         assertEquals(Constants.FFP_TIER_BLUE, TestEJB.ffpBean.creditEliteMiles(customer.getId(), 20000).getTier());
         assertEquals(Constants.FFP_TIER_SILVER, TestEJB.ffpBean.creditEliteMiles(customer.getId(), 20000).getTier());
         assertEquals(Constants.FFP_TIER_GOLD, TestEJB.ffpBean.creditEliteMiles(customer.getId(), 50000).getTier());
-        
+
         try {
             TestEJB.ffpBean.creditEliteMiles(12345, 1000);
         } catch (NotFoundException e) {}

@@ -1,11 +1,17 @@
 package MAS;
 
 import MAS.Bean.*;
+import org.junit.Before;
 
 import javax.ejb.embeddable.EJBContainer;
 import java.util.Properties;
 
 public class TestEJB {
+
+    @Before
+    public void setUp() throws Exception {
+        TestEJB.init();
+    }
 
     public static EJBContainer ejbContainer;
     public static AttributesBean attributesBean;
@@ -16,6 +22,7 @@ public class TestEJB {
     public static CustomerBean customerBean;
     public static CustomerLogBean customerLogBean;
     public static FFPBean ffpBean;
+    public static MessageBean messageBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -37,6 +44,7 @@ public class TestEJB {
             customerBean = (CustomerBean) ejbContainer.getContext().lookup("java:global/Common/CustomerEJB");
             customerLogBean = (CustomerLogBean) ejbContainer.getContext().lookup("java:global/Common/CustomerLogEJB");
             ffpBean = (FFPBean) ejbContainer.getContext().lookup("java:global/Common/FFPEJB");
+            messageBean = (MessageBean) ejbContainer.getContext().lookup("java:global/Common/MessageEJB");
         }
         return ejbContainer;
     }
