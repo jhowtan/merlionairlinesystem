@@ -13,6 +13,7 @@ public class TestEJB {
     public static UserBean userBean;
     public static RoleBean roleBean;
     public static WorkgroupBean workgroupBean;
+    public static CustomerBean customerBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -31,6 +32,7 @@ public class TestEJB {
             userBean = (UserBean) ejbContainer.getContext().lookup("java:global/Common/UserEJB");
             roleBean = (RoleBean) ejbContainer.getContext().lookup("java:global/Common/RoleEJB");
             workgroupBean = (WorkgroupBean) ejbContainer.getContext().lookup("java:global/Common/WorkgroupEJB");
+            customerBean = (CustomerBean) ejbContainer.getContext().lookup("java:global/Common/CustomerEJB");
         }
         return ejbContainer;
     }
