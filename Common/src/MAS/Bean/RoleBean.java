@@ -99,6 +99,7 @@ public class RoleBean {
         try {
             return em.createQuery("SELECT p from Permission p WHERE p.name = :name", Permission.class)
                     .setParameter("name", name)
+                    .setMaxResults(1)
                     .getSingleResult();
         } catch (Exception e) {
             throw new NotFoundException();

@@ -1,9 +1,6 @@
 package MAS;
 
-import MAS.Bean.AttributesBean;
-import MAS.Bean.AuditLogBean;
-import MAS.Bean.RoleBean;
-import MAS.Bean.UserBean;
+import MAS.Bean.*;
 
 import javax.ejb.embeddable.EJBContainer;
 import java.util.Properties;
@@ -15,6 +12,7 @@ public class TestEJB {
     public static AuditLogBean auditLogBean;
     public static UserBean userBean;
     public static RoleBean roleBean;
+    public static WorkgroupBean workgroupBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -32,6 +30,7 @@ public class TestEJB {
             auditLogBean = (AuditLogBean) ejbContainer.getContext().lookup("java:global/Common/AuditLogEJB");
             userBean = (UserBean) ejbContainer.getContext().lookup("java:global/Common/UserEJB");
             roleBean = (RoleBean) ejbContainer.getContext().lookup("java:global/Common/RoleEJB");
+            workgroupBean = (WorkgroupBean) ejbContainer.getContext().lookup("java:global/Common/WorkgroupEJB");
         }
         return ejbContainer;
     }
