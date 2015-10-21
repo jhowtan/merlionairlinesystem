@@ -24,6 +24,7 @@ public class TestEJB {
     public static FFPBean ffpBean;
     public static MessageBean messageBean;
     public static PNRBean pnrBean;
+    public static RouteBean routeBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -47,6 +48,7 @@ public class TestEJB {
             ffpBean = (FFPBean) ejbContainer.getContext().lookup("java:global/Common/FFPEJB");
             messageBean = (MessageBean) ejbContainer.getContext().lookup("java:global/Common/MessageEJB");
             pnrBean = (PNRBean) ejbContainer.getContext().lookup("java:global/Common/PNREJB");
+            routeBean = (RouteBean) ejbContainer.getContext().lookup("java:global/Common/RouteEJB");
         }
         return ejbContainer;
     }
