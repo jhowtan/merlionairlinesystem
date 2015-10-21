@@ -23,6 +23,7 @@ public class TestEJB {
     public static CustomerLogBean customerLogBean;
     public static FFPBean ffpBean;
     public static MessageBean messageBean;
+    public static PNRBean pnrBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -45,6 +46,7 @@ public class TestEJB {
             customerLogBean = (CustomerLogBean) ejbContainer.getContext().lookup("java:global/Common/CustomerLogEJB");
             ffpBean = (FFPBean) ejbContainer.getContext().lookup("java:global/Common/FFPEJB");
             messageBean = (MessageBean) ejbContainer.getContext().lookup("java:global/Common/MessageEJB");
+            pnrBean = (PNRBean) ejbContainer.getContext().lookup("java:global/Common/PNREJB");
         }
         return ejbContainer;
     }

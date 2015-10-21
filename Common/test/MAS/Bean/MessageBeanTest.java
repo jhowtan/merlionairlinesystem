@@ -4,6 +4,7 @@ import MAS.Entity.User;
 import MAS.Entity.Workgroup;
 import MAS.Exception.NotFoundException;
 import MAS.TestEJB;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -11,6 +12,11 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 public class MessageBeanTest {
+
+    @Before
+    public void setUp() throws Exception {
+        TestEJB.init();
+    }
 
     @Test
     public void testCreateMessage() throws Exception {
