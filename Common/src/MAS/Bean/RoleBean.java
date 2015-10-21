@@ -62,6 +62,7 @@ public class RoleBean {
 
     public void setPermissions(long roleId, List<Long> permissionIds) throws NotFoundException {
         Role role = em.find(Role.class, roleId);
+        if (role == null) throw new NotFoundException();
         Permission permission;
         ArrayList<Permission> permissions = new ArrayList<>();
         for(Long permissionId : permissionIds) {
