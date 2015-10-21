@@ -50,5 +50,6 @@
     </orderEntry>
     <orderEntry type="library" scope="TEST" name="org.apache.openejb:openejb-core:4.7.2" level="project" />
     <orderEntry type="library" scope="TEST" name="mysql-connector-java-5.1.36-bin" level="project" />
+    <orderEntry type="library" scope="TEST" name="org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.1" level="project" />
   </component>
 </module>
