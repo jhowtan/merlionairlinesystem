@@ -1,8 +1,6 @@
 package MAS.Bean;
 
 import MAS.Entity.AuditLog;
-import MAS.Entity.Permission;
-import MAS.Entity.Role;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
@@ -10,7 +8,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

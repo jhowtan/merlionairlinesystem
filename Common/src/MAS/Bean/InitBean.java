@@ -2,9 +2,6 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
-import MAS.Common.Test;
-import MAS.Entity.Aircraft;
-import MAS.Entity.Airport;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -39,7 +36,7 @@ public class InitBean {
 
     @PostConstruct
     public void init() {
-        if (!attributesBean.getBooleanAttribute("DATABASE_INITIALIZED", false) && !Test.isTesting) {
+        if (!attributesBean.getBooleanAttribute("DATABASE_INITIALIZED", false)) {
             attributesBean.setBooleanAttribute("DATABASE_INITIALIZED", true);
 
             // INITIALIZE ALL PERMISSIONS

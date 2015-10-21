@@ -1,0 +1,39 @@
+package MAS;
+
+import MAS.Bean.AttributesBean;
+import MAS.Bean.AuditLogBean;
+import MAS.Bean.RoleBean;
+import MAS.Bean.UserBean;
+
+import javax.ejb.embeddable.EJBContainer;
+import java.util.Properties;
+
+public class TestEJB {
+
+    public static EJBContainer ejbContainer;
+    public static AttributesBean attributesBean;
+    public static AuditLogBean auditLogBean;
+    public static UserBean userBean;
+    public static RoleBean roleBean;
+
+    public static EJBContainer init() throws Exception {
+        MAS.Common.Test.isTesting = true;
+        if (ejbContainer == null) {
+            Properties p = new Properties();
+            p.put("em", "new://Resource?type=DataSource");
+            p.put("em.JdbcDriver", "com.mysql.jdbc.Driver");
+            p.put("em.JdbcUrl", "jdbc:mysql://localhost/mastest");
+            p.put("em.UserName", "root");
+            p.put("em.Password", "admin");
+            p.put("javax.persistence.provider", "org.eclipse.persistence.jpa.PersistenceProvider");
+            ejbContainer = EJBContainer.createEJBContainer(p);
+
+            attributesBean = (AttributesBean) ejbContainer.getContext().lookup("java:global/Common/AttributesEJB");
+            auditLogBean = (AuditLogBean) ejbContainer.getContext().lookup("java:global/Common/AuditLogEJB");
+            userBean = (UserBean) ejbContainer.getContext().lookup("java:global/Common/UserEJB");
+            roleBean = (RoleBean) ejbContainer.getContext().lookup("java:global/Common/RoleEJB");
+        }
+        return ejbContainer;
+    }
+
+}
