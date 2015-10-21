@@ -41,11 +41,13 @@ public class RoleBeanTest {
     @Test
     public void testSetPermissions() throws Exception {
         long permissionId = TestEJB.roleBean.createPermission("TEST_PERMISSION_3");
+        long roleId = TestEJB.roleBean.createRole("Test Role 3", Arrays.asList(permissionId));
 
         try {
             TestEJB.roleBean.setPermissions(12345, Arrays.asList(permissionId));
             fail();
         } catch (NotFoundException e) {}
+        TestEJB.roleBean.setPermissions(roleId, Arrays.asList(permissionId));
     }
 
     @Test
@@ -55,6 +57,18 @@ public class RoleBeanTest {
 
         assertTrue(TestEJB.roleBean.isNameUnique("Non-existent Role"));
         assertFalse(TestEJB.roleBean.isNameUnique("Existent Role"));
+    }
+
+    @Test
+    public void testRemoveRole() throws Exception {
+        long permissionId = TestEJB.roleBean.createPermission("TEST_PERMISSION_5");
+        long roleId = TestEJB.roleBean.createRole("Existent Role", Arrays.asList(permissionId));
+        TestEJB.roleBean.removeRole(roleId);
+
+        try {
+            TestEJB.roleBean.removeRole(roleId);
+            fail();
+        } catch (NotFoundException e) {}
     }
 
     @Test
@@ -69,7 +83,12 @@ public class RoleBeanTest {
 
     @Test
     public void testFindPermission() throws Exception {
-        long permissionId = TestEJB.roleBean.createPermission("TEST_PERMISSION_5");
-        assertEquals("TEST_PERMISSION_5", TestEJB.roleBean.findPermission("TEST_PERMISSION_5").getName());
+        long permissionId = TestEJB.roleBean.createPermission("TEST_PERMISSION_6");
+        assertEquals("TEST_PERMISSION_6", TestEJB.roleBean.findPermission("TEST_PERMISSION_6").getName());
+
+        try {
+            TestEJB.roleBean.findPermission("NONEXISTENT_PERMISSION");
+            fail();
+        } catch (NotFoundException e) {}
     }
 }
