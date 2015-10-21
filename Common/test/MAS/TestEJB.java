@@ -15,6 +15,7 @@ public class TestEJB {
     public static WorkgroupBean workgroupBean;
     public static CustomerBean customerBean;
     public static CustomerLogBean customerLogBean;
+    public static FFPBean ffpBean;
 
     public static EJBContainer init() throws Exception {
         MAS.Common.Test.isTesting = true;
@@ -35,6 +36,7 @@ public class TestEJB {
             workgroupBean = (WorkgroupBean) ejbContainer.getContext().lookup("java:global/Common/WorkgroupEJB");
             customerBean = (CustomerBean) ejbContainer.getContext().lookup("java:global/Common/CustomerEJB");
             customerLogBean = (CustomerLogBean) ejbContainer.getContext().lookup("java:global/Common/CustomerLogEJB");
+            ffpBean = (FFPBean) ejbContainer.getContext().lookup("java:global/Common/FFPEJB");
         }
         return ejbContainer;
     }

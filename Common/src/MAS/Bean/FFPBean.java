@@ -19,14 +19,15 @@ public class FFPBean {
     public FFPBean() {
     }
 
-    public void creditMiles(long customerId, int miles) throws NotFoundException {
+    public Customer creditMiles(long customerId, int miles) throws NotFoundException {
         Customer customer = em.find(Customer.class, customerId);
         if (customer == null) throw new NotFoundException();
         customer.setMiles(customer.getMiles() + miles);
         em.persist(customer);
+        return customer;
     }
 
-    public void creditEliteMiles(long customerId, int eliteMiles) throws NotFoundException {
+    public Customer creditEliteMiles(long customerId, int eliteMiles) throws NotFoundException {
         Customer customer = em.find(Customer.class, customerId);
         if (customer == null) throw new NotFoundException();
         if (customer.getQualificationEndDate() == null) {
@@ -44,6 +45,7 @@ public class FFPBean {
             customer.setTier(Constants.FFP_TIER_GOLD);
             customer.setStatusExpiry(Utils.oneYearLater());
         }
+        return customer;
     }
 
 }
