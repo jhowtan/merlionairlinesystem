@@ -23,7 +23,7 @@ import java.util.List;
 
 @ManagedBean
 @ViewScoped
-public class scheduleDevManagedBean {
+public class ScheduleDevManagedBean {
     @EJB
     ScheduleDevelopmentBean scheduleDevelopmentBean;
     @EJB
