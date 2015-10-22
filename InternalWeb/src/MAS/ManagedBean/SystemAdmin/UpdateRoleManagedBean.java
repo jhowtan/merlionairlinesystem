@@ -89,6 +89,9 @@ public class UpdateRoleManagedBean {
             String roleName = roleBean.getRole(id).getName();
             roleBean.removeRole(id);
             authManagedBean.createAuditLog("Deleted role: " + roleName, "delete_role");
+            FacesMessage m = new FacesMessage("Role " + roleName + "is deleted successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
         }
     }

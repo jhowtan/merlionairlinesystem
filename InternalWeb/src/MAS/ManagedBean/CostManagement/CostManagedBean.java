@@ -71,7 +71,7 @@ public class CostManagedBean {
             setAmount(0);
             setComments(null);
             FacesMessage m = new FacesMessage("Cost could not be created because it already exists");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
             changeCostsDisplay();
         }
@@ -94,7 +94,7 @@ public class CostManagedBean {
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The cost cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
             changeCostsDisplay();
         }

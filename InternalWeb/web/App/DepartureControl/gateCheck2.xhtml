@@ -22,7 +22,7 @@
                     <!--<li role="presentation"><h:link outcome="/App/CostManagement/createCost">Create Cost</h:link></li>-->
                     <!--</ul><br />-->
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
@@ -57,14 +57,17 @@
                                                                    rendered="#{gateCheckManagedBean.flight.status == 0}" disabled="#{gateCheckManagedBean.flight.status >= 2}"
                                                                    styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
                                                         <i class="fa fa-sign-in fw"></i> Open Gate
+                                                        <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                                     </h:commandLink>
                                                     <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 2)}"
                                                                    styleClass="btn btn-success btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
                                                         <i class="fa fa-sign-in fw"></i> Begin Boarding
+                                                        <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                                     </h:commandLink>
                                                     <h:commandLink action="#{gateCheckManagedBean.changeGateNumber(gateCheckManagedBean.flight)}"
                                                                    styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
                                                         <i class="fa fa-sign-in fw"></i> Change Gate
+                                                        <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                                     </h:commandLink>
                                                 </div>
                                             </td>

@@ -16,7 +16,7 @@
                         <li role="presentation" class="active"><h:link outcome="/App/RoutePlanning/createAirport">Create Airport</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>

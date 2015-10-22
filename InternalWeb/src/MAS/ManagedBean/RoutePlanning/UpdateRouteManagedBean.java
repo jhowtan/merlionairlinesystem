@@ -63,7 +63,7 @@ public class UpdateRouteManagedBean {
             if (aircraftAssignments.size() > 0) {
                 editable = false;
                 FacesMessage m = new FacesMessage("Route cannot be edited due to assigned flights to this route.");
-                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                m.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("status", m);
             }
         }

@@ -36,12 +36,12 @@ public class RoleManagedBean {
         } catch (EJBException e) {
             FacesMessage m = new FacesMessage("Unable to delete role, please check if there are any " +
                     "existing permissions created for this role.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The role cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

@@ -40,12 +40,12 @@ public class AircraftTypeManagedBean {
             e.getMessage();
             FacesMessage m = new FacesMessage("Unable to delete aircraft type, please check if there are any existing seat " +
                     "configurations or aircraft created for this aircraft type.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The aircraft type cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

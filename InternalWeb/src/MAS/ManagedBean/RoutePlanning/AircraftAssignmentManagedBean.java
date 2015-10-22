@@ -35,11 +35,11 @@ public class AircraftAssignmentManagedBean {
                     + " : " + origin + " - " + destination, "delete_aircraft_assignment");
         } catch (NotFoundException e) {
             FacesMessage m = new FacesMessage("The aircraft assignment cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (IntegrityConstraintViolationException e) {
             FacesMessage m = new FacesMessage("The aircraft cannot be unassigned because a flight already exists.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

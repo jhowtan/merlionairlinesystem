@@ -17,8 +17,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">User Information</div>
                             <div class="panel-body">
-                                <ui:repeat value="#{facesContext.getMessageList('userInfo')}" var="message">
-                                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                                         #{message.detail}
                                     </h:panelGroup>
                                 </ui:repeat>
