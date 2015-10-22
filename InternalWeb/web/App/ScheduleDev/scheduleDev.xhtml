@@ -127,13 +127,15 @@
                                                     <p>Select location of aircraft</p>
                                                 </blockquote>
                                                 <ui:repeat value="#{scheduleDevManagedBean.selectAircrafts}" var="ac" varStatus="varStatus">
-                                                        <div class="input-group #{!acLocation.valid ? 'has-error' : ''}">
+                                                        <div class="input-group #{acLocation.valid ? '' : 'has-error'}">
                                                             <span class="input-group-addon">Location of #{ac.tailNumber} </span>
                                                             <h:selectOneMenu id="acLocation" required="true" binding="#{acLocation}" requiredMessage="Aircraft location is required." value="#{scheduleDevManagedBean.acLocInputs[varStatus.index]}" styleClass="form-control">
                                                                 <f:selectItem itemLabel="---"/>
                                                                 <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ac"
                                                                                itemLabel="#{ac.name}" itemValue="#{ac.id}" />
                                                             </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="#{acLocation.valid ? '' : 'has-error'}">
                                                             <h:message for="acLocation" styleClass="help-block" />
                                                         </div>
                                                     <br/>
