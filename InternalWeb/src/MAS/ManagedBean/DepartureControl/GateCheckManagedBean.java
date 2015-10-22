@@ -32,6 +32,7 @@ public class GateCheckManagedBean {
     public void init() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         try {
+            //@TODO: This line causes 500 error
             flight = flightScheduleBean.getFlight(Long.parseLong(params.get("flight")));
         } catch (NotFoundException e) {
             e.printStackTrace();
