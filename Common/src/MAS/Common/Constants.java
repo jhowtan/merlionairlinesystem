@@ -21,13 +21,14 @@ public class Constants {
     public static final String[] FFP_ALLIANCE_LIST_CODE = {"MA", "A3", "AC", "CA", "AI", "NZ", "NH", "OZ", "AV", "O6", "CM", "MS", "ET", "BR", "B6", "LH", "SK", "SQ", "SA", "JJ", "TP", "TG", "TK", "UA", "VX", "VS", "VA", "UK"};
     public static final String[] FFP_ALLIANCE_LIST_NAME = {"Merlion Airlines - MerlionFlyer Elite", "Aegean Airlines - Miles&Bonus", "Air Canada - Aeroplan", "Air China / Shenzhen Airlines - PhoenixMiles", "Air India - Flying Returns", "Air New Zealand - AirPoints", "ANA - ANA Mileage Club", "Asiana Airlines - Asiana Club", "Avianca - LifeMiles", "Avianca Brazil - Amigo", "Copa Airlines - ConnectMiles", "EgyptAir - EgyptAir Plus", "Ethiopian Airlines - ShebaMiles", "EVA Air - Infinity MileageLands", "JetBlue - TrueBlue", "Lufthansa - Miles & More", "Scandinavian Airlines - EuroBonus", "Singapore Airlines - KrisFlyer", "South African Airways - Voyager", "TAM Airlines - Fidelidade", "TAP Portugal - Victoria", "THAI - Royal Orchid Plus", "Turkish Airlines - Miles&Smiles", "United - MileagePlus", "Virgin America - Elevate", "Virgin Atlantic - Flying Club", "Virgin Australia - Velocity", "Vistara - Club Vistara"};
 
-    public static final String[] COSTS = {"Consumables Per Flight", "Aircraft One-Time Cost", "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost"};
+    public static final String[] COSTS = {"Consumables Per Flight", "Aircraft One-Time Cost", "Cost Per Maintenance", "Market Fuel Cost", "Annual Cost", "Profit Margin"};
 
     public static final int COST_PER_FLIGHT = 0;
     public static final int COST_PER_AIRCRAFT = 1;
     public static final int COST_PER_MAINTENANCE = 2;
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
+    public static final int COST_PROFIT_MARGIN = 5;
 
     public static final String FARE_NORMAL = "NNMA";
     public static final String FARE_LATE = "LTH";
@@ -48,7 +49,7 @@ public class Constants {
     public static final String[] BOOKING_CLASS_NAMES = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
     public static final double[] TRAVEL_CLASS_PRICE_MULTIPLIER = {6, 3, 1.5, 1};
-    public static final double PROFIT_MARGIN = 1.4;
+    //public static final double PROFIT_MARGIN = 1.4;
 
     public static final int RANGE_CONST = 300;
     public static final double RANGE_MOMENTUM = 0.85;

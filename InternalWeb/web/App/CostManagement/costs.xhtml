@@ -86,7 +86,7 @@
                                             <h:message for="aircraft" styleClass="help-block" />
                                         </div>
                                     </h:panelGroup>
-                                    <h:panelGroup rendered="#{costManagedBean.type == 0}">
+                                    <h:panelGroup rendered="#{costManagedBean.type == 0 || costManagedBean.type == 5}">
                                         <div class="form-group col-lg-12">
                                             <label class="control-label" for="acAssignment">Aircraft Assignment</label>
                                             <br/>

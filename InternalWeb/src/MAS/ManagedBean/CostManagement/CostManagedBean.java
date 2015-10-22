@@ -33,8 +33,6 @@ public class CostManagedBean {
     FleetBean fleetBean;
     @EJB
     RouteBean routeBean;
-    @EJB
-    UserBean userBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -43,7 +41,6 @@ public class CostManagedBean {
     private List<Cost> displayCosts;
     private List<Aircraft> aircraftList;
     private List<AircraftAssignment> aaList;
-    private List<User> userList;
 
     private double amount;
     private String comments;
@@ -56,7 +53,6 @@ public class CostManagedBean {
         displayCosts = costsBean.getAllCostOfType(type);
         setAircraftList(fleetBean.getAllAircraft());
         setAaList(routeBean.getAllAircraftAssignments());
-        setUserList(userBean.getAllUsers());
     }
 
     public void createCost() {
@@ -114,12 +110,12 @@ public class CostManagedBean {
     }
 
     public String displayComments(Cost cost) {
-        if (cost.getType() == 1 || cost.getType() == 2) {
+        if (cost.getType() == Constants.COST_PER_AIRCRAFT || cost.getType() == Constants.COST_PER_MAINTENANCE) {
             if (cost.getAssocId() == -1)
                 return "All - " + cost.getComments();
             return displayAC(cost.getAssocId()) + " - " + cost.getComments();
         }
-        else if (cost.getType() == 0) {
+        else if (cost.getType() == Constants.COST_PER_FLIGHT || cost.getType() == Constants.COST_PROFIT_MARGIN) {
             if (cost.getAssocId() == -1)
                 return "All - " + cost.getComments();
             return displayAA(cost.getAssocId()) + " - " + cost.getComments();
@@ -142,14 +138,6 @@ public class CostManagedBean {
             return CommonManagedBean.formatAA(routeBean.getAircraftAssignment(aaId));
         } catch (NotFoundException e) {
             return "Aircraft Assignment Not Found";
-        }
-    }
-
-    private String displayUser(long userId) {
-        try {
-            return CommonManagedBean.formatName(userBean.getUser(userId));
-        } catch (NotFoundException e) {
-            return "User Not Found";
         }
     }
 
@@ -199,14 +187,6 @@ public class CostManagedBean {
 
     public void setAaList(List<AircraftAssignment> aaList) {
         this.aaList = aaList;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
     }
 
     public double getAmount() {

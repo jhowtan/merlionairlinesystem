@@ -47,7 +47,7 @@ public class CostsBean {
                 cost.setAssocId(aircraft.getId());
             }
         }
-        else if (type == Constants.COST_PER_FLIGHT) {
+        else if (type == Constants.COST_PER_FLIGHT || type == Constants.COST_PROFIT_MARGIN) {
             AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, assocId);
             if (aircraftAssignment == null)
             {
@@ -182,11 +182,27 @@ public class CostsBean {
     public double calculateCostPerSeat(long flightId) throws NotFoundException {
         Flight flight = em.find(Flight.class, flightId);
         if (flight == null) throw  new NotFoundException();
+        long aaId = flight.getAircraftAssignment().getId();
         double totalCost = calculateCostPerFlight(flightId);
         SeatConfigObject seatConfigObject = new SeatConfigObject();
         seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
         double costPerSeat = totalCost/(seatConfigObject.getTotalSeats() * Constants.OPERATIONAL_OCCUPANCY);
-        costPerSeat *= Constants.PROFIT_MARGIN;
+        //Get profit margin of this flight
+        double profitMargin;
+        List<Cost> profitMargins;
+        profitMargins = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = :aaId ORDER BY c.id DESC", Cost.class)
+                .setParameter("type", Constants.COST_PROFIT_MARGIN)
+                .setParameter("aaId", aaId).setMaxResults(1).getResultList();
+        if (profitMargins.size() != 0) {
+            profitMargin = profitMargins.get(0).getAmount();
+        }
+        else {
+            profitMargins = em.createQuery("SELECT c from Cost c WHERE c.type = :type AND c.assocId = -1 ORDER BY c.id DESC", Cost.class)
+                    .setParameter("type", Constants.COST_PROFIT_MARGIN).setMaxResults(1).getResultList();
+            profitMargin = profitMargins.get(0).getAmount();
+        }
+        System.out.println(profitMargin);
+        costPerSeat *= profitMargin;
         return costPerSeat;
     }
 

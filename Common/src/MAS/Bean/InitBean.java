@@ -221,46 +221,11 @@ public class InitBean {
                 costsBean.createCost(Constants.COST_PER_MAINTENANCE, 10000, "Maintenance Cost", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 500000, "Marketing Costs", -1);
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
+                costsBean.createCost(Constants.COST_PROFIT_MARGIN, 1.4, "Baseline Profit Margin", -1);
                 //costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-//            try {
-//                System.out.println("RUNNING SCHE DEV TEST");
-//                List<String> apIds = new ArrayList<>();
-//                List<Airport> allAp = routeBean.getAllAirports();
-//                for (int i = 0; i < allAp.size(); i++) {
-//                    apIds.add(allAp.get(i).getId());
-//                }
-//                List<Long> acIds = new ArrayList<>();
-//                List<Aircraft> allAc = fleetBean.getAllAircraft();
-//                List<String> homeBaseIds = new ArrayList<>();
-//                for (int i = 0; i < allAc.size(); i++) {
-//                    acIds.add(allAc.get(i).getId());
-//                    if (i < 2)
-//                        homeBaseIds.add(routeBean.findAirportByCode("SIN").getId());
-//                    else if (i < 4)
-//                        homeBaseIds.add(routeBean.findAirportByCode("HKG").getId());
-//                    else
-//                        homeBaseIds.add(routeBean.findAirportByCode("DXB").getId());
-//                }
-//                List<String> hubIds = new ArrayList<>();
-//                List<Double> hubStr = new ArrayList<>();
-//                hubIds.add(routeBean.findAirportByCode("SIN").getId());
-//                hubStr.add(0.8);
-//                hubIds.add(routeBean.findAirportByCode("HKG").getId());
-//                hubStr.add(0.7);
-//                hubIds.add(routeBean.findAirportByCode("DXB").getId());
-//                hubStr.add(0.3);
-//                scheduleDevelopmentBean.addAirports(apIds);
-//                scheduleDevelopmentBean.addAircrafts(acIds, homeBaseIds);
-//                scheduleDevelopmentBean.addHubs(hubIds, hubStr);
-//                System.out.println("Beginning development:.....");
-//                scheduleDevelopmentBean.testProcess();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
         }
     }
 
