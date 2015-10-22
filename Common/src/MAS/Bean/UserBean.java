@@ -29,22 +29,6 @@ public class UserBean {
     public UserBean() {
     }
 
-    public long createPermission(String name) {
-        Permission permission = new Permission();
-        permission.setName(name);
-        em.persist(permission);
-        em.flush();
-        return permission.getId();
-    }
-
-    public long createRole(String name) {
-        Role role = new Role();
-        role.setName(name);
-        em.persist(role);
-        em.flush();
-        return role.getId();
-    }
-
     public long createUser(String username, String firstName, String lastName, String email, String phone, Airport baseAirport) {
         User user = new User();
         user.setUsername(username.toLowerCase());
@@ -73,10 +57,11 @@ public class UserBean {
         return user.getId();
     }
 
-    public void forgotPassword(String usernameEmail) throws NotFoundException {
+    public User forgotPassword(String usernameEmail) throws NotFoundException {
         try {
             User user = em.createQuery("SELECT u FROM User u WHERE u.username = :usernameEmail OR u.email = :usernameEmail", User.class)
                     .setParameter("usernameEmail", usernameEmail.toLowerCase())
+                    .setMaxResults(1)
                     .getSingleResult();
 
             user.setResetHash(Utils.generateSalt());
@@ -91,12 +76,13 @@ public class UserBean {
                     "Yours Sincerely,\n" +
                     "Merlion Airlines";
             mailBean.send(user.getEmail(), user.getFirstName() + " " + user.getLastName(), "Merlion Airlines Password Reset", msg);
+            return user;
         } catch (NoResultException e) {
             throw new NotFoundException();
         }
     }
 
-    public void setRoles(long id, List<Long> roleIds) throws NotFoundException {
+    public User setRoles(long id, List<Long> roleIds) throws NotFoundException {
         User user = em.find(User.class, id);
         if (user == null) throw new NotFoundException();
         Role role;
@@ -109,6 +95,7 @@ public class UserBean {
         }
         user.setRoles(roles);
         em.persist(user);
+        return user;
     }
 
     public boolean isUsernameUnique(String username) {
@@ -141,13 +128,6 @@ public class UserBean {
         user.setResetExpiry(null);
         user.setPasswordHash(Utils.hash(newPassword, user.getSalt()));
         em.persist(user);
-    }
-
-    public void setPassword(long id, String password) throws NotFoundException {
-        User user = em.find(User.class, id);
-        if (user == null)
-            throw new NotFoundException();
-        user.setPasswordHash(Utils.hash(password, user.getSalt()));
     }
 
     public void changePassword(long id, String newPassword) throws NotFoundException {

@@ -55,6 +55,7 @@ public class WorkgroupBean {
 
     public void setWorkgroupUsers(long wgId, List<Long> userIds) throws NotFoundException {
         Workgroup workgroup = em.find(Workgroup.class, wgId);
+        if (workgroup == null) throw new NotFoundException();
         User user;
         ArrayList<User> users = new ArrayList<>();
         for(Long userId : userIds) {
@@ -93,7 +94,9 @@ public class WorkgroupBean {
 
     public void removeUserFromWorkgroup(long userId, long wgId) throws NotFoundException {
         Workgroup workgroup = em.find(Workgroup.class, wgId);
+        if (workgroup == null) throw new NotFoundException();
         User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
         if (workgroup.getUsers().remove(user)) {
             em.persist(workgroup);
         }

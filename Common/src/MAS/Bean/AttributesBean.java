@@ -1,12 +1,10 @@
 package MAS.Bean;
 
-import MAS.Common.Constants;
 import MAS.Entity.BooleanAttribute;
 import MAS.Entity.DoubleAttribute;
 import MAS.Entity.IntAttribute;
 import MAS.Entity.StringAttribute;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,7 +26,7 @@ public class AttributesBean {
             attribute = new StringAttribute();
             attribute.setKey(key);
             attribute.setValue(defaultValue);
-                em.persist(attribute);
+            em.persist(attribute);
         }
         return attribute.getValue();
     }
