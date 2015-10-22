@@ -32,12 +32,12 @@ public class AirportsManagedBean {
         } catch (EJBException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("Unable to delete the airport. There is an existing route that utilizes this airport.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The airport cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

@@ -36,12 +36,12 @@ public class WorkgroupManagedBean {
         } catch (EJBException e) {
             FacesMessage m = new FacesMessage("Unable to delete workgroup, please check" +
                     " if there are existing users in the workgroup");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The workgroup cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

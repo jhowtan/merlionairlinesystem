@@ -31,15 +31,18 @@ public class BookingClassManagedBean {
             BookingClass bookingClass = bookingClassBean.getBookingClass(id);
             bookingClassBean.removeBookingClass(id);
             authManagedBean.createAuditLog("Deleted booking class: " + bookingClass.getName(), "delete_booking_class");
+            FacesMessage m = new FacesMessage("The booking class " + bookingClass.getName() + "has been successfully deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (EJBException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The booking class you are trying to delete has been open for sale for existing passengers.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
@@ -49,18 +52,24 @@ public class BookingClassManagedBean {
             bookingClassBean.changeOpenStatus(id, isOpen);
             if(isOpen) {
                 authManagedBean.createAuditLog("Closed booking class: " + bookingClassBean.getBookingClass(id).getName(), "close_booking_class");
+                FacesMessage m = new FacesMessage("The booking class has been successfully closed.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
             } else {
                 authManagedBean.createAuditLog("Opened booking class: " + bookingClassBean.getBookingClass(id).getName(), "open_booking_class");
+                FacesMessage m = new FacesMessage("The booking class has been successfully opened.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
             }
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The booking class cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (EJBException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The booking class you are trying to modify has existing tickets sold to customers.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

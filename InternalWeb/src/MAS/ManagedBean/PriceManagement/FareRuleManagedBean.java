@@ -33,7 +33,7 @@ public class FareRuleManagedBean {
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The fare rule cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (EJBException e) {
             e.getMessage();

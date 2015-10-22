@@ -36,12 +36,12 @@ public class CountryManagedBean {
         } catch (EJBException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("Unable to delete country, please check if there are existing cities created for this country.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.getMessage();
             FacesMessage m = new FacesMessage("The country cannot be found, or may have already been deleted.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
 
