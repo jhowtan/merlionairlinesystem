@@ -20,7 +20,7 @@
                                 <div class="panel-heading">Check In</div>
                                 <div class="panel-body">
                                     <ui:repeat value="#{facesContext.getMessageList('check-in-status')}" var="message">
-                                        <h:panelGroup layout="block" styleClass="alert alert-info">
+                                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                                             #{message.detail}
                                         </h:panelGroup>
                                     </ui:repeat>

@@ -15,7 +15,7 @@
             <h:panelGroup class="panel-body" layout="block">
 
                 <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                    <h:panelGroup layout="block" styleClass="alert alert-info">
+                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                         #{message.detail}
                     </h:panelGroup>
                 </ui:repeat>

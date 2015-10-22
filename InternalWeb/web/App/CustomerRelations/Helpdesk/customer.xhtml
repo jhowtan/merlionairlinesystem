@@ -14,10 +14,11 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Customer Helpdesk</h1>
 
-                    <h:panelGroup rendered="#{!helpdeskManagedBean.customerVerified}">
-                        <p>Unable to find customer.</p>
-                        <h:link outcome="index" value="Return to Helpdesk" styleClass="btn btn-default" />
-                    </h:panelGroup>
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
 
 
                     <h:panelGroup rendered="#{helpdeskManagedBean.customerVerified}">
