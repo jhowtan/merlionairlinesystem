@@ -2,6 +2,9 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
+import MAS.Common.Utils;
+import MAS.Entity.BookingClass;
+import MAS.Entity.PNR;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -33,6 +36,10 @@ public class InitBean {
     AttributesBean attributesBean;
     @EJB
     CostsBean costsBean;
+    @EJB
+    PNRBean pnrBean;
+    @EJB
+    BookFlightBean bookFlightBean;
 
     @PostConstruct
     public void init() {
@@ -155,6 +162,22 @@ public class InitBean {
                 e.printStackTrace();
             }
 
+            // INITIALIZE SOME FARE RULES
+            try {
+                int minimumStay = 1;
+                int maximumStay = 30;
+                int advancePurchase = 60;
+                int minimumPassengers = 1;
+                int milesAccrual = 100;
+                fareRuleBean.createFareRule(Constants.FARE_NORMAL, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, true, 1.0);
+                fareRuleBean.createFareRule(Constants.FARE_LATE, minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual, false, 1.35);
+                fareRuleBean.createFareRule(Constants.FARE_DOUBLE, minimumStay, maximumStay, advancePurchase, minimumPassengers + 1, milesAccrual - 10, false, 0.90);
+                fareRuleBean.createFareRule(Constants.FARE_EARLY, minimumStay, 7, advancePurchase + 30, minimumPassengers, milesAccrual - 80, false, 0.85);
+                fareRuleBean.createFareRule(Constants.FARE_EXPENSIVE, minimumStay, maximumStay + 60, advancePurchase - 60, minimumPassengers, milesAccrual, true, 1.5);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // INITIALIZE SOME AIRCRAFT TYPES AND SEAT CONFIGS
             try {
                 long acTypeId = fleetBean.createAircraftType("A380 NR", 323546, 30, 2, 0.120, 634, 276800);
@@ -193,22 +216,26 @@ public class InitBean {
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 23500, acTypeId);
                 acId = fleetBean.createAircraft("9V-DET", new GregorianCalendar(2005, 05, 05).getTime(), routeBean.getAirport("SIN").getId());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            // INITIALIZE SOME FARE RULES
-            try {
-                int minimumStay = 1;
-                int maximumStay = 30;
-                int advancePurchase = 60;
-                int minimumPassengers = 1;
-                int milesAccrual = 100;
-                fareRuleBean.createFareRule(Constants.FARE_NORMAL, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, true, 1.0);
-                fareRuleBean.createFareRule(Constants.FARE_LATE, minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual, false, 1.35);
-                fareRuleBean.createFareRule(Constants.FARE_DOUBLE, minimumStay, maximumStay, advancePurchase, minimumPassengers + 1, milesAccrual - 10, false, 0.90);
-                fareRuleBean.createFareRule(Constants.FARE_EARLY, minimumStay, 7, advancePurchase + 30, minimumPassengers, milesAccrual - 80, false, 0.85);
-                fareRuleBean.createFareRule(Constants.FARE_EXPENSIVE, minimumStay, maximumStay + 60, advancePurchase - 60, minimumPassengers, milesAccrual, true, 1.5);
+                // INITIALIZE FLIGHT & BOOKING CLASS FOR 2ND SYS RELEASE
+                long r1 = routeBean.createRoute("SIN", "HKG");
+                long r2 = routeBean.createRoute("HKG", "SFO");
+                long aa1Id = routeBean.createAircraftAssignment(acId, r1);
+                long aa2Id = routeBean.createAircraftAssignment(acId, r2);
+                long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(new Date(), "12:00"), Utils.addTimeToDate(new Date(), "15:00"), aa1Id);
+                long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(new Date(), "14:00"), Utils.addTimeToDate(new Date(), "17:00"), aa2Id);
+
+                long bk1Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight1Id, 300);
+                long bk2Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight2Id, 2000);
+
+                ArrayList<BookingClass> b = new ArrayList<>();
+                ArrayList<String> p = new ArrayList<>();
+                b.add(bookingClassBean.getBookingClass(bk1Id));
+                b.add(bookingClassBean.getBookingClass(bk2Id));
+                p.add("TAN/KELLY");
+                PNR pnr = bookFlightBean.bookFlights(b, p);
+                pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, "TAN/KELLY"), Constants.SSR_ACTION_CODE_FFP, "B6/12345655");
+                pnrBean.updatePNR(pnr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
