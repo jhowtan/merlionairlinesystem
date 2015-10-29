@@ -201,7 +201,6 @@ public class CostsBean {
                     .setParameter("type", Constants.COST_PROFIT_MARGIN).setMaxResults(1).getResultList();
             profitMargin = profitMargins.get(0).getAmount();
         }
-        System.out.println(profitMargin);
         costPerSeat *= profitMargin;
         return costPerSeat;
     }
