@@ -20,7 +20,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.util.*;
 
 @ManagedBean
@@ -41,6 +40,7 @@ public class CheckInManagedBean {
     private String ffpProgram;
     private String ffpNumber;
     private String finalDestination;
+    private double baggageWeight;
 
     @EJB
     FlightScheduleBean flightScheduleBean;
@@ -140,11 +140,29 @@ public class CheckInManagedBean {
         }
     }
 
-    public void addBaggageToETicket(double weight) {
-        Baggage baggage = new Baggage();
-        baggage.setWeight(weight);
-        List<Baggage> baggageList = primaryETicket.getBaggages();
-        baggageList.add(baggage);
+    public void addBaggageToETicket() {
+        long baggageId = flightScheduleBean.createBaggageItem(baggageWeight);
+        Baggage baggage = null;
+        try {
+            baggage = flightScheduleBean.getBaggageItem(baggageId);
+            List<Baggage> baggageList = primaryETicket.getBaggages();
+            baggageList.add(baggage);
+            flightScheduleBean.updateETicket(primaryETicket);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        baggageWeight = 0;
+    }
+
+    public void printBaggageTag() {
+    }
+
+    public double countTotalWeight() {
+        double totalWeight = 0.0;
+        for (Baggage baggage : primaryETicket.getBaggages()) {
+            totalWeight += baggage.getWeight();
+        }
+        return totalWeight;
     }
 
     public LinkedHashMap<String, String> getFFPAllianceList() {
@@ -266,5 +284,13 @@ public class CheckInManagedBean {
 
     public void setSeats(Integer[] seats) {
         this.seats = seats;
+    }
+
+    public double getBaggageWeight() {
+        return baggageWeight;
+    }
+
+    public void setBaggageWeight(double baggageWeight) {
+        this.baggageWeight = baggageWeight;
     }
 }

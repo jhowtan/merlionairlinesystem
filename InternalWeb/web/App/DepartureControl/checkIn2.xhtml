@@ -129,18 +129,22 @@
                                         <!-- BAGGAGE FORM ITEMS -->
                                         <div class="form-group #{!baggageWeight.valid ? 'has-error' : ''}">
                                             <label class="control-label" for="baggageWeight">Weight for Baggage Item #{checkInManagedBean.primaryETicket.baggages.size()+1}: </label>
-                                            <h:inputText id="baggageWeight" binding="#{baggageWeight}" value="0"
-                                                             styleClass="form-control"
-                                                             required="true" requiredMessage="Please weigh the baggage item."/>
+                                            <h:inputText id="baggageWeight" binding="#{baggageWeight}" value="#{checkInManagedBean.baggageWeight}"
+                                                             styleClass="form-control" pt:type="number" pt:step="0.1" pt:min="0.1"
+                                                             required="true" requiredMessage="Please weigh the baggage item(s) if any."/>
                                             <h:message for="baggageWeight" styleClass="help-block" />
                                         </div>
                                         <p>
                                             <strong>Total Baggages:</strong> #{checkInManagedBean.primaryETicket.baggages.size()}<br/>
+                                            <strong>Total Weight:</strong> #{checkInManagedBean.countTotalWeight()} kg
                                         </p>
+                                        <ui:repeat var="baggage" value="#{checkInManagedBean.primaryETicket.getBaggages()}" varStatus="i">
+                                            <p><strong>Baggage #{i.index + 1}:</strong> #{baggage.weight}</p>
+                                        </ui:repeat>
                                         <div class="text-right">
                                             <div class="btn-group">
-                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket(baggageWeight)}" value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
-                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Print Baggage Tag" styleClass="btn btn-default btn-success" />
+                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket()}" value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
+                                                <h:commandButton action="#{checkInManagedBean.printBaggageTag()}" value="Print Baggage Tag" styleClass="btn btn-default btn-success" />
                                             </div>
                                         </div>
                                     </h:form>

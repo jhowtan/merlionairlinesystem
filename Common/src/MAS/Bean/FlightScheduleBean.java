@@ -287,6 +287,20 @@ public class FlightScheduleBean {
         em.merge(eTicket);
     }
 
+    public long createBaggageItem(double weight) {
+        Baggage baggage = new Baggage();
+        baggage.setWeight(weight);
+        em.persist(baggage);
+        em.flush();
+        return baggage.getId();
+    }
+
+    public Baggage getBaggageItem(long id) throws NotFoundException {
+        Baggage baggage = em.find(Baggage.class, id);
+        if (baggage == null) throw new NotFoundException();
+        return baggage;
+    }
+
     public void updateSingleFlight(Flight flight) throws NotFoundException {
         if (em.find(Flight.class, flight.getId()) == null) throw new NotFoundException();
         em.merge(flight);
