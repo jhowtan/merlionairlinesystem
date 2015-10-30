@@ -3,6 +3,8 @@ package MAS.ManagedBean.CrewOperations;
 import MAS.Bean.CrewCertificationBean;
 import MAS.Bean.FleetBean;
 import MAS.Bean.UserBean;
+import MAS.Common.Constants;
+import MAS.Common.Permissions;
 import MAS.Common.Utils;
 import MAS.Entity.AircraftType;
 import MAS.Entity.Certification;
@@ -43,6 +45,9 @@ public class CrewCertificationManagedBean implements Serializable {
     private Long certificationFlight;
     private Part certificationFile;
 
+    public boolean isCrewManager() {
+        return authManagedBean.hasPermission(Permissions.MANAGE_CREW_CERTIFICATION);
+    }
 
     public List<Certification> retrieveCrewCertifications() {
         try {
@@ -50,6 +55,10 @@ public class CrewCertificationManagedBean implements Serializable {
         } catch (NotFoundException e) {
             return null;
         }
+    }
+
+    public List<Certification> retrieveAllCrewCertifications() {
+        return crewCertificationBean.getAllCrewCertifications();
     }
 
     public List<AircraftType> retrieveAircraftTypes() {

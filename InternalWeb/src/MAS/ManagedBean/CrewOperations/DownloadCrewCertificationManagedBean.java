@@ -2,6 +2,7 @@ package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.CrewCertificationBean;
 import MAS.Bean.UserBean;
+import MAS.Common.Permissions;
 import MAS.Entity.Certification;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -38,7 +39,7 @@ public class DownloadCrewCertificationManagedBean implements Serializable {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         long id = Long.parseLong(params.get("id"));
         certification = crewCertificationBean.getCrewCertification(id);
-        if (certification.getOwner().getId() != authManagedBean.getUserId()) {
+        if (certification.getOwner().getId() != authManagedBean.getUserId() && !authManagedBean.hasPermission(Permissions.MANAGE_CREW_CERTIFICATION)) {
             throw new NotFoundException();
         }
 

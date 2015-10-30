@@ -12,7 +12,7 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Crew Certification</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation" class="active"><h:link outcome="certification">My Certifications</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="certification">All Certifications</h:link></li>
                         <li role="presentation"><h:link outcome="createCertification">Add New Certification</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
@@ -22,26 +22,53 @@
                     </ui:repeat>
 
                     <table class="table table-striped" id="crew_certification_table">
-                        <thead>
-                            <tr>
-                                <th>Certification</th>
-                                <th>Status</th>
-                                <th>Expiry</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{crewCertificationManagedBean.retrieveCrewCertifications()}" var="c">
-                            <tr>
-                                <td>#{crewCertificationManagedBean.getCertificationString(c)}</td>
-                                <td>#{crewCertificationManagedBean.getStatusString(c.approvalStatus)}</td>
-                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm", c.expiry)}</td>
-                                <td>
-                                    <h:link styleClass="btn btn-xs btn-primary" outcome="viewCertification"><f:param name="id" value="#{c.id}" />View</h:link>
-                                </td>
-                            </tr>
-                        </ui:repeat>
-                        </tbody>
+
+                        <h:panelGroup rendered="#{crewCertificationManagedBean.isCrewManager()}">
+                                <thead>
+                                <tr>
+                                    <th>Owner</th>
+                                    <th>Certification</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{crewCertificationManagedBean.retrieveAllCrewCertifications()}" var="c">
+                                    <tr>
+                                        <td>#{c.owner.firstName} #{c.owner.lastName}</td>
+                                        <td>#{crewCertificationManagedBean.getCertificationString(c)}</td>
+                                        <td>#{crewCertificationManagedBean.getStatusString(c.approvalStatus)}</td>
+                                        <td>
+                                            <h:link styleClass="btn btn-xs btn-primary" outcome="viewCertification"><f:param name="id" value="#{c.id}" />View</h:link>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{!crewCertificationManagedBean.isCrewManager()}">
+                                <thead>
+                                <tr>
+                                    <th>Certification</th>
+                                    <th>Status</th>
+                                    <th>Expiry</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{crewCertificationManagedBean.retrieveCrewCertifications()}" var="c">
+                                    <tr>
+                                        <td>#{crewCertificationManagedBean.getCertificationString(c)}</td>
+                                        <td>#{crewCertificationManagedBean.getStatusString(c.approvalStatus)}</td>
+                                        <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm", c.expiry)}</td>
+                                        <td>
+                                            <h:link styleClass="btn btn-xs btn-primary" outcome="viewCertification"><f:param name="id" value="#{c.id}" />View</h:link>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                        </h:panelGroup>
+
                     </table>
 
                 </div>
@@ -54,7 +81,7 @@
             $('#crew_certification_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
         </script>

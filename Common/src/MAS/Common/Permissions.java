@@ -17,7 +17,8 @@ public class Permissions {
 
     public static final String MANAGE_COSTS = "MANAGE_COSTS";
 
-    public static final String CREW_OPERATIONS = "CREW_OPERATIONS";
+    public static final String CREW_CERTIFICATION = "CREW_CERTIFICATION";
+    public static final String MANAGE_CREW_CERTIFICATION = "MANAGE_CREW_CERTIFICATION";
 
     public static final String MANAGE_CUSTOMERS = "MANAGE_CUSTOMERS";
 

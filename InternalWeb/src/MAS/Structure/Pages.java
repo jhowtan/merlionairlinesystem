@@ -79,9 +79,9 @@ public class Pages {
     public static final Page CREATE_COST = new Page("/App/CostManagement/createCost", Permissions.MANAGE_COSTS);
 
     // AFOS
-    public static final Page CREW_CERTIFICATION = new Page("/App/CrewOperations/certification", Permissions.CREW_OPERATIONS);
-    public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_OPERATIONS);
-    public static final Page VIEW_CREW_CERTIFICATION = new Page("/App/CrewOperations/viewCertification", Permissions.CREW_OPERATIONS);
+    public static final Page CREW_CERTIFICATION = new Page("/App/CrewOperations/certification", Permissions.CREW_CERTIFICATION, Permissions.MANAGE_CREW_CERTIFICATION);
+    public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_CERTIFICATION);
+    public static final Page VIEW_CREW_CERTIFICATION = new Page("/App/CrewOperations/viewCertification", Permissions.CREW_CERTIFICATION, Permissions.MANAGE_CREW_CERTIFICATION);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
