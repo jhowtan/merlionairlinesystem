@@ -33,7 +33,6 @@
                         <tbody>
                         <ui:repeat value="#{crewCertificationManagedBean.retrieveCrewCertifications()}" var="c">
                             <tr>
-                                <td>#{c.id}</td>
                                 <td>#{crewCertificationManagedBean.getCertificationString(c)}</td>
                                 <td>#{crewCertificationManagedBean.getStatusString(c.approvalStatus)}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm", c.expiry)}</td>

@@ -71,9 +71,9 @@ public class CrewCertificationManagedBean implements Serializable {
     public String getCertificationString(Certification certification) {
         switch (certification.getType()) {
             case 0:
-                return "Aircraft: " + certification.getAircraftType().getName();
+                return "Aircraft Certification: " + certification.getAircraftType().getName();
             case 1:
-                return "Language: " + certification.getLanguage();
+                return "Language Proficiency: " + certification.getLanguage();
             case 2:
                 return certification.getOthers();
         }

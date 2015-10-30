@@ -60,7 +60,7 @@
                                             </h:inputText>
                                             <h:message for="certificationOthers" styleClass="help-block" />
                                         </h:panelGroup>
-                                        
+
                                         <h:panelGroup styleClass="form-group col-lg-12 #{!certificationExpiry.valid ? 'has-error' : ''}" rendered="#{crewCertificationManagedBean.certificationType == 0}">
                                             <label class="control-label" for="certificationExpiry">Certification Expiry</label>
                                             <h:inputText binding="#{certificationExpiry}" id="certificationExpiry" value="#{crewCertificationManagedBean.certificationExpiry}" styleClass="form-control" pt:placeholder="e.g. 1992-02-28" pt:type="date" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}" required="true" requiredMessage="Certification expiry is required.">
