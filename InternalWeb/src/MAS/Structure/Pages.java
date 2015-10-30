@@ -78,6 +78,10 @@ public class Pages {
     public static final Page LIST_COSTS = new Page("/App/CostManagement/costs", Permissions.MANAGE_COSTS);
     public static final Page CREATE_COST = new Page("/App/CostManagement/createCost", Permissions.MANAGE_COSTS);
 
+    // AFOS
+    public static final Page CREW_CERTIFICATION = new Page("/App/CrewOperations/certification", Permissions.CREW_OPERATIONS);
+    public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_OPERATIONS);
+
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
     public static final Page CHECK_IN_2 = new Page("/App/DepartureControl/checkIn2", Permissions.CHECK_IN);

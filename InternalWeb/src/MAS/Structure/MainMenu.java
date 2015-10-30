@@ -68,6 +68,12 @@ public class MainMenu {
         );
 
         entries.add(
+                new MenuEntry("Crew Operations", "coffee",
+                        new MenuEntry("Crew Certification", null, Pages.CREW_CERTIFICATION, Pages.CREATE_CREW_CERTIFICATION)
+                )
+        );
+
+        entries.add(
                 new MenuEntry("Departure Control", "suitcase",
                         new MenuEntry("Check In", null, Pages.CHECK_IN, Pages.CHECK_IN_2),
                         new MenuEntry("Gate Control", null, Pages.GATE_CHECK, Pages.GATE_CHECK_2)

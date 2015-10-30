@@ -33,6 +33,7 @@
         <class>MAS.Entity.Itinerary</class>
         <class>MAS.Entity.SpecialServiceRequest</class>
         <class>MAS.Entity.ETicket</class>
+        <class>MAS.Entity.Certification</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />
