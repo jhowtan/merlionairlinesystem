@@ -24,10 +24,9 @@
                     <table class="table table-striped" id="crew_certification_table">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Certification</th>
                                 <th>Status</th>
-                                <th>Submitted</th>
+                                <th>Expiry</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -37,11 +36,9 @@
                                 <td>#{c.id}</td>
                                 <td>#{crewCertificationManagedBean.getCertificationString(c)}</td>
                                 <td>#{crewCertificationManagedBean.getStatusString(c.approvalStatus)}</td>
-                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm", c.submittedDate)}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm", c.expiry)}</td>
                                 <td>
-                                    <h:form>
-                                        <h:commandLink value="View Document" styleClass="btn btn-xs btn-primary" action="#{crewCertificationManagedBean.downloadDocument(c.document)}" target="_blank" />
-                                    </h:form>
+                                    <h:link styleClass="btn btn-xs btn-primary" outcome="viewCertification"><f:param name="id" value="#{c.id}" />View</h:link>
                                 </td>
                             </tr>
                         </ui:repeat>

@@ -14,10 +14,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -41,13 +43,6 @@ public class CrewCertificationManagedBean implements Serializable {
     private Long certificationFlight;
     private Part certificationFile;
 
-//    @PostConstruct
-//    public void init() {
-//        try {
-//            Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-//            Long.parseLong(params.get("id"));
-//        } catch (Exception e) {}
-//    }
 
     public List<Certification> retrieveCrewCertifications() {
         try {
@@ -85,30 +80,6 @@ public class CrewCertificationManagedBean implements Serializable {
         return "";
     }
 
-    public void downloadDocument(String filename) throws IOException {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-
-        ec.responseReset();
-        ec.setResponseContentType("application/pdf");
-
-        OutputStream outputStream = ec.getResponseOutputStream();
-        FileInputStream inputStream = new FileInputStream("uploads/" + filename);
-        byte[] buffer = new byte[4096];
-        int bytesRead = 0;
-        while (true) {
-            bytesRead = inputStream.read(buffer);
-            if (bytesRead > 0) {
-                outputStream.write(buffer, 0, bytesRead);
-            } else {
-                break;
-            }
-        }
-        outputStream.close();
-        inputStream.close();
-
-        FacesContext.getCurrentInstance().responseComplete();
-    }
-
     public void createCrewCertification() {
 
         try {
@@ -131,6 +102,7 @@ public class CrewCertificationManagedBean implements Serializable {
 
             Certification certification = new Certification();
             certification.setSubmittedDate(new Date());
+            certification.setExpiry(certificationExpiry);
             certification.setApprovalStatus(0);
             certification.setDocument(filename);
             certification.setOwner(userBean.getUser(authManagedBean.getUserId()));

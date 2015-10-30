@@ -1,0 +1,121 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Crew Certification - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Crew Certification</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="certification">My Certifications</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="createCertification">View Certification</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <h:panelGroup rendered="#{empty viewCrewCertificationManagedBean.certification}">
+                        Certification record not found.
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{! empty viewCrewCertificationManagedBean.certification}">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-push-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Certification Details</div>
+                                    <div class="panel-body">
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.type == 0}">
+                                            <p>
+                                                <strong>Certification Type:</strong><br />
+                                                Aircraft Certification
+                                            </p>
+                                            <p>
+                                                <strong>Aircraft Type:</strong><br />
+                                                #{viewCrewCertificationManagedBean.certification.aircraftType.name}
+                                            </p>
+                                            <p>
+                                                <strong>Certified Until:</strong><br />
+                                                #{commonManagedBean.formatDate("dd MMMM yyyy, hh:mm a", viewCrewCertificationManagedBean.certification.expiry)}
+                                            </p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.type == 1}">
+                                            <p>
+                                                <strong>Certification Type:</strong><br />
+                                                Language Certification
+                                            </p>
+                                            <p>
+                                                <strong>Language Certified:</strong><br />
+                                                #{viewCrewCertificationManagedBean.certification.language}
+                                            </p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.type == 2}">
+                                            <p>
+                                                <strong>Certification Type:</strong><br />
+                                                Other Certification
+                                            </p>
+                                            <p>
+                                                <strong>Certified For:</strong><br />
+                                                #{viewCrewCertificationManagedBean.certification.others}
+                                            </p>
+                                        </h:panelGroup>
+                                        <p>
+                                            <strong>Submitted:</strong><br />
+                                            #{commonManagedBean.formatDate("dd MMMM yyyy, hh:mm a", viewCrewCertificationManagedBean.certification.submittedDate)}
+                                        </p>
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.approvalStatus == 0}">
+                                            <p>
+                                                <strong>Approval Status:</strong><br />
+                                                Pending Approval
+                                            </p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.approvalStatus == 1}">
+                                            <p>
+                                                <strong>Approval Status:</strong><br />
+                                                Approved on #{commonManagedBean.formatDate("dd MMMM yyyy, hh:mm a", viewCrewCertificationManagedBean.certification.approvalDate)}
+                                            </p>
+                                            <p>
+                                                <strong>Approved By:</strong><br />
+                                                #{viewCrewCertificationManagedBean.certification.approver.firstName}
+                                                #{viewCrewCertificationManagedBean.certification.approver.lastName}
+                                            </p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{viewCrewCertificationManagedBean.certification.approvalStatus == 2}">
+                                            <p>
+                                                <strong>Approval Status:</strong><br />
+                                                Rejected on #{commonManagedBean.formatDate("dd MMMM yyyy, hh:mm a", viewCrewCertificationManagedBean.certification.approvalDate)}
+                                            </p>
+                                            <p>
+                                                <strong>Rejected By:</strong><br />
+                                                #{viewCrewCertificationManagedBean.certification.approver.firstName}
+                                                #{viewCrewCertificationManagedBean.certification.approver.lastName}
+                                            </p>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8 col-lg-pull-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Certification Document</div>
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <embed src="downloadCertification.xhtml?id=#{viewCrewCertificationManagedBean.certification.id}" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html"></embed>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
+                    </h:panelGroup>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

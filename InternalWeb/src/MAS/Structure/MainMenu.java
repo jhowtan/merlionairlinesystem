@@ -69,7 +69,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Crew Operations", "coffee",
-                        new MenuEntry("Crew Certification", null, Pages.CREW_CERTIFICATION, Pages.CREATE_CREW_CERTIFICATION)
+                        new MenuEntry("Crew Certification", null, Pages.CREW_CERTIFICATION, Pages.CREATE_CREW_CERTIFICATION, Pages.VIEW_CREW_CERTIFICATION)
                 )
         );
 

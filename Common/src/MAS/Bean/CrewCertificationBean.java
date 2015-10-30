@@ -28,4 +28,10 @@ public class CrewCertificationBean {
         if (user == null) throw new NotFoundException();
         return em.createQuery("SELECT c FROM Certification c WHERE c.owner = :owner", Certification.class).setParameter("owner", user).getResultList();
     }
+
+    public Certification getCrewCertification(long id) throws NotFoundException {
+        Certification certification = em.find(Certification.class, id);
+        if (certification == null) throw new NotFoundException();
+        return certification;
+    }
 }

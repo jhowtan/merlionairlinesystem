@@ -128,4 +128,16 @@ public class Certification {
     public void setDocument(String document) {
         this.document = document;
     }
+
+    private Date expiry;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
+    }
 }

@@ -81,6 +81,7 @@ public class Pages {
     // AFOS
     public static final Page CREW_CERTIFICATION = new Page("/App/CrewOperations/certification", Permissions.CREW_OPERATIONS);
     public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_OPERATIONS);
+    public static final Page VIEW_CREW_CERTIFICATION = new Page("/App/CrewOperations/viewCertification", Permissions.CREW_OPERATIONS);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
