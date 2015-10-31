@@ -1,10 +1,8 @@
 package MAS.ManagedBean.DepartureControl;
 
-import MAS.Bean.FlightScheduleBean;
-import MAS.Bean.UserBean;
-import MAS.Entity.Airport;
-import MAS.Entity.ETicket;
-import MAS.Entity.Flight;
+import MAS.Bean.*;
+import MAS.Common.Constants;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
@@ -13,6 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +25,14 @@ public class GateCheckManagedBean {
     UserBean userBean;
     @EJB
     FlightScheduleBean flightScheduleBean;
+    @EJB
+    CustomerBean customerBean;
+    @EJB
+    FareRuleBean fareRuleBean;
+    @EJB
+    FFPBean ffpBean;
+    @EJB
+    CustomerLogBean customerLogBean;
 
     private Flight flight;
 
@@ -33,7 +40,6 @@ public class GateCheckManagedBean {
     public void init() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         try {
-            //@TODO: This line causes 500 error
             flight = flightScheduleBean.getFlight(Long.parseLong(params.get("flight")));
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -43,8 +49,7 @@ public class GateCheckManagedBean {
     public void changeGateStatus(Flight flight, int status) {
         try {
             if (status == Flight.DEPARTED) {
-                flight.setActualDepartureTime(new Date());
-                // @TODO: Miles accreditation?
+                departFlight(flight);
             }
             flight.setStatus(status);
             flightScheduleBean.updateSingleFlight(flight);
@@ -55,13 +60,59 @@ public class GateCheckManagedBean {
                 flight.getGateNumber() + ": " + showStatusName(flight), "gate_check");
     }
 
-    public void changeGateNumber(Flight flight) {
-        try {
-            flightScheduleBean.updateSingleFlight(flight);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
+    public void departFlight(Flight flight) {
+        flight.setActualDepartureTime(new Date());
+        int milesFlown = new Double(flight.getAircraftAssignment().getRoute().getDistance()).intValue();
+        List<ETicket> etickets = flightScheduleBean.getETicketsForFlight(flight);
+        for (ETicket eticket : etickets) {
+            String ffp = eticket.getFfpNumber();
+            if (ffp == null) continue;
+            String[] parts = ffp.split("/");
+
+            if (parts.length != 2) continue;
+            if (!Arrays.asList(Constants.FFP_ALLIANCE_LIST_CODE).contains(parts[0])) continue;
+            if (!eticket.isGateChecked()) continue;
+
+            if (parts[0].equals("MA")) {
+                try {
+                    Customer customer = customerBean.getCustomer(Long.parseLong(parts[1]));
+                    FareRule fareRule = eticket.getBookingClass().getFareRule();
+
+                    int miles = (milesFlown * fareRule.getMilesAccrual()) / 100;
+                    miles = (miles * travelClassMultiplier(eticket)) / 100;
+
+                    int eliteMiles = milesFlown;
+                    eliteMiles = (eliteMiles * travelClassMultiplier(eticket)) / 100;
+
+                    ffpBean.creditEliteMiles(customer.getId(), eliteMiles);
+                    ffpBean.creditMiles(customer.getId(), miles);
+
+                    customerLogBean.createCustomerLog(customer.getId(),
+                            miles + " Miles earned for flight " + flight.getCode() +
+                                    " from " + flight.getAircraftAssignment().getRoute().getOrigin() +
+                                    " to " + flight.getAircraftAssignment().getRoute().getDestination(), "miles");
+                    customerLogBean.createCustomerLog(customer.getId(),
+                            eliteMiles + " Elite Miles earned for flight " + flight.getCode() +
+                                    " from " + flight.getAircraftAssignment().getRoute().getOrigin() +
+                                    " to " + flight.getAircraftAssignment().getRoute().getDestination(), "elite_miles");
+                } catch (NotFoundException e) {
+                    continue;
+                }
+            } else {
+                // @TODO: Credit Partner Miles
+            }
         }
-        authManagedBean.createAuditLog("Gate number changed for " + flight.getCode() + ": " + flight.getGateNumber(), "gate_check");
+    }
+
+    public int travelClassMultiplier(ETicket eticket) {
+        switch (eticket.getBookingClass().getTravelClass()) {
+            case 0:
+                return 150;
+            case 1:
+                return 125;
+            default:
+                return 100;
+        }
     }
 
     public String showStatusName(Flight flight) {
@@ -113,10 +164,6 @@ public class GateCheckManagedBean {
             return (double) countBoardedPassengers() / countCheckedInPassengers() * 100;
         }
         return 0;
-    }
-
-    public void removeBaggageForPassenger(ETicket eticket) {
-        //@TODO: Decide how we want to remove baggages
     }
 
     public Airport retrieveBaseAirport() {
