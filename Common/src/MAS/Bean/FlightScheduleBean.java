@@ -295,6 +295,12 @@ public class FlightScheduleBean {
         return baggage.getId();
     }
 
+    public void removeBaggageItem(long id) throws NotFoundException {
+        Baggage baggage = em.find(Baggage.class, id);
+        if (baggage == null) throw new NotFoundException();
+        em.remove(baggage);
+    }
+
     public Baggage getBaggageItem(long id) throws NotFoundException {
         Baggage baggage = em.find(Baggage.class, id);
         if (baggage == null) throw new NotFoundException();

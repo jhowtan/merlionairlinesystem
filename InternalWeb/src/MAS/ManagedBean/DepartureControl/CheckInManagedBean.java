@@ -106,6 +106,21 @@ public class CheckInManagedBean {
         return seatConfigObject.convertIntToString(eTicket.getSeatNumber());
     }
 
+    public double calculateAllowance() {
+        switch (primaryETicket.getTravelClass()) {
+            case 0 : // First class
+                return 40.0;
+            case 1 :
+                return 30.0;
+            case 2 :
+                return 25.0;
+            case 3 :
+                return 20.0;
+            default:
+                return 20.0;
+        }
+    }
+
     public void checkIn() {
         int index = 0;
         List<ETicket> selectedConnections = getSelectedConnections();
@@ -154,7 +169,21 @@ public class CheckInManagedBean {
         baggageWeight = 0;
     }
 
-    public void printBaggageTag() {
+    public void removeBaggageFromETicket(long id) {
+        try {
+            List<Baggage> baggageList = primaryETicket.getBaggages();
+            Baggage baggageToRemove = flightScheduleBean.getBaggageItem(id);
+            baggageList.remove(baggageToRemove);
+            flightScheduleBean.updateETicket(primaryETicket);
+            flightScheduleBean.removeBaggageItem(id);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void printBaggageTag(long id) {
+        //@TODO: Print Baggage Tag
+        // 1.  primaryETicket.getBaggages();
     }
 
     public double countTotalWeight() {
