@@ -141,16 +141,31 @@
                                 </tbody>
                             </table>
                             <h:form>
-                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(flight, 4)}"
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 3)}"
+                                               disabled="#{gateCheckManagedBean.flight.status != 2}"
+                                               styleClass="btn btn-info btn-block #{(gateCheckManagedBean.flight.status != 2) ? 'disabled' : ''}">
+                                    <i class="fa fa-clock-o"/> Begin Gate Closing Procedure
+                                    <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
+                                </h:commandLink>
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 4)}"
                                                disabled="#{gateCheckManagedBean.flight.status != 3}"
                                                styleClass="btn btn-warning btn-block #{(gateCheckManagedBean.flight.status != 3) ? 'disabled' : ''}">
                                     <i class="fa fa-clock-o"/> Last Call
+                                    <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                 </h:commandLink>
-                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(flight, 5)}"
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 5)}"
                                                onclick="return confirm('Are you sure you want to close the gate? This is irreversible.');"
                                                disabled="#{gateCheckManagedBean.flight.status != 4}"
                                                styleClass="btn btn-danger btn-block #{(gateCheckManagedBean.flight.status != 4) ? 'disabled' : ''}">
                                     <i class="fa fa-times-circle-o"/> Close Gate
+                                    <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
+                                </h:commandLink>
+                                <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 6)}"
+                                               onclick="return confirm('Please confirm that the flight has departed.');"
+                                               disabled="#{gateCheckManagedBean.flight.status != 5}"
+                                               styleClass="btn btn-default btn-block #{(gateCheckManagedBean.flight.status != 5) ? 'disabled' : ''}">
+                                    <i class="fa fa-times-circle-o"/> Flight Departed
+                                    <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                 </h:commandLink>
                             </h:form>
                         </div>

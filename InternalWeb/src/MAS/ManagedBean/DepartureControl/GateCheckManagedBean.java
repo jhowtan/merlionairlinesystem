@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,10 @@ public class GateCheckManagedBean {
 
     public void changeGateStatus(Flight flight, int status) {
         try {
+            if (status == Flight.DEPARTED) {
+                flight.setActualDepartureTime(new Date());
+                // @TODO: Miles accreditation?
+            }
             flight.setStatus(status);
             flightScheduleBean.updateSingleFlight(flight);
         } catch (NotFoundException e) {
@@ -62,7 +67,7 @@ public class GateCheckManagedBean {
     public String showStatusName(Flight flight) {
         switch (flight.getStatus()) {
             case Flight.NO_STATUS:
-                return "NO STATUS";
+                return "NOT AVAILABLE";
             case Flight.GATE_OPEN:
                 return "GATE OPEN";
             case Flight.BOARDING:
@@ -137,5 +142,13 @@ public class GateCheckManagedBean {
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public void setFlightScheduleBean(FlightScheduleBean flightScheduleBean) {
+        this.flightScheduleBean = flightScheduleBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
     }
 }
