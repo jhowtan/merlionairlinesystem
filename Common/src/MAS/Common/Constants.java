@@ -30,6 +30,12 @@ public class Constants {
     public static final int COST_ANNUAL = 4;
     public static final int COST_PROFIT_MARGIN = 5;
 
+    public static final double BAGGAGE_ALLOWANCE_FIRSTCLASS = 40;
+    public static final double BAGGAGE_ALLOWANCE_BUSINESS = 30;
+    public static final double BAGGAGE_ALLOWANCE_PECONOMY = 25;
+    public static final double BAGGAGE_ALLOWANCE_ECONOMY = 20;
+    public static final double EXCESS_BAGGAGE_CHARGE = 15;
+
     public static final String FARE_NORMAL = "NNMA";
     public static final String FARE_LATE = "LTH";
     public static final String FARE_DOUBLE = "GV2";

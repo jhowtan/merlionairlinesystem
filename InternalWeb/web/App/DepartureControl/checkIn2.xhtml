@@ -135,17 +135,20 @@
                                         </div>
                                         <div>
                                             <strong>Total Baggages:</strong> #{checkInManagedBean.primaryETicket.baggages.size()}<br/>
-                                            <strong>Baggage Allowance:</strong> #{checkInManagedBean.calculateAllowance()} kg<br/>
-                                            <strong>Total Weight:</strong> #{checkInManagedBean.countTotalWeight()} kg
+                                            <strong>Baggage Allowance:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.calculateAllowance(), "#,###.0")} kg<br/>
+                                            <strong>Total Weight:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.countTotalWeight(), "#,###.0")} kg
                                         </div>
                                         <h:panelGroup layout="block" rendered="#{(checkInManagedBean.countTotalWeight() > checkInManagedBean.calculateAllowance())}">
-                                            Please request customer to pay extra 55.00 SGD for the extra baggage weight.
+                                            <strong>Please request customer to pay extra #{commonManagedBean.formatMoney(checkInManagedBean.calculateExcessBaggageCharge())} for the extra baggage weight.</strong>
                                         </h:panelGroup>
                                         <ui:repeat var="baggage" value="#{checkInManagedBean.primaryETicket.getBaggages()}" varStatus="i">
                                             <div>
                                                 <strong>Baggage #{i.index + 1}:</strong> #{baggage.weight} kg
                                                 <div class="btn-group text-right">
-                                                    <h:link outcome="#" action="#{checkInManagedBean.printBaggageTag(baggage.id)}" value="Print Baggage Tag" styleClass="btn btn-xs btn-success" />
+                                                    <h:link outcome="printBaggageTag" action="#{checkInManagedBean.printBaggageTag(baggage.id)}" target="_blank" value="Print Baggage Tag" styleClass="btn btn-xs btn-success">
+                                                        <f:param value="#{checkInManagedBean.primaryETicket.id}" name="eticket"/>
+                                                        <f:param value="#{baggage.id}" name="baggage"/>
+                                                    </h:link>
                                                     <h:commandLink action="#{checkInManagedBean.removeBaggageFromETicket(baggage.id)}" value="Remove Baggage" styleClass="btn btn-xs btn-danger"
                                                                    onclick="return confirm('Are you sure you wish to remove this baggage from this passenger?');"/>
                                                 </div>
@@ -153,7 +156,9 @@
                                         </ui:repeat>
                                         <div class="text-right">
                                             <div class="btn-group">
-                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket()}" value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
+                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket()}"
+                                                                 disabled="#{!checkInManagedBean.primaryETicket.checkedIn}"
+                                                                 value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
                                             </div>
                                         </div>
                                     </h:form>

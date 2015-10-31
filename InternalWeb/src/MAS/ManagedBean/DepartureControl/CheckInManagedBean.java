@@ -109,16 +109,23 @@ public class CheckInManagedBean {
     public double calculateAllowance() {
         switch (primaryETicket.getTravelClass()) {
             case 0 : // First class
-                return 40.0;
-            case 1 :
-                return 30.0;
-            case 2 :
-                return 25.0;
-            case 3 :
-                return 20.0;
-            default:
-                return 20.0;
+                return Constants.BAGGAGE_ALLOWANCE_FIRSTCLASS;
+            case 1 : // Business
+                return Constants.BAGGAGE_ALLOWANCE_BUSINESS;
+            case 2 : // Premium Economy
+                return Constants.BAGGAGE_ALLOWANCE_PECONOMY;
+            case 3 : // Economy
+                return Constants.BAGGAGE_ALLOWANCE_ECONOMY;
         }
+        return 0;
+    }
+
+    public double calculateExcessBaggageCharge() {
+        double excessWeight = countTotalWeight() - calculateAllowance();
+        if (excessWeight <= 0) {
+            return 0;
+        }
+        return excessWeight * Constants.EXCESS_BAGGAGE_CHARGE;
     }
 
     public void checkIn() {
@@ -172,8 +179,13 @@ public class CheckInManagedBean {
     public void removeBaggageFromETicket(long id) {
         try {
             List<Baggage> baggageList = primaryETicket.getBaggages();
-            Baggage baggageToRemove = flightScheduleBean.getBaggageItem(id);
-            baggageList.remove(baggageToRemove);
+            Iterator<Baggage> it = baggageList.iterator();
+            while (it.hasNext()) {
+                Baggage baggage = it.next();
+                if (baggage.getId() == id) {
+                    it.remove();
+                }
+            }
             flightScheduleBean.updateETicket(primaryETicket);
             flightScheduleBean.removeBaggageItem(id);
         } catch (NotFoundException e) {
@@ -183,7 +195,6 @@ public class CheckInManagedBean {
 
     public void printBaggageTag(long id) {
         //@TODO: Print Baggage Tag
-        // 1.  primaryETicket.getBaggages();
     }
 
     public double countTotalWeight() {
