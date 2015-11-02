@@ -95,6 +95,10 @@ public class AuthManagedBean implements Serializable {
         }
     }
 
+    public boolean hasPermission(String permission) {
+        return permissions.contains(permission);
+    }
+
     public void logout() {
         userId = -1;
         authenticated = false;

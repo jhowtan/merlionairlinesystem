@@ -101,21 +101,26 @@
                                         <p>
                                             <strong>Frequent Flyer Program:</strong>
                                             <samp>#{checkInManagedBean.primaryETicket.ffpNumber}</samp>
-                                        </p>
+                                        </p><br/>
+                                        <table class="table">
+                                            <tbody>
+                                            <ui:repeat value="#{checkInManagedBean.getLinkedETickets(checkInManagedBean.primaryETicket)}" var="eticket">
+                                                <tr>
+                                                    <td>
+                                                        <p><strong>Seat Number (#{eticket.flight.aircraftAssignment.route.origin.id}-#{eticket.flight.aircraftAssignment.route.destination.id} on #{eticket.flight.code}):</strong>
+                                                            <samp>#{checkInManagedBean.getNiceSeatName(eticket)}</samp></p>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <h:link outcome="printBoardingPass" styleClass="btn btn-default btn-default" target="_blank">
+                                                            Print Boarding Pass
+                                                            <f:param name="eticket" value="#{eticket.id}" />
+                                                        </h:link>
+                                                    </td>
+                                                </tr>
+                                            </ui:repeat>
+                                            </tbody>
+                                        </table>
 
-                                        <ui:repeat value="#{checkInManagedBean.getLinkedETickets(checkInManagedBean.primaryETicket)}" var="eticket">
-                                        <p>
-                                            <strong>Seat Number (#{eticket.flight.aircraftAssignment.route.origin.id}-#{eticket.flight.aircraftAssignment.route.destination.id} on #{eticket.flight.code}):</strong>
-                                            <samp>#{checkInManagedBean.getNiceSeatName(eticket)}</samp>
-                                        </p>
-                                        </ui:repeat>
-
-                                        <div class="text-right">
-                                            <h:link outcome="printBoardingPass" styleClass="btn btn-default btn-default" target="_blank">
-                                                Print Boarding Pass
-                                                <f:param name="eticket" value="#{checkInManagedBean.primaryETicket.id}" />
-                                            </h:link>
-                                        </div>
                                     </h:form>
                                 </div>
                             </h:panelGroup>
@@ -129,18 +134,44 @@
                                         <!-- BAGGAGE FORM ITEMS -->
                                         <div class="form-group #{!baggageWeight.valid ? 'has-error' : ''}">
                                             <label class="control-label" for="baggageWeight">Weight for Baggage Item #{checkInManagedBean.primaryETicket.baggages.size()+1}: </label>
-                                            <h:inputText id="baggageWeight" binding="#{baggageWeight}" value="0"
-                                                             styleClass="form-control"
-                                                             required="true" requiredMessage="Please weigh the baggage item."/>
+                                            <h:inputText id="baggageWeight" binding="#{baggageWeight}" value="#{checkInManagedBean.baggageWeight}"
+                                                             styleClass="form-control" pt:type="number" pt:step="0.1"/>
                                             <h:message for="baggageWeight" styleClass="help-block" />
                                         </div>
-                                        <p>
+                                        <div>
+                                            <h:panelGroup layout="block" styleClass="alert alert-info" rendered="#{(checkInManagedBean.countTotalWeight() > checkInManagedBean.calculateAllowance())}">
+                                                <strong>Please request customer to pay extra #{commonManagedBean.formatMoney(checkInManagedBean.calculateExcessBaggageCharge())} for the extra baggage weight.</strong>
+                                            </h:panelGroup>
+
                                             <strong>Total Baggages:</strong> #{checkInManagedBean.primaryETicket.baggages.size()}<br/>
-                                        </p>
+                                            <strong>Baggage Allowance:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.calculateAllowance(), "#,###.0")} kg<br/>
+                                            <strong>Total Weight:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.countTotalWeight(), "#,###.0")} kg
+                                        </div>
+                                        <br/>
+                                        <table class="table">
+                                            <tbody>
+                                                <ui:repeat var="baggage" value="#{checkInManagedBean.primaryETicket.getBaggages()}" varStatus="i">
+                                                    <tr>
+                                                        <td><strong>Baggage #{i.index + 1}:</strong> #{baggage.weight} kg</td>
+                                                        <td class="text-right">
+                                                            <div class="btn-group">
+                                                                <h:link outcome="printBaggageTag" action="#{checkInManagedBean.printBaggageTag(baggage.id)}" target="_blank" value="Print Baggage Tag" styleClass="btn btn-xs btn-success">
+                                                                    <f:param value="#{checkInManagedBean.primaryETicket.id}" name="eticket"/>
+                                                                    <f:param value="#{baggage.id}" name="baggage"/>
+                                                                </h:link>
+                                                                <h:commandLink action="#{checkInManagedBean.removeBaggageFromETicket(baggage.id)}" value="Remove Baggage" styleClass="btn btn-xs btn-danger"
+                                                                               onclick="return confirm('Are you sure you wish to remove this baggage from this passenger?');"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </ui:repeat>
+                                            </tbody>
+                                        </table>
                                         <div class="text-right">
                                             <div class="btn-group">
-                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket(baggageWeight)}" value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
-                                                <h:commandButton action="#{checkInManagedBean.getPrimaryETicket()}" value="Print Baggage Tag" styleClass="btn btn-default btn-success" />
+                                                <h:commandButton action="#{checkInManagedBean.addBaggageToETicket()}"
+                                                                 disabled="#{!checkInManagedBean.primaryETicket.checkedIn}"
+                                                                 value="Add Baggage Item" styleClass="btn btn-default btn-default"/>
                                             </div>
                                         </div>
                                     </h:form>

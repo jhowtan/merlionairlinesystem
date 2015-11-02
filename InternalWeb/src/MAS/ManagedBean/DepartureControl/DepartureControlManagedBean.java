@@ -63,8 +63,12 @@ public class DepartureControlManagedBean {
         }
     }
 
-    public List<Flight> retrieveDepartingFlightsFromBaseAirport() {
-        return flightScheduleBean.findDepartingFlightsByAirport(retrieveBaseAirport());
+    public List<Flight> retrieveDepartingFlightsFromBaseAirportForCheckIn() {
+        return flightScheduleBean.findDepartingFlightsByAirportForCheckIn(retrieveBaseAirport());
+    }
+
+    public List<Flight> retrieveDepartingFlightsFromBaseAirportForGateControl() {
+        return flightScheduleBean.findDepartingFlightsByAirportForGateControl(retrieveBaseAirport());
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

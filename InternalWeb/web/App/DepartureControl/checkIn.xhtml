@@ -35,7 +35,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirport()}" var="flight">
+                                    <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirportForCheckIn()}" var="flight">
                                         <tr>
                                             <td>#{flight.code}</td>
                                             <td>#{flight.aircraftAssignment.route.origin.city.name} (#{flight.aircraftAssignment.route.origin.id}) - #{flight.aircraftAssignment.route.destination.city.name} (#{flight.aircraftAssignment.route.destination.id})</td>

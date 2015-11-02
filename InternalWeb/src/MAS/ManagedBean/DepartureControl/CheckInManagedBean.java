@@ -20,7 +20,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.util.*;
 
 @ManagedBean
@@ -41,6 +40,7 @@ public class CheckInManagedBean {
     private String ffpProgram;
     private String ffpNumber;
     private String finalDestination;
+    private double baggageWeight;
 
     @EJB
     FlightScheduleBean flightScheduleBean;
@@ -106,6 +106,28 @@ public class CheckInManagedBean {
         return seatConfigObject.convertIntToString(eTicket.getSeatNumber());
     }
 
+    public double calculateAllowance() {
+        switch (primaryETicket.getTravelClass()) {
+            case 0 : // First class
+                return Constants.BAGGAGE_ALLOWANCE_FIRSTCLASS;
+            case 1 : // Business
+                return Constants.BAGGAGE_ALLOWANCE_BUSINESS;
+            case 2 : // Premium Economy
+                return Constants.BAGGAGE_ALLOWANCE_PECONOMY;
+            case 3 : // Economy
+                return Constants.BAGGAGE_ALLOWANCE_ECONOMY;
+        }
+        return 0;
+    }
+
+    public double calculateExcessBaggageCharge() {
+        double excessWeight = countTotalWeight() - calculateAllowance();
+        if (excessWeight <= 0) {
+            return 0;
+        }
+        return excessWeight * Constants.EXCESS_BAGGAGE_CHARGE;
+    }
+
     public void checkIn() {
         int index = 0;
         List<ETicket> selectedConnections = getSelectedConnections();
@@ -140,11 +162,47 @@ public class CheckInManagedBean {
         }
     }
 
-    public void addBaggageToETicket(double weight) {
-        Baggage baggage = new Baggage();
-        baggage.setWeight(weight);
-        List<Baggage> baggageList = primaryETicket.getBaggages();
-        baggageList.add(baggage);
+    public void addBaggageToETicket() {
+        long baggageId = flightScheduleBean.createBaggageItem(baggageWeight);
+        Baggage baggage = null;
+        try {
+            baggage = flightScheduleBean.getBaggageItem(baggageId);
+            List<Baggage> baggageList = primaryETicket.getBaggages();
+            baggageList.add(baggage);
+            flightScheduleBean.updateETicket(primaryETicket);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        baggageWeight = 0;
+    }
+
+    public void removeBaggageFromETicket(long id) {
+        try {
+            List<Baggage> baggageList = primaryETicket.getBaggages();
+            Iterator<Baggage> it = baggageList.iterator();
+            while (it.hasNext()) {
+                Baggage baggage = it.next();
+                if (baggage.getId() == id) {
+                    it.remove();
+                }
+            }
+            flightScheduleBean.updateETicket(primaryETicket);
+            flightScheduleBean.removeBaggageItem(id);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void printBaggageTag(long id) {
+        //@TODO: Print Baggage Tag
+    }
+
+    public double countTotalWeight() {
+        double totalWeight = 0.0;
+        for (Baggage baggage : primaryETicket.getBaggages()) {
+            totalWeight += baggage.getWeight();
+        }
+        return totalWeight;
     }
 
     public LinkedHashMap<String, String> getFFPAllianceList() {
@@ -266,5 +324,13 @@ public class CheckInManagedBean {
 
     public void setSeats(Integer[] seats) {
         this.seats = seats;
+    }
+
+    public double getBaggageWeight() {
+        return baggageWeight;
+    }
+
+    public void setBaggageWeight(double baggageWeight) {
+        this.baggageWeight = baggageWeight;
     }
 }
