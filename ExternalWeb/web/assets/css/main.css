@@ -253,8 +253,11 @@ section.splash {
     text-align: center;
 }
 
-section.splash > div {
+section.splash > div:first-child {
     padding-top: 60px;
+}
+
+section.splash > div:last-child {
     padding-bottom: 60px;
 }
 
@@ -269,6 +272,17 @@ section.splash p.lead {
     margin-top: 20px;
     margin-bottom: 40px;
     font-size: 30px;
+}
+
+section.splash label {
+    color: rgba(255,255,255, 0.95);
+    font-size: 20px;
+    font-weight: lighter;
+}
+
+section.splash .form-control {
+    border-color: #cfdadd;
+    border-radius: 2px;
 }
 
 section.splash-full {
@@ -295,6 +309,12 @@ section.splash-full {
 
 section.splash.home {
     background-image: url("../img/splash-home.jpg");
+}
+
+@media (min-width: 768px) {
+    section.splash.home .booking-form {
+        margin-top: 50px;
+    }
 }
 
 /* Authentication Splash */

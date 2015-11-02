@@ -2,13 +2,43 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:form="http://www.springframework.org/tags/form">
     <ui:define name="title">Home - Merlion Airlines</ui:define>
     <ui:define name="content">
         <section class="splash splash-full home">
             <div class="container-fluid">
                 <h1 class="title animated fadeInDown">Experience the world with Merlion Airlines</h1>
                 <p class="lead animated fadeInDown">Fly across 24 different countries and 108 cities today</p>
+            </div>
+            <div class="container">
+                <h:form styleClass="booking-form">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <h:inputText pt:type="text" id="origin" binding="#{origin}" value=""
+                                             pt:placeholder="Origin"
+                                             styleClass="form-control input-lg" required="true" requiredMessage="Please enter an origin"/>
+                            </div>
+                            <h:message for="origin" styleClass="help-block" />
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <h:inputText pt:type="text" id="destination" binding="#{destination}" value=""
+                                             pt:placeholder="Destination"
+                                             styleClass="form-control input-lg" required="true" requiredMessage="Please enter a destination"/>
+                            </div>
+                            <h:message for="destination" styleClass="help-block" />
+                        </div>
+                        <div class="col-md-2">
+                            <h:link outcome="flightSearch" value="Search" styleClass="btn btn-lg btn-primary btn-block">
+                                <f:param value="#{origin}" name="origin"/>
+                                <f:param value="#{destination}" name="destination"/>
+                            </h:link>
+                        </div>
+                    </div>
+
+                </h:form>
             </div>
         </section>
     </ui:define>
