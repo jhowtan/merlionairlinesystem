@@ -10,6 +10,12 @@
     <ui:define name="content">
         <section class="content">
             <div class="container">
+                <ol class="breadcrumb">
+                    <li class="active">Search</li>
+                    <li>Results</li>
+                    <li>Book</li>
+                    <li>Payment</li>
+                </ol>
                 <div class="row">
                     <div class="col-lg-offset-1 col-lg-10 text-center">
                         <h1 class="title">Flight Search</h1>
@@ -31,9 +37,8 @@
                                 <label class="control-label" for="origin">Origin</label>
                                 <h:selectOneMenu value="" binding="#{origin}" class="form-control" id="origin">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <ui:repeat var="" value="">
-                                        <f:selectItem itemLabel="" itemValue=""/>
-                                    </ui:repeat>
+                                    <f:selectItems value="#{flightSearchManagedBean.airports}" var="ap"
+                                                   itemLabel="#{ap.city.name}, #{ap.name} (#{ap.id})" itemValue="#{ap.id}" />
                                 </h:selectOneMenu>
                                 <h:message for="origin" styleClass="help-block" />
                             </div>
@@ -41,9 +46,8 @@
                                 <label class="control-label" for="destination">Destination</label>
                                 <h:selectOneMenu value="" binding="#{destination}" class="form-control" id="destination">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <ui:repeat var="" value="">
-                                        <f:selectItem itemLabel="" itemValue=""/>
-                                    </ui:repeat>
+                                    <f:selectItems value="#{flightSearchManagedBean.airports}" var="ap"
+                                                   itemLabel="#{ap.city.name}, #{ap.name} (#{ap.id})" itemValue="#{ap.id}" />
                                 </h:selectOneMenu>
                                 <h:message for="destination" styleClass="help-block" />
                             </div>
@@ -83,9 +87,10 @@
                                              value="" binding="#{travelClass}"
                                              required="true" requiredMessage="Please choose a travel class">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <ui:repeat value="" var="">
-                                        <f:selectItem itemLabel="" itemValue=""/>
-                                    </ui:repeat>
+                                    <f:selectItem itemLabel="First Class" itemValue="0"/>
+                                    <f:selectItem itemLabel="Business Class" itemValue="1"/>
+                                    <f:selectItem itemLabel="Premium Economy" itemValue="2"/>
+                                    <f:selectItem itemLabel="Economy" itemValue="3"/>
                                 </h:selectOneMenu>
                                 <h:message for="travelClass" styleClass="help-block" />
                             </div>
