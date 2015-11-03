@@ -45,7 +45,7 @@
 
                 <div class="nav navbar-nav navbar-divider"></div>
                 <ul class="nav navbar-nav navbar-nav-primary">
-                    <li><a href="#">Book</a></li>
+                    <li><a href="#{commonManagedBean.getRoot()}/booking">Book</a></li>
                     <li><a href="#">Check In</a></li>
                     <li><a href="#">Manage</a></li>
                 </ul>
@@ -108,8 +108,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="visible-xs"><h:link outcome="login.xhtml">Sign In</h:link></li>
-                        <li><h:link outcome="signup.xhtml">Register</h:link></li>
+                        <li class="visible-xs"><h:link outcome="/login">Sign In</h:link></li>
+                        <li><h:link outcome="/signup">Register</h:link></li>
                     </ui:fragment>
                 </ul>
             </div>
