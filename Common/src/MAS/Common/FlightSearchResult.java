@@ -1,6 +1,5 @@
 package MAS.Common;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FlightSearchResult {

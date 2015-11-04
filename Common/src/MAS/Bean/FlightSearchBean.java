@@ -78,7 +78,6 @@ public class FlightSearchBean {
     public List<FlightSearchResult> searchAvailableFlights(String origin, String destination, Date date, int passengerCount, int travelClass, int travelDuration) {
         ArrayList<FlightSearchResult> flightSearchResults = new ArrayList<>();
         List<List<Flight>> flightPairs = searchFlights(origin, destination, date);
-
         for (List<Flight> flightPair : flightPairs) {
             ArrayList<FlightSearchItem> flightSearchItems = new ArrayList<>();
             Boolean unavailable = false;
@@ -90,6 +89,8 @@ public class FlightSearchBean {
                 FlightSearchItem flightSearchItem = new FlightSearchItem(flight);
                 try {
                     for (BookingClass bookingClass : bookingClassBean.findBookingClassByFlight(flight.getId())) {
+                        if (!bookingClass.isOpen())
+                            continue;
                         // Check fare rules
                         if (bookingClass.getFareRule().getMinimumPassengers() > passengerCount)
                             continue;
@@ -118,7 +119,4 @@ public class FlightSearchBean {
         }
         return flightSearchResults;
     }
-
-
-
 }

@@ -22,6 +22,7 @@ public class FlightSearchItem {
         } else if (bookingClass.getPrice() < cheapestBookingClass.getPrice()) {
             cheapestBookingClass = bookingClass;
         }
+        bookingClasses.add(bookingClass);
     }
 
     public Flight getFlight() {
