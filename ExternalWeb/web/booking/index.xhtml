@@ -35,19 +35,22 @@
                         <div class="col-lg-5 col-lg-offset-1">
                             <div class="form-group #{!origin.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="origin">Origin</label>
-                                <h:selectOneMenu value="" binding="#{origin}" class="form-control" id="origin">
+                                <h:selectOneMenu value="#{flightSearchManagedBean.origin}" binding="#{origin}" class="form-control" id="origin"
+                                        required="true" requiredMessage="Please choose an origin to fly from.">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItems value="#{flightSearchManagedBean.airports}" var="ap"
-                                                   itemLabel="#{ap.city.name}, #{ap.name} (#{ap.id})" itemValue="#{ap.id}" />
+                                    <f:selectItems value="#{flightSearchManagedBean.getOrigins()}" var="ap"
+                                                   itemLabel="#{ap.city.name} (#{ap.id})" itemValue="#{ap.id}" />
+                                    <f:ajax render="@form"/>
                                 </h:selectOneMenu>
                                 <h:message for="origin" styleClass="help-block" />
                             </div>
                             <div class="form-group #{!destination.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="destination">Destination</label>
-                                <h:selectOneMenu value="" binding="#{destination}" class="form-control" id="destination">
+                                <h:selectOneMenu value="#{flightSearchManagedBean.destination}" binding="#{destination}" class="form-control" id="destination"
+                                                 required="true" requiredMessage="Please choose an destination to fly to.">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItems value="#{flightSearchManagedBean.airports}" var="ap"
-                                                   itemLabel="#{ap.city.name}, #{ap.name} (#{ap.id})" itemValue="#{ap.id}" />
+                                    <f:selectItems value="#{flightSearchManagedBean.getDestinationsByOrigin()}" var="ap"
+                                                   itemLabel="#{ap.city.name} (#{ap.id})" itemValue="#{ap.id}" />
                                 </h:selectOneMenu>
                                 <h:message for="destination" styleClass="help-block" />
                             </div>
@@ -60,18 +63,32 @@
                             <p class="form-subheading">Please choose your dates of departure and return if any. We will do our best to serve your travel needs with our fleet flying round the clock.</p>
                         </div>
                         <div class="col-lg-5 col-lg-offset-1">
+                            <div class="checkbox">
+                                <label>
+                                    <h:selectBooleanCheckbox styleClass="checkbox" id="roundTrip" value="#{flightSearchManagedBean.roundTrip}">
+                                        <f:ajax render="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                    Round Trip
+                                </label>
+                            </div>
                             <div class="form-group #{!departDate.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="departDate">Departure Date</label>
                                 <h:inputText pt:type="date" class="form-control" id="departDate" binding="#{departDate}"
-                                               value="" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
-                                               required="true" requiredMessage="Please enter a date of departure"/>
+                                               value="#{flightSearchManagedBean.departureDate}" pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                               required="true" requiredMessage="Please enter a date of departure.">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                                <h:message for="departDate" styleClass="help-block" />
                             </div>
-                            <h:message for="departDate" styleClass="help-block" />
-                            <div class="form-group #{!returnDate.valid ? 'has-error' : ''}">
+                            <h:panelGroup class="form-group #{!returnDate.valid ? 'has-error' : ''}" rendered="#{flightSearchManagedBean.roundTrip}">
                                 <label class="control-label" for="returnDate">Return Date</label>
-                                <h:inputText pt:type="date" pt:min="#{commonManagedBean.formatDate(departDate, null)}" class="form-control" binding="#{returnDate}" id="returnDate" />
-                            </div>
-                            <h:message for="returnDate" styleClass="help-block" />
+                                <h:inputText pt:type="date" pt:min="#{commonManagedBean.formatDate(departDate, null)}"
+                                             value="#{flightSearchManagedBean.returnDate}" class="form-control" binding="#{returnDate}" id="returnDate"
+                                             required="true" requiredMessage="Please enter the date of your return.">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                                <h:message for="returnDate" styleClass="help-block" />
+                            </h:panelGroup>
                         </div>
                     </div>
                     <hr/>
@@ -84,21 +101,23 @@
                             <div class="form-group #{!travelClass.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="travelClass">Travel Class</label>
                                 <h:selectOneMenu pt:type="text" styleClass="form-control" id="travelClass"
-                                             value="" binding="#{travelClass}"
+                                             value="#{flightSearchManagedBean.travelClass}" binding="#{travelClass}"
                                              required="true" requiredMessage="Please choose a travel class">
-                                    <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItem itemLabel="First Class" itemValue="0"/>
-                                    <f:selectItem itemLabel="Business Class" itemValue="1"/>
-                                    <f:selectItem itemLabel="Premium Economy" itemValue="2"/>
                                     <f:selectItem itemLabel="Economy" itemValue="3"/>
+                                    <f:selectItem itemLabel="Premium Economy" itemValue="2"/>
+                                    <f:selectItem itemLabel="Business Class" itemValue="1"/>
+                                    <f:selectItem itemLabel="First Class" itemValue="0"/>
                                 </h:selectOneMenu>
                                 <h:message for="travelClass" styleClass="help-block" />
                             </div>
                             <div class="form-group #{!numPassengers.valid ? 'has-error' : ''}">
                                 <label class="control-label" for="numPassengers">Passengers</label>
-                                <h:inputText pt:type="number" styleClass="form-control" pt:placeholder="1"
-                                             value="#{signUpManagedBean.lastName}" binding="#{numPassengers}" id="numPassengers"
-                                             required="true" requiredMessage="Please enter the number of passengers flying" />
+                                <h:inputText pt:type="number" styleClass="form-control" pt:min="1" pt:max="8"
+                                             value="#{flightSearchManagedBean.passengers}" binding="#{numPassengers}" id="numPassengers"
+                                             required="true" requiredMessage="Please enter the number of passengers flying"
+                                             validatorMessage="A valid number of passengers is required." converterMessage="Please choose between 1 to 8 passengers.">
+                                    <f:validateLongRange minimum="1" maximum="8"/>
+                                </h:inputText>
                                 <h:message for="numPassengers" styleClass="help-block" />
                             </div>
                         </div>
@@ -106,7 +125,7 @@
                     <hr/>
                     <div class="row">
                         <div class="col-md-6 col-md-push-3 col-lg-6 col-lg-push-3">
-                            <h:link outcome="#" value="Search &amp; Book" styleClass="btn btn-primary btn-lg btn-block" />
+                            <h:commandLink value="Search &amp; Book" styleClass="btn btn-primary btn-lg btn-block" />
                         </div>
                     </div>
                 </h:form>

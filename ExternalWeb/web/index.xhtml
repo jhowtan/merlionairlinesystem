@@ -2,8 +2,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-                xmlns:form="http://www.springframework.org/tags/form">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="title">Home - Merlion Airlines</ui:define>
     <ui:define name="content">
         <section class="splash splash-full home">
@@ -31,7 +30,7 @@
                             <h:message for="destination" styleClass="help-block" />
                         </div>
                         <div class="col-md-2">
-                            <h:link outcome="flightSearch" value="Search" styleClass="btn btn-lg btn-primary btn-block">
+                            <h:link outcome="/booking" value="Search" styleClass="btn btn-lg btn-primary btn-block">
                                 <f:param value="#{origin}" name="origin"/>
                                 <f:param value="#{destination}" name="destination"/>
                             </h:link>
