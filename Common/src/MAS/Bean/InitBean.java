@@ -164,16 +164,12 @@ public class InitBean {
 
             // INITIALIZE SOME FARE RULES
             try {
-                int minimumStay = 1;
-                int maximumStay = 30;
-                int advancePurchase = 60;
                 int minimumPassengers = 1;
-                int milesAccrual = 100;
-                fareRuleBean.createFareRule(Constants.FARE_NORMAL, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, true, 1.0);
-                fareRuleBean.createFareRule(Constants.FARE_LATE, minimumStay + 9, maximumStay, advancePurchase - 30, minimumPassengers, milesAccrual, false, 1.35);
-                fareRuleBean.createFareRule(Constants.FARE_DOUBLE, minimumStay, maximumStay, advancePurchase, minimumPassengers + 1, milesAccrual - 10, false, 0.90);
-                fareRuleBean.createFareRule(Constants.FARE_EARLY, minimumStay, 7, advancePurchase + 30, minimumPassengers, milesAccrual - 80, false, 0.85);
-                fareRuleBean.createFareRule(Constants.FARE_EXPENSIVE, minimumStay, maximumStay + 60, advancePurchase - 60, minimumPassengers, milesAccrual, true, 1.5);
+                fareRuleBean.createFareRule(Constants.FARE_NORMAL, 0, 0, 0, minimumPassengers, 100, true, 1.0);
+                fareRuleBean.createFareRule(Constants.FARE_LATE, 0, 0, 0, minimumPassengers, 100, false, 1.35);
+                fareRuleBean.createFareRule(Constants.FARE_DOUBLE, 0, 0, 0, minimumPassengers + 1, 90, false, 0.90);
+                fareRuleBean.createFareRule(Constants.FARE_EARLY, 3, 14, 45, minimumPassengers, 25, false, 0.85);
+                fareRuleBean.createFareRule(Constants.FARE_EXPENSIVE, 0, 0, 0, minimumPassengers, 100, true, 1.5);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -220,18 +216,49 @@ public class InitBean {
                 // INITIALIZE FLIGHT & BOOKING CLASS FOR 2ND SYS RELEASE
                 long r1 = routeBean.createRoute("SIN", "HKG");
                 long r2 = routeBean.createRoute("HKG", "SFO");
+                long r3 = routeBean.createRoute("SFO", "HKG");
+                long r4 = routeBean.createRoute("HKG", "SIN");
                 long aa1Id = routeBean.createAircraftAssignment(acId, r1);
                 long aa2Id = routeBean.createAircraftAssignment(acId, r2);
-                long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(new Date(), "12:00"), Utils.addTimeToDate(new Date(), "15:00"), aa1Id);
-                long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(new Date(), "14:00"), Utils.addTimeToDate(new Date(), "17:00"), aa2Id);
+                long aa3Id = routeBean.createAircraftAssignment(acId, r3);
+                long aa4Id = routeBean.createAircraftAssignment(acId, r4);
+                long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "12:00"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "15:00"), aa1Id);
+                long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "16:05"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 2), "05:11"), aa2Id);
+                long flight3Id = flightScheduleBean.createFlight("MA13", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "08:15"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "21:14"), aa3Id);
+                long flight4Id = flightScheduleBean.createFlight("MA14", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "22:30"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 9), "02:01"), aa4Id);
 
-                long bk1Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight1Id, 300);
-                long bk2Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight2Id, 2000);
+                long bk1Id = bookingClassBean.createBookingClass("T", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight1Id, 305);
+                long bk2Id = bookingClassBean.createBookingClass("T", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight2Id, 2000);
+                long bk3Id = bookingClassBean.createBookingClass("T", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight3Id, 2100);
+                long bk4Id = bookingClassBean.createBookingClass("T", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight4Id, 405);
+                long bk5Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId(), flight1Id, 205);
+                long bk6Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId(), flight2Id, 1800);
+                long bk7Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId(), flight3Id, 1999);
+                long bk8Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_DOUBLE).getId(), flight4Id, 300);
+                long bk9Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId(), flight1Id, 405);
+                long bk10Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId(), flight2Id, 2500);
+                long bk11Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId(), flight3Id, 2300);
+                long bk12Id = bookingClassBean.createBookingClass("U", 10, 3, fareRuleBean.getFareRuleByName(Constants.FARE_EXPENSIVE).getId(), flight4Id, 500);
+
+                bookingClassBean.changeOpenStatus(bk1Id, true);
+                bookingClassBean.changeOpenStatus(bk2Id, true);
+                bookingClassBean.changeOpenStatus(bk3Id, true);
+                bookingClassBean.changeOpenStatus(bk4Id, true);
+                bookingClassBean.changeOpenStatus(bk5Id, true);
+                bookingClassBean.changeOpenStatus(bk6Id, true);
+                bookingClassBean.changeOpenStatus(bk7Id, true);
+                bookingClassBean.changeOpenStatus(bk8Id, true);
+                bookingClassBean.changeOpenStatus(bk9Id, true);
+                bookingClassBean.changeOpenStatus(bk10Id, true);
+                bookingClassBean.changeOpenStatus(bk11Id, true);
+                bookingClassBean.changeOpenStatus(bk12Id, true);
 
                 ArrayList<BookingClass> b = new ArrayList<>();
                 ArrayList<String> p = new ArrayList<>();
                 b.add(bookingClassBean.getBookingClass(bk1Id));
                 b.add(bookingClassBean.getBookingClass(bk2Id));
+                b.add(bookingClassBean.getBookingClass(bk3Id));
+                b.add(bookingClassBean.getBookingClass(bk4Id));
                 p.add("TAN/KELLY");
                 PNR pnr = bookFlightBean.bookFlights(b, p);
                 pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, "TAN/KELLY"), Constants.SSR_ACTION_CODE_FFP, "B6/12345655");
