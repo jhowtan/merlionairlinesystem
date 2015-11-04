@@ -217,7 +217,7 @@ public class RouteBean {
                 .getResultList();
 
         List<Airport> connectingFlightDestinations =
-                em.createQuery("SELECT r2.destination FROM Route r1, Route r2 WHERE r1.origin = :origin AND r1.destination = r2.origin", Airport.class)
+                em.createQuery("SELECT r2.destination FROM Route r1, Route r2 WHERE r1.origin = :origin AND r1.destination = r2.origin AND r1.origin <> r2.destination", Airport.class)
                 .setParameter("origin", origin)
                 .getResultList();
 

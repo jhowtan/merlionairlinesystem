@@ -75,7 +75,9 @@ public class FlightSearchManagedBean {
 
     public List<Airport> getDestinationsByOrigin() {
         try {
-            return routeBean.getDestinationByOrigin(routeBean.getAirport(origin));
+            List<Airport> destinations = routeBean.getDestinationByOrigin(routeBean.getAirport(origin));
+            Collections.sort(destinations, new AirportComparator());
+            return destinations;
         } catch (NotFoundException e) {
             return new ArrayList<>();
         }
