@@ -332,11 +332,16 @@ span.cheapest-price {
     font-weight: 400;
 }
 
-span.flight-display, span.stopover-display{
+span.flight-display {
     display: block;
     padding-top: 10px;
     font-size: 20px;
     font-weight: 500;
+}
+
+span.stopover-display {
+    display: block;
+    font-size: 16px;;
 }
 
 .table tbody>tr>td.vert-align{
