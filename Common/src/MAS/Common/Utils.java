@@ -41,6 +41,20 @@ public class Utils {
         return calendar.getTime();
     }
 
+    public static Date currentMonthStart() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        return c.getTime();
+    }
+
+    public static Date currentMonthEnd() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        return c.getTime();
+    }
+
     public static int yearsBetween(Date first, Date last) {
         Calendar a = getCalendar(first);
         Calendar b = getCalendar(last);

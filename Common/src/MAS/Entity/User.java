@@ -188,4 +188,26 @@ public class User {
     public void setBaseAirport(Airport baseAirport) {
         this.baseAirport = baseAirport;
     }
+
+    private int job;
+
+    @Basic
+    public int getJob() {
+        return job;
+    }
+
+    public void setJob(int job) {
+        this.job = job;
+    }
+
+    private Airport currentLocation;
+
+    @ManyToOne
+    public Airport getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Airport currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 }

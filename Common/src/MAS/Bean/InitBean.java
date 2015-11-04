@@ -158,6 +158,15 @@ public class InitBean {
                 userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999", routeBean.findAirportByCode("SIN"));
                 userBean.changePassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
+
+                //Initialize some flight crew
+                String[] firstNames = {"Daryl", "John", "Jon", "Louis", "Jacob", "Mark", "Marcus", "Larry", "Aaron", "Barry"};
+                ArrayList<Long> flightCrewPermissions = new ArrayList<>();
+                flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
+                roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
+                for (int i = 0; i < 20; i ++) {
+                    //userId = userBean.createUser(
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

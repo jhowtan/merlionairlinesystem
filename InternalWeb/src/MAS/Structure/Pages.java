@@ -82,6 +82,8 @@ public class Pages {
     public static final Page CREW_CERTIFICATION = new Page("/App/CrewOperations/certification", Permissions.CREW_CERTIFICATION, Permissions.MANAGE_CREW_CERTIFICATION);
     public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_CERTIFICATION);
     public static final Page VIEW_CREW_CERTIFICATION = new Page("/App/CrewOperations/viewCertification", Permissions.CREW_CERTIFICATION, Permissions.MANAGE_CREW_CERTIFICATION);
+    public static final Page FLIGHT_BIDDING = new Page("/App/CrewOperations/flightBidding", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
+    public static final Page VIEW_FLIGHT_BIDS = new Page("/App/CrewOperations/viewFlightBids", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
@@ -89,7 +91,6 @@ public class Pages {
     // DCS: Gate Control
     public static final Page GATE_CHECK = new Page("/App/DepartureControl/gateCheck", Permissions.GATE_CONTROL);
     public static final Page GATE_CHECK_2 = new Page("/App/DepartureControl/gateCheck2", Permissions.GATE_CONTROL);
-
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);

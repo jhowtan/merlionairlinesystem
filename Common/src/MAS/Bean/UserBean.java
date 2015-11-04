@@ -42,6 +42,7 @@ public class UserBean {
         user.setResetHash(Utils.generateSalt());
         user.setResetExpiry(Utils.hoursFromNow(72));
         user.setBaseAirport(baseAirport);
+        user.setCurrentLocation(baseAirport);
         em.persist(user);
         em.flush();
 
