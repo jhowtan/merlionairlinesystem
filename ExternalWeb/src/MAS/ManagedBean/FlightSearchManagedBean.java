@@ -1,6 +1,8 @@
 package MAS.ManagedBean;
 
+import MAS.Bean.FlightSearchBean;
 import MAS.Bean.RouteBean;
+import MAS.Common.FlightSearchResult;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
@@ -17,6 +19,10 @@ public class FlightSearchManagedBean {
 
     @EJB
     RouteBean routeBean;
+    @EJB
+    FlightSearchBean flightSearchBean;
+
+    private int step = 1;
 
     private List<Airport> airports;
     private String origin;
@@ -33,11 +39,31 @@ public class FlightSearchManagedBean {
         ArrayList<Airport> origins = new ArrayList<>();
         List<Route> routes = routeBean.getAllRoutes();
         for (Route r : routes) {
-            if (!origins.contains(r))
+            if (!origins.contains(r.getOrigin()))
                origins.add(r.getOrigin());
         }
         Collections.sort(origins, new AirportComparator());
         return origins;
+    }
+
+    public List<FlightSearchResult> getOutboundResults() {
+        int travelDuration = 0;
+        if (roundTrip) {
+            travelDuration = (int) ((returnDate.getTime() - departureDate.getTime()) / 1000 / 60 / 60 / 24);
+        }
+        return flightSearchBean.searchAvailableFlights(origin, destination, departureDate, passengers, travelClass, travelDuration);
+    }
+
+    public void nextStep() {
+        step++;
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 
     private class AirportComparator implements Comparator<Airport> {

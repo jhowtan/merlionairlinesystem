@@ -91,6 +91,8 @@ public class FlightSearchBean {
                     for (BookingClass bookingClass : bookingClassBean.findBookingClassByFlight(flight.getId())) {
                         if (!bookingClass.isOpen())
                             continue;
+                        if (bookingClass.getAllocation() - bookingClass.getOccupied() < passengerCount)
+                            continue;
                         // Check fare rules
                         if (bookingClass.getFareRule().getMinimumPassengers() > passengerCount)
                             continue;

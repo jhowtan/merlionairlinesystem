@@ -3,7 +3,7 @@ package MAS.Common;
 import java.util.List;
 
 public class FlightSearchResult {
-    public final List<FlightSearchItem> flightSearchItems;
+    private final List<FlightSearchItem> flightSearchItems;
 
 
     public FlightSearchResult(List<FlightSearchItem> flightSearchItems) {
@@ -22,4 +22,7 @@ public class FlightSearchResult {
         return cheapestPrice;
     }
 
+    public List<FlightSearchItem> getFlightSearchItems() {
+        return flightSearchItems;
+    }
 }
