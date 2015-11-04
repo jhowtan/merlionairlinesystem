@@ -146,7 +146,7 @@
                                             <p>From <br/>
                                                 <span class="cheapest-price">$#{flightSearchResult.getCheapestPrice()}</span>
                                             </p>
-                                            <p>Total Duration: <strong>17 hours</strong> <strong>36 mins</strong></p>
+                                            <p>Total Duration: <strong>#{flightSearchResult.getTotalHoursDuration()} hours #{flightSearchResult.getTotalMinDuration()} mins</strong></p>
                                             <span class="stopover-display">
                                                 <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 0}">Direct Flight</h:panelGroup>
                                                 <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 1}">

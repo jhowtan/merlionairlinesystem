@@ -330,6 +330,7 @@ span.cheapest-price {
     display: inline;
     font-size: 32px;
     font-weight: 400;
+    color: #2b542c;
 }
 
 span.flight-display {

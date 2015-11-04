@@ -1,5 +1,6 @@
 package MAS.Common;
 
+import java.util.Date;
 import java.util.List;
 
 public class FlightSearchResult {
@@ -22,6 +23,32 @@ public class FlightSearchResult {
         return cheapestPrice;
     }
 
+    public long getTotalHoursDuration() {
+        long totalHours = 0;
+        for (FlightSearchItem flightSearchItem : flightSearchItems) {
+            Date departTime = flightSearchItem.getFlight().getDepartureTime();
+            Date arriveTime = flightSearchItem.getFlight().getArrivalTime();
+
+            long diff = arriveTime.getTime() - departTime.getTime();
+            long hours = diff / (60 * 60 * 1000) % 24;
+            totalHours += hours;
+        }
+        return totalHours;
+    }
+
+    public long getTotalMinDuration() {
+        long totalMinutes = 0;
+        for (FlightSearchItem flightSearchItem : flightSearchItems) {
+            Date departTime = flightSearchItem.getFlight().getDepartureTime();
+            Date arriveTime = flightSearchItem.getFlight().getArrivalTime();
+
+            long diff = arriveTime.getTime() - departTime.getTime();
+            long minutes = diff / (60 * 1000) % 60;
+            totalMinutes += minutes;
+        }
+        return totalMinutes;
+
+    }
     public List<FlightSearchItem> getFlightSearchItems() {
         return flightSearchItems;
     }
