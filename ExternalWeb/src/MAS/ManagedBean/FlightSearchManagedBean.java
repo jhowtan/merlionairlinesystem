@@ -1,10 +1,17 @@
 package MAS.ManagedBean;
 
+import MAS.Bean.BookFlightBean;
 import MAS.Bean.FlightSearchBean;
+import MAS.Bean.PNRBean;
 import MAS.Bean.RouteBean;
+import MAS.Common.Constants;
+import MAS.Common.FlightSearchItem;
 import MAS.Common.FlightSearchResult;
 import MAS.Entity.Airport;
+import MAS.Entity.BookingClass;
+import MAS.Entity.PNR;
 import MAS.Entity.Route;
+import MAS.Exception.BookingException;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +28,10 @@ public class FlightSearchManagedBean {
     RouteBean routeBean;
     @EJB
     FlightSearchBean flightSearchBean;
+    @EJB
+    BookFlightBean bookFlightBean;
+    @EJB
+    PNRBean pnrBean;
 
     private int step = 1;
 
@@ -32,8 +43,78 @@ public class FlightSearchManagedBean {
     private Date returnDate;
     private int passengers = 1;
     private int travelClass = 3;
-
     private boolean roundTrip = true;
+
+    // Step 2
+    private List<FlightSearchResult> outboundSearchResult;
+    private List<FlightSearchResult> returnSearchResult;
+    private FlightSearchResult selectedOutboundSearchResult;
+    private FlightSearchResult selectedReturnSearchResult;
+
+    // Step 3
+    private List<FlightSearchItem> selectedFlightSearchItems;
+    private HashMap<Integer, BookingClass> selectedBookingClasses;
+
+    // Step 4
+    private double totalPricePerPerson;
+    private List<PassengerDetails> passengersDetails;
+    private String paymentName;
+    private String paymentCard;
+
+    // Step 5
+    private PNR pnr;
+
+    public class PassengerDetails {
+        private String firstName;
+        private String lastName;
+        private String ffpProgram;
+        private String ffpNumber;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getFfpProgram() {
+            return ffpProgram;
+        }
+
+        public void setFfpProgram(String ffpProgram) {
+            this.ffpProgram = ffpProgram;
+        }
+
+        public String getFfpNumber() {
+            return ffpNumber;
+        }
+
+        public void setFfpNumber(String ffpNumber) {
+            this.ffpNumber = ffpNumber;
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+        setAirports(routeBean.getAllAirports());
+    }
+
+    public LinkedHashMap<String, String> getFFPAllianceList() {
+        LinkedHashMap<String, String> ffpAllianceList = new LinkedHashMap<>();
+        for (int i = 0; i < Constants.FFP_ALLIANCE_LIST_CODE.length; i++) {
+            ffpAllianceList.put(Constants.FFP_ALLIANCE_LIST_NAME[i], Constants.FFP_ALLIANCE_LIST_CODE[i]);
+        }
+        return ffpAllianceList;
+    }
 
     public List<Airport> getOrigins() {
         ArrayList<Airport> origins = new ArrayList<>();
@@ -62,8 +143,94 @@ public class FlightSearchManagedBean {
         return flightSearchBean.searchAvailableFlights(destination, origin, returnDate, passengers, travelClass, travelDuration);
     }
 
+    public void selectOutboundSearchResult(int item) {
+        if (item == -1) {
+            selectedOutboundSearchResult = null;
+            return;
+        }
+        selectedOutboundSearchResult = outboundSearchResult.get(item);
+    }
+
+    public void selectReturnSearchResult(int item) {
+        if (item == -1) {
+            selectedReturnSearchResult = null;
+            return;
+        }
+        selectedReturnSearchResult = returnSearchResult.get(item);
+    }
+
+    public void selectBookingClass(int flightItem, int bookingClassItem) {
+        if (bookingClassItem == -1) {
+            selectedBookingClasses.remove(flightItem);
+            return;
+        }
+        selectedBookingClasses.put(flightItem, selectedFlightSearchItems.get(flightItem).getBookingClasses().get(bookingClassItem));
+    }
+
+    public boolean isStep2Valid() {
+        if (selectedOutboundSearchResult == null) return false;
+        if (selectedReturnSearchResult == null && roundTrip) return false;
+        return true;
+    }
+
+    public boolean isStep3Valid() {
+        return selectedBookingClasses.size() == selectedFlightSearchItems.size();
+    }
+
     public void nextStep() {
         step++;
+        switch (step) {
+            case 2:
+                selectedOutboundSearchResult = null;
+                selectedReturnSearchResult = null;
+                outboundSearchResult = getOutboundResults();
+                returnSearchResult = null;
+                if (roundTrip) {
+                    returnSearchResult = getReturnResults();
+                }
+                passengersDetails = new ArrayList<>();
+                for (int i = 0; i < passengers; i++) {
+                    passengersDetails.add(new PassengerDetails());
+                }
+                break;
+            case 3:
+                selectedFlightSearchItems = new ArrayList<>();
+                selectedFlightSearchItems.addAll(selectedOutboundSearchResult.getFlightSearchItems());
+                if (roundTrip) {
+                    selectedFlightSearchItems.addAll(selectedReturnSearchResult.getFlightSearchItems());
+                }
+                selectedBookingClasses = new HashMap<>();
+                break;
+            case 4:
+                totalPricePerPerson = 0;
+                for (BookingClass bookingClass : selectedBookingClasses.values()) {
+                    totalPricePerPerson += bookingClass.getPrice();
+                }
+                break;
+            case 5:
+                try {
+                    pnr = null;
+                    ArrayList<BookingClass> b = new ArrayList<>(selectedBookingClasses.values());
+                    ArrayList<String> p = new ArrayList<>();
+                    for (PassengerDetails passengerDetails : passengersDetails) {
+                        p.add(passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase());
+                    }
+                    pnr = bookFlightBean.bookFlights(b, p);
+                    for (PassengerDetails passengerDetails : passengersDetails) {
+                        if (passengerDetails.ffpNumber.equals("")) continue;
+                        pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase()), Constants.SSR_ACTION_CODE_FFP, passengerDetails.ffpProgram + "/" + passengerDetails.ffpNumber);
+                    }
+                    pnrBean.updatePNR(pnr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+        }
+    }
+
+    public void prevStep() {
+        step--;
     }
 
     public int getStep() {
@@ -72,6 +239,54 @@ public class FlightSearchManagedBean {
 
     public void setStep(int step) {
         this.step = step;
+    }
+
+    public List<FlightSearchResult> getOutboundSearchResult() {
+        return outboundSearchResult;
+    }
+
+    public void setOutboundSearchResult(List<FlightSearchResult> outboundSearchResult) {
+        this.outboundSearchResult = outboundSearchResult;
+    }
+
+    public List<FlightSearchResult> getReturnSearchResult() {
+        return returnSearchResult;
+    }
+
+    public void setReturnSearchResult(List<FlightSearchResult> returnSearchResult) {
+        this.returnSearchResult = returnSearchResult;
+    }
+
+    public FlightSearchResult getSelectedOutboundSearchResult() {
+        return selectedOutboundSearchResult;
+    }
+
+    public void setSelectedOutboundSearchResult(FlightSearchResult selectedOutboundSearchResult) {
+        this.selectedOutboundSearchResult = selectedOutboundSearchResult;
+    }
+
+    public FlightSearchResult getSelectedReturnSearchResult() {
+        return selectedReturnSearchResult;
+    }
+
+    public void setSelectedReturnSearchResult(FlightSearchResult selectedReturnSearchResult) {
+        this.selectedReturnSearchResult = selectedReturnSearchResult;
+    }
+
+    public HashMap<Integer, BookingClass> getSelectedBookingClasses() {
+        return selectedBookingClasses;
+    }
+
+    public void setSelectedBookingClasses(HashMap<Integer, BookingClass> selectedBookingClasses) {
+        this.selectedBookingClasses = selectedBookingClasses;
+    }
+
+    public double getTotalPricePerPerson() {
+        return totalPricePerPerson;
+    }
+
+    public void setTotalPricePerPerson(double totalPricePerPerson) {
+        this.totalPricePerPerson = totalPricePerPerson;
     }
 
     private class AirportComparator implements Comparator<Airport> {
@@ -89,11 +304,6 @@ public class FlightSearchManagedBean {
         } catch (NotFoundException e) {
             return new ArrayList<>();
         }
-    }
-
-    @PostConstruct
-    public void init() {
-        setAirports(routeBean.getAllAirports());
     }
 
     public List<Airport> getAirports() {
@@ -158,5 +368,45 @@ public class FlightSearchManagedBean {
 
     public void setRoundTrip(boolean roundTrip) {
         this.roundTrip = roundTrip;
+    }
+
+    public List<FlightSearchItem> getSelectedFlightSearchItems() {
+        return selectedFlightSearchItems;
+    }
+
+    public void setSelectedFlightSearchItems(List<FlightSearchItem> selectedFlightSearchItems) {
+        this.selectedFlightSearchItems = selectedFlightSearchItems;
+    }
+
+    public List<PassengerDetails> getPassengersDetails() {
+        return passengersDetails;
+    }
+
+    public void setPassengersDetails(List<PassengerDetails> passengersDetails) {
+        this.passengersDetails = passengersDetails;
+    }
+
+    public String getPaymentName() {
+        return paymentName;
+    }
+
+    public void setPaymentName(String paymentName) {
+        this.paymentName = paymentName;
+    }
+
+    public String getPaymentCard() {
+        return paymentCard;
+    }
+
+    public void setPaymentCard(String paymentCard) {
+        this.paymentCard = paymentCard;
+    }
+
+    public PNR getPnr() {
+        return pnr;
+    }
+
+    public void setPnr(PNR pnr) {
+        this.pnr = pnr;
     }
 }

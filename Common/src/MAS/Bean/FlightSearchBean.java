@@ -93,6 +93,8 @@ public class FlightSearchBean {
                             continue;
                         if (bookingClass.getAllocation() - bookingClass.getOccupied() < passengerCount)
                             continue;
+                        if (bookingClass.getTravelClass() != travelClass)
+                            continue;
                         // Check fare rules
                         if (bookingClass.getFareRule().getMinimumPassengers() > passengerCount)
                             continue;
