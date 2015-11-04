@@ -134,30 +134,48 @@
 
                     <h:panelGroup styleClass="panel panel-default" layout="block">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Outbound Flight</h3>
+                            <h3 class="panel-title">Outbound Flights</h3>
                         </div>
                         <div class="panel-body">
                             <h:panelGroup layout="block" rendered="#{flightSearchManagedBean.getOutboundResults().size() == 0}">No flight found.</h:panelGroup>
                             <table class="table table-hover">
+                                <tbody>
                                 <ui:repeat value="#{flightSearchManagedBean.getOutboundResults()}" var="flightSearchResult">
                                     <tr>
                                         <td>
-                                            <p>From $#{flightSearchResult.getCheapestPrice()}</p>
-                                            <p>
-                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 0}">Direct Flight</h:panelGroup>
-                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 1}">#{flightSearchResult.getStopoverCounts()} Stopover</h:panelGroup>
+                                            <p>From <br/>
+                                                <span class="cheapest-price">$#{flightSearchResult.getCheapestPrice()}</span>
                                             </p>
+                                            <p>Total Duration: <strong>17 hours</strong> <strong>36 mins</strong></p>
+                                            <span class="stopover-display">
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 0}">Direct Flight</h:panelGroup>
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 1}">
+                                                    #{flightSearchResult.getStopoverCounts()} Stopover
+                                                </h:panelGroup>
+                                            </span>
                                         </td>
                                         <td>
                                             <ui:repeat value="#{flightSearchResult.flightSearchItems}" var="flightSearchItem">
-                                                <p>#{flightSearchItem.flight.aircraftAssignment.route.origin.id} - #{flightSearchItem.flight.aircraftAssignment.route.destination.id} on #{flightSearchItem.flight.code} (#{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.departureTime)} - #{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.arrivalTime)})</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h3><span class="fa fa-plane"></span> #{flightSearchItem.flight.aircraftAssignment.route.origin.id} - #{flightSearchItem.flight.aircraftAssignment.route.destination.id}
+                                                            <br/><small>#{flightSearchItem.flight.aircraftAssignment.route.origin.city.name} - #{flightSearchItem.flight.aircraftAssignment.route.destination.city.name}</small>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <span class="flight-display">On #{flightSearchItem.flight.code} <small>(#{flightSearchItem.flight.aircraftAssignment.aircraft.tailNumber})</small></span>
+                                                        <strong>Departs:</strong> <small>#{commonManagedBean.formatDate("hh:mm a, E d MMM", flightSearchItem.flight.departureTime)}</small><br/>
+                                                        <strong>Arrives:</strong> <small>#{commonManagedBean.formatDate("hh:mm a, E d MMM", flightSearchItem.flight.arrivalTime)}</small>
+                                                    </div>
+                                                </div>
                                             </ui:repeat>
                                         </td>
-                                        <td class="text-right">
+                                        <td class="text-center vert-align">
                                             <a class="btn btn-primary" href="#">Select</a>
                                         </td>
                                     </tr>
                                 </ui:repeat>
+                                </tbody>
                             </table>
                         </div>
                     </h:panelGroup>

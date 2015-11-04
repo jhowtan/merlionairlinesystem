@@ -323,3 +323,22 @@ section.splash.auth {
     background-image: url("../img/splash-auth.jpg");
     background-position: bottom;
 }
+
+/* Flight Search */
+
+span.cheapest-price {
+    display: inline;
+    font-size: 32px;
+    font-weight: 400;
+}
+
+span.flight-display, span.stopover-display{
+    display: block;
+    padding-top: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
