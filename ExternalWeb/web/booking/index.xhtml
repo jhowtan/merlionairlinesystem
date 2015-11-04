@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <ui:define name="title">Flight Search - Merlion Airlines</ui:define>
 
@@ -129,22 +129,71 @@
             </h:panelGroup>
 
             <h:panelGroup styleClass="container" rendered="#{flightSearchManagedBean.step == 2}" layout="block">
+                <h:form>
 
-                <table class="table">
-                    <ui:repeat value="#{flightSearchManagedBean.getOutboundResults()}" var="flightSearchResult">
-                        <tr>
-                            <td>
-                                From $#{flightSearchResult.getCheapestPrice()}
-                            </td>
-                            <td>
-                                <ui:repeat value="#{flightSearchResult.flightSearchItems}" var="flightSearchItem">
-                                    <p>#{flightSearchItem.flight.aircraftAssignment.route.origin.id} - #{flightSearchItem.flight.aircraftAssignment.route.destination.id} on #{flightSearchItem.flight.code} (#{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.departureTime)} - #{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.arrivalTime)})</p>
+
+                    <h:panelGroup styleClass="panel panel-default" layout="block">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Outbound Flight</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h:panelGroup layout="block" rendered="#{flightSearchManagedBean.getOutboundResults().size() == 0}">No flight found.</h:panelGroup>
+                            <table class="table table-hover">
+                                <ui:repeat value="#{flightSearchManagedBean.getOutboundResults()}" var="flightSearchResult">
+                                    <tr>
+                                        <td>
+                                            <p>From $#{flightSearchResult.getCheapestPrice()}</p>
+                                            <p>
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 0}">Direct Flight</h:panelGroup>
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 1}">#{flightSearchResult.getStopoverCounts()} Stopover</h:panelGroup>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <ui:repeat value="#{flightSearchResult.flightSearchItems}" var="flightSearchItem">
+                                                <p>#{flightSearchItem.flight.aircraftAssignment.route.origin.id} - #{flightSearchItem.flight.aircraftAssignment.route.destination.id} on #{flightSearchItem.flight.code} (#{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.departureTime)} - #{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.arrivalTime)})</p>
+                                            </ui:repeat>
+                                        </td>
+                                        <td class="text-right">
+                                            <a class="btn btn-primary" href="#">Select</a>
+                                        </td>
+                                    </tr>
                                 </ui:repeat>
-                            </td>
-                        </tr>
-                    </ui:repeat>
-                </table>
+                            </table>
+                        </div>
+                    </h:panelGroup>
 
+
+                    <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{flightSearchManagedBean.roundTrip}">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Return Flight</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h:panelGroup layout="block" rendered="#{flightSearchManagedBean.getReturnResults().size() == 0}">No flight found.</h:panelGroup>
+                            <table class="table table-hover">
+                                <ui:repeat value="#{flightSearchManagedBean.getReturnResults()}" var="flightSearchResult">
+                                    <tr>
+                                        <td>
+                                            <p>From $#{flightSearchResult.getCheapestPrice()}</p>
+                                            <p>
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 0}">Direct Flight</h:panelGroup>
+                                                <h:panelGroup rendered="#{flightSearchResult.getStopoverCounts() == 1}">#{flightSearchResult.getStopoverCounts()} Stopover</h:panelGroup>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <ui:repeat value="#{flightSearchResult.flightSearchItems}" var="flightSearchItem">
+                                                <p>#{flightSearchItem.flight.aircraftAssignment.route.origin.id} - #{flightSearchItem.flight.aircraftAssignment.route.destination.id} on #{flightSearchItem.flight.code} (#{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.departureTime)} - #{commonManagedBean.formatDate("hh:mm", flightSearchItem.flight.arrivalTime)})</p>
+                                            </ui:repeat>
+                                        </td>
+                                        <td class="text-right">
+                                            <a class="btn btn-primary" href="#">Select</a>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </table>
+                        </div>
+                    </h:panelGroup>
+
+                </h:form>
             </h:panelGroup>
 
         </section>

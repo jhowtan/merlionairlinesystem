@@ -54,6 +54,14 @@ public class FlightSearchManagedBean {
         return flightSearchBean.searchAvailableFlights(origin, destination, departureDate, passengers, travelClass, travelDuration);
     }
 
+    public List<FlightSearchResult> getReturnResults() {
+        int travelDuration = 0;
+        if (roundTrip) {
+            travelDuration = (int) ((returnDate.getTime() - departureDate.getTime()) / 1000 / 60 / 60 / 24);
+        }
+        return flightSearchBean.searchAvailableFlights(destination, origin, returnDate, passengers, travelClass, travelDuration);
+    }
+
     public void nextStep() {
         step++;
     }
