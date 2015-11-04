@@ -40,7 +40,7 @@
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
                                     <f:selectItems value="#{flightSearchManagedBean.getOrigins()}" var="ap"
                                                    itemLabel="#{ap.city.name} (#{ap.id})" itemValue="#{ap.id}" />
-                                    <f:ajax render="@form"/>
+                                    <f:ajax render="destination" />
                                 </h:selectOneMenu>
                                 <h:message for="origin" styleClass="help-block" />
                             </div>
@@ -66,7 +66,7 @@
                             <div class="checkbox">
                                 <label>
                                     <h:selectBooleanCheckbox styleClass="checkbox" id="roundTrip" value="#{flightSearchManagedBean.roundTrip}">
-                                        <f:ajax render="@form"/>
+                                        <f:ajax render="returnDateContainer"/>
                                     </h:selectBooleanCheckbox>
                                     Round Trip
                                 </label>
@@ -80,14 +80,16 @@
                                 </h:inputText>
                                 <h:message for="departDate" styleClass="help-block" />
                             </div>
-                            <h:panelGroup class="form-group #{!returnDate.valid ? 'has-error' : ''}" rendered="#{flightSearchManagedBean.roundTrip}">
-                                <label class="control-label" for="returnDate">Return Date</label>
-                                <h:inputText pt:type="date" pt:min="#{commonManagedBean.formatDate(departDate, null)}"
-                                             value="#{flightSearchManagedBean.returnDate}" class="form-control" binding="#{returnDate}" id="returnDate"
-                                             required="true" requiredMessage="Please enter the date of your return.">
-                                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                                </h:inputText>
-                                <h:message for="returnDate" styleClass="help-block" />
+                            <h:panelGroup id="returnDateContainer">
+                                <h:panelGroup class="form-group #{!returnDate.valid ? 'has-error' : ''}" rendered="#{flightSearchManagedBean.roundTrip}">
+                                    <label class="control-label" for="returnDate">Return Date</label>
+                                    <h:inputText pt:type="date" pt:min="#{commonManagedBean.formatDate(departDate, null)}"
+                                                 value="#{flightSearchManagedBean.returnDate}" class="form-control" binding="#{returnDate}" id="returnDate"
+                                                 required="true" requiredMessage="Please enter the date of your return.">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                                    </h:inputText>
+                                    <h:message for="returnDate" styleClass="help-block" />
+                                </h:panelGroup>
                             </h:panelGroup>
                         </div>
                     </div>

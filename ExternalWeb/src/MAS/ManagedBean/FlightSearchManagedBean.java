@@ -8,9 +8,11 @@ import MAS.Exception.NotFoundException;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.util.*;
 
 @ManagedBean
+@ViewScoped
 public class FlightSearchManagedBean {
 
     @EJB
