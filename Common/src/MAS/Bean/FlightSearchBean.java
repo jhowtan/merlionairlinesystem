@@ -1,7 +1,10 @@
 package MAS.Bean;
 
+import MAS.Common.FlightSearchItem;
+import MAS.Common.FlightSearchResult;
 import MAS.Common.Utils;
 import MAS.Entity.Airport;
+import MAS.Entity.BookingClass;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 
@@ -18,27 +21,12 @@ public class FlightSearchBean {
     EntityManager em;
     @EJB
     RouteBean routeBean;
+    @EJB
+    BookFlightBean bookFlightBean;
+    @EJB
+    BookingClassBean bookingClassBean;
 
     public FlightSearchBean() {
-    }
-
-    public List<Flight> searchDirectFlights(String origin, String destination, Date date) {
-        try {
-            Airport originAirport = routeBean.getAirport(origin);
-            Airport destinationAirport = routeBean.getAirport(destination);
-            Date dayStart = Utils.addTimeToDate(date, "00:00");
-            Date dayEnd = Utils.minutesLater(dayStart, 1440);
-
-            List<Flight> directFlights = em.createQuery("SELECT f from  Flight f WHERE f.aircraftAssignment.route.origin = :origin AND f.aircraftAssignment.route.destination = :destination AND f.departureTime >= :dayStart AND f.departureTime < :dayEnd", Flight.class)
-                    .setParameter("origin", originAirport)
-                    .setParameter("destination", destinationAirport)
-                    .setParameter("dayStart", dayStart)
-                    .setParameter("dayEnd", dayEnd)
-                    .getResultList();
-            return directFlights;
-        } catch (NotFoundException e) {
-            return new ArrayList<Flight>();
-        }
     }
 
     public List<List<Flight>> searchFlights(String origin, String destination, Date date) {
@@ -83,8 +71,54 @@ public class FlightSearchBean {
             return results;
 
         } catch (NotFoundException e) {
-            return new ArrayList<List<Flight>>();
+            return new ArrayList<>();
         }
     }
+
+    public List<FlightSearchResult> searchAvailableFlights(String origin, String destination, Date date, int passengerCount, int travelClass, int travelDuration) {
+        ArrayList<FlightSearchResult> flightSearchResults = new ArrayList<>();
+        List<List<Flight>> flightPairs = searchFlights(origin, destination, date);
+
+        for (List<Flight> flightPair : flightPairs) {
+            ArrayList<FlightSearchItem> flightSearchItems = new ArrayList<>();
+            Boolean unavailable = false;
+            for (Flight flight : flightPair) {
+                if (bookFlightBean.seatsLeft(flight, travelClass) < passengerCount) {
+                    unavailable = true;
+                    break;
+                }
+                FlightSearchItem flightSearchItem = new FlightSearchItem(flight);
+                try {
+                    for (BookingClass bookingClass : bookingClassBean.findBookingClassByFlight(flight.getId())) {
+                        // Check fare rules
+                        if (bookingClass.getFareRule().getMinimumPassengers() > passengerCount)
+                            continue;
+                        if (bookingClass.getFareRule().getMinimumStay() != 0 && bookingClass.getFareRule().getMinimumStay() > travelDuration)
+                            continue;
+                        if (bookingClass.getFareRule().getMaximumStay() != 0 && bookingClass.getFareRule().getMaximumStay() < travelDuration)
+                            continue;
+                        if (Utils.hoursFromNow(24 * bookingClass.getFareRule().getAdvancePurchase()).after(flight.getDepartureTime()))
+                            continue;
+                        flightSearchItem.addBookingClass(bookingClass);
+                    }
+                    if (flightSearchItem.getBookingClasses().size() == 0) {
+                        unavailable = true;
+                        break;
+                    }
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
+                }
+                flightSearchItems.add(flightSearchItem);
+            }
+            if (unavailable) {
+                continue;
+            }
+            FlightSearchResult flightSearchResult = new FlightSearchResult(flightSearchItems);
+            flightSearchResults.add(flightSearchResult);
+        }
+        return flightSearchResults;
+    }
+
+
 
 }
