@@ -35,7 +35,9 @@ public class SeatSelectionManagedBean {
         try {
             eTicket = flightScheduleBean.getETicket(Long.parseLong(params.get("eticket")));
             seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-            selectedSeat = seatConfigObject.convertIntToString(eTicket.getSeatNumber());
+            if (eTicket.getSeatNumber() != -1) {
+                selectedSeat = seatConfigObject.convertIntToString(eTicket.getSeatNumber());
+            }
         } catch (Exception e) {
             eTicket = null;
         }
