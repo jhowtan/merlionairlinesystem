@@ -1,0 +1,35 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Seat Selection - Merlion Airlines</ui:define>
+
+    <ui:define name="content">
+        <section class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-10 text-center">
+                        <h1 class="title">Seat Selection</h1>
+                        <p class="lead">Select your seat ahead of time before your flight.</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="container">
+                <h:panelGroup layout="block" rendered="#{empty seatSelectionManagedBean.eTicket}">
+                    <p class="text-center">Sorry, seat selection is not available to you at the moment.<br/>Please contact customer support.</p>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{! empty seatSelectionManagedBean.eTicket}">
+                    #{seatSelectionManagedBean.availableSeatsName()}
+                    <hr/>
+                    #{seatSelectionManagedBean.getCabinConfig()}
+                </h:panelGroup>
+            </div>
+        </section>
+
+    </ui:define>
+
+</ui:composition>
