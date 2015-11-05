@@ -64,10 +64,17 @@ public class CheckInManagedBean {
                 relatedPassengersCheckDisable.put(eTicket.getId(), eTicket.getId().equals(primaryETicket.getId()));
             }
 
-            // @TODO: Populate seat array with allocated seat in ticket
-
             connections = getPossibleConnections(primaryETicket);
             seats = new Integer[connections.size()];
+
+            int i = 0;
+            for (ETicket connection : connections) {
+                if (connection.getSeatNumber() != -1) {
+                    seats[i] = connection.getSeatNumber();
+                }
+                i++;
+            }
+
             finalDestination = connections.get(connections.size() - 1).getFlight().getAircraftAssignment().getRoute().getDestination().getId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +104,16 @@ public class CheckInManagedBean {
 
     public LinkedHashMap<String, Integer> availableSeatsName(ETicket eTicket) {
         SeatConfigObject seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-        seatConfigObject.addTakenSeats(flightScheduleBean.getSeatsTakenForFlight(eTicket.getFlight()));
+        List<Integer> seatsTakenForFlight = flightScheduleBean.getSeatsTakenForFlight(eTicket.getFlight());
+        Iterator<Integer> it = seatsTakenForFlight.iterator();
+        while (it.hasNext()) {
+            Integer seatNumber = it.next();
+            if (seatNumber == eTicket.getSeatNumber()) {
+                it.remove();
+                break;
+            }
+        }
+        seatConfigObject.addTakenSeats(seatsTakenForFlight);
         return seatConfigObject.getAvailableSeatsNameForTravelClass(eTicket.getTravelClass());
     }
 

@@ -29,6 +29,7 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" rendered="#{! empty seatSelectionManagedBean.eTicket}" styleClass="text-center">
                     <div id="seat-map"></div>
+                    <hr/>
                     <h:form>
                         <h:inputText id="selectedSeat" binding="#{selectedSeat}" value="#{seatSelectionManagedBean.selectedSeat}" styleClass="hidden">
                             <f:ajax render="saveButtonContainer" />
