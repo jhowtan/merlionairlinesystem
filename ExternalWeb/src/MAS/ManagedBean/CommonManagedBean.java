@@ -1,5 +1,6 @@
 package MAS.ManagedBean;
 
+import MAS.Common.Cabin;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.Customer;
@@ -88,6 +89,10 @@ public class CommonManagedBean {
                 return "gold";
         }
         return "blue";
+    }
+
+    public String getTravelClassString(int travelClass) {
+        return Cabin.TRAVEL_CLASSES[travelClass];
     }
 
 }

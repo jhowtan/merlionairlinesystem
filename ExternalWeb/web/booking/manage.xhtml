@@ -1,0 +1,99 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Manage Booking - Merlion Airlines</ui:define>
+
+    <ui:define name="content">
+        <section class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-10 text-center">
+                        <h1 class="title">Manage Booking</h1>
+                        <h:panelGroup rendered="#{empty manageBookingManagedBean.pnr}">
+                            <p class="lead">Have a booking confirmation number? Manage your flight booking here.</p>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{! empty manageBookingManagedBean.pnr}">
+                            <p class="lead">Manage your flights for booking number #{manageBookingManagedBean.pnr.bookingReference}.</p>
+                        </h:panelGroup>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="container">
+                <h:panelGroup layout="block" styleClass="alert alert-warning" rendered="#{empty manageBookingManagedBean.pnr and ! empty manageBookingManagedBean.bookingReference and ! empty manageBookingManagedBean.passengerLastName}">Sorry, we were unable to retrieve your booking.</h:panelGroup>
+                <h:form rendered="#{empty manageBookingManagedBean.pnr}">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="form-group #{!bookingReference.valid ? 'has-error' : ''}">
+                                <h:inputText pt:placeholder="Booking Reference Number" styleClass="form-control input-lg" binding="#{bookingReference}" value="#{manageBookingManagedBean.bookingReference}" required="true" />
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group #{!passengerLastName.valid ? 'has-error' : ''}">
+                                <h:inputText pt:placeholder="Passenger Last Name" styleClass="form-control input-lg" binding="#{passengerLastName}" value="#{manageBookingManagedBean.passengerLastName}" required="true" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <h:commandButton action="#{manageBookingManagedBean.retrievePNR()}" value="Find Booking" styleClass="btn btn-primary btn-lg btn-block" />
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+
+                <h:panelGroup layout="block" rendered="#{! empty manageBookingManagedBean.pnr}">
+
+                    <ui:repeat value="#{manageBookingManagedBean.getFlightTicketCollections(manageBookingManagedBean.pnr)}" var="flightTicketCollection">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Flight #{flightTicketCollection.flight.code}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table">
+                                    <tr>
+                                        <th rowspan="2">#{flightTicketCollection.flight.code}</th>
+                                        <th width="120">Departs</th>
+                                        <td>#{flightTicketCollection.flight.aircraftAssignment.route.origin.name} (#{flightTicketCollection.flight.aircraftAssignment.route.origin.id})</td>
+                                        <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.departureTime)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="120">Arrives</th>
+                                        <td>#{flightTicketCollection.flight.aircraftAssignment.route.destination.name} (#{flightTicketCollection.flight.aircraftAssignment.route.destination.id})</td>
+                                        <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.arrivalTime)}</td>
+                                    </tr>
+                                </table>
+
+                                <hr />
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Passenger</th>
+                                            <th>Seat</th>
+                                            <th>Class</th>
+                                        </tr>
+                                    </thead>
+                                    <ui:repeat value="#{flightTicketCollection.eTickets}" var="eTicket">
+                                        <tbody>
+                                            <tr>
+                                                <td>#{eTicket.passengerName}</td>
+                                                <td>Unselected</td>
+                                                <td>#{commonManagedBean.getTravelClassString(eTicket.travelClass)}</td>
+                                            </tr>
+                                        </tbody>
+                                    </ui:repeat>
+                                </table>
+                            </div>
+                        </div>
+                    </ui:repeat>
+
+                </h:panelGroup>
+            </div>
+        </section>
+    </ui:define>
+
+</ui:composition>

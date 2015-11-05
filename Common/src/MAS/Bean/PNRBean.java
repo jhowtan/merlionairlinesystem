@@ -1,9 +1,6 @@
 package MAS.Bean;
 
-import MAS.Entity.Flight;
-import MAS.Entity.Itinerary;
-import MAS.Entity.PNR;
-import MAS.Entity.SpecialServiceRequest;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.LocalBean;
@@ -21,6 +18,27 @@ public class PNRBean {
     EntityManager em;
 
     public PNRBean() {
+    }
+
+    public PNR getPNR(long id) throws NotFoundException {
+        PNR pnr = em.find(PNR.class, id);
+        if (pnr == null) throw new NotFoundException();
+        return pnr;
+    }
+
+    public PNR getPNR(long id, String passengerLastName) throws NotFoundException {
+        PNR pnr = getPNR(id);
+        for(String passenger : pnr.getPassengers()) {
+            String[] parts = passenger.split("/");
+            if (parts[0].toUpperCase().equals(passengerLastName.trim().toUpperCase())) {
+                return pnr;
+            }
+        }
+        throw new NotFoundException();
+    }
+
+    public List<ETicket> getETicketsByPNR(PNR pnr) {
+        return em.createQuery("SELECT e FROM ETicket e WHERE e.pnr = :pnr", ETicket.class).setParameter("pnr", pnr).getResultList();
     }
 
     public void updatePNR(PNR pnr) throws NotFoundException {
