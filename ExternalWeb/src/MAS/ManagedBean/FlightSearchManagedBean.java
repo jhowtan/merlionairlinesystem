@@ -17,6 +17,7 @@ import MAS.Exception.NotFoundException;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.*;
 
@@ -32,6 +33,9 @@ public class FlightSearchManagedBean {
     BookFlightBean bookFlightBean;
     @EJB
     PNRBean pnrBean;
+
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
 
     private int step = 1;
 
@@ -63,6 +67,10 @@ public class FlightSearchManagedBean {
 
     // Step 5
     private PNR pnr;
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
 
     public class PassengerDetails {
         private String firstName;
@@ -190,7 +198,16 @@ public class FlightSearchManagedBean {
                 }
                 passengersDetails = new ArrayList<>();
                 for (int i = 0; i < passengers; i++) {
-                    passengersDetails.add(new PassengerDetails());
+                    if (authManagedBean.isAuthenticated() && i == 0) {
+                        PassengerDetails p = new PassengerDetails();
+                        p.firstName = authManagedBean.retrieveCustomer().getFirstName();
+                        p.lastName = authManagedBean.retrieveCustomer().getLastName();
+                        p.ffpNumber = String.valueOf(authManagedBean.getCustomerId());
+                        p.ffpProgram = "MA";
+                        passengersDetails.add(p);
+                    } else {
+                        passengersDetails.add(new PassengerDetails());
+                    }
                 }
                 break;
             case 3:
