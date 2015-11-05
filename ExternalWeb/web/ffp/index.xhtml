@@ -1,0 +1,108 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:merlion="http://java.sun.com/jsf/composite/merlion"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="preRender"><f:event type="preRenderView" listener="#{authManagedBean.requiresLogin}" /></ui:define>
+
+    <ui:define name="title">MerlionFlyer Elite - Merlion Airlines</ui:define>
+    <ui:define name="content">
+        <section class="content">
+            <div class="container summary-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="lead">MerlionFlyer Elite Blue 81111111</h3>
+                        <h1 class="miles-summary">124187 MerlionFlyer Miles</h1>
+                    </div>
+                    <div class="col-md-offset-3 col-md-3 text-right">
+                        <div class="cust-display">
+                            <p>Mr Lau Wei Jie</p>
+                            <p>jon@jon.sg</p>
+                            <p>Last Login: #{commonManagedBean.formatDate("dd MMM yyyy, hh:mm a", null)}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="container">
+                <h1 class="ffp-title">Your Status</h1>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <h2 class="form-heading">Status Requalification</h2>
+                        <p class="form-subheading">
+                            Earned by flying exclusively on Merlion Airlines.
+                        </p>
+                        <div class="panel panel-info">
+                            <div class="panel-body text-center">
+                                <h2>MerlionFlyer Elite Gold <small>requalification</small></h2>
+                                <span class="miles-count">0 <small>Elite Miles</small></span>
+                                <br/>required by <span class="miles-expiry">30 Apr 2016</span>.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <h2 class="form-heading">Expiring miles</h2>
+                        <p class="form-subheading">
+                            Earned by flying on Merlion Airlines or partner airlines.
+                        </p>
+                        <div class="panel panel-info">
+                            <div class="panel-body text-center">
+                                You have <span class="miles-count">1,606</span>
+                                MerlionFlyer miles expiring by
+                                <span class="miles-expiry">30 Apr 2016</span>.
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="pull-right">
+                                <h:link outcome="/booking" styleClass="btn btn-info btn-lg btn-block">Redeem Flights</h:link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="container">
+                <h1 class="ffp-title">Your Bookings</h1>
+                <h:panelGroup styleClass="panel panel-default" layout="block">
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th width="30%">Booking Reference</th>
+                                <th width="30%">Origin to Destination</th>
+                                <th width="30%">Date</th>
+                                <th width="10%">Manage</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>test</td>
+                                    <td>test</td>
+                                    <td>test</td>
+                                    <td>test</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </h:panelGroup>
+                <div class="text-center">
+                    <div class="pull-right">
+                        <h:link outcome="/booking/manage" styleClass="btn btn-info btn-lg btn-block">See All Bookings</h:link>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="container">
+                <h1 class="ffp-title">Recent Activity</h1>
+                <h:panelGroup styleClass="panel panel-default" layout="block">
+                    <div class="panel-body">
+                        No Recent Activity
+                    </div>
+                </h:panelGroup>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>
