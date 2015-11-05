@@ -1,9 +1,7 @@
 package MAS.Bean;
 
 import MAS.Common.Utils;
-import MAS.Entity.Flight;
-import MAS.Entity.FlightRoster;
-import MAS.Entity.User;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -21,11 +19,17 @@ public class FlightRosterBean {
     @PersistenceContext
     EntityManager em;
 
+    @EJB
+    FlightBidBean flightBidBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
+    @EJB
+    RouteBean routeBean;
 
     public FlightRosterBean() {
     }
 
-    public long createFlightRoster(long flightId, List<Long> userIds) throws NotFoundException {
+    public long createFlightRoster(long flightId, List<Long> userIds, boolean complete) throws NotFoundException {
         Flight flight = em.find(Flight.class, flightId);
         if (flight == null) throw new NotFoundException();
         List<User> members = new ArrayList<>();
@@ -37,6 +41,7 @@ public class FlightRosterBean {
         FlightRoster flightRoster = new FlightRoster();
         flightRoster.setFlight(flight);
         flightRoster.setMembers(members);
+        flightRoster.setComplete(complete);
         em.persist(flightRoster);
         em.flush();
         return flightRoster.getId();
@@ -88,6 +93,11 @@ public class FlightRosterBean {
     }
 
     public void allocateFlightJobs() {
-
+        List<FlightBid> flightBids = flightBidBean.getFlightBidsWithStatus(0);
+        List<Flight> flights = flightScheduleBean.getFlightWithinDate(Utils.currentMonthStart(), Utils.currentMonthEnd());
+        List<Airport> airports = new ArrayList<>();
+        List<List<User>> airportBuckets = new ArrayList<>();
+        //Initialise airport buckets
+        //For each flight, choose flight attendants. If unable, mark as uncomplete
     }
 }

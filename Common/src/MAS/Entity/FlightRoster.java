@@ -60,4 +60,15 @@ public class FlightRoster {
     public void setSignedOut(List<User> signedOut) {
         this.signedOut = signedOut;
     }
+
+    private boolean complete;
+
+    @Basic
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
 }

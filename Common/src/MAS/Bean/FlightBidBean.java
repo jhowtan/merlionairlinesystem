@@ -58,6 +58,10 @@ public class FlightBidBean {
         return flightBid;
     }
 
+    public List<FlightBid> getFlightBidsWithStatus(int status) {
+        return em.createQuery("SELECT f from FlightBid f WHERE f.status = :status", FlightBid.class).setParameter("status", status).getResultList();
+    }
+
     public void removeFlightBid(long id) throws NotFoundException {
         FlightBid flightBid = em.find(FlightBid.class, id);
         if (flightBid == null) throw new NotFoundException();
