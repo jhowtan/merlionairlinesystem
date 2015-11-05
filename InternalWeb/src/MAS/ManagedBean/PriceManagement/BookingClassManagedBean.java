@@ -51,13 +51,13 @@ public class BookingClassManagedBean {
         try {
             bookingClassBean.changeOpenStatus(id, isOpen);
             if(isOpen) {
-                authManagedBean.createAuditLog("Closed booking class: " + bookingClassBean.getBookingClass(id).getName(), "close_booking_class");
-                FacesMessage m = new FacesMessage("The booking class has been successfully closed.");
+                authManagedBean.createAuditLog("Opened booking class: " + bookingClassBean.getBookingClass(id).getName(), "open_booking_class");
+                FacesMessage m = new FacesMessage("The booking class has been successfully opened.");
                 m.setSeverity(FacesMessage.SEVERITY_INFO);
                 FacesContext.getCurrentInstance().addMessage("status", m);
             } else {
-                authManagedBean.createAuditLog("Opened booking class: " + bookingClassBean.getBookingClass(id).getName(), "open_booking_class");
-                FacesMessage m = new FacesMessage("The booking class has been successfully opened.");
+                authManagedBean.createAuditLog("Closed booking class: " + bookingClassBean.getBookingClass(id).getName(), "close_booking_class");
+                FacesMessage m = new FacesMessage("The booking class has been successfully closed.");
                 m.setSeverity(FacesMessage.SEVERITY_INFO);
                 FacesContext.getCurrentInstance().addMessage("status", m);
             }

@@ -24,6 +24,14 @@ public class BookFlightBean {
     public BookFlightBean() {
     }
 
+    public long seatsLeft(Flight flight, int travelClass) {
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        int totalSeatsInClass = seatConfigObject.getSeatsInClass(travelClass);
+        long seatsBookedInClass = (long) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", flight).setParameter("travelClass", travelClass).getSingleResult();
+        return totalSeatsInClass - seatsBookedInClass;
+    }
+
     public PNR bookFlights(List<BookingClass> bookingClasses, List<String> passengerNames) throws BookingException {
         // Ensure enough seats available on all booking class and flights before proceeding
         for (BookingClass bookingClass : bookingClasses) {
@@ -33,12 +41,7 @@ public class BookFlightBean {
             if (!bookingClass.isOpen()) {
                 throw new BookingException("Booking class not open!");
             }
-            SeatConfigObject seatConfigObject = new SeatConfigObject();
-            seatConfigObject.parse(bookingClass.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-            int totalSeatsInClass = seatConfigObject.getSeatsInClass(bookingClass.getTravelClass());
-            long seatsBookedInClass = (long) em.createQuery("SELECT COUNT(e) FROM ETicket e WHERE e.flight = :flight AND e.travelClass = :travelClass").setParameter("flight", bookingClass.getFlight()).setParameter("travelClass", bookingClass.getTravelClass()).getSingleResult();
-            long seatsLeftInClass = totalSeatsInClass - seatsBookedInClass;
-            if (seatsLeftInClass < passengerNames.size()) {
+            if (seatsLeft(bookingClass.getFlight(), bookingClass.getTravelClass()) < passengerNames.size()) {
                 throw new BookingException("Not enough seats in travel class.");
             }
         }

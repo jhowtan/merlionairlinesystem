@@ -253,8 +253,11 @@ section.splash {
     text-align: center;
 }
 
-section.splash > div {
+section.splash > div:first-child {
     padding-top: 60px;
+}
+
+section.splash > div:last-child {
     padding-bottom: 60px;
 }
 
@@ -269,6 +272,17 @@ section.splash p.lead {
     margin-top: 20px;
     margin-bottom: 40px;
     font-size: 30px;
+}
+
+section.splash label {
+    color: rgba(255,255,255, 0.95);
+    font-size: 20px;
+    font-weight: lighter;
+}
+
+section.splash .form-control {
+    border-color: #cfdadd;
+    border-radius: 2px;
 }
 
 section.splash-full {
@@ -297,9 +311,40 @@ section.splash.home {
     background-image: url("../img/splash-home.jpg");
 }
 
+@media (min-width: 768px) {
+    section.splash.home .booking-form {
+        margin-top: 50px;
+    }
+}
+
 /* Authentication Splash */
 
 section.splash.auth {
     background-image: url("../img/splash-auth.jpg");
     background-position: bottom;
+}
+
+/* Flight Search */
+
+span.cheapest-price {
+    display: inline;
+    font-size: 32px;
+    font-weight: 400;
+    color: #2b542c;
+}
+
+span.flight-display {
+    display: block;
+    padding-top: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+span.stopover-display {
+    display: block;
+    font-size: 16px;;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
 }
