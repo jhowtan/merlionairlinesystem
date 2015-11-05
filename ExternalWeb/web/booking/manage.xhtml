@@ -82,7 +82,7 @@
                                     <tr>
                                         <td>#{varStatus.index + 1}</td>
                                         <td>#{eTicket.passengerName}</td>
-                                        <td>Unselected</td>
+                                        <td>#{manageBookingManagedBean.getSeatNumber(eTicket)}</td>
                                         <td>#{commonManagedBean.getTravelClassString(eTicket.travelClass)}</td>
                                         <td>
                                             <div class="btn-toolbar">

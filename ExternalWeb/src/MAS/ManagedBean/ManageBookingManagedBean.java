@@ -4,6 +4,7 @@ import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.PNRBean;
 import MAS.Common.Cabin;
 import MAS.Common.Constants;
+import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
@@ -41,6 +42,15 @@ public class ManageBookingManagedBean {
         } catch (Exception e) {
             e.printStackTrace();
             pnr = null;
+        }
+    }
+
+    public String getSeatNumber(ETicket eTicket) {
+        SeatConfigObject seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        try {
+            return seatConfigObject.convertIntToString(eTicket.getSeatNumber());
+        } catch (NotFoundException e) {
+            return "N/A";
         }
     }
 

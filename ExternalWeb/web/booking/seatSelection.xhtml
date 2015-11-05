@@ -19,16 +19,155 @@
                 <hr/>
             </div>
             <div class="container">
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-danger">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
                 <h:panelGroup layout="block" rendered="#{empty seatSelectionManagedBean.eTicket}">
                     <p class="text-center">Sorry, seat selection is not available to you at the moment.<br/>Please contact customer support.</p>
                 </h:panelGroup>
-                <h:panelGroup layout="block" rendered="#{! empty seatSelectionManagedBean.eTicket}">
-                    #{seatSelectionManagedBean.availableSeatsName()}
-                    <hr/>
-                    #{seatSelectionManagedBean.getCabinConfig()}
+                <h:panelGroup layout="block" rendered="#{! empty seatSelectionManagedBean.eTicket}" styleClass="text-center">
+                    <div id="seat-map"></div>
+                    <h:form>
+                        <h:inputText id="selectedSeat" binding="#{selectedSeat}" value="#{seatSelectionManagedBean.selectedSeat}" styleClass="hidden">
+                            <f:ajax render="saveButtonContainer" />
+                        </h:inputText>
+                        <h:panelGroup id="saveButtonContainer">
+                            <h:commandButton action="#{seatSelectionManagedBean.save()}" value="Select Seat #{seatSelectionManagedBean.selectedSeat}" styleClass="btn btn-success btn-lg btn-no-uppercase" disabled="#{empty seatSelectionManagedBean.selectedSeat}"></h:commandButton>
+                        </h:panelGroup>
+
+                    </h:form>
                 </h:panelGroup>
             </div>
         </section>
+
+        <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/packages/seat-charts/jquery.seat-charts.css" />
+        <style type="text/css">
+            #seat-map {
+                display: inline-block;
+            }
+            #seat-map div.seatCharts-cell {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+
+                -moz-user-select: -moz-none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            #seat-map div.seatCharts-seat {
+                font-size: 11px;
+                cursor: pointer;
+            }
+            #seat-map div.seatCharts-seat.unavailable {
+                cursor: not-allowed;
+            }
+            #seat-map div.seatCharts-seat.selected {
+                background: #0000ff;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="javascript">
+        <h:panelGroup rendered="#{! empty seatSelectionManagedBean.eTicket}">
+            <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/packages/seat-charts/jquery.seat-charts.min.js"></script>
+            <script type="text/javascript">
+                $(function() {
+                    var selectedSeatEl = $("[id='#{selectedSeat.clientId}']");
+                    var cabinLayout = "#{seatSelectionManagedBean.getCabinConfig()}";
+                    var cabinRowCount = #{seatSelectionManagedBean.getCabinRowCount()};
+                    var cabinFirstRow = #{seatSelectionManagedBean.getFirstSeatRow()};
+                    var cabinFirstSeat = #{seatSelectionManagedBean.getFirstSeatInCabin()};
+                    var seatsTaken = #{seatSelectionManagedBean.occupiedSeatsNameJson()};
+
+                    var selectedSeat = selectedSeatEl.val();
+                    var columnLabels = ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R"];
+
+                    //<![CDATA[
+                    var cabinMap = [];
+                    for (var i = 0; i < cabinRowCount; i++) {
+                        cabinMap.push(cabinLayout);
+                    }
+                    var columnNaming = [];
+                    var j = 0;
+                    for (var i = 0; i < cabinLayout.length; i++) {
+                        if (cabinLayout[i] == 's') {
+                            columnNaming.push(columnLabels[j]);
+                            j++;
+                        } else {
+                            columnNaming.push("");
+                        }
+                    }
+                    var rowNaming = [];
+                    for (var i = 0; i < cabinRowCount; i++) {
+                        rowNaming.push(cabinFirstRow + i);
+                    }
+                    //]]>
+
+                    var sc = $('#seat-map').seatCharts({
+                        map: cabinMap,
+                        seats: {
+                            s: {
+                                classes : 'seat'
+                            }
+                        },
+                        naming: {
+                            columns: columnNaming,
+                            rows: rowNaming,
+                            getId  : function(character, row, column) {
+                                return row + column;
+                            },
+                            getLabel : function (character, row, column) {
+                                return row + column;
+                            }
+                        },
+                        click: function () {
+                            if (this.status() == 'available') {
+                                var seat = sc.get(selectedSeat);
+                                if (seat != null) {
+                                    if (seat.status() == 'selected') {
+                                        seat.status('available');
+                                    }
+                                }
+                                selectedSeat = this.settings.id;
+                                selectedSeatEl.val(selectedSeat);
+                                selectedSeatEl.change();
+                                return 'selected';
+                            } else if (this.status() == 'selected') {
+                                selectedSeat = "";
+                                selectedSeatEl.val("");
+                                selectedSeatEl.change();
+                                return 'available';
+                            } else if (this.status() == 'unavailable') {
+                                //seat has been already booked
+                                return 'unavailable';
+                            } else {
+                                return this.style();
+                            }
+                        }
+                    });
+
+                    var updateSeatMap = function(sc) {
+                        seatsTaken.forEach(function(val) {
+                            var seat = sc.get(val);
+                            if (seat != null) {
+                                seat.status('unavailable')
+                            }
+                        });
+                        var seat = sc.get(selectedSeat);
+                        if (seat != null) {
+                            seat.status('selected');
+                        }
+                    };
+
+                    updateSeatMap(sc);
+
+                });
+            </script>
+        </h:panelGroup>
 
     </ui:define>
 
