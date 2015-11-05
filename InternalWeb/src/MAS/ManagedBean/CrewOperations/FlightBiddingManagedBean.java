@@ -1,11 +1,11 @@
 package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.FleetBean;
+import MAS.Bean.FlightBidBean;
 import MAS.Bean.FlightScheduleBean;
+import MAS.Bean.UserBean;
 import MAS.Common.Utils;
-import MAS.Entity.Aircraft;
-import MAS.Entity.AircraftMaintenanceSlot;
-import MAS.Entity.Flight;
+import MAS.Entity.*;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +29,10 @@ public class FlightBiddingManagedBean {
     FleetBean fleetBean;
     @EJB
     FlightScheduleBean flightScheduleBean;
+    @EJB
+    FlightBidBean flightBidBean;
+    @EJB
+    UserBean userBean;
 
     public class CalendarData {
         public List<CalendarEntry> entries;
@@ -57,6 +61,7 @@ public class FlightBiddingManagedBean {
             ArrayList<CalendarResource> calendarResources = new ArrayList<>();
             Date startOfMonth = Utils.currentMonthStart();
             Date endOfMonth = Utils.currentMonthEnd();
+            User loggedIn = userBean.getUser(authManagedBean.getUserId());
 
             List<Flight> resultFlights = flightScheduleBean.getFlightWithinDate(startOfMonth, endOfMonth);
 
@@ -107,6 +112,14 @@ public class FlightBiddingManagedBean {
         } catch (Exception e) {
             //e.printStackTrace();
         }
+    }
+
+    public void testButton() {
+        flightBidBean.spamFlightBids();
+    }
+
+    public void testedButton() {
+
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

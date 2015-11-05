@@ -2,6 +2,7 @@ package MAS.Entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class FlightBid {
@@ -28,17 +29,6 @@ public class FlightBid {
         this.bidder = bidder;
     }
 
-    private Flight flight;
-
-    @ManyToOne
-    public Flight getFlight() {
-        return flight;
-    }
-
-    public void setFlight(Flight flight) {
-        this.flight = flight;
-    }
-
     private Date bidDate;
 
     @Basic
@@ -49,5 +39,27 @@ public class FlightBid {
 
     public void setBidDate(Date bidDate) {
         this.bidDate = bidDate;
+    }
+
+    private List<Flight> flights;
+
+    @ManyToMany
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
+    }
+
+    private int status;
+
+    @Basic
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

@@ -58,6 +58,25 @@ public class UserBean {
         return user.getId();
     }
 
+    public long createUserWithoutEmail(String username, String firstName, String lastName, String email, String phone, Airport baseAirport) {
+        User user = new User();
+        user.setUsername(username.toLowerCase());
+        user.setSalt(Utils.generateSalt());
+        user.setLocked(false);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email.toLowerCase());
+        user.setPhone(phone);
+        user.setDeleted(false);
+        user.setResetHash(Utils.generateSalt());
+        user.setResetExpiry(Utils.hoursFromNow(72));
+        user.setBaseAirport(baseAirport);
+        user.setCurrentLocation(baseAirport);
+        em.persist(user);
+        em.flush();
+        return user.getId();
+    }
+
     public User forgotPassword(String usernameEmail) throws NotFoundException {
         try {
             User user = em.createQuery("SELECT u FROM User u WHERE u.username = :usernameEmail OR u.email = :usernameEmail", User.class)
@@ -139,6 +158,13 @@ public class UserBean {
         em.persist(user);
     }
 
+    public void changeJob(long id, int jobId) throws NotFoundException {
+        User user = em.find(User.class, id);
+        if (user == null) throw new NotFoundException();
+        user.setJob(jobId);
+        em.persist(user);
+    }
+
     public long login(String username, String password) throws InvalidLoginException {
         try {
             User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
@@ -158,6 +184,11 @@ public class UserBean {
 
     public List<User> getAllUsers() {
         return em.createQuery("SELECT u from User u WHERE NOT u.deleted", User.class).getResultList();
+    }
+
+    public List<User> getUsersWithJobs(int jobId) {
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted AND u.job = :job", User.class)
+                .setParameter("job", jobId).getResultList();
     }
 
     public boolean isResetHashValid(Long id, String resetHash) {

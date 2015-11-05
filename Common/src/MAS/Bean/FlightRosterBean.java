@@ -1,15 +1,18 @@
 package MAS.Bean;
 
+import MAS.Common.Utils;
 import MAS.Entity.Flight;
 import MAS.Entity.FlightRoster;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "FlightRosterEJB")
@@ -17,6 +20,7 @@ import java.util.List;
 public class FlightRosterBean {
     @PersistenceContext
     EntityManager em;
+
 
     public FlightRosterBean() {
     }
@@ -79,6 +83,11 @@ public class FlightRosterBean {
         if (signedOut == null) signedOut = new ArrayList<>();
         if (signedOut.indexOf(user) == -1) signedOut.add(user);
         flightRoster.setSignedOut(signedOut);
+        //@TODO: set crew current location to here
         em.persist(flightRoster);
+    }
+
+    public void allocateFlightJobs() {
+
     }
 }

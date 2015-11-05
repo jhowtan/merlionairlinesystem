@@ -14,6 +14,10 @@
                     <h1 class="page-header">Flight Bidding</h1>
                     <div class="form-group col-lg-12">
                         <label class="control-label">Select Flights</label>
+                        <h:form>
+                            <h:commandButton action="#{flightBiddingManagedBean.testButton()}" value="Test" styleClass="btn btn-success" />
+                            <h:commandButton action="#{flightBiddingManagedBean.testedButton()}" value="Test 2" styleClass="btn btn-success" />
+                        </h:form>
                     </div>
                 </div>
                 <h:panelGroup id="flTimetable">
