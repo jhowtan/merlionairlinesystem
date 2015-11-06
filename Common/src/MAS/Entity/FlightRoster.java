@@ -39,28 +39,6 @@ public class FlightRoster {
         this.members = members;
     }
 
-    private List<User> signedIn;
-
-    @ManyToMany
-    public List<User> getSignedIn() {
-        return signedIn;
-    }
-
-    public void setSignedIn(List<User> signedIn) {
-        this.signedIn = signedIn;
-    }
-
-    private List<User> signedOut;
-
-    @ManyToMany
-    public List<User> getSignedOut() {
-        return signedOut;
-    }
-
-    public void setSignedOut(List<User> signedOut) {
-        this.signedOut = signedOut;
-    }
-
     private boolean complete;
 
     @Basic
@@ -71,4 +49,5 @@ public class FlightRoster {
     public void setComplete(boolean complete) {
         this.complete = complete;
     }
+
 }

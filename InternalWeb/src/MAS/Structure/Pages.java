@@ -83,7 +83,7 @@ public class Pages {
     public static final Page CREATE_CREW_CERTIFICATION = new Page("/App/CrewOperations/createCertification", Permissions.CREW_CERTIFICATION);
     public static final Page VIEW_CREW_CERTIFICATION = new Page("/App/CrewOperations/viewCertification", Permissions.CREW_CERTIFICATION, Permissions.MANAGE_CREW_CERTIFICATION);
     public static final Page FLIGHT_BIDDING = new Page("/App/CrewOperations/flightBidding", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
-    public static final Page VIEW_FLIGHT_BIDS = new Page("/App/CrewOperations/viewFlightBids", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
+    public static final Page FLIGHT_ROSTER = new Page("/App/CrewOperations/flightRoster", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);

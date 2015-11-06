@@ -74,28 +74,28 @@ public class FlightRosterBean {
         return result;
     }
 
-    public void signInFR(long flightRosterId, long userId) throws NotFoundException {
-        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
-        User user = em.find(User.class, userId);
-        if (flightRoster == null || user == null) throw new NotFoundException();
-        List<User> signedIn = flightRoster.getSignedIn();
-        if (signedIn == null) signedIn = new ArrayList<>();
-        if (signedIn.indexOf(user) == -1) signedIn.add(user);
-        flightRoster.setSignedIn(signedIn);
-        em.persist(flightRoster);
-    }
-
-    public void signOutFR(long flightRosterId, long userId) throws NotFoundException {
-        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
-        User user = em.find(User.class, userId);
-        if (flightRoster == null || user == null) throw new NotFoundException();
-        List<User> signedOut = flightRoster.getSignedOut();
-        if (signedOut == null) signedOut = new ArrayList<>();
-        if (signedOut.indexOf(user) == -1) signedOut.add(user);
-        flightRoster.setSignedOut(signedOut);
-        //@TODO: set crew current location to here
-        em.persist(flightRoster);
-    }
+//    public void signInFR(long flightRosterId, long userId) throws NotFoundException {
+//        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
+//        User user = em.find(User.class, userId);
+//        if (flightRoster == null || user == null) throw new NotFoundException();
+//        List<User> signedIn = flightRoster.getSignedIn();
+//        if (signedIn == null) signedIn = new ArrayList<>();
+//        if (signedIn.indexOf(user) == -1) signedIn.add(user);
+//        flightRoster.setSignedIn(signedIn);
+//        em.persist(flightRoster);
+//    }
+//
+//    public void signOutFR(long flightRosterId, long userId) throws NotFoundException {
+//        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
+//        User user = em.find(User.class, userId);
+//        if (flightRoster == null || user == null) throw new NotFoundException();
+//        List<User> signedOut = flightRoster.getSignedOut();
+//        if (signedOut == null) signedOut = new ArrayList<>();
+//        if (signedOut.indexOf(user) == -1) signedOut.add(user);
+//        flightRoster.setSignedOut(signedOut);
+//        user.setCurrentLocation(flightRoster.getFlight().getAircraftAssignment().getRoute().getDestination());
+//        em.persist(flightRoster);
+//    }
 
     public void allocateFlightJobs() {
         List<FlightBid> flightBids = flightBidBean.getFlightBidsWithStatus(0);
@@ -121,10 +121,11 @@ public class FlightRosterBean {
             hypoCrew.readyTime = Utils.monthStart(1);
             airportBuckets.get(airports.indexOf(loc)).add(hypoCrew);
         }
+
         for (int i = 0; i < flights.size(); i++) {
             Flight flight = flights.get(i);
-            List<Long> cabinRoster = new ArrayList<>();
-            List<Long> cockpitRoster = new ArrayList<>();
+            List<User> cabinRoster = new ArrayList<>();
+            List<User> cockpitRoster = new ArrayList<>();
             Airport origin = flights.get(i).getAircraftAssignment().getRoute().getOrigin();
             Airport dest = flights.get(i).getAircraftAssignment().getRoute().getDestination();
             int cabinReq = flights.get(i).getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
@@ -156,32 +157,24 @@ public class FlightRosterBean {
                 }
             }
             for (int k = 0; k < prospectiveCabin.size(); k++) {
-                if (cabinRoster.size() >= cabinReq)
-                    break;
-                else
-                    addToRoster(prospectiveCabin.get(k), flight, cabinRoster, airportBuckets, airports);
+                if (cabinRoster.size() >= cabinReq) break;
+                else addToRoster(prospectiveCabin.get(k), flight, cabinRoster, airportBuckets, airports);
             }
             for (int k = 0; k < prospectiveCockpit.size(); k++) {
-                if (cockpitRoster.size() >= cockpitReq)
-                    break;
-                else
-                    addToRoster(prospectiveCockpit.get(k), flight, cockpitRoster, airportBuckets, airports);
+                if (cockpitRoster.size() >= cockpitReq) break;
+                else addToRoster(prospectiveCockpit.get(k), flight, cockpitRoster, airportBuckets, airports);
             }
             List<Long> fullRoster = new ArrayList<>();
-            for (int k = 0; k < cabinRoster.size(); k++) {
-                fullRoster.add(cabinRoster.get(k));
-            }
-            for (int k = 0; k < cockpitRoster.size(); k++) {
-                fullRoster.add(cockpitRoster.get(k));
-            }
-            //System.out.println(fullRoster);
+            for (int k = 0; k < cabinRoster.size(); k++)
+                fullRoster.add(cabinRoster.get(k).getId());
+            for (int k = 0; k < cockpitRoster.size(); k++)
+                fullRoster.add(cockpitRoster.get(k).getId());
             try {
                 createFlightRoster(flight.getId(), fullRoster, cabinRoster.size() == cabinReq && cockpitRoster.size() == cockpitReq);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        System.gc();
     }
 
     private FlightBid getBidFromUser(User user, List<FlightBid> flightBids) throws NotFoundException {
@@ -192,8 +185,8 @@ public class FlightRosterBean {
         throw new NotFoundException();
     }
 
-    private void addToRoster(HypoCrew hypoCrew, Flight flight, List<Long> roster, List<List<HypoCrew>> airportBuckets, List<Airport> airports) {
-        roster.add(hypoCrew.user.getId());
+    private void addToRoster(HypoCrew hypoCrew, Flight flight, List<User> roster, List<List<HypoCrew>> airportBuckets, List<Airport> airports) {
+        roster.add(hypoCrew.user);
         //Set users ready date, location, and have to move to another bucket
         hypoCrew.readyTime = Utils.minutesLater(flight.getArrivalTime(), 60 * 30);
         hypoCrew.location = flight.getAircraftAssignment().getRoute().getDestination();
