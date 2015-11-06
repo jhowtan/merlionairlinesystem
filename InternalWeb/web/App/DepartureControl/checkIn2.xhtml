@@ -145,7 +145,7 @@
 
                                             <strong>Total Baggages:</strong> #{checkInManagedBean.primaryETicket.baggages.size()}<br/>
                                             <strong>Baggage Allowance:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.calculateAllowance(), "#,###.0")} kg<br/>
-                                            <strong>Total Weight:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.countTotalWeight(), "#,###.0")} kg
+                                            <strong>Total Weight:</strong> #{commonManagedBean.displayDouble(checkInManagedBean.countTotalWeight(), "#,###.#")} kg
                                         </div>
                                         <br/>
                                         <table class="table">
