@@ -89,7 +89,7 @@ public class MainMenu {
 
         entries.add(
                 new MenuEntry("Management Reporting", "line-chart",
-                        new MenuEntry("Profitability", null, Pages.PROFITABILITY_REPORT),
+                        new MenuEntry("Profitability Reporting", null, Pages.PROFITABILITY_REPORT),
                         new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),
                         new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
                         new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
