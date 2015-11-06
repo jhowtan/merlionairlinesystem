@@ -348,29 +348,74 @@
                         <hr/>
                     </ui:repeat>
 
-                    <div class="row">
-                        <div class="col-lg-4 col-lg-offset-1">
-                            <h2 class="form-heading">Payment</h2>
-                            <p class="form-subheading">Please enter your payment details. By doing so, you agree for Merlion Airlines to debit a total of $#{commonManagedBean.displayDouble(flightSearchManagedBean.passengers * flightSearchManagedBean.totalPricePerPerson, "0.00")} from your credit card.</p>
-                        </div>
-                        <div class="col-lg-5 col-lg-offset-1">
-                            <div class="form-group #{!paymentName.valid ? 'has-error' : ''}">
-                                <label class="control-label" for="paymentName">Cardholder's Name</label>
-                                <h:inputText value="#{flightSearchManagedBean.paymentName}" binding="#{paymentName}" class="form-control" id="paymentName"
-                                             required="true" requiredMessage="Please enter the cardholder's name.">
-                                </h:inputText>
-                                <h:message for="paymentName" styleClass="help-block" />
+                    <h:panelGroup rendered="#{flightSearchManagedBean.canRedeemMiles()}">
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-offset-1">
+                                <h2 class="form-heading">Redeem Miles</h2>
+                                <p class="form-subheading">Offset your total payment amount with your miles.</p>
                             </div>
-                            <div class="form-group #{!paymentCard.valid ? 'has-error' : ''}">
-                                <label class="control-label" for="paymentName">Credit Card Number</label>
-                                <h:inputText value="#{flightSearchManagedBean.paymentCard}" binding="#{paymentCard}" class="form-control" id="paymentCard"
-                                             required="true" requiredMessage="Please enter the payment card number.">
-                                </h:inputText>
-                                <h:message for="paymentCard" styleClass="help-block" />
+                            <div class="col-lg-5 col-lg-offset-1">
+                                <table class="table">
+                                    <tr>
+                                        <th>Subtotal</th>
+                                        <td>$#{commonManagedBean.displayDouble(flightSearchManagedBean.totalPrice, "0.00")}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Miles Available</th>
+                                        <td>
+                                            #{authManagedBean.retrieveCustomer().miles} miles
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2">Miles Redeemed</th>
+                                        <td>
+                                            <h:panelGroup id="milesRedeemed">#{flightSearchManagedBean.milesRedeemed}</h:panelGroup> miles
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <h:inputText pt:type="range" pt:min="0" pt:max="#{flightSearchManagedBean.maxMilesRedeemable()}" pt:step="1" value="#{flightSearchManagedBean.milesRedeemed}">
+                                                <f:ajax render="totalPrice1 totalprice2 milesRedeemed paymentSection" />
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Amount</th>
+                                        <td><h:panelGroup id="totalPrice1">$#{commonManagedBean.displayDouble(flightSearchManagedBean.getTotalPayable(), "0.00")}</h:panelGroup></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
-                    </div>
-                    <hr/>
+                        <hr/>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="paymentSection">
+                        <h:panelGroup rendered="#{flightSearchManagedBean.getTotalPayable() > 0}">
+                            <div class="row">
+                                <div class="col-lg-4 col-lg-offset-1">
+                                    <h2 class="form-heading">Payment</h2>
+                                    <p class="form-subheading">Please enter your payment details. By doing so, you agree for Merlion Airlines to debit a total of <h:panelGroup id="totalPrice2">$#{commonManagedBean.displayDouble(flightSearchManagedBean.getTotalPayable(), "0.00")}</h:panelGroup> from your credit card.</p>
+                                </div>
+                                <div class="col-lg-5 col-lg-offset-1">
+                                    <div class="form-group #{!paymentName.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="paymentName">Cardholder's Name</label>
+                                        <h:inputText value="#{flightSearchManagedBean.paymentName}" binding="#{paymentName}" class="form-control" id="paymentName"
+                                                     required="true" requiredMessage="Please enter the cardholder's name.">
+                                        </h:inputText>
+                                        <h:message for="paymentName" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group #{!paymentCard.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="paymentName">Credit Card Number</label>
+                                        <h:inputText value="#{flightSearchManagedBean.paymentCard}" binding="#{paymentCard}" class="form-control" id="paymentCard"
+                                                     required="true" requiredMessage="Please enter the payment card number.">
+                                        </h:inputText>
+                                        <h:message for="paymentCard" styleClass="help-block" />
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                        </h:panelGroup>
+                    </h:panelGroup>
 
 
                     <div class="text-center">
