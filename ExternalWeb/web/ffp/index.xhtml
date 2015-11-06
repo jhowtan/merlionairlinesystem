@@ -13,13 +13,13 @@
             <div class="container summary-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3 class="lead">MerlionFlyer Elite Blue 81111111</h3>
-                        <h1 class="miles-summary">124187 MerlionFlyer Miles</h1>
+                        <h3 class="lead">MerlionFlyer #{ffpManagedBean.getTierName(ffpManagedBean.customer.tier)} #{ffpManagedBean.customer.id}</h3>
+                        <h1 class="miles-summary">#{ffpManagedBean.customer.miles} MerlionFlyer Miles</h1>
                     </div>
                     <div class="col-md-offset-3 col-md-3 text-right">
                         <div class="cust-display">
-                            <p>Mr Lau Wei Jie</p>
-                            <p>jon@jon.sg</p>
+                            <p>#{authManagedBean.customerDisplayName}</p>
+                            <p>#{ffpManagedBean.customer.email}</p>
                             <p>Last Login: #{commonManagedBean.formatDate("dd MMM yyyy, hh:mm a", null)}</p>
                         </div>
                     </div>
@@ -36,27 +36,33 @@
                         </p>
                         <div class="panel panel-info">
                             <div class="panel-body text-center">
-                                <h2>MerlionFlyer Elite Gold <small>requalification</small></h2>
-                                <span class="miles-count">0 <small>Elite Miles</small></span>
-                                <br/>required by <span class="miles-expiry">30 Apr 2016</span>.
+                                <h2>MerlionFlyer #{ffpManagedBean.getTierName(ffpManagedBean.customer.tier)}</h2>
+                                <h:panelGroup rendered="#{ffpManagedBean.customer.tier > 1}">
+                                    <h3>Requalification</h3>
+                                    <span class="miles-count">#{ffpManagedBean.customer.eliteMiles} <small>Elite Miles</small></span>
+                                    <br/>
+                                    required by <span class="miles-expiry">#{commonManagedBean.formatDate("dd MMM yyyy", ffpManagedBean.customer.qualificationEndDate)}</span>.
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{ffpManagedBean.customer.tier != 3}">
+                                    <p>You are #{ffpManagedBean.getRequiredMilesforNextTier(ffpManagedBean.customer.tier)} Elite Miles away from #{ffpManagedBean.getTierName(ffpManagedBean.customer.tier + 1)}.</p>
+                                </h:panelGroup>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <h2 class="form-heading">Expiring miles</h2>
+                        <h2 class="form-heading">Flight Miles</h2>
                         <p class="form-subheading">
                             Earned by flying on Merlion Airlines or partner airlines.
                         </p>
                         <div class="panel panel-info">
                             <div class="panel-body text-center">
-                                You have <span class="miles-count">1,606</span>
-                                MerlionFlyer miles expiring by
-                                <span class="miles-expiry">30 Apr 2016</span>.
+                                You have <span class="miles-count">#{ffpManagedBean.customer.miles}</span>
+                                MerlionFlyer miles.
                             </div>
                         </div>
                         <div class="text-center">
                             <div class="pull-right">
-                                <h:link outcome="/booking" styleClass="btn btn-info btn-lg btn-block">Redeem Flights</h:link>
+                                <h:link outcome="/booking/index" styleClass="btn btn-info btn-lg btn-block">Redeem Flights</h:link>
                             </div>
                         </div>
                     </div>

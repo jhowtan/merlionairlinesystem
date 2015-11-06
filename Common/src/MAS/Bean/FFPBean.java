@@ -34,12 +34,12 @@ public class FFPBean {
             customer.setQualificationEndDate(Utils.oneYearLater());
         }
         customer.setEliteMiles(customer.getEliteMiles() + eliteMiles);
-        if (customer.getTier() == Constants.FFP_TIER_BLUE && customer.getEliteMiles() >= 25000) {
+        if (customer.getTier() == Constants.FFP_TIER_BLUE && customer.getEliteMiles() >= Constants.FFP_TIER_SILVER_REQUIREMENT) {
             customer.setQualificationEndDate(Utils.oneYearLater());
             customer.setEliteMiles(0);
             customer.setTier(Constants.FFP_TIER_SILVER);
             customer.setStatusExpiry(Utils.oneYearLater());
-        } else if (customer.getTier() == Constants.FFP_TIER_SILVER && customer.getEliteMiles() >= 50000) {
+        } else if (customer.getTier() == Constants.FFP_TIER_SILVER && customer.getEliteMiles() >= Constants.FFP_TIER_GOLD_REQUIREMENT) {
             customer.setQualificationEndDate(Utils.oneYearLater());
             customer.setEliteMiles(0);
             customer.setTier(Constants.FFP_TIER_GOLD);
