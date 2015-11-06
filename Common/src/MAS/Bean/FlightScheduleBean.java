@@ -178,11 +178,8 @@ public class FlightScheduleBean {
         for (int i = 0; i <= days; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(currDepartureDate);
-            System.out.println(currDepartureDate);
             if (recurringDaysList.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                 // @TODO: Check if flight can be scheduled at this time
-                System.out.println(currDepartureDate);
-                System.out.println(currArrivalDate);
 
                 Flight flight = new Flight();
                 flight.setCode(code);

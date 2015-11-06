@@ -3,9 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Common.Utils;
-import MAS.Entity.Airport;
-import MAS.Entity.BookingClass;
-import MAS.Entity.PNR;
+import MAS.Entity.*;
 import org.apache.commons.math3.analysis.function.Constant;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +40,8 @@ public class InitBean {
     PNRBean pnrBean;
     @EJB
     BookFlightBean bookFlightBean;
+    @EJB
+    CrewCertificationBean crewCertificationBean;
 
     @PostConstruct
     public void init() {
@@ -160,34 +160,6 @@ public class InitBean {
                 userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999", routeBean.findAirportByCode("SIN"));
                 userBean.changePassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
-
-                //Initialize some flight crew
-                String[] firstNames = {"Daryl", "John", "Jon", "Louis", "Jacob", "Mark", "Marcus", "Larry", "Aaron", "Barry", "Colin", "David", "Erica", "Erik", "Amanda", "Clara", "Grace", "Hannah", "Chloe", "Jessica", "Irene", "Fiona", "Olivia", "Penelope", "Ian", "Evan", "Joe", "Jane", "Ryan", "Victor", "Steward"};
-                String[] lastNames = {"Tan", "Jones", "Avery", "Campbell", "Bond", "Davidson", "Bell", "Jackson", "Hill", "Thomson", "Terry", "Underwood", "Vance", "Scott", "Powell", "Reid"};
-                List<Airport> airports = routeBean.getAllAirports();
-                ArrayList<Long> flightCrewPermissions = new ArrayList<>();
-                flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
-                roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
-                for (int i = 0; i < 50; i ++) { //Cabin crew
-                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
-                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
-                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
-                    userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
-                            "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
-                    userBean.changePassword(userId, "password");
-                    userBean.setRoles(userId, Arrays.asList(roleId));
-                    userBean.changeJob(userId, Constants.cabinCrewJobId);
-                }
-                for (int i = 0; i < 10; i ++) { //Pilots
-                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
-                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
-                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
-                    userId = userBean.createUserWithoutEmail(username, selFName, selLName,"merlionairlines+".concat(username).concat("@ma.com"),
-                            "+65 6555-1234", airports.get((int)(Math.random() * airports.size())) );
-                    userBean.changePassword(userId, "password");
-                    userBean.setRoles(userId, Arrays.asList(roleId));
-                    userBean.changeJob(userId, Constants.cockpitCrewJobId);
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -246,26 +218,60 @@ public class InitBean {
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 23500, acTypeId);
                 acId = fleetBean.createAircraft("9V-DET", new GregorianCalendar(2005, 05, 05).getTime(), routeBean.getAirport("SIN").getId());
                 fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                // INITIALIZE FLIGHT & BOOKING CLASS FOR 2ND SYS RELEASE
-                long r1 = routeBean.createRoute("SIN", "HKG");
-                long r2 = routeBean.createRoute("HKG", "SFO");
-                long aa1Id = routeBean.createAircraftAssignment(acId, r1);
-                long aa2Id = routeBean.createAircraftAssignment(acId, r2);
-                long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(new Date(), "12:00"), Utils.addTimeToDate(new Date(), "15:00"), aa1Id);
-                long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(new Date(), "16:00"), Utils.addTimeToDate(new Date(), "19:00"), aa2Id);
-
-                long bk1Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight1Id, 300);
-                long bk2Id = bookingClassBean.createBookingClass("T", 0, 3, fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL).getId(), flight2Id, 2000);
-
-                ArrayList<BookingClass> b = new ArrayList<>();
-                ArrayList<String> p = new ArrayList<>();
-                b.add(bookingClassBean.getBookingClass(bk1Id));
-                b.add(bookingClassBean.getBookingClass(bk2Id));
-                p.add("TAN/KELLY");
-                PNR pnr = bookFlightBean.bookFlights(b, p);
-                pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, "TAN/KELLY"), Constants.SSR_ACTION_CODE_FFP, "B6/12345655");
-                pnrBean.updatePNR(pnr);
+            try {
+                //Initialize some flight crew
+                String[] firstNames = {"Daryl", "John", "Jon", "Louis", "Jacob", "Mark", "Marcus", "Larry", "Aaron", "Barry", "Colin", "David", "Erica", "Erik", "Amanda", "Clara", "Grace", "Hannah", "Chloe", "Jessica", "Irene", "Fiona", "Olivia", "Penelope", "Ian", "Evan", "Joe", "Jane", "Ryan", "Victor", "Steward"};
+                String[] lastNames = {"Tan", "Jones", "Avery", "Campbell", "Bond", "Davidson", "Bell", "Jackson", "Hill", "Thomson", "Terry", "Underwood", "Vance", "Scott", "Powell", "Reid"};
+                List<Airport> airports = routeBean.getAllAirports();
+                ArrayList<Long> flightCrewPermissions = new ArrayList<>();
+                flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
+                long roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
+                for (int i = 0; i < 100; i ++) { //Cabin crew
+                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
+                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
+                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
+                    long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
+                            "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
+                    userBean.changePassword(userId, "password");
+                    userBean.setRoles(userId, Arrays.asList(roleId));
+                    userBean.changeJob(userId, Constants.cabinCrewJobId);
+                    List<AircraftType> acTypes = fleetBean.getAllAircraftTypes();
+                    for (int j = 0; j < acTypes.size(); j++) {
+                        Certification certification = new Certification();
+                        certification.setAircraftType(acTypes.get(j));
+                        certification.setExpiry(Utils.oneYearLater());
+                        certification.setApprovalDate(new Date());
+                        certification.setApprover(userBean.getAllUsers().get(0));
+                        certification.setApprovalStatus(1);
+                        certification.setOwner(userBean.getUser(userId));
+                        crewCertificationBean.createCrewCertification(certification);
+                    }
+                }
+                for (int i = 0; i < 25; i ++) { //Pilots
+                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
+                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
+                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
+                    long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
+                            "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
+                    userBean.changePassword(userId, "password");
+                    userBean.setRoles(userId, Arrays.asList(roleId));
+                    userBean.changeJob(userId, Constants.cockpitCrewJobId);
+                    List<AircraftType> acTypes = fleetBean.getAllAircraftTypes();
+                    for (int j = 0; j < acTypes.size(); j++) {
+                        Certification certification = new Certification();
+                        certification.setAircraftType(acTypes.get(j));
+                        certification.setExpiry(Utils.oneYearLater());
+                        certification.setApprovalDate(new Date());
+                        certification.setApprover(userBean.getAllUsers().get(0));
+                        certification.setApprovalStatus(1);
+                        certification.setOwner(userBean.getUser(userId));
+                        crewCertificationBean.createCrewCertification(certification);
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

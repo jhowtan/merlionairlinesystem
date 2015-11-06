@@ -62,7 +62,7 @@ public class CrewCertificationBean {
                 .setParameter("aircraftType", aircraftType).setParameter("owner", user).getResultList();
         for (int i = 0; i < certifications.size(); i++) {
             Certification cert = certifications.get(i);
-            if (cert.getApprovalStatus() == 1 && cert.getExpiry().compareTo(new Date()) == -1)
+            if (cert.getApprovalStatus() == 1 && cert.getExpiry().compareTo(new Date()) == 1)
                 return true;
         }
         return false;

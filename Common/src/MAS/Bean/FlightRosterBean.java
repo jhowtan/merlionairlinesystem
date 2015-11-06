@@ -28,6 +28,8 @@ public class FlightRosterBean {
     FlightScheduleBean flightScheduleBean;
     @EJB
     RouteBean routeBean;
+    @EJB
+    CrewCertificationBean crewCertificationBean;
 
     public FlightRosterBean() {
     }
@@ -102,6 +104,7 @@ public class FlightRosterBean {
         Collections.sort(flights);
         List<Airport> airports = new ArrayList<>();
         List<List<HypoCrew>> airportBuckets = new ArrayList<>();
+        //List<FlightRoster> flightRosters = new ArrayList<>();
         //Initialise airport buckets
         //For each flight, choose flight attendants. If unable, mark as incomplete
         for (int i = 0; i < flightBids.size(); i++) {
@@ -120,39 +123,65 @@ public class FlightRosterBean {
         }
         for (int i = 0; i < flights.size(); i++) {
             Flight flight = flights.get(i);
-            FlightRoster flightRoster = new FlightRoster();
-            List<User> cabinRoster = new ArrayList<>();
-            List<User> cockpitRoster = new ArrayList<>();
+            List<Long> cabinRoster = new ArrayList<>();
+            List<Long> cockpitRoster = new ArrayList<>();
             Airport origin = flights.get(i).getAircraftAssignment().getRoute().getOrigin();
             Airport dest = flights.get(i).getAircraftAssignment().getRoute().getDestination();
             int cabinReq = flights.get(i).getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
             int cockpitReq = flights.get(i).getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCockpitCrewReq();
             List<HypoCrew> available = airportBuckets.get(airports.indexOf(origin));
-            List<HypoCrew> prospective = new ArrayList<>();
+            List<HypoCrew> prospectiveCabin = new ArrayList<>();
+            List<HypoCrew> prospectiveCockpit = new ArrayList<>();
             for (int j = 0; j < available.size(); j++) {
-                if (cabinRoster.size() == cabinReq && cockpitRoster.size() == cockpitReq) {
-                    break;
-                }
-                else {
-                    HypoCrew crew = available.get(j);
-                    if (cabinRoster.size() < cabinReq && crew.user.getJob() == Constants.cabinCrewJobId) {
-                        try {//if this user has chosen this flight, add
-                            if (getBidFromUser(crew.user, flightBids).getFlights().indexOf(flight) != -1) {
-                                prospective.add(0, crew);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        //else, if user is qualified but did not choose
-                        //HERE
-                        //else if dont need then dont add
+                HypoCrew crew = available.get(j);
+                try {
+                    //if this user has chosen this flight, add
+                    if (getBidFromUser(crew.user, flightBids).getFlights().indexOf(flight) != -1) {
+                        if (crew.user.getJob() == Constants.cabinCrewJobId)
+                            prospectiveCabin.add(0, crew);
+                        else if (crew.user.getJob() == Constants.cockpitCrewJobId)
+                            prospectiveCockpit.add(0, crew);
+                        crew.lastSuccess = flight.getDepartureTime();
                     }
-                    if (cockpitRoster.size() < cockpitReq && crew.user.getJob() == Constants.cockpitCrewJobId) {
-
+                    //else, if user is qualified but did not choose
+                    else if (crewCertificationBean.crewCertifiedFor(crew.user.getId(), flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getId())) {
+                        if (crew.user.getJob() == Constants.cabinCrewJobId)
+                            prospectiveCabin.add(crew);
+                        else if (crew.user.getJob() == Constants.cockpitCrewJobId)
+                            prospectiveCockpit.add(crew);
                     }
+                    //else if dont need then dont add
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+            for (int k = 0; k < prospectiveCabin.size(); k++) {
+                if (cabinRoster.size() >= cabinReq)
+                    break;
+                else
+                    addToRoster(prospectiveCabin.get(k), flight, cabinRoster, airportBuckets, airports);
+            }
+            for (int k = 0; k < prospectiveCockpit.size(); k++) {
+                if (cockpitRoster.size() >= cockpitReq)
+                    break;
+                else
+                    addToRoster(prospectiveCockpit.get(k), flight, cockpitRoster, airportBuckets, airports);
+            }
+            List<Long> fullRoster = new ArrayList<>();
+            for (int k = 0; k < cabinRoster.size(); k++) {
+                fullRoster.add(cabinRoster.get(k));
+            }
+            for (int k = 0; k < cockpitRoster.size(); k++) {
+                fullRoster.add(cockpitRoster.get(k));
+            }
+            //System.out.println(fullRoster);
+            try {
+                createFlightRoster(flight.getId(), fullRoster, cabinRoster.size() == cabinReq && cockpitRoster.size() == cockpitReq);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        System.gc();
     }
 
     private FlightBid getBidFromUser(User user, List<FlightBid> flightBids) throws NotFoundException {
@@ -163,7 +192,17 @@ public class FlightRosterBean {
         throw new NotFoundException();
     }
 
-    private void addToRoster(HypoCrew hypoCrew, Flight flight, List<User> roster, double priority) {
-
+    private void addToRoster(HypoCrew hypoCrew, Flight flight, List<Long> roster, List<List<HypoCrew>> airportBuckets, List<Airport> airports) {
+        roster.add(hypoCrew.user.getId());
+        //Set users ready date, location, and have to move to another bucket
+        hypoCrew.readyTime = Utils.minutesLater(flight.getArrivalTime(), 60 * 30);
+        hypoCrew.location = flight.getAircraftAssignment().getRoute().getDestination();
+        for (int i = 0; i < airportBuckets.size(); i++) {
+            if (airportBuckets.get(i).indexOf(hypoCrew) != -1) {
+                airportBuckets.get(i).remove(hypoCrew);
+                break;
+            }
+        }
+        airportBuckets.get(airports.indexOf(hypoCrew.location)).add(hypoCrew);
     }
 }

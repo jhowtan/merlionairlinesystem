@@ -72,7 +72,8 @@ public class FlightBidBean {
         Date startOfMonth = Utils.monthStart(1);
         Date endOfMonth = Utils.monthEnd(1);
         List<Flight> flights = flightScheduleBean.getFlightWithinDate(startOfMonth, endOfMonth);
-        List<User> users = userBean.getUsersWithJobs(3);
+        List<User> users = userBean.getUsersWithJobs(Constants.cabinCrewJobId);
+        users.addAll(userBean.getUsersWithJobs(Constants.cockpitCrewJobId));
         for (int j = 0; j < users.size(); j++) {
             List<Long> biddedFlights = new ArrayList<>();
             for (int i = 0; i < attributesBean.getIntAttribute(Constants.FLIGHTJOBS_PER_MONTH, 5); i++) {
