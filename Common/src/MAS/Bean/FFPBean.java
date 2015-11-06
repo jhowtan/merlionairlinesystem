@@ -48,4 +48,11 @@ public class FFPBean {
         return customer;
     }
 
+    public Customer redeemMiles(long customerId, int miles) throws NotFoundException {
+        Customer customer = em.find(Customer.class, customerId);
+        if (customer == null) throw new NotFoundException();
+        customer.setMiles(Math.max(0, customer.getMiles() - miles));
+        em.persist(customer);
+        return customer;
+    }
 }

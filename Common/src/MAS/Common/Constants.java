@@ -70,4 +70,6 @@ public class Constants {
     public static final String SSR_ACTION_CODE_FFP = "FFP";
 
     public static int MAX_CONNECTION_TIME_MINUTES = 1440;
+
+    public static int MILES_TO_CENTS = 3;
 }
