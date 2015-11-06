@@ -86,6 +86,15 @@ public class MainMenu {
                         new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD)
                 )
         );
+
+        entries.add(
+                new MenuEntry("Management Reporting", "line-chart",
+                        new MenuEntry("Profitability", null, Pages.PROFITABILITY_REPORT),
+                        new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),
+                        new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
+                        new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
+                        new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT))
+        );
     }
 
     public List<MenuEntry> getEntries() {
