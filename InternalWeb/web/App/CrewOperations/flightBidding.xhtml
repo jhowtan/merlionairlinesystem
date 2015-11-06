@@ -49,10 +49,11 @@
                         aspectRatio: 1.35,
                         editable: false,
                         header: {
-                            left: 'prev,next, today',
-                            center: 'title'
-                            //right: 'agendaWeek,month'
+                            left: '',
+                            center: 'title',
+                            right: ''
                         },
+                        defaultDate: moment().add(1, 'months'),
                         buttonText: {
                             next: 'Next',
                             prev: 'Prev'

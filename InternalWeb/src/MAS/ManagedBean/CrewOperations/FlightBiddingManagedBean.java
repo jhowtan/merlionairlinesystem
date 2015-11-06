@@ -1,9 +1,6 @@
 package MAS.ManagedBean.CrewOperations;
 
-import MAS.Bean.FleetBean;
-import MAS.Bean.FlightBidBean;
-import MAS.Bean.FlightScheduleBean;
-import MAS.Bean.UserBean;
+import MAS.Bean.*;
 import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -33,6 +30,8 @@ public class FlightBiddingManagedBean {
     FlightBidBean flightBidBean;
     @EJB
     UserBean userBean;
+    @EJB
+    FlightRosterBean flightRosterBean;
 
     public class CalendarData {
         public List<CalendarEntry> entries;
@@ -59,8 +58,8 @@ public class FlightBiddingManagedBean {
         try {
             ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
             ArrayList<CalendarResource> calendarResources = new ArrayList<>();
-            Date startOfMonth = Utils.currentMonthStart();
-            Date endOfMonth = Utils.currentMonthEnd();
+            Date startOfMonth = Utils.monthStart(1);
+            Date endOfMonth = Utils.monthEnd(1);
             User loggedIn = userBean.getUser(authManagedBean.getUserId());
 
             List<Flight> resultFlights = flightScheduleBean.getFlightWithinDate(startOfMonth, endOfMonth);
@@ -119,7 +118,7 @@ public class FlightBiddingManagedBean {
     }
 
     public void testedButton() {
-
+        flightRosterBean.allocateFlightJobs();
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

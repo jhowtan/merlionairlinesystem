@@ -6,6 +6,7 @@ import MAS.Common.Utils;
 import MAS.Entity.Airport;
 import MAS.Entity.BookingClass;
 import MAS.Entity.PNR;
+import org.apache.commons.math3.analysis.function.Constant;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -175,7 +176,7 @@ public class InitBean {
                             "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
                     userBean.changePassword(userId, "password");
                     userBean.setRoles(userId, Arrays.asList(roleId));
-                    userBean.changeJob(userId, 3);
+                    userBean.changeJob(userId, Constants.cabinCrewJobId);
                 }
                 for (int i = 0; i < 10; i ++) { //Pilots
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];
@@ -185,7 +186,7 @@ public class InitBean {
                             "+65 6555-1234", airports.get((int)(Math.random() * airports.size())) );
                     userBean.changePassword(userId, "password");
                     userBean.setRoles(userId, Arrays.asList(roleId));
-                    userBean.changeJob(userId, 4);
+                    userBean.changeJob(userId, Constants.cockpitCrewJobId);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

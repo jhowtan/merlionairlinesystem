@@ -126,9 +126,9 @@ public class FlightScheduleBean {
     }
 
     public List<Flight> getFlightWithinDate(Date start, Date end) {
-        return em.createQuery("SELECT f from Flight f WHERE f.departureTime >= :start AND f.departureTime < :end", Flight.class)
-                .setParameter("start", start)
-                .setParameter("end", end).getResultList();
+        return em.createQuery("SELECT f from Flight f WHERE f.departureTime >= :start AND f.departureTime <= :end", Flight.class)
+                .setParameter("start", start, TemporalType.TIMESTAMP)
+                .setParameter("end", end, TemporalType.TIMESTAMP).getResultList();
     }
 
     public List<Flight> getAllFlights() {

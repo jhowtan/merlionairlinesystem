@@ -1,5 +1,6 @@
 package MAS.Bean;
 
+import MAS.Entity.AircraftType;
 import MAS.Entity.Certification;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
@@ -7,6 +8,7 @@ import MAS.Exception.NotFoundException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "CrewCertificationEJB")
@@ -49,5 +51,20 @@ public class CrewCertificationBean {
         em.persist(certification);
         em.flush();
         return certification;
+    }
+
+    public boolean crewCertifiedFor(long userId, long aircraftTypeId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        AircraftType aircraftType = em.find(AircraftType.class, aircraftTypeId);
+        if (aircraftType == null) throw new NotFoundException();
+        List<Certification> certifications = em.createQuery("SELECT c FROM Certification c WHERE c.owner = :owner AND c.aircraftType = :aircraftType", Certification.class)
+                .setParameter("aircraftType", aircraftType).setParameter("owner", user).getResultList();
+        for (int i = 0; i < certifications.size(); i++) {
+            Certification cert = certifications.get(i);
+            if (cert.getApprovalStatus() == 1 && cert.getExpiry().compareTo(new Date()) == -1)
+                return true;
+        }
+        return false;
     }
 }

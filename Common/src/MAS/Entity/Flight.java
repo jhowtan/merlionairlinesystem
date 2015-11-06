@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Flight {
+public class Flight implements Comparable<Flight> {
     public static final int NO_STATUS = 0;
     public static final int GATE_OPEN = 1;
     public static final int BOARDING = 2;
@@ -114,5 +114,10 @@ public class Flight {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public int compareTo(Flight another) {
+        return this.getDepartureTime().compareTo(another.getDepartureTime());
     }
 }

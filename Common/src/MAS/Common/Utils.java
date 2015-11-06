@@ -41,17 +41,23 @@ public class Utils {
         return calendar.getTime();
     }
 
-    public static Date currentMonthStart() {
+    public static Date monthStart(int plusMonth) {
         Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
         c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
         return c.getTime();
     }
 
-    public static Date currentMonthEnd() {
+    public static Date monthEnd(int plusMonth) {
         Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
         c.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
         c.set(Calendar.HOUR_OF_DAY, 23);
         c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
         return c.getTime();
     }
 
@@ -64,6 +70,11 @@ public class Utils {
             diff--;
         }
         return diff;
+    }
+
+    public static double timeBetween(Date first, Date last) {
+        //@TODO: Stub
+        return 0;
     }
 
     public static Date addTimeToDate(Date date, String time) {

@@ -69,23 +69,23 @@ public class FlightBidBean {
     }
 
     public void spamFlightBids() {
-        Date startOfMonth = Utils.currentMonthStart();
-        Date endOfMonth = Utils.currentMonthEnd();
+        Date startOfMonth = Utils.monthStart(1);
+        Date endOfMonth = Utils.monthEnd(1);
         List<Flight> flights = flightScheduleBean.getFlightWithinDate(startOfMonth, endOfMonth);
         List<User> users = userBean.getUsersWithJobs(3);
         for (int j = 0; j < users.size(); j++) {
             List<Long> biddedFlights = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < attributesBean.getIntAttribute(Constants.FLIGHTJOBS_PER_MONTH, 5); i++) {
                 //long flightId = -1;
                 //while (biddedFlights.indexOf(flightId) != -1 || flightId == -1)
                 //{
                     long flightId = flights.get((int)(Math.random() * flights.size())).getId();
                 //}
-                if (biddedFlights.indexOf(flightId) != -1)
+                if (biddedFlights.indexOf(flightId) == -1)
                     biddedFlights.add(flightId);
             }
             try {
-                createFlightBid(users.get(j).getId(), biddedFlights);
+                long id = createFlightBid(users.get(j).getId(), biddedFlights);
             } catch (Exception e) {
                 e.printStackTrace();
             }
