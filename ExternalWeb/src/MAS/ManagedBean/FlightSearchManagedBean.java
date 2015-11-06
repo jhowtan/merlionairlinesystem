@@ -1,17 +1,10 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.BookFlightBean;
-import MAS.Bean.FlightSearchBean;
-import MAS.Bean.PNRBean;
-import MAS.Bean.RouteBean;
+import MAS.Bean.*;
 import MAS.Common.Constants;
 import MAS.Common.FlightSearchItem;
 import MAS.Common.FlightSearchResult;
-import MAS.Entity.Airport;
-import MAS.Entity.BookingClass;
-import MAS.Entity.PNR;
-import MAS.Entity.Route;
-import MAS.Exception.BookingException;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +24,8 @@ public class FlightSearchManagedBean {
     FlightSearchBean flightSearchBean;
     @EJB
     BookFlightBean bookFlightBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
     @EJB
     PNRBean pnrBean;
 
@@ -238,6 +233,27 @@ public class FlightSearchManagedBean {
                         pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase()), Constants.SSR_ACTION_CODE_FFP, passengerDetails.ffpProgram + "/" + passengerDetails.ffpNumber);
                     }
                     pnrBean.updatePNR(pnr);
+                    for (String passenger : pnr.getPassengers()) {
+                        int passengerNum = pnrBean.getPassengerNumber(pnr, passenger);
+                        String ffpNumber = null;
+                        for (PassengerDetails passengerDetails : passengersDetails) {
+                            if (passenger.toUpperCase().equals(passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase())) {
+                                if (passengerDetails.ffpNumber != null && !passengerDetails.ffpNumber.equals("")) {
+                                    ffpNumber = passengerDetails.getFfpProgram() + "/" + passengerDetails.ffpNumber;
+                                }
+                                break;
+                            }
+                        }
+                        if (ffpNumber != null) {
+                            for (SpecialServiceRequest ssr : pnrBean.getPassengerSpecialServiceRequests(pnr, passengerNum)) {
+                                if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+                                    ETicket eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+                                    eTicket.setFfpNumber(ffpNumber);
+                                    flightScheduleBean.updateETicket(eTicket);
+                                }
+                            }
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
