@@ -44,7 +44,7 @@
                                     required by <span class="miles-expiry">#{commonManagedBean.formatDate("dd MMM yyyy", ffpManagedBean.customer.qualificationEndDate)}</span>.
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{ffpManagedBean.customer.tier != 3}">
-                                    <p>You are #{ffpManagedBean.getRequiredMilesforNextTier(ffpManagedBean.customer.tier)} Elite Miles away from #{ffpManagedBean.getTierName(ffpManagedBean.customer.tier + 1)}.</p>
+                                    <p>You are #{ffpManagedBean.getRequiredMilesForNextTier(ffpManagedBean.customer.tier)} Elite Miles away from #{ffpManagedBean.getTierName(ffpManagedBean.customer.tier + 1)}.</p>
                                 </h:panelGroup>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
             </div>
             <hr/>
             <div class="container">
-                <h1 class="ffp-title">Your Bookings</h1>
+                <h1 class="ffp-title">Your Upcoming Flights</h1>
                 <h:panelGroup styleClass="panel panel-default" layout="block">
                     <div class="panel-body">
                         <table class="table table-hover">
@@ -84,28 +84,52 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>test</td>
-                                    <td>test</td>
-                                    <td>test</td>
-                                    <td>test</td>
-                                </tr>
+                                <ui:repeat value="#{ffpManagedBean.getCustomerEtickets()}" var="eticket">
+                                    <tr>
+                                        <td>#{eticket.pnr.bookingReference}</td>
+                                        <td>#{eticket.flight.aircraftAssignment.route.origin.id} - #{eticket.flight.aircraftAssignment.route.destination.id}</td>
+                                        <td>#{commonManagedBean.formatDate("E dd MMM, hh:mm", eticket.flight.departureTime)}</td>
+                                        <td>
+                                            <h:link outcome="/booking/manage" styleClass="btn btn-primary btn-sm" value="Manage">
+                                                <f:param value="#{eticket.pnr.bookingReference}" name="bookingReference"/>
+                                                <f:param value="#{ffpManagedBean.customer.lastName}" name="passengerLastName"/>
+                                            </h:link>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
                             </tbody>
                         </table>
                     </div>
                 </h:panelGroup>
-                <div class="text-center">
-                    <div class="pull-right">
-                        <h:link outcome="/booking/manage" styleClass="btn btn-info btn-lg btn-block">See All Bookings</h:link>
-                    </div>
-                </div>
             </div>
             <hr/>
             <div class="container">
                 <h1 class="ffp-title">Recent Activity</h1>
                 <h:panelGroup styleClass="panel panel-default" layout="block">
-                    <div class="panel-body">
-                        No Recent Activity
+                    <div class="panel-body text-center">
+                        <h:panelGroup rendered="#{empty ffpManagedBean.customerLogs}">
+                            You currently have no activities.
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{!empty ffpManagedBean.customerLogs}">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="30%">Time</th>
+                                        <th width="30%">Category</th>
+                                        <th width="40%">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ui:repeat value="#{ffpManagedBean.customerLogs}" var="activity">
+                                        <tr>
+                                            <td>#{activity.timestamp}</td>
+                                            <td>#{activity.category}</td>
+                                            <td>#{activity.description}</td>
+                                        </tr>
+                                    </ui:repeat>
+                                </tbody>
+                            </table>
+                        </h:panelGroup>
                     </div>
                 </h:panelGroup>
             </div>

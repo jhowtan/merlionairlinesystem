@@ -3,19 +3,21 @@ package MAS.Bean;
 import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Stateless(name = "PNREJB")
 @LocalBean
 public class PNRBean {
     @PersistenceContext
     EntityManager em;
+
+    @EJB
+    CustomerBean customerBean;
 
     public PNRBean() {
     }
@@ -35,6 +37,27 @@ public class PNRBean {
             }
         }
         throw new NotFoundException();
+    }
+
+    public List<PNR> getCustomerPNR(long custId) throws NotFoundException {
+        Customer customer = customerBean.getCustomer(custId);
+        List<PNR> pnrList = em.createQuery("SELECT p FROM PNR p", PNR.class).getResultList();
+        List<PNR> customerPNR = new ArrayList<>();
+        for (PNR pnr : pnrList) {
+            for (String passenger : pnr.getPassengers()) {
+                String[] parts = passenger.split("/");
+                if (parts[0].toUpperCase().equals(customer.getLastName().trim().toUpperCase())) {
+                    customerPNR.add(pnr);
+                }
+            }
+        }
+        Collections.sort(customerPNR, new Comparator<PNR>() {
+            @Override
+            public int compare(PNR o1, PNR o2) {
+                return o1.getCreated().compareTo(o2.getCreated());
+            }
+        });
+        return customerPNR;
     }
 
     public List<ETicket> getETicketsByPNR(PNR pnr) {
