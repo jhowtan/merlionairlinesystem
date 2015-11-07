@@ -53,6 +53,24 @@ public class FlightRosterBean {
         return flightRoster.getId();
     }
 
+    public long createFlightRoster(long flightId, List<Long> userIds) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        List<User> members = new ArrayList<>();
+        for (int i = 0; i < userIds.size(); i++) {
+            User member = em.find(User.class, userIds.get(i));
+            if (member == null) throw new NotFoundException();
+            members.add(member);
+        }
+        FlightRoster flightRoster = new FlightRoster();
+        flightRoster.setFlight(flight);
+        flightRoster.setMembers(members);
+        em.persist(flightRoster);
+        em.flush();
+        updateFlightRosterComplete(flightRoster.getId());
+        return flightRoster.getId();
+    }
+
     public FlightRoster getFlightRoster(long id) throws NotFoundException {
         FlightRoster flightRoster = em.find(FlightRoster.class, id);
         if (flightRoster == null) throw new NotFoundException();

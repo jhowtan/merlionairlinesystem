@@ -63,7 +63,7 @@ public class FlightRosterManagedBean {
             crew = flightRoster.getMembers();
         } catch (NotFoundException e) {
             //No flight roster for this flight
-            flightRoster = new FlightRoster();
+            flightRoster = null;
             crew = new ArrayList<>();
         }
     }
@@ -91,11 +91,19 @@ public class FlightRosterManagedBean {
 
     public void saveFlightRoster() {
         try {
-            flightRosterBean.changeFlightRosterMembers(flightRoster.getId(), crew);
+            if (flightRoster == null) {
+                List<Long> crewIds = new ArrayList<>();
+                for (int i = 0; i < crew.size(); i++)
+                    crewIds.add(crew.get(i).getId());
+                flightRosterBean.createFlightRoster(flightId, crewIds);
+            } else {
+                flightRosterBean.changeFlightRosterMembers(flightRoster.getId(), crew);
+            }
             FacesMessage m = new FacesMessage("Flight rosters saved.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage m = new FacesMessage("Unable to save flight rosters.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
@@ -147,6 +155,7 @@ public class FlightRosterManagedBean {
         public String info;
         public String color;
         public String crewMembers;
+        public String flightId;
     }
 
     private class CalendarResource {
@@ -176,6 +185,7 @@ public class FlightRosterManagedBean {
                 c.start = f.getDepartureTime();
                 c.end = f.getArrivalTime();
                 c.className = new ArrayList<>();
+                c.flightId = String.valueOf(f.getId());
                 if (fr.isComplete())
                     c.className.add("calendar-blue-event");
                 else

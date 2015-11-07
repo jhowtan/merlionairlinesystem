@@ -155,6 +155,12 @@
                                 container: 'body'
                             });
                         },
+                        eventClick: function(calEvent, jsEvent, view) {
+                            var flightId = calEvent.flightId;
+                            flightIdEl.val(flightId);
+                            flightIdEl.change();
+                            saveFlightBtnEl.click();
+                        },
                         events: data.entries
                     });
                 });
@@ -163,19 +169,23 @@
 
         <script type="text/javascript">
             //<![CDATA[
+            var flightIdEl = $("[id='#{flight.clientId}']");
+            var engine = new Bloodhound({
+                remote: {
+                    url: 'crewSearch.xhtml?q=%QUERY',
+                    wildcard: '%QUERY'
+                },
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace
+            });
+            engine.initialize();
+
             var flightChangeEvent = function() {
                 initTokenField();
             };
+
             var initTokenField = function() {
-                var engine = new Bloodhound({
-                    remote: {
-                        url: 'crewSearch.xhtml?q=%QUERY',
-                        wildcard: '%QUERY'
-                    },
-                    datumTokenizer: Bloodhound.tokenizers.whitespace,
-                    queryTokenizer: Bloodhound.tokenizers.whitespace
-                });
-                engine.initialize();
+                $("[id='#{flightCrew.clientId}']").val('');
                 $("[id='#{flightCrew.clientId}']")
                         .on('tokenfield:createtoken', function(e) {
 
