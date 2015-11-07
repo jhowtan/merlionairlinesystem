@@ -53,6 +53,15 @@ public class CommonManagedBean {
         }
     }
 
+    public static String formatJob(int jobId) {
+        if (jobId == 4) {
+            return "Pilot";
+        } else if (jobId == 3) {
+            return "Cabin Crew";
+        }
+        return "No Job";
+    }
+
     public static String formatRoute(Route route) {
         return route.getOrigin().getId() + " - " + route.getDestination().getId();
     }

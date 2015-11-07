@@ -239,4 +239,12 @@ public class UserBean {
                 .getResultList();
     }
 
+    public List<User> searchForFlightCrew(String query) {
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted AND (u.username LIKE :query OR CONCAT(u.firstName, ' ', u.lastName) LIKE :query) AND (u.job = :cabincrew OR u.job = :cockpitcrew)", User.class)
+                .setParameter("query", "%" + query + "%")
+                .setParameter("cabincrew", Constants.cabinCrewJobId)
+                .setParameter("cockpitcrew", Constants.cockpitCrewJobId)
+                .getResultList();
+    }
+
 }

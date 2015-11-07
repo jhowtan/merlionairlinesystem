@@ -12,8 +12,95 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Flight Rosters</h1>
                     <div class="form-group col-lg-12">
+                        <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                            <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                                #{message.detail}
+                            </h:panelGroup>
+                        </ui:repeat>
                     </div>
                 </div>
+                <h:panelGroup rendered="#{flightRosterManagedBean.isCrewManager()}">
+                    <div class="form-group col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Flight Roster Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <h:form>
+                                        <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="flight">Choose Flight Code</label>
+                                            <h:selectOneMenu styleClass="form-control" id="flight" value="#{flightRosterManagedBean.flightId}" binding="#{flight}">
+                                                <f:selectItem itemLabel="Select a flight"/>
+                                                <f:selectItems value="#{flightRosterManagedBean.flights}" var="fl"
+                                                               itemLabel="#{fl.getCode()} (#{fl.aircraftAssignment.route.origin.id} - #{fl.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
+                                                <f:ajax event="change" render="crewPanel" listener="#{flightRosterManagedBean.flightCodeChangeListener}" onevent="flightChangeEvent"/>
+                                            </h:selectOneMenu>
+                                            <h:message for="flight" styleClass="help-block" />
+                                        </div>
+                                        <h:panelGroup id="crewPanel">
+                                            <h:panelGroup rendered="#{flightRosterManagedBean.hasFlight()}">
+                                                <div class="form-group col-lg-12 #{!flightCrew.valid ? 'has-error' : ''}">
+                                                    <label class="control-label" for="flightCrew">Flight Crew Name</label>
+                                                    <h:inputText id="flightCrew" binding="#{flightCrew}" value="#{flightRosterManagedBean.userId}" styleClass="form-control" required="true" requiredMessage="Please enter a flight crew.">
+                                                        <f:ajax/>
+                                                    </h:inputText>
+                                                    <h:message for="flightCrew" styleClass="help-block" />
+                                                </div>
+                                                <div class="col-lg-12 text-right">
+                                                    <div class="btn-group">
+                                                        <h:commandButton immediate="true" action="#{flightRosterManagedBean.addCrew()}" value="Add Crew Member" styleClass="btn btn-success">
+                                                            <f:ajax execute="flightCrew" render="crewPanel" onevent="initTokenField"/>
+                                                        </h:commandButton>
+                                                    </div>
+                                                </div>
+                                                <h:panelGroup rendered="#{flightRosterManagedBean.crew.size() == 0}">
+                                                    <div class="col-lg-12">
+                                                        <p>There is nobody scheduled for this flight.</p>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{flightRosterManagedBean.crew.size() != 0}">
+                                                    <div class="col-lg-12">
+                                                        <p>#{flightRosterManagedBean.getFulfillmentString()}</p>
+                                                    </div>
+                                                    <table class="table table-striped col-lg-12" id="bids_table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Username</th>
+                                                            <th>Name</th>
+                                                            <th>Job</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <ui:repeat value="#{flightRosterManagedBean.crew}" var="crew">
+                                                            <tr>
+                                                                <td>#{crew.username}</td>
+                                                                <td>#{crew.firstName} #{crew.lastName}</td>
+                                                                <td>#{commonManagedBean.formatJob(crew.job)}</td>
+                                                                <td>
+                                                                    <div class="btn-group">
+                                                                        <h:commandLink id="removeButton" action="#{flightRosterManagedBean.removeCrew(crew)}" styleClass="btn btn-default btn-xs btn-danger"><i class="fa fa-trash"/> Remove
+                                                                            <f:ajax execute="removeButton" render="@form" onevent="initTokenField"/>
+                                                                        </h:commandLink>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </ui:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="btn-group">
+                                                            <h:commandButton immediate="true" action="#{flightRosterManagedBean.saveFlightRoster()}" value="Save" styleClass="btn btn-success"/>
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
                 <h:panelGroup id="flTimetable">
                     <div class="col-lg-12">
                         <div id="calendar"></div>
@@ -35,6 +122,7 @@
         <script type="text/javascript">
             $.get("getFlightRoster.xhtml", function(data) {
                 $(document).ready(function() {
+                    initTokenField();
                     $('#calendar').fullCalendar({
                         //height: 420,
                         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -72,5 +160,36 @@
                 });
             });
         </script>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            var flightChangeEvent = function() {
+                initTokenField();
+            };
+            var initTokenField = function() {
+                var engine = new Bloodhound({
+                    remote: {
+                        url: 'crewSearch.xhtml?q=%QUERY',
+                        wildcard: '%QUERY'
+                    },
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace
+                });
+                engine.initialize();
+                $("[id='#{flightCrew.clientId}']")
+                        .on('tokenfield:createtoken', function(e) {
+
+                        })
+                        .on('tokenfield:edittoken', function(e) {
+                            return false;
+                        })
+                        .tokenfield({
+                            limit: 1,
+                            typeahead: [null, { source: engine.ttAdapter(), displayKey: 'label' }]
+                        });
+            };
+            //]]>
+        </script>
     </ui:define>
+
 </ui:composition>

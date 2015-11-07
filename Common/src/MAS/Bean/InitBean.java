@@ -239,12 +239,12 @@ public class InitBean {
                 flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
                 flightCrewPermissions.add(roleBean.findPermission(Permissions.CREW_CERTIFICATION).getId());
                 long roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
-                for (int i = 0; i < 100; i ++) { //Cabin crew
+                for (int i = 0; i < 200; i ++) { //Cabin crew
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];
                     String selLName = lastNames[(int)(Math.random() * lastNames.length)];
                     String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
                     long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
-                            "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
+                            "+65 6555-1234", airports.get(i % airports.size()));
                     userBean.changePassword(userId, "password");
                     userBean.setRoles(userId, Arrays.asList(roleId));
                     userBean.changeJob(userId, Constants.cabinCrewJobId);
@@ -260,12 +260,12 @@ public class InitBean {
                         crewCertificationBean.createCrewCertification(certification);
                     }
                 }
-                for (int i = 0; i < 25; i ++) { //Pilots
+                for (int i = 0; i < 50; i ++) { //Pilots
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];
                     String selLName = lastNames[(int)(Math.random() * lastNames.length)];
                     String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
                     long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
-                            "+65 6555-1234", airports.get((int) (Math.random() * airports.size())));
+                            "+65 6555-1234", airports.get(i % airports.size()));
                     userBean.changePassword(userId, "password");
                     userBean.setRoles(userId, Arrays.asList(roleId));
                     userBean.changeJob(userId, Constants.cockpitCrewJobId);

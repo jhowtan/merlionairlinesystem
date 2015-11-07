@@ -1,19 +1,25 @@
 package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.*;
+import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Common.Utils;
 import MAS.Entity.Flight;
 import MAS.Entity.FlightRoster;
 import MAS.Entity.User;
+import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class FlightRosterManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -35,6 +42,93 @@ public class FlightRosterManagedBean {
     UserBean userBean;
     @EJB
     FlightRosterBean flightRosterBean;
+
+    private List<User> crew;
+    private List<Flight> flights;
+    private long flightId;
+    private Long userId;
+    private FlightRoster flightRoster;
+
+    @PostConstruct
+    private void init() {
+        Date start = new Date();
+        Date end = Utils.monthEnd(2);
+        flights = flightScheduleBean.getFlightWithinDate(start, end);
+        crew = new ArrayList<>();
+    }
+
+    public void flightCodeChangeListener(AjaxBehaviorEvent event) {
+        try {
+            flightRoster = flightRosterBean.getFlightRosterForFlight(flightId);
+            crew = flightRoster.getMembers();
+        } catch (NotFoundException e) {
+            //No flight roster for this flight
+            flightRoster = new FlightRoster();
+            crew = new ArrayList<>();
+        }
+    }
+
+    public void addCrew() {
+        try {
+            User user = userBean.getUser(userId);
+            boolean exists = false;
+            for (int i = 0; i < crew.size(); i++) {
+                if (crew.get(i).equals(user))
+                    exists = true;
+            }
+            if (!exists)
+                crew.add(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userId = null;
+    }
+
+    public void removeCrew(User member) {
+        if (crew.indexOf(member) != -1)
+            crew.remove(member);
+    }
+
+    public void saveFlightRoster() {
+        try {
+            flightRosterBean.changeFlightRosterMembers(flightRoster.getId(), crew);
+            FacesMessage m = new FacesMessage("Flight rosters saved.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Unable to save flight rosters.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public boolean hasFlight() {
+        try {
+            flightScheduleBean.getFlight(flightId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getFulfillmentString() {
+        try {
+            Flight flight = flightScheduleBean.getFlight(flightId);
+            int cabinReq = flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
+            int cockpitReq = flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCockpitCrewReq();
+            int inCabin = 0;
+            int inCockpit = 0;
+            for (int i = 0; i < crew.size(); i++) {
+                if (crew.get(i).getJob() == Constants.cabinCrewJobId)
+                    inCabin++;
+                else if (crew.get(i).getJob() == Constants.cockpitCrewJobId)
+                    inCockpit++;
+            }
+            return "This flight has " + inCabin + " cabin crew out of the required " + cabinReq + ", and " + inCockpit + " pilots out of the required " + cockpitReq + ".";
+        } catch (Exception e) {
+            return "This flight is unfulfilled";
+        }
+    }
 
     public boolean isCrewManager() {
         return authManagedBean.hasPermission(Permissions.MANAGE_FLIGHT_BID);
@@ -72,7 +166,7 @@ public class FlightRosterManagedBean {
             if (!isCrewManager())
                 flightRosters = flightRosterBean.getFlightRostersOfUser(user.getId());
             else
-                flightRosters = flightRosterBean.getAllFlightRosters();
+                flightRosters = flightRosterBean.getAllFutureFlightRosters();
 
             for (FlightRoster fr : flightRosters) {
                 CalendarEntry c = new CalendarEntry();
@@ -135,7 +229,82 @@ public class FlightRosterManagedBean {
         }
     }
 
+    private class SearchResult {
+        public String value;
+        public String label;
+    }
+
+    public void crewSearch() {
+        Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String query = params.get("q");
+
+        List<User> users = userBean.searchForFlightCrew(query);
+
+        ArrayList<SearchResult> searchResults = new ArrayList<>();
+
+        for (User user : users) {
+            SearchResult r = new SearchResult();
+            r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + ")";
+            r.value = String.valueOf(user.getId());
+            searchResults.add(r);
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(searchResults);
+
+        if(!authManagedBean.isAuthenticated()) {
+            json = "[]";
+        }
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
+        response.setContentLength(json.length());
+        response.setContentType("application/json");
+
+        try {
+            response.getOutputStream().write(json.getBytes());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ctx.responseComplete();
+    }
+
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public List<User> getCrew() {
+        return crew;
+    }
+
+    public void setCrew(List<User> crew) {
+        this.crew = crew;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
+    }
+
+    public long getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(long flightId) {
+        this.flightId = flightId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

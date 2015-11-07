@@ -59,6 +59,30 @@ public class FlightRosterBean {
         return flightRoster;
     }
 
+    public void changeFlightRosterMembers(long id, List<User> members) throws NotFoundException {
+        FlightRoster flightRoster = em.find(FlightRoster.class, id);
+        if (flightRoster == null) throw new NotFoundException();
+        flightRoster.setMembers(members);
+        updateFlightRosterComplete(id);
+    }
+
+    public void updateFlightRosterComplete(long id) throws NotFoundException {
+        FlightRoster flightRoster = em.find(FlightRoster.class, id);
+        if (flightRoster == null) throw new NotFoundException();
+        int cabinReq = flightRoster.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCabinCrewReq();
+        int cockpitReq = flightRoster.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getCockpitCrewReq();
+        int inCabin = 0;
+        int inCockpit = 0;
+        List<User> crew = flightRoster.getMembers();
+        for (int i = 0; i < crew.size(); i++) {
+            if (crew.get(i).getJob() == Constants.cabinCrewJobId)
+                inCabin++;
+            else if (crew.get(i).getJob() == Constants.cockpitCrewJobId)
+                inCockpit++;
+        }
+        flightRoster.setComplete(inCabin >= cabinReq && inCockpit >= cockpitReq);
+    }
+
     public void removeFlightRoster(long id) throws NotFoundException {
         FlightRoster flightRoster = em.find(FlightRoster.class, id);
         if (flightRoster == null) throw new NotFoundException();
@@ -68,11 +92,11 @@ public class FlightRosterBean {
     public FlightRoster getFlightRosterForFlight(long flightId) throws NotFoundException {
         Flight flight = em.find(Flight.class, flightId);
         if (flight == null) throw new NotFoundException();
-        FlightRoster result = em.createQuery("SELECT fr from FlightRoster fr WHERE fr.flight = :flight", FlightRoster.class)
+        List<FlightRoster> result = em.createQuery("SELECT fr from FlightRoster fr WHERE fr.flight = :flight", FlightRoster.class)
                 .setParameter("flight", flight)
-                .setMaxResults(1).getResultList().get(0);
-        if (result == null) throw new NotFoundException();
-        return result;
+                .setMaxResults(1).getResultList();
+        if (result.size() == 0) throw new NotFoundException();
+        return result.get(0);
     }
 
     public List<FlightRoster> getFlightRostersOfUser(long userId) throws NotFoundException {
