@@ -4,10 +4,9 @@ import MAS.Bean.BookingClassBean;
 import MAS.Bean.CostsBean;
 import MAS.Bean.FleetBean;
 import MAS.Bean.FlightScheduleBean;
+import MAS.Bean.RouteBean;
 import MAS.Common.SeatConfigObject;
-import MAS.Entity.BookingClass;
-import MAS.Entity.ETicket;
-import MAS.Entity.Flight;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -21,6 +20,8 @@ public class ProfitabilityReportManagedBean {
     private BookingClassBean bookingClassBean;
     @EJB
     private FleetBean fleetBean;
+    @EJB
+    private RouteBean routeBean;
     @EJB
     private CostsBean costsBean;
     @EJB
@@ -70,4 +71,11 @@ public class ProfitabilityReportManagedBean {
         return totalCostOfFlight / numSeatsInFlight * numSeatsInBookingClass;
     }
 
+    public List<Aircraft> getAllAircrafts() {
+        return fleetBean.getAllAircraft();
+    }
+
+    public List<Route> getAllRoutes() {
+        return routeBean.getAllRoutes();
+    }
 }
