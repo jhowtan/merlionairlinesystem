@@ -31,6 +31,8 @@ public class FlightRosterBean {
     RouteBean routeBean;
     @EJB
     CrewCertificationBean crewCertificationBean;
+    @EJB
+    UserBean userBean;
 
     public FlightRosterBean() {
     }
@@ -238,6 +240,17 @@ public class FlightRosterBean {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<User> getReplacement(Flight flight, int jobId) {
+        List<User> result = new ArrayList<>();
+        try {
+            result = userBean.getUsersAtAirportWithJob(flight.getAircraftAssignment().getRoute().getOrigin().getId(), jobId);
+            System.out.println(result);
+        } catch (Exception e) {
+
+        }
+        return result;
     }
 
     private FlightBid getBidFromUser(User user, List<FlightBid> flightBids) throws NotFoundException {

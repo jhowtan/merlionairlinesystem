@@ -26,17 +26,24 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <h:form>
-                                        <div class="form-group col-lg-12 #{!flightRoster.valid ? 'has-error' : ''}">
-                                            <label class="control-label" for="flightRoster">Choose Flight Code</label>
-                                            <h:selectOneMenu styleClass="form-control" id="flightRoster" value="#{flightDefermentManagedBean.flightRosterId}" binding="#{flightRoster}">
-                                                <f:selectItem itemLabel="Select a flight"/>
-                                                <f:selectItems value="#{flightDefermentManagedBean.flightRosters}" var="fr"
-                                                               itemLabel="#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
-                                                               itemValue="#{fr.id}" />
-                                                <f:ajax event="change" render="deferPanel" listener="#{flightDefermentManagedBean.flightRosterChangeListener}"/>
-                                            </h:selectOneMenu>
-                                            <h:message for="flightRoster" styleClass="help-block" />
-                                        </div>
+                                        <h:panelGroup rendered="#{flightDefermentManagedBean.flightRosters.size() == 0}">
+                                            <div class="col-lg-12">
+                                                <p>You have no upcoming flights you can defer from.</p>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{flightDefermentManagedBean.flightRosters.size() != 0}">
+                                            <div class="form-group col-lg-12 #{!flightRoster.valid ? 'has-error' : ''}">
+                                                <label class="control-label" for="flightRoster">Choose Flight Code</label>
+                                                <h:selectOneMenu styleClass="form-control" id="flightRoster" value="#{flightDefermentManagedBean.flightRosterId}" binding="#{flightRoster}">
+                                                    <f:selectItem itemLabel="Select a flight"/>
+                                                    <f:selectItems value="#{flightDefermentManagedBean.flightRosters}" var="fr"
+                                                                   itemLabel="#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
+                                                                   itemValue="#{fr.id}" />
+                                                    <f:ajax event="change" render="deferPanel" listener="#{flightDefermentManagedBean.flightRosterChangeListener}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="flightRoster" styleClass="help-block" />
+                                            </div>
+                                        </h:panelGroup>
                                         <h:panelGroup id="deferPanel">
                                             <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightRoster()}">
                                                 <div class="form-group col-lg-12">
@@ -57,12 +64,12 @@
                             </div>
                         </div>
                     </div>
-                    <h:panelGroup id="flTimetable">
-                        <div class="col-lg-12">
-                            <div id="calendar"></div>
-                            <br/>
-                        </div>
-                    </h:panelGroup>
+                    <!--<h:panelGroup id="flTimetable">-->
+                        <!--<div class="col-lg-12">-->
+                            <!--<div id="calendar"></div>-->
+                            <!--<br/>-->
+                        <!--</div>-->
+                    <!--</h:panelGroup>-->
                 </h:panelGroup>
                 <h:panelGroup rendered="#{flightDefermentManagedBean.isCrewManager()}">
                     <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightDeferment()}">

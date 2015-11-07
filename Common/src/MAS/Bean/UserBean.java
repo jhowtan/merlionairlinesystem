@@ -191,6 +191,14 @@ public class UserBean {
                 .setParameter("job", jobId).getResultList();
     }
 
+    public List<User> getUsersAtAirportWithJob(String airportId, int jobId) throws NotFoundException {
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        return em.createQuery("SELECT u from User u WHERE NOT u.deleted AND u.job = :job AND u.currentLocation = :airport", User.class)
+                .setParameter("airport", airport)
+                .setParameter("job", jobId).getResultList();
+    }
+
     public boolean isResetHashValid(Long id, String resetHash) {
         User user = em.find(User.class, id);
         if (user == null) return false;

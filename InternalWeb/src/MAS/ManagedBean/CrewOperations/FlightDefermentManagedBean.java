@@ -3,6 +3,7 @@ package MAS.ManagedBean.CrewOperations;
 import MAS.Bean.FlightDefermentBean;
 import MAS.Bean.FlightRosterBean;
 import MAS.Common.Permissions;
+import MAS.Common.Utils;
 import MAS.Entity.FlightDeferment;
 import MAS.Entity.FlightRoster;
 import MAS.Entity.User;
@@ -17,6 +18,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean
@@ -41,8 +43,16 @@ public class FlightDefermentManagedBean {
     @PostConstruct
     private void init() {
         try {
-            if (!isCrewManager())
+            if (!isCrewManager()) {
                 flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
+                for (int i = 0; i < flightRosters.size(); i++) {
+                    if (flightRosters.get(i).getFlight().getDepartureTime().compareTo(Utils.addTimeToDate(new Date(), "24:00")) >= 1)
+                    {
+                        flightRosters.remove(i);
+                        i--;
+                    }
+                }
+            }
             else
                 flightDeferments = flightDefermentBean.getUnresolvedDeferments();
         } catch (Exception e) {
@@ -53,7 +63,7 @@ public class FlightDefermentManagedBean {
     public void resolve(FlightDeferment flightDeferment) {
         this.flightDeferment = flightDeferment;
         if (flightDeferment != null) {//get available replacements
-
+            availableReplacements = flightRosterBean.getReplacement(flightDeferment.getFlightRoster().getFlight(), flightDeferment.getDeferrer().getJob());
         }
     }
 
