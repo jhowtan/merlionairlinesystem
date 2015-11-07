@@ -11,6 +11,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -80,6 +81,14 @@ public class FlightRosterBean {
         List<User> userList = new ArrayList<>();
         userList.add(user);
         return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.members IN :userList").setParameter("userList", userList).getResultList();
+    }
+
+    public List<FlightRoster> getAllFutureFlightRosters() {
+        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.flight.departureTime > :date").setParameter("date", new Date(), TemporalType.TIMESTAMP).getResultList();
+    }
+
+    public List<FlightRoster> getAllFlightRosters() {
+        return em.createQuery("SELECT fr from FlightRoster fr").getResultList();
     }
 
 //    public void signInFR(long flightRosterId, long userId) throws NotFoundException {

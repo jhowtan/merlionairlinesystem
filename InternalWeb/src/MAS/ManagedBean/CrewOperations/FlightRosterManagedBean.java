@@ -1,6 +1,7 @@
 package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.*;
+import MAS.Common.Permissions;
 import MAS.Common.Utils;
 import MAS.Entity.Flight;
 import MAS.Entity.FlightRoster;
@@ -35,6 +36,10 @@ public class FlightRosterManagedBean {
     @EJB
     FlightRosterBean flightRosterBean;
 
+    public boolean isCrewManager() {
+        return authManagedBean.hasPermission(Permissions.MANAGE_FLIGHT_BID);
+    }
+
     public class CalendarData {
         public List<CalendarEntry> entries;
         public List<CalendarResource> resources;
@@ -62,8 +67,12 @@ public class FlightRosterManagedBean {
             ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
             ArrayList<CalendarResource> calendarResources = new ArrayList<>();
             User user = userBean.getUser(authManagedBean.getUserId());
+            List<FlightRoster> flightRosters;
 
-            List<FlightRoster> flightRosters = flightRosterBean.getFlightRostersOfUser(user.getId());
+            if (!isCrewManager())
+                flightRosters = flightRosterBean.getFlightRostersOfUser(user.getId());
+            else
+                flightRosters = flightRosterBean.getAllFlightRosters();
 
             for (FlightRoster fr : flightRosters) {
                 CalendarEntry c = new CalendarEntry();
@@ -73,18 +82,25 @@ public class FlightRosterManagedBean {
                 c.start = f.getDepartureTime();
                 c.end = f.getArrivalTime();
                 c.className = new ArrayList<>();
-                c.className.add("calendar-blue-event");
+                if (fr.isComplete())
+                    c.className.add("calendar-blue-event");
+                else
+                    c.className.add("calendar-red-event");
                 String cMembers = "";
                 for (int i = 0; i < fr.getMembers().size(); i++) {
                     cMembers = cMembers.concat(fr.getMembers().get(i).getFirstName() + " " + fr.getMembers().get(i).getLastName() + ", ");
                 }
-                c.crewMembers = cMembers.substring(0, cMembers.length() - 2);
+                if (cMembers.length() > 2)
+                    c.crewMembers = cMembers.substring(0, cMembers.length() - 2);
+                else
+                    c.crewMembers = "Nobody";
                 c.info = f.getCode() + ": " + c.crewMembers;
                 calendarEntries.add(c);
 
                 CalendarResource cr = new CalendarResource();
                 cr.id = String.valueOf(f.getAircraftAssignment().getAircraft().getId());
-                cr.crewName = user.getFirstName() + " " + user.getLastName();
+                if (!isCrewManager())
+                    cr.crewName = user.getFirstName() + " " + user.getLastName();
                 calendarResources.add(cr);
             }
 
@@ -115,7 +131,7 @@ public class FlightRosterManagedBean {
             ctx.responseComplete();
 
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
