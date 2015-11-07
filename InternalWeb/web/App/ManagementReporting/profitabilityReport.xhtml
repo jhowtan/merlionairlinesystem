@@ -121,7 +121,7 @@
                                         </tr>
                                     </ui:repeat>
                                 </tbody>
-                                </table>
+                            </table>
                         </div>
                     </div> <!--END OF PANEL -->
                 </div>
@@ -175,50 +175,67 @@
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-            var flightTableDataTable = function() {
-                $('#flight_table').DataTable({
+            $(document).ready(function() {
+                var flightTable = $('#flight_table').DataTable({
                     "stateSave": true,
-                    "order": [[2, 'desc']]
+                    "order": [[4, 'desc']]
                 });
-            };
-            var bookingClassTableDataTable = function() {
-                $('#booking_class_table').DataTable({
-                    "stateSave": true,
-                    "order": [[2, 'desc']]
+                // <![CDATA[
+                var bookingClassTable = $('#booking_class_table').DataTable({
+                    "order": [[5, 'desc']],
+                    "initComplete": function () {
+                        this.api().columns().every( function () {
+                            var column = this;
+                            var select = $('<select><option value="">All</option></select>')
+                                    .appendTo( $(column.footer()).empty() )
+                                    .on( 'change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                                $(this).val()
+                                        );
+                                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                                    });
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        } );
+                    }
                 });
-            };
-            flightsChart = new Morris.Bar({
-                element: 'top-flights',
-                data: [],
-                xkey: 'name',
-                ykeys: ['value'],
-                labels: ['Net Revenue Change']
-            });
-            $.ajax({
-                url: 'reportingData.xhtml?q=topPerformingFlights',
-                success: function(data) {
-                    flightsChart.setData(data);
-                }
-            });
-            bookingClassChart = new Morris.Bar({
-                element: 'top-booking-classes',
-                data: [],
-                xkey: 'name',
-                ykeys: ['value'],
-                labels: ['Net Revenue Change']
-            });
-            $.ajax({
-                url: 'reportingData.xhtml?q=topPerformingBookingClass',
-                success: function(data) {
-                    bookingClassChart.setData(data);
-                }
-            });
-            $.fn.dataTable.ext.search.push(
+                // ]]>
+                // Event listener for flights table
+                $('#durationFrom, #durationTo, #originDest, #aircraft').change(function() {
+                    flightTable.draw();
+                });
+                var flightsChart = new Morris.Bar({
+                    element: 'top-flights',
+                    data: [],
+                    xkey: 'name',
+                    ykeys: ['value'],
+                    labels: ['Net Revenue Change']
+                });
+                $.ajax({
+                    url: 'reportingData.xhtml?q=topPerformingFlights',
+                    success: function(data) {
+                        flightsChart.setData(data);
+                    }
+                });
+                var bookingClassChart = new Morris.Bar({
+                    element: 'top-booking-classes',
+                    data: [],
+                    xkey: 'name',
+                    ykeys: ['value'],
+                    labels: ['Net Revenue Change']
+                });
+                $.ajax({
+                    url: 'reportingData.xhtml?q=topPerformingBookingClass',
+                    success: function(data) {
+                        bookingClassChart.setData(data);
+                    }
+                });
+                $.fn.dataTable.ext.search.push(
                     function( settings, data, dataIndex ) {
                         if (settings.nTable != document.getElementById('flight_table')) {
                             return true;
                         }
-                        //@TODO: logic for filtering aircraft
                         var from = $('#durationFrom').val();
                         var to = $('#durationTo').val();
                         var aircraft = $('#aircraft').val();
@@ -250,44 +267,8 @@
                         }
                         return true;
                         // ]]>
-
                     }
-            );
-
-            $(document).ready(function() {
-                var flightTable = $('#flight_table').DataTable({
-                    "stateSave": true,
-                    "order": [[2, 'desc']]
-                });
-                // <![CDATA[
-                var bookingClassTable = $('#booking_class_table').DataTable({
-                    "stateSave": true,
-                    "order": [[2, 'desc']],
-                    "initComplete": function () {
-                        console.log('xxxxxx');
-                        this.api().columns().every( function () {
-                            console.log('xxx');
-                            var column = this;
-                            var select = $('<select><option value="">All</option></select>')
-                                    .appendTo( $(column.footer()).empty() )
-                                    .on( 'change', function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                                $(this).val()
-                                        );
-                                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
-                                    });
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
-                        } );
-                    }
-                });
-                // ]]>
-                bookingClassTable.draw();
-                // Event listener for flights table
-                $('#durationFrom, #durationTo, #originDest, #aircraft').change( function() {
-                    flightTable.draw();
-                } );
+                );
             });
         </script>
     </ui:define>
