@@ -4,7 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Costs - Merlion Airline System</ui:define>
+    <ui:define name="title">Profitability Reporting - Merlion Airline System</ui:define>
 
     <ui:define name="content">
         <div class="container-fluid">
@@ -187,34 +187,32 @@
                     "order": [[2, 'desc']]
                 });
             };
-            flightsChart = new Morris.Area({
+            flightsChart = new Morris.Bar({
                 element: 'top-flights',
                 data: [],
-                xkey: 'date',
+                xkey: 'name',
                 ykeys: ['value'],
-                labels: ['Price']
+                labels: ['Net Revenue Change']
             });
-//            $.ajax({
-//                // TODO: implement data retrieval for charts
-//                url: 'reportingData.xhtml?q=',
-//                success: function(data) {
-//                    flightsChart.setData(data);
-//                }
-//            });
-            bookingClassChart = new Morris.Line({
+            $.ajax({
+                url: 'reportingData.xhtml?q=topPerformingFlights',
+                success: function(data) {
+                    flightsChart.setData(data);
+                }
+            });
+            bookingClassChart = new Morris.Bar({
                 element: 'top-booking-classes',
                 data: [],
-                xkey: 'date',
+                xkey: 'name',
                 ykeys: ['value'],
-                labels: ['Price']
+                labels: ['Net Revenue Change']
             });
-//            $.ajax({
-//                // TODO: implement data retrieval for charts
-//                url: 'reportingData.xhtml?q=',
-//                success: function(data) {
-//                    bookingClassChart.setData(data);
-//                }
-//            });
+            $.ajax({
+                url: 'reportingData.xhtml?q=topPerformingBookingClass',
+                success: function(data) {
+                    bookingClassChart.setData(data);
+                }
+            });
             $.fn.dataTable.ext.search.push(
                     function( settings, data, dataIndex ) {
                         if (settings.nTable != document.getElementById('flight_table')) {
