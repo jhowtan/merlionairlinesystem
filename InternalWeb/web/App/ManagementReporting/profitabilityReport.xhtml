@@ -59,35 +59,103 @@
                                 </a>
                             </div>
                             <div id="filter-options" class="panel-collapse collapse in" aria-labelledby="filter-heading">
-                                <div class="panel-body">
-                                    <div class="form-group col-lg-3">
-                                        <label class="control-label" for="aircraft">Aircraft</label>
-                                        <h:selectOneMenu styleClass="form-control"
-                                                         id="aircraft">
-                                            <f:selectItem itemLabel="All" itemValue="" />
-                                            <f:selectItems value="#{profitabilityReportManagedBean.getAllAircrafts()}" var="aircraft"
-                                                           itemLabel="#{aircraft.tailNumber} (#{aircraft.seatConfig.aircraftType.name})"
-                                                           itemValue="#{aircraft.tailNumber} (#{aircraft.seatConfig.aircraftType.name})" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                    <div class="form-group col-lg-3">
-                                        <label class="control-label" for="originDest">Origin-Destination</label>
-                                        <h:selectOneMenu styleClass="form-control"
-                                                         id="originDest">
-                                            <f:selectItem itemLabel="All" itemValue="" />
-                                            <f:selectItems value="#{profitabilityReportManagedBean.getAllRoutes()}" var="route"
-                                                           itemLabel="#{route.origin.id} - #{route.destination.id}"
-                                                           itemValue="#{route.origin.id} - #{route.destination.id}" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                    <div class="form-group col-lg-3">
-                                        <label class="control-label" for="durationFrom">From</label>
-                                        <input type="date" id="durationFrom" class="form-control"/>
-                                    </div>
-                                    <div class="form-group col-lg-3">
-                                        <label class="control-label" for="durationTo">To</label>
-                                        <input type="date" id="durationTo" class="form-control"/>
-                                    </div>
+                                <div class="panel-body container-fluid">
+                                    <h:form>
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <label class="control-label" for="originDest">Origin-Destination</label>
+                                                <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.routeIds}"
+                                                                 id="originDest">
+                                                    <f:selectItems value="#{profitabilityReportManagedBean.getAllRoutes()}" var="route"
+                                                                   itemLabel="#{route.origin.id} - #{route.destination.id}"
+                                                                   itemValue="#{route.id}" />
+                                                    <f:ajax event="change" render="flightTable"
+                                                            listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                            onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                </h:selectManyListbox>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label class="control-label" for="durationFrom">From</label>
+                                                <h:inputText pt:type="date" id="durationFrom" class="form-control" value="#{profitabilityReportManagedBean.fromDate}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    <f:ajax event="change" render="flightTable"
+                                                            listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                            onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label class="control-label" for="durationTo">To</label>
+                                                <h:inputText pt:type="date" id="durationTo" class="form-control" value="#{profitabilityReportManagedBean.toDate}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                                                    <f:ajax event="change" render="flightTable"
+                                                            listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                            onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label class="control-label" for="minProfit">Min Profit</label>
+                                                <h:inputText pt:type="number" id="minProfit" class="form-control" value="#{profitabilityReportManagedBean.minProfit}">
+                                                    <f:ajax event="change" render="flightTable"
+                                                            listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                            onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <label class="control-label" for="maxProfit">Max Profit</label>
+                                                <h:inputText pt:type="number" id="maxProfit" class="form-control" value="#{profitabilityReportManagedBean.maxProfit}">
+                                                    <f:ajax event="change" render="flightTable"
+                                                            listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                            onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                </h:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="input-group col-md-12">
+                                                    <span class="input-group-addon">Aircraft Types</span>
+                                                    <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.aircraftTypeIds}">
+                                                        <f:selectItems value="#{profitabilityReportManagedBean.allAircraftTypes}" var="acType"
+                                                                       itemLabel="#{acType.name}" itemValue="#{acType.id}" />
+                                                        <f:ajax event="change" render="flightTable"
+                                                                listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                                onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                    </h:selectManyListbox>
+                                                </div>
+                                                <br/>
+                                                <div class="input-group col-md-12">
+                                                    <span class="input-group-addon">Aircraft</span>
+                                                    <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.aircraftIds}">
+                                                        <f:selectItems value="#{profitabilityReportManagedBean.allAircraft}" var="ac"
+                                                                       itemLabel="#{ac.tailNumber} (#{ac.seatConfig.aircraftType.name})" itemValue="#{ac.id}" />
+                                                        <f:ajax event="change" render="flightTable"
+                                                                listener="#{profitabilityReportManagedBean.flightFilterChangeEvent}"
+                                                                onevent="function(data) {
+                                                                if (data.status == 'success') {
+                                                                    reloadFlightTable();
+                                                                }} " />
+                                                    </h:selectManyListbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h:form>
                                 </div>
                             </div>
                         </div>
@@ -96,33 +164,39 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Flight Summary Table</div>
-                        <div class="panel-body">
-                            <table class="table table-striped" id="flight_table">
-                                <thead>
+                        <h:panelGroup id="flightTable">
+                            <div class="panel-heading">Flight Summary Table</div>
+                            <div class="panel-body">
+                                <table class="table table-striped" id="flight_table">
+                                    <thead>
                                     <tr>
                                         <th>Flight Date</th>
                                         <th>Origin-Destination</th>
                                         <th>Flight Code</th>
                                         <th>Aircraft</th>
+                                        <th>Revenue</th>
+                                        <th>Costs</th>
                                         <th>Overall Profitability</th>
                                     </tr>
-                                </thead>
-                                <tbody>
+                                    </thead>
+                                    <tbody>
                                     <ui:repeat value="#{profitabilityReportManagedBean.getAllFlights()}" var="flight">
                                         <tr>
                                             <td>#{commonManagedBean.formatDate("E dd MMM yyyy, hh:mm", flight.departureTime)}</td>
                                             <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
                                             <td>#{flight.code}</td>
-                                            <td>#{flight.aircraftAssignment.aircraft.tailNumber} (#{flight.aircraftAssignment.aircraft.seatConfig.aircraftType.name})</td>
+                                            <td>#{flight.aircraftAssignment.aircraft.seatConfig.aircraftType.name} (#{flight.aircraftAssignment.aircraft.seatConfig.name})</td>
+                                            <td>#{commonManagedBean.formatMoney(profitabilityReportManagedBean.getRevenueByFlight(flight))}</td>
+                                            <td>#{commonManagedBean.formatMoney(profitabilityReportManagedBean.getCostByFlight(flight))}</td>
                                             <td class="#{profitabilityReportManagedBean.getProfitabilityByFlight(flight) > 0 ? 'profitability-gain' : 'profitability-loss'}">
                                                 #{commonManagedBean.formatMoney(profitabilityReportManagedBean.getProfitabilityByFlight(flight))} (#{commonManagedBean.displayDouble(profitabilityReportManagedBean.getProfitabilityByFlight(flight) / profitabilityReportManagedBean.getCostByFlight(flight) * 100,"##.##")}%)
                                             </td>
                                         </tr>
                                     </ui:repeat>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </h:panelGroup>
                     </div> <!--END OF PANEL -->
                 </div>
                 <div class="col-lg-12">
@@ -175,9 +249,14 @@
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(document).ready(function(){
+               loadAll();
+            });
+            var reloadFlightTable = function() {
+                var flightTable = $('#flight_table').DataTable();
+            }
+            var loadAll = function() {
                 var flightTable = $('#flight_table').DataTable({
-                    "stateSave": true,
                     "order": [[4, 'desc']]
                 });
                 // <![CDATA[
@@ -201,10 +280,6 @@
                     }
                 });
                 // ]]>
-                // Event listener for flights table
-                $('#durationFrom, #durationTo, #originDest, #aircraft').change(function() {
-                    flightTable.draw();
-                });
                 var flightsChart = new Morris.Bar({
                     element: 'top-flights',
                     data: [],
@@ -231,45 +306,8 @@
                         bookingClassChart.setData(data);
                     }
                 });
-                $.fn.dataTable.ext.search.push(
-                    function( settings, data, dataIndex ) {
-                        if (settings.nTable != document.getElementById('flight_table')) {
-                            return true;
-                        }
-                        var from = $('#durationFrom').val();
-                        var to = $('#durationTo').val();
-                        var aircraft = $('#aircraft').val();
-                        var originDest = $('#originDest').val();
-
-                        var dataDate = new Date(data[0]);
-                        var dataOriginDest = data[1];
-                        var dataAircraft = data[3];
-
-                        if (from != '') {
-                            from = new Date(from);
-                        }
-                        if (to != '') {
-                            to = new Date(to);
-                        }
-
-                        // <![CDATA[
-                        if (from != '' && dataDate < from) {
-                            return false;
-                        }
-                        if (to != '' && dataDate > to) {
-                            return false;
-                        }
-                        if (aircraft != '' && aircraft != dataAircraft) {
-                            return false;
-                        }
-                        if (originDest != '' && originDest != dataOriginDest) {
-                            return false;
-                        }
-                        return true;
-                        // ]]>
-                    }
-                );
-            });
+                reloadFlightTable();
+            };
         </script>
     </ui:define>
 </ui:composition>

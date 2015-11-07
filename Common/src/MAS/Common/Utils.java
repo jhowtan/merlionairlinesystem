@@ -8,11 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.lang.Math.*;
-import static java.lang.Math.sqrt;
 
 public class Utils {
 
@@ -50,6 +45,11 @@ public class Utils {
             diff--;
         }
         return diff;
+    }
+
+    public static int monthOf(Date date) {
+        Calendar calendar = getCalendar(date);
+        return calendar.get(Calendar.MONTH);
     }
 
     public static Date addTimeToDate(Date date, String time) {
