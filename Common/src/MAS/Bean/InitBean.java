@@ -160,6 +160,14 @@ public class InitBean {
                 userId = userBean.createUser("thad", "Thaddeus", "Loh", "merlionairlines+thad@gmail.com", "+65 6555-9999", routeBean.findAirportByCode("SIN"));
                 userBean.changePassword(userId, "password");
                 userBean.setRoles(userId, Arrays.asList(roleId));
+
+                ArrayList<Long> crewManagerPermissions = new ArrayList<>();
+                crewManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_CREW_CERTIFICATION).getId());
+                crewManagerPermissions.add(roleBean.findPermission(Permissions.MANAGE_FLIGHT_BID).getId());
+                roleId = roleBean.createRole("Crew Manager", crewManagerPermissions);
+                userId = userBean.createUserWithoutEmail("crewmgr", "Eliah", "Jones", "merlionairlines+eliah@gmail.com", "+65 6555-4232", routeBean.findAirportByCode("SIN"));
+                userBean.changePassword(userId, "password");
+                userBean.setRoles(userId, Arrays.asList(roleId));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -246,7 +254,7 @@ public class InitBean {
                         certification.setAircraftType(acTypes.get(j));
                         certification.setExpiry(Utils.oneYearLater());
                         certification.setApprovalDate(new Date());
-                        certification.setApprover(userBean.getAllUsers().get(0));
+                        certification.setApprover(userBean.searchForUser("crewmgr").get(0));
                         certification.setApprovalStatus(1);
                         certification.setOwner(userBean.getUser(userId));
                         crewCertificationBean.createCrewCertification(certification);
@@ -267,7 +275,7 @@ public class InitBean {
                         certification.setAircraftType(acTypes.get(j));
                         certification.setExpiry(Utils.oneYearLater());
                         certification.setApprovalDate(new Date());
-                        certification.setApprover(userBean.getAllUsers().get(0));
+                        certification.setApprover(userBean.searchForUser("crewmgr").get(0));
                         certification.setApprovalStatus(1);
                         certification.setOwner(userBean.getUser(userId));
                         crewCertificationBean.createCrewCertification(certification);

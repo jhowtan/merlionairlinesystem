@@ -9,128 +9,146 @@
     <ui:define name="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Flight Bidding</h1>
-                    <h:form>
-                        <h:commandButton action="#{flightBiddingManagedBean.testButton()}" value="Test" styleClass="btn btn-success" />
-                        <h:commandButton action="#{flightBiddingManagedBean.testedButton()}" value="Test 2" styleClass="btn btn-success" />
-                    </h:form>
-                    <div class="form-group col-lg-6">
-                        <h:form>
-                            <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                                <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
-                                    #{message.detail}
-                                </h:panelGroup>
-                            </ui:repeat>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Bid For Flights</div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="hidden">
-                                            <div class="form-group col-lg-12 #{!flightId.valid ? 'has-error' : ''}">
-                                                <label class="control-label" for="flightId">Flight ID</label>
-                                                <h:inputText id="flightId" binding="#{flightId}" value="#{flightBiddingManagedBean.flightId}" styleClass="form-control" pt:placeholder="Flight ID" required="true" requiredMessage="Flight id is required.">
-                                                </h:inputText>
-                                                <h:message for="flightId" styleClass="help-block" />
-                                            </div>
-                                            <div class="col-lg-12 text-right">
-                                                <div class="btn-group">
-                                                    <h:commandButton id="saveFlightBtn" binding="#{saveFlightBtn}" action="#{flightBiddingManagedBean.addFlight()}" value="Add Flight" styleClass="btn btn-success">
-                                                        <f:ajax execute="flightId" render="@form"/>
-                                                    </h:commandButton>
+                <h:panelGroup rendered="#{!flightBiddingManagedBean.isCrewManager()}">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Flight Bidding</h1>
+                        <div class="form-group col-lg-6">
+                            <h:form>
+                                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                                        #{message.detail}
+                                    </h:panelGroup>
+                                </ui:repeat>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Bid For Flights</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="hidden">
+                                                <div class="form-group col-lg-12 #{!flightId.valid ? 'has-error' : ''}">
+                                                    <label class="control-label" for="flightId">Flight ID</label>
+                                                    <h:inputText id="flightId" binding="#{flightId}" value="#{flightBiddingManagedBean.flightId}" styleClass="form-control" pt:placeholder="Flight ID" required="true" requiredMessage="Flight id is required.">
+                                                    </h:inputText>
+                                                    <h:message for="flightId" styleClass="help-block" />
+                                                </div>
+                                                <div class="col-lg-12 text-right">
+                                                    <div class="btn-group">
+                                                        <h:commandButton id="saveFlightBtn" binding="#{saveFlightBtn}" action="#{flightBiddingManagedBean.addFlight()}" value="Add Flight" styleClass="btn btn-success">
+                                                            <f:ajax execute="flightId" render="@form"/>
+                                                        </h:commandButton>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <h:panelGroup id="flBidded" rendered="true">
+                                                <h:panelGroup rendered="#{flightBiddingManagedBean.flightsBidded.size() == 0}">
+                                                    <div class="col-lg-12">
+                                                        <p>No flights selected.</p>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{flightBiddingManagedBean.flightsBidded.size() != 0}">
+                                                    <table class="table table-striped col-lg-12" id="bids_table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Flight Code</th>
+                                                            <th>Route</th>
+                                                            <th>Date</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <ui:repeat value="#{flightBiddingManagedBean.flightsBidded}" var="fl">
+                                                            <tr>
+                                                                <td>#{fl.id}</td>
+                                                                <td>#{fl.code}</td>
+                                                                <td>#{fl.aircraftAssignment.getRoute().getOrigin().getId()} - #{fl.aircraftAssignment.getRoute().getDestination().getId()}</td>
+                                                                <td>#{commonManagedBean.formatDate("dd MMM",fl.departureTime)}</td>
+                                                                <td>
+                                                                    <div class="btn-group">
+                                                                        <h:commandLink id="removeButton" action="#{flightBiddingManagedBean.removeFlight(fl)}" styleClass="btn btn-default btn-xs btn-danger"><i class="fa fa-trash"/> Remove
+                                                                            <f:ajax execute="removeButton" render="@form"/>
+                                                                        </h:commandLink>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </ui:repeat>
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="col-lg-12 text-right">
+                                                        <div class="btn-group">
+                                                            <h:commandButton immediate="true" action="#{flightBiddingManagedBean.sendBid()}" value="#{flightBiddingManagedBean.getSendButtonText()}"
+                                                                             disabled="#{flightBiddingManagedBean.isSendButtonDisabled()}" styleClass="btn btn-success"/>
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
                                         </div>
-                                        <h:panelGroup id="flBidded" rendered="true">
-                                        <h:panelGroup rendered="#{flightBiddingManagedBean.flightsBidded.size() == 0}">
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Your previous bid</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <h:panelGroup id="noPastBidsMsg" rendered="#{flightBiddingManagedBean.pastFlightsBidded.size() == 0}">
                                             <div class="col-lg-12">
-                                                <p>No flights selected.</p>
+                                                <p>You do not have any past bids.</p>
                                             </div>
                                         </h:panelGroup>
-                                        <h:panelGroup rendered="#{flightBiddingManagedBean.flightsBidded.size() != 0}">
-                                            <table class="table table-striped col-lg-12" id="bids_table">
+                                        <h:panelGroup id="pastBidsPanel" rendered="#{flightBiddingManagedBean.pastFlightsBidded.size() != 0}">
+                                            <table class="table table-striped col-lg-12" id="pastBids_table">
                                                 <thead>
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Flight Code</th>
                                                     <th>Route</th>
                                                     <th>Date</th>
-                                                    <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <ui:repeat value="#{flightBiddingManagedBean.flightsBidded}" var="fl">
+                                                <ui:repeat value="#{flightBiddingManagedBean.pastFlightsBidded}" var="fl">
                                                     <tr>
                                                         <td>#{fl.id}</td>
                                                         <td>#{fl.code}</td>
                                                         <td>#{fl.aircraftAssignment.getRoute().getOrigin().getId()} - #{fl.aircraftAssignment.getRoute().getDestination().getId()}</td>
                                                         <td>#{commonManagedBean.formatDate("dd MMM",fl.departureTime)}</td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                <h:commandLink id="removeButton" action="#{flightBiddingManagedBean.removeFlight(fl)}" styleClass="btn btn-default btn-xs btn-danger"><i class="fa fa-trash"/> Remove
-                                                                    <f:ajax execute="removeButton" render="@form"/>
-                                                                </h:commandLink>
-                                                            </div>
-                                                        </td>
                                                     </tr>
                                                 </ui:repeat>
                                                 </tbody>
                                             </table>
-                                            <div class="col-lg-12 text-right">
-                                                <div class="btn-group">
-                                                    <h:commandButton immediate="true" action="#{flightBiddingManagedBean.sendBid()}" value="#{flightBiddingManagedBean.getSendButtonText()}"
-                                                                     disabled="#{flightBiddingManagedBean.isSendButtonDisabled()}" styleClass="btn btn-success"/>
-                                                </div>
-                                            </div>
-                                        </h:panelGroup>
                                         </h:panelGroup>
                                     </div>
                                 </div>
                             </div>
-                        </h:form>
-                    </div>
-                    <div class="form-group col-lg-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Your previous bid</div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <h:panelGroup id="noPastBidsMsg" rendered="#{flightBiddingManagedBean.pastFlightsBidded.size() == 0}">
-                                        <div class="col-lg-12">
-                                            <p>You do not have any past bids.</p>
-                                        </div>
-                                    </h:panelGroup>
-                                    <h:panelGroup id="pastBidsPanel" rendered="#{flightBiddingManagedBean.pastFlightsBidded.size() != 0}">
-                                        <table class="table table-striped col-lg-12" id="pastBids_table">
-                                            <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Flight Code</th>
-                                                <th>Route</th>
-                                                <th>Date</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <ui:repeat value="#{flightBiddingManagedBean.pastFlightsBidded}" var="fl">
-                                                <tr>
-                                                    <td>#{fl.id}</td>
-                                                    <td>#{fl.code}</td>
-                                                    <td>#{fl.aircraftAssignment.getRoute().getOrigin().getId()} - #{fl.aircraftAssignment.getRoute().getDestination().getId()}</td>
-                                                    <td>#{commonManagedBean.formatDate("dd MMM",fl.departureTime)}</td>
-                                                </tr>
-                                            </ui:repeat>
-                                            </tbody>
-                                        </table>
-                                    </h:panelGroup>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <h:panelGroup id="flTimetable">
+                    <h:panelGroup id="flTimetable">
+                        <div class="col-lg-12">
+                            <h3 class="page-header">Flights Available</h3>
+                            <div id="calendar"></div>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{flightBiddingManagedBean.isCrewManager()}">
                     <div class="col-lg-12">
-                        <h3 class="page-header">Flights Available</h3>
-                        <div id="calendar"></div>
-                        <br/>
+                        <h1 class="page-header">Flight Bidding</h1>
+                        <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                            <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                                #{message.detail}
+                            </h:panelGroup>
+                        </ui:repeat>
+                        <h3>There are #{flightBiddingManagedBean.unresolvedBids()} unresolved bids left for this month.</h3>
+                        <h:form>
+                            <div class="col-lg-12 text-right">
+                                <div class="btn-group">
+                                    <h:commandButton id="spamBtn" action="#{flightBiddingManagedBean.spamFlightBids()}" value="Test Flight Bids" styleClass="btn btn-info"/>
+                                    <h:commandButton id="allocateRosterBtn" disabled="#{flightBiddingManagedBean.unresolvedBids() == 0}"
+                                                     action="#{flightBiddingManagedBean.allocateFlightJobs()}" value="Allocate Flight Bids" styleClass="btn btn-success"/>
+                                </div>
+                            </div>
+                        </h:form>
                     </div>
                 </h:panelGroup>
             </div>

@@ -128,6 +128,8 @@ public class FlightRosterBean {
             hypoCrew.lastSuccess = Utils.monthStart(1);
             hypoCrew.readyTime = Utils.monthStart(1);
             airportBuckets.get(airports.indexOf(loc)).add(hypoCrew);
+            flightBids.get(i).setStatus(1);
+            em.merge(flightBids.get(i));
         }
 
         for (int i = 0; i < flights.size(); i++) {

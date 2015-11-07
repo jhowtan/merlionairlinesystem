@@ -2,6 +2,7 @@ package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.*;
 import MAS.Common.Constants;
+import MAS.Common.Permissions;
 import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -51,32 +52,48 @@ public class FlightBiddingManagedBean {
         flightsBidded = new ArrayList<>();
         try {
             FlightBid pastBid = flightBidBean.getFlightBidOfUser(authManagedBean.getUserId());
-            pastFlightsBidded = new ArrayList<>(pastBid.getFlights());
+            if (pastBid.getStatus() == 0)
+                pastFlightsBidded = new ArrayList<>(pastBid.getFlights());
+            else
+                pastFlightsBidded = new ArrayList<>();
         } catch (Exception e) {
             pastFlightsBidded = new ArrayList<>();
         }
     }
 
+    public boolean isCrewManager() {
+        return authManagedBean.hasPermission(Permissions.MANAGE_FLIGHT_BID);
+    }
+
+    public int unresolvedBids() {
+        return flightBidBean.getFlightBidsWithStatus(0).size();
+    }
+
     public void addFlight() {
         try {
             //Check for number of flights already bidded for first
-            Flight flight = flightScheduleBean.getFlight(Long.parseLong(flightId));
-            if (!crewCertificationBean.crewCertifiedFor(authManagedBean.getUserId(), flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getId())) {
-                FacesMessage m = new FacesMessage("You are not certified for that flight.");
+            if (flightsBidded.size() >= attributesBean.getIntAttribute(Constants.FLIGHTJOBS_PER_MONTH, 5)) {
+                FacesMessage m = new FacesMessage("You have reached the maximum number of flights to be selected.");
                 m.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("status", m);
-            }
-            else {
-                boolean exists = false;
-                for (int i = 0; i < flightsBidded.size(); i++) {
-                    if (flightsBidded.get(i).getId() == flight.getId())
-                        exists = true;
-                }
-                if (!exists) flightsBidded.add(flight);
-                else {
-                    FacesMessage m = new FacesMessage("Flight has already been selected.");
+            } else {
+                Flight flight = flightScheduleBean.getFlight(Long.parseLong(flightId));
+                if (!crewCertificationBean.crewCertifiedFor(authManagedBean.getUserId(), flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getId())) {
+                    FacesMessage m = new FacesMessage("You are not certified for that flight.");
                     m.setSeverity(FacesMessage.SEVERITY_ERROR);
                     FacesContext.getCurrentInstance().addMessage("status", m);
+                } else {
+                    boolean exists = false;
+                    for (int i = 0; i < flightsBidded.size(); i++) {
+                        if (flightsBidded.get(i).getId() == flight.getId())
+                            exists = true;
+                    }
+                    if (!exists) flightsBidded.add(flight);
+                    else {
+                        FacesMessage m = new FacesMessage("Flight has already been selected.");
+                        m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                        FacesContext.getCurrentInstance().addMessage("status", m);
+                    }
                 }
             }
             flightId = "";
@@ -207,12 +224,21 @@ public class FlightBiddingManagedBean {
         }
     }
 
-    public void testButton() {
-        flightBidBean.spamFlightBids();
+    public void allocateFlightJobs() {
+        try {
+            flightRosterBean.allocateFlightJobs();
+            FacesMessage m = new FacesMessage("Flight rosters created.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Unable to create flight rosters.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
-    public void testedButton() {
-        flightRosterBean.allocateFlightJobs();
+    public void spamFlightBids() {
+        flightBidBean.spamFlightBids();
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
