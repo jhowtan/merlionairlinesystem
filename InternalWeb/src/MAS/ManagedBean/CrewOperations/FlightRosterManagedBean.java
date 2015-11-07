@@ -156,6 +156,7 @@ public class FlightRosterManagedBean {
         public String color;
         public String crewMembers;
         public String flightId;
+        public String flightRosterId;
     }
 
     private class CalendarResource {
@@ -186,6 +187,7 @@ public class FlightRosterManagedBean {
                 c.end = f.getArrivalTime();
                 c.className = new ArrayList<>();
                 c.flightId = String.valueOf(f.getId());
+                c.flightRosterId = String.valueOf(fr.getId());
                 if (fr.isComplete())
                     c.className.add("calendar-blue-event");
                 else

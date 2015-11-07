@@ -37,6 +37,7 @@
         <class>MAS.Entity.FlightBid</class>
         <class>MAS.Entity.FlightRoster</class>
         <class>MAS.Entity.RosterSignInOut</class>
+        <class>MAS.Entity.FlightDeferment</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />
