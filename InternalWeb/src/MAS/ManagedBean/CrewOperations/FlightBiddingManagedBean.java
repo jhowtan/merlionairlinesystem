@@ -39,6 +39,8 @@ public class FlightBiddingManagedBean {
     FlightRosterBean flightRosterBean;
     @EJB
     AttributesBean attributesBean;
+    @EJB
+    CrewCertificationBean crewCertificationBean;
 
     private String flightId;
     private List<Flight> flightsBidded;
@@ -59,16 +61,23 @@ public class FlightBiddingManagedBean {
         try {
             //Check for number of flights already bidded for first
             Flight flight = flightScheduleBean.getFlight(Long.parseLong(flightId));
-            boolean exists = false;
-            for (int i = 0; i < flightsBidded.size(); i++) {
-                if (flightsBidded.get(i).getId() == flight.getId())
-                    exists = true;
-            }
-            if (!exists) flightsBidded.add(flight);
-            else {
-                FacesMessage m = new FacesMessage("Flight has already been selected.");
+            if (!crewCertificationBean.crewCertifiedFor(authManagedBean.getUserId(), flight.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getId())) {
+                FacesMessage m = new FacesMessage("You are not certified for that flight.");
                 m.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("status", m);
+            }
+            else {
+                boolean exists = false;
+                for (int i = 0; i < flightsBidded.size(); i++) {
+                    if (flightsBidded.get(i).getId() == flight.getId())
+                        exists = true;
+                }
+                if (!exists) flightsBidded.add(flight);
+                else {
+                    FacesMessage m = new FacesMessage("Flight has already been selected.");
+                    m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    FacesContext.getCurrentInstance().addMessage("status", m);
+                }
             }
             flightId = "";
         } catch (Exception e) {
@@ -128,7 +137,7 @@ public class FlightBiddingManagedBean {
         public ArrayList<String> className;
         public String info;
         public String color;
-        public String aircraftId;
+        public String flightId;
     }
 
     private class CalendarResource {
@@ -148,21 +157,23 @@ public class FlightBiddingManagedBean {
             List<Flight> resultFlights = flightScheduleBean.getFlightWithinDate(startOfMonth, endOfMonth);
 
             for (Flight f : resultFlights) {
-                CalendarEntry c = new CalendarEntry();
-                c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
-                        f.getAircraftAssignment().getRoute().getDestination().getId();
-                c.start = f.getDepartureTime();
-                c.end = f.getArrivalTime();
-                c.className = new ArrayList<>();
-                c.className.add("calendar-blue-event");
-                c.info = f.getCode() + " (" + f.getId() + ")";
-                c.aircraftId = String.valueOf(f.getAircraftAssignment().getAircraft().getId());
-                calendarEntries.add(c);
+                if (crewCertificationBean.crewCertifiedFor(loggedIn.getId(), f.getAircraftAssignment().getAircraft().getSeatConfig().getAircraftType().getId())) {
+                    CalendarEntry c = new CalendarEntry();
+                    c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
+                            f.getAircraftAssignment().getRoute().getDestination().getId();
+                    c.start = f.getDepartureTime();
+                    c.end = f.getArrivalTime();
+                    c.className = new ArrayList<>();
+                    c.className.add("calendar-blue-event");
+                    c.info = f.getCode() + ": " + c.title + " (ID:" + f.getId() + ")";
+                    c.flightId = String.valueOf(f.getId());//String.valueOf(f.getAircraftAssignment().getAircraft().getId());
+                    calendarEntries.add(c);
 
-                CalendarResource cr = new CalendarResource();
-                cr.id = String.valueOf(f.getAircraftAssignment().getAircraft().getId());
-                cr.tailNumber = f.getAircraftAssignment().getAircraft().getTailNumber();
-                calendarResources.add(cr);
+                    CalendarResource cr = new CalendarResource();
+                    cr.id = String.valueOf(f.getAircraftAssignment().getAircraft().getId());
+                    cr.tailNumber = f.getAircraftAssignment().getAircraft().getTailNumber();
+                    calendarResources.add(cr);
+                }
             }
 
             CalendarData cd = new CalendarData();

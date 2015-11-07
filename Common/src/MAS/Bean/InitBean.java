@@ -229,6 +229,7 @@ public class InitBean {
                 List<Airport> airports = routeBean.getAllAirports();
                 ArrayList<Long> flightCrewPermissions = new ArrayList<>();
                 flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
+                flightCrewPermissions.add(roleBean.findPermission(Permissions.CREW_CERTIFICATION).getId());
                 long roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
                 for (int i = 0; i < 100; i ++) { //Cabin crew
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];
