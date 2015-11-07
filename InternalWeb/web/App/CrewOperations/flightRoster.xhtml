@@ -43,7 +43,7 @@
                         header: {
                             left: 'prev,next today',
                             center: 'title',
-                            right: ''
+                            right: 'agendaWeek,month'
                         },
                         buttonText: {
                             next: 'Next',
@@ -57,7 +57,6 @@
                                 field: 'tailNumber'
                             }
                         ],
-                        resourceAreaWidth: "10%",
                         defaultView: 'month',
                         allDaySlot: false,
                         eventAfterRender: function(event, element, view) {
@@ -68,9 +67,7 @@
                                 container: 'body'
                             });
                         },
-                        eventResourceField: 'aircraftId',
-                        events: data.entries,
-                        resources: data.resources
+                        events: data.entries
                     });
                 });
             });

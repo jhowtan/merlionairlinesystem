@@ -145,7 +145,7 @@ public class FlightRosterBean {
                 HypoCrew crew = available.get(j);
                 try {
                     //flight crew is not ready yet
-
+                    if (crew.readyTime.compareTo(flight.getDepartureTime()) == 1) continue;
                     //if this user has chosen this flight, add
                     if (getBidFromUser(crew.user, flightBids).getFlights().indexOf(flight) != -1) {
                         if (crew.user.getJob() == Constants.cabinCrewJobId)

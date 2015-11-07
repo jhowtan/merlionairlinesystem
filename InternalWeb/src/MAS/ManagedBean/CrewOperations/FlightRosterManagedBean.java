@@ -74,12 +74,12 @@ public class FlightRosterManagedBean {
                 c.end = f.getArrivalTime();
                 c.className = new ArrayList<>();
                 c.className.add("calendar-blue-event");
-                c.info = f.getCode();
                 String cMembers = "";
                 for (int i = 0; i < fr.getMembers().size(); i++) {
                     cMembers = cMembers.concat(fr.getMembers().get(i).getFirstName() + " " + fr.getMembers().get(i).getLastName() + ", ");
                 }
-                c.crewMembers = cMembers;
+                c.crewMembers = cMembers.substring(0, cMembers.length() - 2);
+                c.info = f.getCode() + ": " + c.crewMembers;
                 calendarEntries.add(c);
 
                 CalendarResource cr = new CalendarResource();
