@@ -22,6 +22,78 @@
             </div>
             <!-- END ROW -->
             <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="flight-chart-heading">
+                            <a data-toggle="collapse" href="#flight-chart" aria-controls="flight-chart">
+                                Top Performing Flights
+                            </a>
+                        </div>
+                        <div class="panel-collapse collapse in" id="flight-chart" aria-labelledby="#flight-chart-heading">
+                            <div class="panel-body">
+                                <div id="top-flights"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="bookclass-chart-heading">
+                            <a data-toggle="collapse" href="#bookclass-chart" aria-controls="bookclass-chart">
+                                Top Performing Booking Classes
+                            </a>
+                        </div>
+                        <div class="panel-collapse collapse in" id="bookclass-chart" aria-labelledby="#bookclass-chart-heading">
+                            <div class="panel-body">
+                                <div id="top-booking-classes"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel-group" id="filter-accordion" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="filter-heading">
+                                <a data-toggle="collapse" data-parent="#filter-accordion" href="#filter-options" aria-controls="filter-options">
+                                    Filter functions
+                                </a>
+                            </div>
+                            <div id="filter-options" class="panel-collapse collapse in" aria-labelledby="filter-heading">
+                                <div class="panel-body">
+                                    <div class="form-group col-lg-3">
+                                        <label class="control-label" for="aircraft">Aircraft</label>
+                                        <h:selectOneMenu styleClass="form-control"
+                                                         id="aircraft">
+                                            <f:selectItem itemLabel="All" itemValue="" />
+                                            <f:selectItems value="#{profitabilityReportManagedBean.getAllAircrafts()}" var="aircraft"
+                                                           itemLabel="#{aircraft.seatConfig.aircraftType.name}: #{aircraft.tailNumber}"
+                                                           itemValue="#{aircraft.seatConfig.aircraftType.name}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                        <label class="control-label" for="originDest">Origin-Destination</label>
+                                        <h:selectOneMenu styleClass="form-control"
+                                                         id="originDest">
+                                            <f:selectItem itemLabel="All" itemValue="" />
+                                            <f:selectItems value="#{profitabilityReportManagedBean.getAllRoutes()}" var="route"
+                                                           itemLabel="#{route.origin.id} - #{route.destination.id}"
+                                                           itemValue="#{route.origin.id} - #{route.destination.id}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                        <label class="control-label" for="durationFrom">From</label>
+                                        <input type="date" id="durationFrom" class="form-control"/>
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                        <label class="control-label" for="durationTo">To</label>
+                                        <input type="date" id="durationTo" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">Flight Summary Table</div>
@@ -43,13 +115,17 @@
                                             <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
                                             <td>#{flight.code}</td>
                                             <td>#{flight.aircraftAssignment.aircraft.tailNumber} (#{flight.aircraftAssignment.aircraft.seatConfig.aircraftType.name})</td>
-                                            <td>#{commonManagedBean.formatMoney(profitabilityReportManagedBean.getProfitabilityByFlight(flight))} (#{commonManagedBean.displayDouble(profitabilityReportManagedBean.getProfitabilityByFlight(flight) / profitabilityReportManagedBean.getCostByFlight(flight) * 100,"##.##")}%)</td>
+                                            <td class="#{profitabilityReportManagedBean.getProfitabilityByFlight(flight) > 0 ? 'profitability-gain' : 'profitability-loss'}">
+                                                #{commonManagedBean.formatMoney(profitabilityReportManagedBean.getProfitabilityByFlight(flight))} (#{commonManagedBean.displayDouble(profitabilityReportManagedBean.getProfitabilityByFlight(flight) / profitabilityReportManagedBean.getCostByFlight(flight) * 100,"##.##")}%)
+                                            </td>
                                         </tr>
                                     </ui:repeat>
                                 </tbody>
                                 </table>
                         </div>
                     </div> <!--END OF PANEL -->
+                </div>
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">Booking Class Table</div>
                         <div class="panel-body">
@@ -72,7 +148,9 @@
                                         <td>#{bookingClass.flight.aircraftAssignment.route.origin.id} - #{bookingClass.flight.aircraftAssignment.route.destination.id} (#{bookingClass.flight.code})</td>
                                         <td>#{bookingClass.occupied} / #{bookingClass.allocation}</td>
                                         <td>#{bookingClass.price}</td>
-                                        <td>#{commonManagedBean.formatMoney(profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.flight, bookingClass))} (#{commonManagedBean.displayDouble(profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.flight, bookingClass) / profitabilityReportManagedBean.getCostByBookingClass(bookingClass.flight, bookingClass) * 100,"##.##")}%)</td>
+                                        <td class="#{profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.flight, bookingClass) > 0 ? 'profitability-gain' : 'profitability-loss'}">
+                                            #{commonManagedBean.formatMoney(profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.flight, bookingClass))} (#{commonManagedBean.displayDouble(profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.flight, bookingClass) / profitabilityReportManagedBean.getCostByBookingClass(bookingClass.flight, bookingClass) * 100,"##.##")}%)
+                                        </td>
                                     </tr>
                                 </ui:repeat>
                                 </tbody>
@@ -99,21 +177,60 @@
                     "order": [[2, 'desc']]
                 });
             };
-            flightTableDataTable();
-            bookingClassTableDataTable();
-//            costsChart = new Morris.Area({
-//                element: 'flight_table',
-//                data: [],
-//                xkey: 'date',
-//                ykeys: ['value'],
-//                labels: ['Price']
-//            });
-//            $.ajax({
-//                url: 'costData.xhtml?q=3',
-//                success: function(data) {
-//                    costsChart.setData(data);
-//                }
-//            });
+            flightsChart = new Morris.Area({
+                element: 'top-flights',
+                data: [],
+                xkey: 'date',
+                ykeys: ['value'],
+                labels: ['Price']
+            });
+            $.ajax({
+                // TODO: implement data retrieval for charts
+                url: 'reportingData.xhtml?q=',
+                success: function(data) {
+                    flightsChart.setData(data);
+                }
+            });
+            bookingClassChart = new Morris.Line({
+                element: 'top-booking-classes',
+                data: [],
+                xkey: 'date',
+                ykeys: ['value'],
+                labels: ['Price']
+            });
+            $.ajax({
+                // TODO: implement data retrieval for charts
+                url: 'reportingData.xhtml?q=',
+                success: function(data) {
+                    bookingClassChart.setData(data);
+                }
+            });
+            $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        //@TODO: logic for filtering aircraft
+                        return true;
+                    }
+            );
+
+            $(document).ready(function() {
+                var flightTable = $('#flight_table').DataTable({
+                    "stateSave": true,
+                    "order": [[2, 'desc']]
+                });
+                var bookingClassTable = $('#booking_class_table').DataTable({
+                    "stateSave": true,
+                    "order": [[2, 'desc']]
+                });
+                // Event listener for flights table
+                $('#aircraft, #originDest, #duration').keyup( function() {
+                    flightTable.draw();
+                } );
+                // TODO: implement event listener fields for booking class
+                // Event listener for booking class table
+                // $('#aircraft, #originDest, #duration').keyup( function() {
+                //    bookingClassTable.draw();
+                // } );
+            });
         </script>
     </ui:define>
 </ui:composition>
