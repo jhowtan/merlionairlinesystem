@@ -2,7 +2,10 @@ package MAS.ManagedBean.CrewOperations;
 
 import MAS.Bean.FlightDefermentBean;
 import MAS.Bean.FlightRosterBean;
+import MAS.Common.Permissions;
+import MAS.Entity.FlightDeferment;
 import MAS.Entity.FlightRoster;
+import MAS.Entity.User;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -30,15 +33,40 @@ public class FlightDefermentManagedBean {
     private FlightRoster flightRoster;
     private long flightRosterId;
     private List<FlightRoster> flightRosters;
+    private List<FlightDeferment> flightDeferments;
     private String reason;
+    private FlightDeferment flightDeferment;
+    private List<User> availableReplacements;
 
     @PostConstruct
     private void init() {
         try {
-            flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
+            if (!isCrewManager())
+                flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
+            else
+                flightDeferments = flightDefermentBean.getUnresolvedDeferments();
         } catch (Exception e) {
             flightRosters = new ArrayList<>();
         }
+    }
+
+    public void resolve(FlightDeferment flightDeferment) {
+        this.flightDeferment = flightDeferment;
+        if (flightDeferment != null) {//get available replacements
+
+        }
+    }
+
+    public void replaceFlightCrew(User replacement) {
+
+    }
+
+    public boolean hasFlightDeferment() {
+        return flightDeferment != null;
+    }
+
+    public boolean isCrewManager() {
+        return authManagedBean.hasPermission(Permissions.MANAGE_FLIGHT_BID);
     }
 
     public void flightRosterChangeListener(AjaxBehaviorEvent event) {
@@ -103,5 +131,29 @@ public class FlightDefermentManagedBean {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public List<FlightDeferment> getFlightDeferments() {
+        return flightDeferments;
+    }
+
+    public void setFlightDeferments(List<FlightDeferment> flightDeferments) {
+        this.flightDeferments = flightDeferments;
+    }
+
+    public FlightDeferment getFlightDeferment() {
+        return flightDeferment;
+    }
+
+    public void setFlightDeferment(FlightDeferment flightDeferment) {
+        this.flightDeferment = flightDeferment;
+    }
+
+    public List<User> getAvailableReplacements() {
+        return availableReplacements;
+    }
+
+    public void setAvailableReplacements(List<User> availableReplacements) {
+        this.availableReplacements = availableReplacements;
     }
 }

@@ -19,52 +19,120 @@
                         </ui:repeat>
                     </div>
                 </div>
-                <h:panelGroup rendered="#{!flightRosterManagedBean.isCrewManager()}">
+                <h:panelGroup rendered="#{!flightDefermentManagedBean.isCrewManager()}">
                     <div class="form-group col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">Defer from flight</div>
                             <div class="panel-body">
                                 <div class="row">
                                     <h:form>
-                                        <h:form>
-                                            <div class="form-group col-lg-12 #{!flightRoster.valid ? 'has-error' : ''}">
-                                                <label class="control-label" for="flightRoster">Choose Flight Code</label>
-                                                <h:selectOneMenu styleClass="form-control" id="flightRoster" value="#{flightDefermentManagedBean.flightRosterId}" binding="#{flightRoster}">
-                                                    <f:selectItem itemLabel="Select a flight"/>
-                                                    <f:selectItems value="#{flightDefermentManagedBean.flightRosters}" var="fr"
-                                                                   itemLabel="#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
-                                                                    itemValue="#{fr.id}" />
-                                                    <f:ajax event="change" render="deferPanel" listener="#{flightDefermentManagedBean.flightRosterChangeListener}"/>
-                                                </h:selectOneMenu>
-                                                <h:message for="flightRoster" styleClass="help-block" />
-                                            </div>
-                                            <h:panelGroup id="deferPanel">
-                                                <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightRoster()}">
-                                                    <div class="form-group col-lg-12">
-                                                        <label class="control-label" for="reason">Reason</label>
-                                                        <h:inputTextarea style="resize:none" cols="30" rows="4" id="reason" value="#{flightDefermentManagedBean.reason}" styleClass="form-control" required="true" requiredMessage="Please enter a reason.">
-                                                        </h:inputTextarea>
-                                                        <h:message for="reason" styleClass="help-block" />
+                                        <div class="form-group col-lg-12 #{!flightRoster.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="flightRoster">Choose Flight Code</label>
+                                            <h:selectOneMenu styleClass="form-control" id="flightRoster" value="#{flightDefermentManagedBean.flightRosterId}" binding="#{flightRoster}">
+                                                <f:selectItem itemLabel="Select a flight"/>
+                                                <f:selectItems value="#{flightDefermentManagedBean.flightRosters}" var="fr"
+                                                               itemLabel="#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
+                                                               itemValue="#{fr.id}" />
+                                                <f:ajax event="change" render="deferPanel" listener="#{flightDefermentManagedBean.flightRosterChangeListener}"/>
+                                            </h:selectOneMenu>
+                                            <h:message for="flightRoster" styleClass="help-block" />
+                                        </div>
+                                        <h:panelGroup id="deferPanel">
+                                            <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightRoster()}">
+                                                <div class="form-group col-lg-12">
+                                                    <label class="control-label" for="reason">Reason</label>
+                                                    <h:inputTextarea style="resize:none" cols="30" rows="4" id="reason" value="#{flightDefermentManagedBean.reason}" styleClass="form-control" required="true" requiredMessage="Please enter a reason.">
+                                                    </h:inputTextarea>
+                                                    <h:message for="reason" styleClass="help-block" />
+                                                </div>
+                                                <div class="col-lg-12 text-right">
+                                                    <div class="btn-group">
+                                                        <h:commandButton action="#{flightDefermentManagedBean.saveFlightDeferment()}" onclick="return confirm('Are you sure you wish to defer from flight?');" value="Submit Deferment" styleClass="btn btn-success"/>
                                                     </div>
-                                                    <div class="col-lg-12 text-right">
-                                                        <div class="btn-group">
-                                                            <h:commandButton action="#{flightDefermentManagedBean.saveFlightDeferment()}" onclick="return confirm('Are you sure you wish to defer from flight?');" value="Submit Deferment" styleClass="btn btn-success"/>
-                                                        </div>
-                                                    </div>
-                                                </h:panelGroup>
+                                                </div>
                                             </h:panelGroup>
-                                        </h:form>
+                                        </h:panelGroup>
                                     </h:form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <h:panelGroup id="flTimetable">
+                        <div class="col-lg-12">
+                            <div id="calendar"></div>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup id="flTimetable">
-                    <div class="col-lg-12">
-                        <div id="calendar"></div>
-                        <br/>
-                    </div>
+                <h:panelGroup rendered="#{flightDefermentManagedBean.isCrewManager()}">
+                    <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightDeferment()}">
+                        <div class="form-group col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Resolve Flight Deferment</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <h:form>
+                                            <div class="form-group col-lg-12">
+                                                <label class="control-label" for="username">Flight Crew Username</label>
+                                                <h:inputText readonly="true" styleClass="form-control" id="username"
+                                                             value="#{flightDefermentManagedBean.flightDeferment.deferrer.username}"/>
+                                            </div>
+                                            <div class="form-group col-lg-12">
+                                                <label class="control-label" for="flight">Flight</label>
+                                                <h:inputText readonly="true" styleClass="form-control" id="flight"
+                                                             value="#{flightDefermentManagedBean.flightDeferment.flightRoster.flight.code}: #{flightDefermentManagedBean.flightDeferment.flightRoster.flight.aircraftAssignment.route.origin.id} - #{flightDefermentManagedBean.flightDeferment.flightRoster.flight.aircraftAssignment.route.destination.id}
+, #{commonManagedBean.formatDate('dd MMM yy', flightDefermentManagedBean.flightDeferment.flightRoster.flight.departureTime)}"/>
+                                            </div>
+                                            <div class="form-group col-lg-12">
+                                                <label class="control-label" for="reason">Reason</label>
+                                                <h:inputTextarea readonly="true" style="resize:none" cols="30" rows="4" id="reason" value="#{flightDefermentManagedBean.flightDeferment.reason}" styleClass="form-control" required="true" requiredMessage="Please enter a reason.">
+                                                </h:inputTextarea>
+                                                <h:message for="reason" styleClass="help-block" />
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h4>Available Replacements</h4>
+                                            </div>
+                                            <div class="col-lg-12 text-right">
+                                                <div class="btn-group">
+                                                    <h:commandButton action="#{flightDefermentManagedBean.saveFlightDeferment()}" onclick="return confirm('Are you sure you wish to defer from flight?');" value="Submit Deferment" styleClass="btn btn-success"/>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <table class="table table-striped" id="flightDefer_table">
+                        <thead>
+                        <tr>
+                            <th>Flight</th>
+                            <th>Deferrer</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Submission Date</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{flightDefermentManagedBean.getFlightDeferments()}" var="fd">
+                            <tr>
+                                <td>#{fd.flightRoster.flight.code}</td>
+                                <td>#{fd.deferrer.username}</td>
+                                <td>#{fd.reason}</td>
+                                <td>#{(fd.status == 0) ? 'Unresolved' : 'Resolved'}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yy", fd.createDate)}</td>
+                                <td>
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <h:commandLink action="#{flightDefermentManagedBean.resolve(fd)}" styleClass="btn btn-default btn-xs btn-success">Resolve</h:commandLink>
+                                        </div>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
                 </h:panelGroup>
             </div>
         </div>
@@ -122,6 +190,14 @@
                         events: data.entries
                     });
                 });
+            });
+        </script>
+        <script type="text/javascript">
+            $('#flightDefer_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
+                ]
             });
         </script>
     </ui:define>
