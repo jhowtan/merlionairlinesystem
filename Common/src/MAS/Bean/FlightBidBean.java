@@ -36,6 +36,8 @@ public class FlightBidBean {
     public long createFlightBid(long userId, List<Long> flightIds) throws NotFoundException {
         User bidder = em.find(User.class, userId);
         if (bidder == null) throw new NotFoundException();
+        FlightBid oldFB = getFlightBidOfUser(bidder.getId());
+        if (oldFB != null) removeFlightBid(oldFB.getId());
         FlightBid flightBid = new FlightBid();
         flightBid.setBidder(bidder);
         flightBid.setBidDate(new Date());
@@ -66,6 +68,14 @@ public class FlightBidBean {
         FlightBid flightBid = em.find(FlightBid.class, id);
         if (flightBid == null) throw new NotFoundException();
         em.remove(flightBid);
+    }
+
+    public FlightBid getFlightBidOfUser(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        List<FlightBid> flightBidList = em.createQuery("SELECT f from FlightBid f WHERE f.bidder = :user", FlightBid.class).setParameter("user", user).setMaxResults(1).getResultList();
+        if (flightBidList.size() == 0) return null;
+        else return flightBidList.get(0);
     }
 
     public void spamFlightBids() {

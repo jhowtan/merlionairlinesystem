@@ -74,6 +74,14 @@ public class FlightRosterBean {
         return result;
     }
 
+    public List<FlightRoster> getFlightRostersOfUser(long userId) throws NotFoundException {
+        User user = em.find(User.class, userId);
+        if (user == null) throw new NotFoundException();
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.members IN :userList").setParameter("userList", userList).getResultList();
+    }
+
 //    public void signInFR(long flightRosterId, long userId) throws NotFoundException {
 //        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
 //        User user = em.find(User.class, userId);
@@ -136,6 +144,8 @@ public class FlightRosterBean {
             for (int j = 0; j < available.size(); j++) {
                 HypoCrew crew = available.get(j);
                 try {
+                    //flight crew is not ready yet
+
                     //if this user has chosen this flight, add
                     if (getBidFromUser(crew.user, flightBids).getFlights().indexOf(flight) != -1) {
                         if (crew.user.getJob() == Constants.cabinCrewJobId)
