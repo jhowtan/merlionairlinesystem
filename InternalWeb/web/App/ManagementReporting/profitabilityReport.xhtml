@@ -66,8 +66,8 @@
                                                          id="aircraft">
                                             <f:selectItem itemLabel="All" itemValue="" />
                                             <f:selectItems value="#{profitabilityReportManagedBean.getAllAircrafts()}" var="aircraft"
-                                                           itemLabel="#{aircraft.seatConfig.aircraftType.name}: #{aircraft.tailNumber}"
-                                                           itemValue="#{aircraft.seatConfig.aircraftType.name}" />
+                                                           itemLabel="#{aircraft.tailNumber} (#{aircraft.seatConfig.aircraftType.name})"
+                                                           itemValue="#{aircraft.tailNumber} (#{aircraft.seatConfig.aircraftType.name})" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="form-group col-lg-3">
@@ -111,7 +111,7 @@
                                 <tbody>
                                     <ui:repeat value="#{profitabilityReportManagedBean.getAllFlights()}" var="flight">
                                         <tr>
-                                            <td>#{commonManagedBean.formatDate("E dd MMM, hh:mm", flight.departureTime)}</td>
+                                            <td>#{commonManagedBean.formatDate("E dd MMM yyyy, hh:mm", flight.departureTime)}</td>
                                             <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
                                             <td>#{flight.code}</td>
                                             <td>#{flight.aircraftAssignment.aircraft.tailNumber} (#{flight.aircraftAssignment.aircraft.seatConfig.aircraftType.name})</td>
@@ -144,7 +144,7 @@
                                 <ui:repeat value="#{profitabilityReportManagedBean.getAllBookingClass()}" var="bookingClass">
                                     <tr>
                                         <td>#{bookingClass.name} (ELITE #{commonManagedBean.getTierString(bookingClass.travelClass).toUpperCase()})</td>
-                                        <td>#{commonManagedBean.formatDate("E dd MMM, hh:mm", bookingClass.flight.departureTime)}</td>
+                                        <td>#{commonManagedBean.formatDate("E dd MMM yyyy, hh:mm", bookingClass.flight.departureTime)}</td>
                                         <td>#{bookingClass.flight.aircraftAssignment.route.origin.id} - #{bookingClass.flight.aircraftAssignment.route.destination.id} (#{bookingClass.flight.code})</td>
                                         <td>#{bookingClass.occupied} / #{bookingClass.allocation}</td>
                                         <td>#{bookingClass.price}</td>
@@ -154,6 +154,16 @@
                                     </tr>
                                 </ui:repeat>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Booking Class</th>
+                                        <th>Date of Departure</th>
+                                        <th>Origin-Destination</th>
+                                        <th>Sales</th>
+                                        <th>Price</th>
+                                        <th>Overall Profitability</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div> <!--END OF PANEL -->
@@ -184,13 +194,13 @@
                 ykeys: ['value'],
                 labels: ['Price']
             });
-            $.ajax({
-                // TODO: implement data retrieval for charts
-                url: 'reportingData.xhtml?q=',
-                success: function(data) {
-                    flightsChart.setData(data);
-                }
-            });
+//            $.ajax({
+//                // TODO: implement data retrieval for charts
+//                url: 'reportingData.xhtml?q=',
+//                success: function(data) {
+//                    flightsChart.setData(data);
+//                }
+//            });
             bookingClassChart = new Morris.Line({
                 element: 'top-booking-classes',
                 data: [],
@@ -198,17 +208,51 @@
                 ykeys: ['value'],
                 labels: ['Price']
             });
-            $.ajax({
-                // TODO: implement data retrieval for charts
-                url: 'reportingData.xhtml?q=',
-                success: function(data) {
-                    bookingClassChart.setData(data);
-                }
-            });
+//            $.ajax({
+//                // TODO: implement data retrieval for charts
+//                url: 'reportingData.xhtml?q=',
+//                success: function(data) {
+//                    bookingClassChart.setData(data);
+//                }
+//            });
             $.fn.dataTable.ext.search.push(
                     function( settings, data, dataIndex ) {
+                        if (settings.nTable != document.getElementById('flight_table')) {
+                            return true;
+                        }
                         //@TODO: logic for filtering aircraft
+                        var from = $('#durationFrom').val();
+                        var to = $('#durationTo').val();
+                        var aircraft = $('#aircraft').val();
+                        var originDest = $('#originDest').val();
+
+                        var dataDate = new Date(data[0]);
+                        var dataOriginDest = data[1];
+                        var dataAircraft = data[3];
+
+                        if (from != '') {
+                            from = new Date(from);
+                        }
+                        if (to != '') {
+                            to = new Date(to);
+                        }
+
+                        // <![CDATA[
+                        if (from != '' && dataDate < from) {
+                            return false;
+                        }
+                        if (to != '' && dataDate > to) {
+                            return false;
+                        }
+                        if (aircraft != '' && aircraft != dataAircraft) {
+                            return false;
+                        }
+                        if (originDest != '' && originDest != dataOriginDest) {
+                            return false;
+                        }
                         return true;
+                        // ]]>
+
                     }
             );
 
@@ -217,19 +261,35 @@
                     "stateSave": true,
                     "order": [[2, 'desc']]
                 });
+                // <![CDATA[
                 var bookingClassTable = $('#booking_class_table').DataTable({
                     "stateSave": true,
-                    "order": [[2, 'desc']]
+                    "order": [[2, 'desc']],
+                    "initComplete": function () {
+                        console.log('xxxxxx');
+                        this.api().columns().every( function () {
+                            console.log('xxx');
+                            var column = this;
+                            var select = $('<select><option value="">All</option></select>')
+                                    .appendTo( $(column.footer()).empty() )
+                                    .on( 'change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                                $(this).val()
+                                        );
+                                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                                    });
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        } );
+                    }
                 });
+                // ]]>
+                bookingClassTable.draw();
                 // Event listener for flights table
-                $('#aircraft, #originDest, #duration').keyup( function() {
+                $('#durationFrom, #durationTo, #originDest, #aircraft').change( function() {
                     flightTable.draw();
                 } );
-                // TODO: implement event listener fields for booking class
-                // Event listener for booking class table
-                // $('#aircraft, #originDest, #duration').keyup( function() {
-                //    bookingClassTable.draw();
-                // } );
             });
         </script>
     </ui:define>
