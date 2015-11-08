@@ -69,7 +69,6 @@ public class ProfitabilityReportManagedBean {
         setMonths(new ArrayList<>());
         setMinProfit(0);
         setMaxProfit(0);
-        //#{profitMBEAN.allMonths.indexOf(month)}
     }
 
     public void flightFilterChangeEvent(AjaxBehaviorEvent event) {
@@ -306,5 +305,13 @@ public class ProfitabilityReportManagedBean {
 
     public void setSelectedFlightId(long selectedFlightId) {
         this.selectedFlightId = selectedFlightId;
+    }
+
+    public List<String> getAllMonths() {
+        return allMonths;
+    }
+
+    public void setAllMonths(List<String> allMonths) {
+        this.allMonths = allMonths;
     }
 }
