@@ -183,10 +183,11 @@
                                 <table class="table table-striped" id="flight_table">
                                     <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Flight Date</th>
                                         <th>Origin-Destination</th>
                                         <th>Flight Code</th>
-                                        <th>Aircraft</th>
+                                        <th>Aircraft (Seat Configuration)</th>
                                         <th>Revenue</th>
                                         <th>Costs</th>
                                         <th>Overall Profitability</th>
@@ -195,6 +196,18 @@
                                     <tbody>
                                     <ui:repeat value="#{profitabilityReportManagedBean.getAllFlights()}" var="flight">
                                         <tr>
+                                            <td>
+                                                <h:form>
+                                                    <h:selectBooleanCheckbox value="false">
+                                                        <f:ajax event="change" render="bookingClassTable"
+                                                                listener="#{profitabilityReportManagedBean.bookingClassFilterChangeEvent}"
+                                                                onevent="function(data) {
+                                                                    if (data.status == 'success') {
+                                                                        reloadBookingClassTable();
+                                                                    }} " />
+                                                    </h:selectBooleanCheckbox>
+                                                </h:form>
+                                            </td>
                                             <td>#{commonManagedBean.formatDate("E dd MMM yyyy, hh:mm", flight.departureTime)}</td>
                                             <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
                                             <td>#{flight.code}</td>
@@ -213,6 +226,7 @@
                     </div> <!--END OF PANEL -->
                 </div>
                 <div class="col-lg-12">
+                    <h:panelGroup id="bookingClassTable">
                     <div class="panel panel-default">
                         <div class="panel-heading">Booking Class Table</div>
                         <div class="panel-body">
@@ -230,7 +244,7 @@
                                 <tbody>
                                 <ui:repeat value="#{profitabilityReportManagedBean.getAllBookingClass()}" var="bookingClass">
                                     <tr>
-                                        <td>#{bookingClass.name} (ELITE #{commonManagedBean.getTierString(bookingClass.travelClass).toUpperCase()})</td>
+                                        <td>#{bookingClass.name} (#{commonManagedBean.getTravelClassString(bookingClass.travelClass)})</td>
                                         <td>#{commonManagedBean.formatDate("E dd MMM yyyy, hh:mm", bookingClass.flight.departureTime)}</td>
                                         <td>#{bookingClass.flight.aircraftAssignment.route.origin.id} - #{bookingClass.flight.aircraftAssignment.route.destination.id} (#{bookingClass.flight.code})</td>
                                         <td>#{bookingClass.occupied} / #{bookingClass.allocation}</td>
@@ -254,6 +268,7 @@
                             </table>
                         </div>
                     </div> <!--END OF PANEL -->
+                    </h:panelGroup>
                 </div>
             </div>
         </div>
@@ -267,7 +282,10 @@
             });
             var reloadFlightTable = function() {
                 var flightTable = $('#flight_table').DataTable();
-            }
+            };
+            var reloadBookingClassTable = function() {
+                var bookingClassTable = $('booking_class_table').DataTable();
+            };
             var loadAll = function() {
                 var flightTable = $('#flight_table').DataTable({
                     "order": [[4, 'desc']]

@@ -1,10 +1,6 @@
 package MAS.ManagedBean.ManagementReporting;
 
-import MAS.Bean.BookingClassBean;
-import MAS.Bean.CostsBean;
-import MAS.Bean.FleetBean;
-import MAS.Bean.FlightScheduleBean;
-import MAS.Bean.RouteBean;
+import MAS.Bean.*;
 import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
