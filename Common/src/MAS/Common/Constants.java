@@ -22,6 +22,15 @@ public class Constants {
     public static final int FFP_TIER_SILVER_REQUIREMENT = 25000;
     public static final int FFP_TIER_GOLD_REQUIREMENT = 50000;
 
+    public static final int FIRST_CLASS = 0;
+    public static final int BUSINESS_CLASS = 1;
+    public static final int PREMIUM_EC_CLASS = 2;
+    public static final int ECONOMY_CLASS = 3;
+    public static final String FIRST_CLASS_LABEL = "First Class";
+    public static final String BUSINESS_CLASS_LABEL = "Business Class";
+    public static final String PREMIUM_EC_CLASS_LABEL = "Premium Economy";
+    public static final String ECONOMY_CLASS_LABEL = "Economy";
+
 
     public static final String[] FFP_ALLIANCE_LIST_CODE = {"MA", "A3", "AC", "CA", "AI", "NZ", "NH", "OZ", "AV", "O6", "CM", "MS", "ET", "BR", "B6", "LH", "SK", "SQ", "SA", "JJ", "TP", "TG", "TK", "UA", "VX", "VS", "VA", "UK"};
     public static final String[] FFP_ALLIANCE_LIST_NAME = {"Merlion Airlines - MerlionFlyer Elite", "Aegean Airlines - Miles&Bonus", "Air Canada - Aeroplan", "Air China / Shenzhen Airlines - PhoenixMiles", "Air India - Flying Returns", "Air New Zealand - AirPoints", "ANA - ANA Mileage Club", "Asiana Airlines - Asiana Club", "Avianca - LifeMiles", "Avianca Brazil - Amigo", "Copa Airlines - ConnectMiles", "EgyptAir - EgyptAir Plus", "Ethiopian Airlines - ShebaMiles", "EVA Air - Infinity MileageLands", "JetBlue - TrueBlue", "Lufthansa - Miles & More", "Scandinavian Airlines - EuroBonus", "Singapore Airlines - KrisFlyer", "South African Airways - Voyager", "TAM Airlines - Fidelidade", "TAP Portugal - Victoria", "THAI - Royal Orchid Plus", "Turkish Airlines - Miles&Smiles", "United - MileagePlus", "Virgin America - Elevate", "Virgin Atlantic - Flying Club", "Virgin Australia - Velocity", "Vistara - Club Vistara"};
