@@ -84,9 +84,9 @@ public class Pages {
 
     // AFOS: Operations Reporting
     public static final Page LIST_FLIGHT_REPORTS = new Page("/App/OperationsReporting/flightReports", Permissions.FLIGHT_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
-    public static final Page CREATE_FLIGHT_REPORT = new Page("/App/CrewOperations/createFlightReport", Permissions.FLIGHT_REPORTING);
+    public static final Page CREATE_FLIGHT_REPORT = new Page("/App/OperationsReporting/createFlightReport", Permissions.FLIGHT_REPORTING);
     public static final Page LIST_MAINTENANCE_REPORTS = new Page("/App/OperationsReporting/maintenanceReports", Permissions.MAINTENANCE_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
-    public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/CrewOperations/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
+    public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/OperationsReporting/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
