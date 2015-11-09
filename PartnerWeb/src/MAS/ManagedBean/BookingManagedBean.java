@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,6 +32,7 @@ public class BookingManagedBean {
     // Step 2
     List<WsFlightResultArray> outboundSearchResult;
     List<WsFlightResultArray> returnSearchResult;
+    List<Long> selectedBookingClasses;
 
     public void nextStep() throws DatatypeConfigurationException {
         step++;
@@ -46,6 +48,7 @@ public class BookingManagedBean {
                     returnDateG.setTime(returnDate);
                     XMLGregorianCalendar returnDateXML = DatatypeFactory.newInstance().newXMLGregorianCalendar(returnDateG );
                     returnSearchResult = dds.searchAvailableFlights(destination, origin, returnDateXML, passengers, travelClass, travelDuration);
+                    selectedBookingClasses = new ArrayList<>();
                 }
                 GregorianCalendar departureDateG = new GregorianCalendar();
                 departureDateG.setTime(departureDate);
@@ -53,6 +56,18 @@ public class BookingManagedBean {
                 outboundSearchResult = dds.searchAvailableFlights(origin, destination, departureDateXML, passengers, travelClass, travelDuration);
                 break;
         }
+    }
+
+    public void toggleSelectBookingClass(long id) {
+        if (selectedBookingClasses.contains(id)) {
+            selectedBookingClasses.remove(id);
+        } else {
+            selectedBookingClasses.add(id);
+        }
+    }
+
+    public boolean isBookingClassSelected(long id) {
+        return selectedBookingClasses.contains(id);
     }
 
     public void prevStep() {
@@ -129,5 +144,13 @@ public class BookingManagedBean {
 
     public void setReturnSearchResult(List<WsFlightResultArray> returnSearchResult) {
         this.returnSearchResult = returnSearchResult;
+    }
+
+    public List<Long> getSelectedBookingClasses() {
+        return selectedBookingClasses;
+    }
+
+    public void setSelectedBookingClasses(List<Long> selectedBookingClasses) {
+        this.selectedBookingClasses = selectedBookingClasses;
     }
 }

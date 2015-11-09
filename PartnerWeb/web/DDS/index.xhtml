@@ -107,7 +107,9 @@
                                         <td>
                                             <ui:repeat value="#{flight.bookingClasses}" var="bookingClass">
                                                 <p>
-                                                    <h:commandButton value="$#{commonManagedBean.displayDouble(bookingClass.price, '0.00')} (#{bookingClass.name})" styleClass="btn btn-primary" />
+                                                    <h:commandLink action="#{bookingManagedBean.toggleSelectBookingClass(bookingClass.id)}" value="$#{commonManagedBean.displayDouble(bookingClass.price, '0.00')} (#{bookingClass.name})" styleClass="btn #{bookingManagedBean.isBookingClassSelected(bookingClass.id) ? 'btn-warning active' : 'btn-primary'}">
+                                                        <f:ajax render="@form" />
+                                                    </h:commandLink>
                                                 </p>
                                             </ui:repeat>
                                         </td>
@@ -143,7 +145,9 @@
                                         <td>
                                             <ui:repeat value="#{flight.bookingClasses}" var="bookingClass">
                                                 <p>
-                                                    <h:commandButton value="$#{commonManagedBean.displayDouble(bookingClass.price, '0.00')} (#{bookingClass.name})" styleClass="btn btn-primary" />
+                                                    <h:commandLink action="#{bookingManagedBean.toggleSelectBookingClass(bookingClass.id)}" value="$#{commonManagedBean.displayDouble(bookingClass.price, '0.00')} (#{bookingClass.name})" styleClass="btn #{bookingManagedBean.isBookingClassSelected(bookingClass.id) ? 'btn-warning active' : 'btn-primary'}">
+                                                        <f:ajax render="@form" />
+                                                    </h:commandLink>
                                                 </p>
                                             </ui:repeat>
                                         </td>
@@ -161,7 +165,7 @@
                         <h:commandButton immediate="true" action="#{bookingManagedBean.prevStep()}" value="Back" styleClass="btn btn-primary btn-lg" />
                     </div>
                     <div class="pull-right">
-                        <h:commandButton action="#{bookingManagedBean.nextStep()}" value="Continue with Booking" styleClass="btn btn-success btn-lg" />
+                        <h:commandButton action="#{bookingManagedBean.nextStep()}" value="Continue with Booking" styleClass="btn btn-success btn-lg" disabled="#{bookingManagedBean.selectedBookingClasses.size() == 0boo}" />
                     </div>
                 </div>
 
