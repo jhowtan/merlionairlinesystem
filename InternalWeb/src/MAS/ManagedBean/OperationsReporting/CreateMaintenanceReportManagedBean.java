@@ -3,8 +3,11 @@ package MAS.ManagedBean.OperationsReporting;
 import MAS.Bean.AircraftMaintenanceSlotBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.OperationsReportingBean;
-import MAS.Entity.AircraftMaintenanceSlot;
-import MAS.Entity.MaintenanceReport;
+import MAS.Bean.UserBean;
+import MAS.Common.Constants;
+import MAS.Common.Utils;
+import MAS.Entity.*;
+import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -14,12 +17,17 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean
 public class CreateMaintenanceReportManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
+
+    @EJB
+    UserBean userBean;
 
     @EJB
     FlightScheduleBean flightScheduleBean;
@@ -30,31 +38,46 @@ public class CreateMaintenanceReportManagedBean {
     @EJB
     OperationsReportingBean operationsReportingBean;
 
-    private List<AircraftMaintenanceSlot> aircraftMaintenanceSlots;
+    private List<AircraftMaintenanceSlot> crewMaintenanceSlots;
     private List<String> statusList;
     private List<String> categoryList;
 
-    private AircraftMaintenanceSlot aircraftMaintenanceSlot;
+    private long aircraftMaintenanceSlotId;
     private MaintenanceReport maintenanceReport;
 
     @PostConstruct
     public void init() {
-        aircraftMaintenanceSlots = aircraftMaintenanceSlotBean.getAllSlots();
-        statusList = new ArrayList<>();
-        categoryList = new ArrayList<>();
-        statusList.add("OK");
-        statusList.add("NOT OK");
-        statusList.add("UNDIAGNOSED");
-        categoryList.add("Minor");
-        categoryList.add("Major");
+        try {
+            Airport baseAirport = userBean.getUser(authManagedBean.getUserId()).getBaseAirport();
+            List<AircraftMaintenanceSlot> airportMaintenanceSlots = aircraftMaintenanceSlotBean.findSlotByAirport(baseAirport.getId());
+            crewMaintenanceSlots = new ArrayList<>();
+            for (AircraftMaintenanceSlot maintenanceSlot : airportMaintenanceSlots) {
+                if ( maintenanceSlot.getStartTime().compareTo(new Date()) < 0) {
+                    if ( maintenanceSlot.getStartTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
+                        crewMaintenanceSlots.add(maintenanceSlot);
+                }
+            }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        categoryList = new ArrayList<>(Arrays.asList(Constants.MAINTENANCE_REPORT_CATEGORIES));
+        maintenanceReport = new MaintenanceReport();
+        maintenanceReport.setStatus(0);
     }
 
     public void createMaintenanceReport() {
-        maintenanceReport = operationsReportingBean.createMaintenanceReport(maintenanceReport);
-        authManagedBean.createAuditLog("Created new maintenance report: " + maintenanceReport.getMaintenanceSlot().getAirport() + " - " + maintenanceReport.getId() + " @ ", "create_maintenance_report");
-        FacesMessage m = new FacesMessage("Flight report created for" + maintenanceReport.getMaintenanceSlot().toString() + " successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+        try {
+            maintenanceReport.setUser(userBean.getUser(authManagedBean.getUserId()));
+            maintenanceReport.setMaintenanceSlot(aircraftMaintenanceSlotBean.getSlot(aircraftMaintenanceSlotId));
+            maintenanceReport = operationsReportingBean.createMaintenanceReport(maintenanceReport);
+            authManagedBean.createAuditLog("Created new maintenance report: " + maintenanceReport.getMaintenanceSlot().getAirport() + " - " + maintenanceReport.getId() + " @ ", "create_maintenance_report");
+            FacesMessage m = new FacesMessage("Maintenance report created for" + maintenanceReport.getMaintenanceSlot().toString() + " successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Cannot find present user in system");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);        }
     }
 
     public AuthManagedBean getAuthManagedBean() {
@@ -73,20 +96,12 @@ public class CreateMaintenanceReportManagedBean {
         this.maintenanceReport = maintenanceReport;
     }
 
-    public AircraftMaintenanceSlot getAircraftMaintenanceSlot() {
-        return aircraftMaintenanceSlot;
+    public List<AircraftMaintenanceSlot> getCrewMaintenanceSlots() {
+        return crewMaintenanceSlots;
     }
 
-    public void setAircraftMaintenanceSlot(AircraftMaintenanceSlot aircraftMaintenanceSlot) {
-        this.aircraftMaintenanceSlot = aircraftMaintenanceSlot;
-    }
-
-    public List<String> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<String> categoryList) {
-        this.categoryList = categoryList;
+    public void setCrewMaintenanceSlots(List<AircraftMaintenanceSlot> crewMaintenanceSlots) {
+        this.crewMaintenanceSlots = crewMaintenanceSlots;
     }
 
     public List<String> getStatusList() {
@@ -97,11 +112,19 @@ public class CreateMaintenanceReportManagedBean {
         this.statusList = statusList;
     }
 
-    public List<AircraftMaintenanceSlot> getAircraftMaintenanceSlots() {
-        return aircraftMaintenanceSlots;
+    public List<String> getCategoryList() {
+        return categoryList;
     }
 
-    public void setAircraftMaintenanceSlots(List<AircraftMaintenanceSlot> aircraftMaintenanceSlots) {
-        this.aircraftMaintenanceSlots = aircraftMaintenanceSlots;
+    public void setCategoryList(List<String> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public long getAircraftMaintenanceSlotId() {
+        return aircraftMaintenanceSlotId;
+    }
+
+    public void setAircraftMaintenanceSlotId(long aircraftMaintenanceSlotId) {
+        this.aircraftMaintenanceSlotId = aircraftMaintenanceSlotId;
     }
 }

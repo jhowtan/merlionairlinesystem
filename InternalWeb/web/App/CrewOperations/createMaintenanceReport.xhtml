@@ -1,7 +1,7 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Create Maintenance Report - Merlion Airline System</ui:define>
@@ -11,6 +11,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Create Maintenance Report</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="maintenanceReports">All Maintenance Reports</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="createMaintenanceReport">Create Maintenance Report</h:link></li>
+                    </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
@@ -21,53 +25,47 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Maintenance Report Details</div>
                             <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
-                                        <label class="control-label" for="flight">Maintenance Slot</label>
-                                        <h:selectOneMenu id="flight" binding="#{maintenance}" value="#{createMaintenanceReportManagedBean.aircraftMaintenanceSlot}" styleClass="form-control">
-                                            <f:selectItems value="#{createMaintenanceReportManagedBean.aircraftMaintenanceSlots}" var="f"
-                                                           itemValue="#{f}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
-                                            </f:selectItems>
-                                            <f:ajax render="@form" />
-                                        </h:selectOneMenu>
-                                        <h:message for="flight" styleClass="help-block" />
+                                <h:panelGroup rendered="#{createMaintenanceReportManagedBean.crewMaintenanceSlots.size() > 0}">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12 #{!maintenanceSlot.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="flight">Maintenance Slot</label>
+                                            <h:selectOneMenu id="flight" binding="#{maintenanceSlot}" value="#{createMaintenanceReportManagedBean.maintenanceSlotId}" styleClass="form-control">
+                                                <f:selectItems value="#{createMaintenanceReportManagedBean.crewFlights}" var="f"
+                                                               itemValue="#{f.id}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
+                                                </f:selectItems>
+                                            </h:selectOneMenu>
+                                            <h:message for="flight" styleClass="help-block" />
+                                        </div>
+
+                                        <h:panelGroup id="flightDetails">
+                                            <h:panelGroup styleClass="form-group col-lg-12 #{!category.valid ? 'has-error' : ''}" layout="block">
+                                                <label class="control-label" for="category">Category</label>
+                                                <h:selectOneMenu id="category" binding="#{category}" value="#{createMaintenanceReportManagedBean.maintenanceReport.category}" styleClass="form-control"
+                                                                 required="true" requiredMessage="Please choose a category.">
+                                                    <f:selectItems value="#{createMaintenanceReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createMaintenanceReportManagedBean.categoryList.indexOf(c)}" />
+                                                </h:selectOneMenu>
+                                                <h:message for="category" styleClass="help-block" />
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="form-group col-lg-12 #{!reportBody.valid ? 'has-error' : ''}" layout="block">
+                                                <label class="control-label" for="reportBody">Report Content</label>
+                                                <h:inputTextarea id="reportBody" rows="10" styleClass="form-control" required="true" requiredMessage="Please enter the contents of your report."
+                                                                 binding="#{reportBody}" value="#{createMaintenanceReportManagedBean.maintenanceReport.body}"  pt:placeholder="Please describe the events that took place during the maintenance schedule." >
+                                                </h:inputTextarea>
+                                                <h:message for="reportBody" styleClass="help-block" />
+                                            </h:panelGroup>
+                                        </h:panelGroup>
                                     </div>
-
-                                    <h:panelGroup id="flightDetails">
-                                        <h:panelGroup styleClass="form-group col-lg-12 #{!flightStatus.valid ? 'has-error' : ''}" layout="block">
-                                            <label class="control-label" for="flightStatus">Maintenance Status</label>
-                                            <h:selectOneMenu id="flightStatus" binding="#{flightStatus}" value="#{createMaintenanceReportManagedBean.maintenanceReport.status}" styleClass="form-control">
-                                                <f:selectItems value="#{createFlightReportManagedBean.statusList}" var="a" itemLabel="#{a}" itemValue="#{createFlightReportManagedBean.statusList.getIndexOf(a)}" />
-                                            </h:selectOneMenu>
-                                            <h:message for="flightStatus" styleClass="help-block" />
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="form-group col-lg-12 #{!category.valid ? 'has-error' : ''}" layout="block">
-                                            <label class="control-label" for="category">Category</label>
-                                            <h:selectOneMenu id="category" binding="#{category}" value="#{createMaintenanceReportManagedBean.maintenanceReport.category}" styleClass="form-control"
-                                                             required="true" requiredMessage="Please enter the language certified.">
-                                                <f:selectItems value="#{createFlightReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createFlightReportManagedBean.categoryList.getIndexOf(b)}" />
-                                            </h:selectOneMenu>
-                                            <h:message for="category" styleClass="help-block" />
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="form-group col-lg-12 #{!reportBody.valid ? 'has-error' : ''}" layout="block">
-                                            <label class="control-label" for="reportBody">Report Content</label>
-                                            <h:inputTextarea id="reportBody" rows="10" styleClass="form-control" required="true" requiredMessage="Please enter the contents of your report."
-                                                             binding="#{reportBody}" value="#{createMaintenanceReportManagedBean.maintenanceReport.body}"  pt:placeholder="Please describe the events that took place during the flight." >
-                                            </h:inputTextarea>
-                                            <h:message for="reportBody" styleClass="help-block" />
-                                        </h:panelGroup>
-
-                                    </h:panelGroup>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="btn-group">
-                                <h:link outcome="flightReports" class="btn btn-default" value="Back" />
-                                <h:commandButton action="#{createMaintenanceReportManagedBean.createMaintenanceReport()}" value="Submit" styleClass="btn btn-success" />
+                                    <div class="text-right">
+                                        <div class="btn-group">
+                                            <h:link outcome="maintenanceReports" class="btn btn-default" value="Back" />
+                                            <h:commandButton action="#{createMaintenanceReportManagedBean.createMaintenanceReport()}" value="Submit" styleClass="btn btn-success" />
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{createMaintenanceReportManagedBean.crewMaintenanceSlots.size() == 0}" styleClass="text-center">
+                                    You have not performed any maintenance duties for a report to be made.
+                                </h:panelGroup>
                             </div>
                         </div>
                     </h:form>

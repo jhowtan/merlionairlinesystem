@@ -72,7 +72,7 @@ public class AircraftMaintenanceSlotBean {
         return em.createQuery("SELECT s from AircraftMaintenanceSlot s WHERE s.aircraft = :aircraft", AircraftMaintenanceSlot.class).setParameter("aircraft", aircraft).getResultList();
     }
 
-    public List<AircraftMaintenanceSlot> findSlotByAirport(long airportId) throws NotFoundException {
+    public List<AircraftMaintenanceSlot> findSlotByAirport(String airportId) throws NotFoundException {
         Airport airport = em.find(Airport.class, airportId);
         if (airport == null) throw new NotFoundException();
         return em.createQuery("SELECT s from AircraftMaintenanceSlot s WHERE s.airport = :airport", AircraftMaintenanceSlot.class).setParameter("airport", airport).getResultList();
