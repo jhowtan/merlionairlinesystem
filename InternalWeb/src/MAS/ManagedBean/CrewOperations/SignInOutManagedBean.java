@@ -90,7 +90,7 @@ public class SignInOutManagedBean {
 
     public String signOutProblem() {
         signOut();
-        return "flightReports&faces-redirect=true";
+        return "createFlightReport?faces-redirect=true";
     }
 
     public String getSignOutText() {
