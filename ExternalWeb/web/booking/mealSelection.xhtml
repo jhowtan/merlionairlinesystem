@@ -1,0 +1,47 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Meal Selection - Merlion Airlines</ui:define>
+
+    <ui:define name="content">
+        <section class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-10 text-center">
+                        <h1 class="title">Meal Selection</h1>
+                        <p class="lead">Select your meal ahead of time before your flight.</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="container">
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert alert-danger">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+                <h:panelGroup layout="block" rendered="#{empty mealSelectionManagedBean.eTicket}">
+                    <p class="text-center">Sorry, meal selection is not available to you at the moment.<br/>Please contact customer support.</p>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{! empty mealSelectionManagedBean.eTicket}" styleClass="text-center">
+                    <ui:repeat value="#{mealSelectionManagedBean.mealSelection}" var="meal">
+                        #{meal}
+                    </ui:repeat>
+                    <hr/>
+                    <h:form>
+                        <h:panelGroup id="saveButtonContainer">
+                            <h:commandButton action="#{seatSelectionManagedBean.save()}" value="Select Meal" styleClass="btn btn-success btn-lg btn-no-uppercase"></h:commandButton>
+                        </h:panelGroup>
+
+                    </h:form>
+                </h:panelGroup>
+            </div>
+        </section>
+
+    </ui:define>
+
+</ui:composition>

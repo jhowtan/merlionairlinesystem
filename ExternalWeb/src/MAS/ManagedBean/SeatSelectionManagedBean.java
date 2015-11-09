@@ -4,6 +4,7 @@ import MAS.Bean.FlightScheduleBean;
 import MAS.Common.Cabin;
 import MAS.Common.SeatConfigObject;
 import MAS.Entity.ETicket;
+import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 import com.google.gson.Gson;
 
@@ -34,6 +35,9 @@ public class SeatSelectionManagedBean {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         try {
             eTicket = flightScheduleBean.getETicket(Long.parseLong(params.get("eticket")));
+            if (eTicket.getFlight().getStatus() != Flight.NO_STATUS) {
+                throw new Exception();
+            }
             seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
             if (eTicket.getSeatNumber() != -1) {
                 selectedSeat = seatConfigObject.convertIntToString(eTicket.getSeatNumber());

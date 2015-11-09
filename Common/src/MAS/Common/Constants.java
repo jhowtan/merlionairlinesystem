@@ -87,6 +87,7 @@ public class Constants {
 
     public static final String SSR_ACTION_CODE_TICKET_NUMBER = "TKNR";
     public static final String SSR_ACTION_CODE_FFP = "FFP";
+    public static final String SSR_ACTION_CODE_MEAL = "SPML";
 
     public static int MAX_CONNECTION_TIME_MINUTES = 1440;
 

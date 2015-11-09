@@ -70,11 +70,11 @@
                             <table class="table table-bordered" style="border-top: 2px solid #ddd;">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th width="50">#</th>
                                     <th>Passenger</th>
-                                    <th>Seat</th>
-                                    <th>Class</th>
-                                    <th>Action</th>
+                                    <th width="150">Seat</th>
+                                    <th width="150">Class</th>
+                                    <th width="225">Action</th>
                                 </tr>
                                 </thead>
                                 <ui:repeat value="#{flightTicketCollection.eTickets}" var="eTicket" varStatus="varStatus">
@@ -86,10 +86,12 @@
                                         <td>#{commonManagedBean.getTravelClassString(eTicket.travelClass)}</td>
                                         <td>
                                             <div class="btn-toolbar">
-                                                <h:link outcome="seatSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase" value="Seat Selection">
+                                                <h:link outcome="seatSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase #{eTicket.flight.status == 0 ? '' : 'disabled'}" value="Seat Selection">
                                                     <f:param name="eticket" value="#{eTicket.id}" />
                                                 </h:link>
-                                                <h:link styleClass="btn btn-xs btn-primary btn-no-uppercase" value="Meal Selection" />
+                                                <h:link outcome="mealSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase #{eTicket.flight.status == 0 ? '' : 'disabled'}" value="Meal Selection">
+                                                    <f:param name="eticket" value="#{eTicket.id}" />
+                                                </h:link>
                                             </div>
                                         </td>
                                     </tr>
