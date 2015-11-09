@@ -1,8 +1,6 @@
 package MAS.ManagedBean;
 
-import MAS.WebService.DirectDistributionSystem.DirectDistributionSystem;
-import MAS.WebService.DirectDistributionSystem.DirectDistributionSystemService;
-import MAS.WebService.DirectDistributionSystem.WsFlightResultArray;
+import MAS.WebService.DirectDistributionSystem.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -32,7 +30,10 @@ public class BookingManagedBean {
     List<Long> selectedBookingClasses;
 
     // Step 3
-    private List<PassengerDetails> passengersDetails;
+    private List<WsPassengerDetails> passengersDetails;
+
+    // Step 4
+    private String bookingReference;
 
     public void nextStep() throws DatatypeConfigurationException {
         step++;
@@ -43,7 +44,7 @@ public class BookingManagedBean {
             case 2:
                 passengersDetails = new ArrayList<>();
                 for (int i = 0; i < passengers; i++) {
-                    passengersDetails.add(new PassengerDetails());
+                    passengersDetails.add(new WsPassengerDetails());
                 }
                 int travelDuration = 0;
                 if (returnDate != null) {
@@ -59,6 +60,16 @@ public class BookingManagedBean {
                 outboundSearchResult = dds.searchAvailableFlights(origin, destination, departureDateXML, passengers, travelClass, travelDuration);
                 selectedBookingClasses = new ArrayList<>();
                 break;
+            case 3:
+                break;
+            case 4:
+                try {
+                    bookingReference = dds.book(selectedBookingClasses, passengersDetails);
+                } catch (BookingException_Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
         }
     }
 
@@ -168,50 +179,19 @@ public class BookingManagedBean {
         this.selectedBookingClasses = selectedBookingClasses;
     }
 
-    public List<PassengerDetails> getPassengersDetails() {
+    public List<WsPassengerDetails> getPassengersDetails() {
         return passengersDetails;
     }
 
-    public void setPassengersDetails(List<PassengerDetails> passengersDetails) {
+    public void setPassengersDetails(List<WsPassengerDetails> passengersDetails) {
         this.passengersDetails = passengersDetails;
     }
 
-    public class PassengerDetails {
-        private String firstName;
-        private String lastName;
-        private String ffpProgram;
-        private String ffpNumber;
+    public String getBookingReference() {
+        return bookingReference;
+    }
 
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
-        public String getFfpProgram() {
-            return ffpProgram;
-        }
-
-        public void setFfpProgram(String ffpProgram) {
-            this.ffpProgram = ffpProgram;
-        }
-
-        public String getFfpNumber() {
-            return ffpNumber;
-        }
-
-        public void setFfpNumber(String ffpNumber) {
-            this.ffpNumber = ffpNumber;
-        }
+    public void setBookingReference(String bookingReference) {
+        this.bookingReference = bookingReference;
     }
 }

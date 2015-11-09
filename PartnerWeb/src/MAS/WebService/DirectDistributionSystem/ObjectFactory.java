@@ -24,10 +24,13 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _BookResponse_QNAME = new QName("http://WebService.MAS/", "bookResponse");
+    private final static QName _Book_QNAME = new QName("http://WebService.MAS/", "book");
     private final static QName _SearchAvailableFlightsResponse_QNAME = new QName("http://WebService.MAS/", "searchAvailableFlightsResponse");
     private final static QName _WsBookingClass_QNAME = new QName("http://WebService.MAS/", "wsBookingClass");
     private final static QName _SearchAvailableFlights_QNAME = new QName("http://WebService.MAS/", "searchAvailableFlights");
     private final static QName _WsFlightResult_QNAME = new QName("http://WebService.MAS/", "wsFlightResult");
+    private final static QName _BookingException_QNAME = new QName("http://WebService.MAS/", "BookingException");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: MAS.WebService.DirectDistributionSystem
@@ -69,11 +72,61 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BookResponse }
+     * 
+     */
+    public BookResponse createBookResponse() {
+        return new BookResponse();
+    }
+
+    /**
+     * Create an instance of {@link Book }
+     * 
+     */
+    public Book createBook() {
+        return new Book();
+    }
+
+    /**
+     * Create an instance of {@link BookingException }
+     * 
+     */
+    public BookingException createBookingException() {
+        return new BookingException();
+    }
+
+    /**
+     * Create an instance of {@link WsPassengerDetails }
+     * 
+     */
+    public WsPassengerDetails createWsPassengerDetails() {
+        return new WsPassengerDetails();
+    }
+
+    /**
      * Create an instance of {@link WsFlightResultArray }
      * 
      */
     public WsFlightResultArray createWsFlightResultArray() {
         return new WsFlightResultArray();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BookResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://WebService.MAS/", name = "bookResponse")
+    public JAXBElement<BookResponse> createBookResponse(BookResponse value) {
+        return new JAXBElement<BookResponse>(_BookResponse_QNAME, BookResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Book }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://WebService.MAS/", name = "book")
+    public JAXBElement<Book> createBook(Book value) {
+        return new JAXBElement<Book>(_Book_QNAME, Book.class, null, value);
     }
 
     /**
@@ -110,6 +163,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://WebService.MAS/", name = "wsFlightResult")
     public JAXBElement<WsFlightResult> createWsFlightResult(WsFlightResult value) {
         return new JAXBElement<WsFlightResult>(_WsFlightResult_QNAME, WsFlightResult.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BookingException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://WebService.MAS/", name = "BookingException")
+    public JAXBElement<BookingException> createBookingException(BookingException value) {
+        return new JAXBElement<BookingException>(_BookingException_QNAME, BookingException.class, null, value);
     }
 
 }

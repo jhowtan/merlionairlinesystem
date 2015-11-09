@@ -1,10 +1,17 @@
 package MAS.WebService;
-import MAS.Bean.FlightSearchBean;
+import MAS.Bean.*;
+import MAS.Common.Constants;
 import MAS.Common.FlightSearchItem;
 import MAS.Common.FlightSearchResult;
 import MAS.Entity.BookingClass;
+import MAS.Entity.ETicket;
+import MAS.Entity.PNR;
+import MAS.Entity.SpecialServiceRequest;
+import MAS.Exception.BookingException;
+import MAS.Exception.NotFoundException;
 import MAS.WebServiceHelpers.WSBookingClass;
 import MAS.WebServiceHelpers.WSFlightResult;
+import MAS.WebServiceHelpers.WSPassengerDetails;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -20,10 +27,18 @@ import java.util.List;
 public class DirectDistributionSystem {
 
     FlightSearchBean flightSearchBean;
+    PNRBean pnrBean;
+    BookingClassBean bookingClassBean;
+    BookFlightBean bookFlightBean;
+    FlightScheduleBean flightScheduleBean;
 
     public DirectDistributionSystem() {
         try {
             flightSearchBean = (FlightSearchBean) new InitialContext().lookup("java:global/WebService_war_exploded/FlightSearchEJB");
+            pnrBean = (PNRBean) new InitialContext().lookup("java:global/WebService_war_exploded/PNREJB");
+            bookingClassBean = (BookingClassBean) new InitialContext().lookup("java:global/WebService_war_exploded/BookingClassEJB");
+            bookFlightBean = (BookFlightBean) new InitialContext().lookup("java:global/WebService_war_exploded/BookFlightEJB");
+            flightScheduleBean = (FlightScheduleBean) new InitialContext().lookup("java:global/WebService_war_exploded/FlightScheduleEJB");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -62,6 +77,59 @@ public class DirectDistributionSystem {
             searchResultsArray[i] = searchResult;
         }
         return searchResultsArray;
+    }
+
+    @WebMethod
+    public String book(@WebParam(name="bookingClasses") long[] bookingClasses, @WebParam(name="passengersDetails") WSPassengerDetails[] passengersDetails) throws BookingException {
+        PNR pnr = null;
+        ArrayList<BookingClass> b = new ArrayList<>();
+        for (long bookingClass : bookingClasses) {
+            try {
+                b.add(bookingClassBean.getBookingClass(bookingClass));
+            } catch (NotFoundException e) {
+                throw new BookingException();
+            }
+        }
+        ArrayList<String> p = new ArrayList<>();
+        for (WSPassengerDetails passengerDetails : passengersDetails) {
+            p.add(passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase());
+        }
+        pnr = bookFlightBean.bookFlights(b, p);
+        for (WSPassengerDetails passengerDetails : passengersDetails) {
+            if (passengerDetails.ffpNumber.equals("")) continue;
+            try {
+                pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase()), Constants.SSR_ACTION_CODE_FFP, passengerDetails.ffpProgram + "/" + passengerDetails.ffpNumber);
+            } catch (NotFoundException e) {
+                throw new BookingException();
+            }
+        }
+        try {
+            pnrBean.updatePNR(pnr);
+            for (String passenger : pnr.getPassengers()) {
+                int passengerNum = pnrBean.getPassengerNumber(pnr, passenger);
+                String ffpNumber = null;
+                for (WSPassengerDetails passengerDetails : passengersDetails) {
+                    if (passenger.toUpperCase().equals(passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase())) {
+                        if (passengerDetails.ffpNumber != null && !passengerDetails.ffpNumber.equals("")) {
+                            ffpNumber = passengerDetails.ffpProgram + "/" + passengerDetails.ffpNumber;
+                        }
+                        break;
+                    }
+                }
+                if (ffpNumber != null) {
+                    for (SpecialServiceRequest ssr : pnrBean.getPassengerSpecialServiceRequests(pnr, passengerNum)) {
+                        if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+                            ETicket eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+                            eTicket.setFfpNumber(ffpNumber);
+                            flightScheduleBean.updateETicket(eTicket);
+                        }
+                    }
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new BookingException();
+        }
+        return pnr.getBookingReference();
     }
 
     public static void main(String[] argv) {

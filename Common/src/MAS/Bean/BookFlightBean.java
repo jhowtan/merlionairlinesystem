@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Stateless(name = "BookFlightBeanEJB")
+@Stateless(name = "BookFlightEJB")
 public class BookFlightBean {
     @PersistenceContext
     private EntityManager em;

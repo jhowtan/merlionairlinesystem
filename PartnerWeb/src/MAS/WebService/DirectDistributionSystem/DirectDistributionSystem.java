@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Action;
+import javax.xml.ws.FaultAction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -25,6 +26,29 @@ import javax.xml.ws.ResponseWrapper;
 })
 public interface DirectDistributionSystem {
 
+
+    /**
+     * 
+     * @param bookingClasses
+     * @param passengersDetails
+     * @return
+     *     returns java.lang.String
+     * @throws BookingException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "book", targetNamespace = "http://WebService.MAS/", className = "MAS.WebService.DirectDistributionSystem.Book")
+    @ResponseWrapper(localName = "bookResponse", targetNamespace = "http://WebService.MAS/", className = "MAS.WebService.DirectDistributionSystem.BookResponse")
+    @Action(input = "http://WebService.MAS/DirectDistributionSystem/bookRequest", output = "http://WebService.MAS/DirectDistributionSystem/bookResponse", fault = {
+        @FaultAction(className = BookingException_Exception.class, value = "http://WebService.MAS/DirectDistributionSystem/book/Fault/BookingException")
+    })
+    public String book(
+        @WebParam(name = "bookingClasses", targetNamespace = "")
+        List<Long> bookingClasses,
+        @WebParam(name = "passengersDetails", targetNamespace = "")
+        List<WsPassengerDetails> passengersDetails)
+        throws BookingException_Exception
+    ;
 
     /**
      * 

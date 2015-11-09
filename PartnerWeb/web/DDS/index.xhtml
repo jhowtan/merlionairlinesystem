@@ -223,6 +223,10 @@
                 </div>
             </h:form>
         </h:panelGroup>
+
+        <h:panelGroup styleClass="container" rendered="#{bookingManagedBean.step == 4}" layout="block">
+            <p>Your booking has been made.<br />Booking confirmation number: #{bookingManagedBean.bookingReference}</p>
+        </h:panelGroup>
         <br />
     </div>
 
