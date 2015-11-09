@@ -61,6 +61,14 @@ public class FlightBiddingManagedBean {
         }
     }
 
+    public boolean biddingOpened() {
+        return attributesBean.getBooleanAttribute("BIDOPENED", false);
+    }
+
+    public void toggleBiddingPeriod() {
+        attributesBean.setBooleanAttribute("BIDOPENED", !attributesBean.getBooleanAttribute("BIDOPENED", false));
+    }
+
     public boolean isCrewManager() {
         return authManagedBean.hasPermission(Permissions.MANAGE_FLIGHT_BID);
     }
