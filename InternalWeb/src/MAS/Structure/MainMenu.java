@@ -91,6 +91,13 @@ public class MainMenu {
         );
 
         entries.add(
+                new MenuEntry("Operations Reporting", "crosshairs",
+                        new MenuEntry("Flight Reporting", null, Pages.LIST_FLIGHT_REPORTS, Pages.CREATE_FLIGHT_REPORT),
+                        new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT)
+                )
+        );
+
+        entries.add(
                 new MenuEntry("Management Reporting", "line-chart",
                         new MenuEntry("Profitability Reporting", null, Pages.PROFITABILITY_REPORT),
                         new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),

@@ -1,0 +1,66 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Maintenance Slots - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Maintenance Slots</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/maintenanceSlots">Maintenance Slots</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createMaintenanceSlot">Create Maintenance Slots</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <table class="table table-striped" id="maintenance_table">
+                        <thead>
+                        <tr>
+                            <th>Aircraft Tail Number</th>
+                            <th>Airport</th>
+                            <th>Start Time</th>
+                            <th>Estimated Duration</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{maintenanceSlotManagedBean.getAllSlots()}" var="ms">
+                            <tr>
+                                <td>#{ms.aircraft.getTailNumber()}</td>
+                                <td>#{ms.airport.getName()}</td>
+                                <td>#{ms.getStartTime()}</td>
+                                <td>#{commonManagedBean.formateDoubleRounded(ms.duration)} minutes</td>
+                                <td>
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <h:link outcome="/App/FlightPlanning/updateMaintenanceSlot" styleClass="btn btn-default btn-xs btn-info"><f:param name="msId" value="#{ms.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
+                                            <h:commandLink action="#{maintenanceSlotManagedBean.delete(ms.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete this maintenance slot for #{ms.aircraft.getTailNumber()}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                        </div>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#maintenance_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
