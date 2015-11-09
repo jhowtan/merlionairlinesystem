@@ -71,7 +71,7 @@
                         <!--</div>-->
                     <!--</h:panelGroup>-->
                 </h:panelGroup>
-                <h:panelGroup rendered="#{flightDefermentManagedBean.isCrewManager()}">
+                <h:panelGroup id="crewManPanel" rendered="#{flightDefermentManagedBean.isCrewManager()}">
                     <h:panelGroup rendered="#{flightDefermentManagedBean.hasFlightDeferment()}">
                         <div class="form-group col-lg-12">
                             <div class="panel panel-default">
@@ -120,8 +120,7 @@
                                                                     <td>#{crew.phone}</td>
                                                                     <td>
                                                                         <div class="btn-group">
-                                                                            <h:commandLink id="replaceBtn" action="#{flightDefermentManagedBean.replaceFlightCrew(crew)}" styleClass="btn btn-default btn-xs btn-success">Replace
-                                                                            </h:commandLink>
+                                                                            <h:commandLink id="replaceBtn" action="#{flightDefermentManagedBean.replaceFlightCrew(crew)}" styleClass="btn btn-default btn-xs btn-success">Replace</h:commandLink>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
