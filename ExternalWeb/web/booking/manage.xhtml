@@ -56,25 +56,36 @@
                                 <tr>
                                     <th width="150"><i class="fa fa-plane fa-fw"></i> Departs</th>
                                     <td>#{flightTicketCollection.flight.aircraftAssignment.route.origin.city.name} (#{flightTicketCollection.flight.aircraftAssignment.route.origin.id})</td>
-                                    <td>#{flightTicketCollection.flight.aircraftAssignment.route.origin.name}</td>
-                                    <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.departureTime)}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-map-pin"></i>
+                                        #{flightTicketCollection.flight.aircraftAssignment.route.origin.name}
+                                    </td>                                    <td width="200">
+                                        <i class="fa fa-fw fa-clock-o"></i>
+                                        #{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.departureTime)}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th width="150"><i class="fa fa-plane fa-fw"></i> Arrives</th>
+                                    <th><i class="fa fa-plane fa-fw"></i> Arrives</th>
                                     <td>#{flightTicketCollection.flight.aircraftAssignment.route.destination.city.name} (#{flightTicketCollection.flight.aircraftAssignment.route.destination.id})</td>
-                                    <td>#{flightTicketCollection.flight.aircraftAssignment.route.destination.name}</td>
-                                    <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.arrivalTime)}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-map-pin"></i>
+                                        #{flightTicketCollection.flight.aircraftAssignment.route.destination.name}
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-fw fa-clock-o"></i>
+                                        #{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.arrivalTime)}
+                                    </td>
                                 </tr>
                             </table>
 
                             <table class="table table-bordered" style="border-top: 2px solid #ddd;">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th width="50">#</th>
                                     <th>Passenger</th>
-                                    <th>Seat</th>
-                                    <th>Class</th>
-                                    <th>Action</th>
+                                    <th width="150">Seat</th>
+                                    <th width="150">Class</th>
+                                    <th width="225">Action</th>
                                 </tr>
                                 </thead>
                                 <ui:repeat value="#{flightTicketCollection.eTickets}" var="eTicket" varStatus="varStatus">
@@ -86,10 +97,12 @@
                                         <td>#{commonManagedBean.getTravelClassString(eTicket.travelClass)}</td>
                                         <td>
                                             <div class="btn-toolbar">
-                                                <h:link outcome="seatSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase" value="Seat Selection">
+                                                <h:link outcome="seatSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase #{eTicket.flight.status == 0 ? '' : 'disabled'}" value="Seat Selection">
                                                     <f:param name="eticket" value="#{eTicket.id}" />
                                                 </h:link>
-                                                <h:link styleClass="btn btn-xs btn-primary btn-no-uppercase" value="Meal Selection" />
+                                                <h:link outcome="mealSelection" styleClass="btn btn-xs btn-primary btn-no-uppercase #{eTicket.flight.status == 0 ? '' : 'disabled'}" value="Meal Selection">
+                                                    <f:param name="eticket" value="#{eTicket.id}" />
+                                                </h:link>
                                             </div>
                                         </td>
                                     </tr>
