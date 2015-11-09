@@ -75,7 +75,7 @@ public class CommonManagedBean {
     }
 
     public String formatMoney(double amount) {
-        NumberFormat numberFormat = new DecimalFormat("#,###.00");
+        NumberFormat numberFormat = new DecimalFormat("#,##0.00");
         return "$" + numberFormat.format(amount);
     }
 
@@ -131,6 +131,18 @@ public class CommonManagedBean {
                 return "gold";
         }
         return "blue";
+    }
+
+    public String getTravelClassString(int tier) {
+        switch (tier) {
+            case Constants.FIRST_CLASS:
+                return Constants.FIRST_CLASS_LABEL;
+            case Constants.BUSINESS_CLASS:
+                return Constants.BUSINESS_CLASS_LABEL;
+            case Constants.PREMIUM_EC_CLASS:
+                return Constants.PREMIUM_EC_CLASS_LABEL;
+        }
+        return Constants.ECONOMY_CLASS_LABEL;
     }
 
     public static String formatAA(AircraftAssignment aa) {

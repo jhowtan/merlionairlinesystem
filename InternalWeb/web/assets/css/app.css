@@ -1977,3 +1977,22 @@ fieldset[disabled] .btn-black.active {
 .sidebar ul li a.active {
   background-color: #425569;
 }
+
+#page-wrapper .panel-heading > a {
+  color: #f1f1f1;
+  text-decoration: none;
+}
+
+#page-wrapper .panel-heading > a:hover,
+#page-wrapper .panel-heading > a:focus {
+  color: rgb(182, 212, 229);
+  text-decoration: none;
+}
+
+td.profitability-loss {
+  color: #9f191f;
+}
+
+td.profitability-gain {
+  color: limegreen;
+}
