@@ -1,6 +1,5 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Campaigns - Merlion Airline System</ui:define>
@@ -27,18 +26,24 @@
                             <th>End</th>
                             <th>Code</th>
                             <th>Discount</th>
+                            <th>Usage Count</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <ui:repeat value="#{flightsManagedBean.getAllFlights()}" var="cm">
+                        <ui:repeat value="#{campaignsManagedBean.campaigns}" var="cm">
                             <tr>
-                                <td></td>
+                                <td>#{cm.name}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.startDate)}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.endDate)}</td>
+                                <td>#{cm.code}</td>
+                                <td>#{cm.discount}</td>
+                                <td>#{cm.usageCount}</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
-                                            <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>
-                                            <h:commandLink action="#{flightsManagedBean.delete(fl.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete flight: #{fl.code}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                            <!--<h:link outcome="/App/CustomerRelations/viewCampaign" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>-->
+                                            <h:commandLink action="#{campaignsManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete campaign: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                         </div>
                                     </h:form>
                                 </td>

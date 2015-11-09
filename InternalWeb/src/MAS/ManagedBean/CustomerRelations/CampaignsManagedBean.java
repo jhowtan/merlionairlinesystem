@@ -8,7 +8,11 @@ import MAS.Entity.Route;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class CampaignsManagedBean {
     private double discount;
     private String code;
     private List<String> routeIds;
+    private String bookingClassesString;
 
     @PostConstruct
     private void init() {
@@ -44,7 +49,36 @@ public class CampaignsManagedBean {
     }
 
     public void createCampaign() {
+        try {
+            List<String> bkClasses = Arrays.asList(bookingClassesString.replaceAll("^[,\\s]+", "").split("[,\\s]+"));
+            List<Long> routeIdLongs = new ArrayList<>();
+            for (String s : routeIds) {
+                routeIdLongs.add(Long.parseLong(s));
+            }
+            campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
+            FacesMessage m = new FacesMessage("Campaign: " + campaignName + " created.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesMessage m = new FacesMessage("Campaign could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
 
+    public void delete(Campaign campaign) {
+        try {
+            campaignBean.removeCampaign(campaign.getId());
+            FacesMessage m = new FacesMessage("Campaign: " + campaign.getName() + " deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Campaign: " + campaign.getName() + " could not be deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+        load();
     }
 
     public String getCampaignName() {
@@ -133,5 +167,13 @@ public class CampaignsManagedBean {
 
     public void setRouteIds(List<String> routeIds) {
         this.routeIds = routeIds;
+    }
+
+    public String getBookingClassesString() {
+        return bookingClassesString;
+    }
+
+    public void setBookingClassesString(String bookingClassesString) {
+        this.bookingClassesString = bookingClassesString;
     }
 }
