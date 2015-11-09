@@ -1,23 +1,16 @@
 package MAS.WebService;
 import MAS.Bean.FlightSearchBean;
-import MAS.Bean.UserBean;
 import MAS.Common.FlightSearchItem;
 import MAS.Common.FlightSearchResult;
-import MAS.Entity.User;
-import MAS.Exception.NotFoundException;
+import MAS.Entity.BookingClass;
 import MAS.WebServiceHelpers.WSBookingClass;
 import MAS.WebServiceHelpers.WSFlightResult;
-import MAS.WebServiceHelpers.WSSearchResult;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.ws.Endpoint;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,41 +29,38 @@ public class DirectDistributionSystem {
     }
 
     @WebMethod
-    public ArrayList<WSSearchResult> searchAvailableFlights(String origin, String destination, Date date, int passengerCount, int travelClass, int travelDuration) {
+    public WSFlightResult[][] searchAvailableFlights(String origin, String destination, Date date, int passengerCount, int travelClass, int travelDuration) {
         List<FlightSearchResult> flightSearchResults = flightSearchBean.searchAvailableFlights(origin, destination, date, passengerCount, travelClass, travelDuration);
-
-        ArrayList<WSSearchResult> searchResults = new ArrayList<>();
-
-        WSSearchResult searchResult = new WSSearchResult();
-
-        WSFlightResult flightResult = new WSFlightResult();
-        flightResult.flightNumber = "MA123T";
-        searchResult.flightResults = new ArrayList<>();
-        searchResult.flightResults.add(flightResult);
-        searchResult.flightResults.add(flightResult);
-
-        searchResult.flightResults = new ArrayList<>();
-        searchResult.flightResults.add(flightResult);
-
-        searchResults.add(searchResult);
-
-        return searchResults;
-
-//        ArrayList<ArrayList<WSFlightResult>> searchResults = new ArrayList<>();
-//
-//        for (FlightSearchResult flightSearchResult : flightSearchResults) {
-//            ArrayList<WSFlightResult> searchResult = new ArrayList<>();
-//            for (FlightSearchItem flightSearchItem : flightSearchResult.getFlightSearchItems()) {
-//                WSFlightResult wsFlightResult = new WSFlightResult();
-//                wsFlightResult.flightNumber = flightSearchItem.getFlight().getCode();
-////                webServiceFlight.departureTime = flightSearchItem.getFlight().getDepartureTime();
-////                webServiceFlight.arrivalTime = flightSearchItem.getFlight().getArrivalTime();
-//                // Add booking classes
-//                searchResult.add(wsFlightResult);
-//            }
-//            searchResults.add(searchResult);
-//        }
-        //return searchResults;
+        ArrayList<ArrayList<WSFlightResult>> searchResults = new ArrayList<>();
+        for (FlightSearchResult flightSearchResult : flightSearchResults) {
+            ArrayList<WSFlightResult> searchResult = new ArrayList<>();
+            for (FlightSearchItem flightSearchItem : flightSearchResult.getFlightSearchItems()) {
+                WSFlightResult flightResult = new WSFlightResult();
+                flightResult.id = flightSearchItem.getFlight().getId();
+                flightResult.flightNumber = flightSearchItem.getFlight().getCode();
+                flightResult.depatureTime = flightSearchItem.getFlight().getDepartureTime();
+                flightResult.arrivalTIme = flightSearchItem.getFlight().getArrivalTime();
+                flightResult.orign = flightSearchItem.getFlight().getAircraftAssignment().getRoute().getOrigin().getId();
+                flightResult.destination = flightSearchItem.getFlight().getAircraftAssignment().getRoute().getDestination().getId();
+                flightResult.bookingClasses = new ArrayList<>();
+                for (BookingClass bookingClass : flightSearchItem.getBookingClasses()) {
+                    WSBookingClass wsBookingClass = new WSBookingClass();
+                    wsBookingClass.id = bookingClass.getId();
+                    wsBookingClass.name = bookingClass.getName();
+                    wsBookingClass.price = bookingClass.getPrice();
+                    wsBookingClass.fareRule = bookingClass.getFareRule().getName();
+                    flightResult.bookingClasses.add(wsBookingClass);
+                }
+                searchResult.add(flightResult);
+            }
+            searchResults.add(searchResult);
+        }
+        WSFlightResult[][] searchResultsArray = new WSFlightResult[searchResults.size()][];
+        for (int i = 0; i < searchResults.size(); i++) {
+            WSFlightResult[] searchResult = searchResults.get(i).toArray(new WSFlightResult[searchResults.get(i).size()]);
+            searchResultsArray[i] = searchResult;
+        }
+        return searchResultsArray;
     }
 
     public static void main(String[] argv) {

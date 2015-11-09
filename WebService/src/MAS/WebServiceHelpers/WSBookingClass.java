@@ -7,4 +7,5 @@ public class WSBookingClass {
     public long id;
     public String name;
     public double price;
+    public String fareRule;
 }
