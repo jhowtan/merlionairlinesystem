@@ -9,8 +9,8 @@ public class WSFlightResult {
     public ArrayList<WSBookingClass> bookingClasses;
     public long id;
     public String flightNumber;
-    public Date depatureTime;
-    public Date arrivalTIme;
-    public String orign;
+    public Date departureTime;
+    public Date arrivalTime;
+    public String origin;
     public String destination;
 }

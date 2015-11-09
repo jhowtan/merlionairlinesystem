@@ -7,6 +7,7 @@ import MAS.WebServiceHelpers.WSBookingClass;
 import MAS.WebServiceHelpers.WSFlightResult;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,7 +30,7 @@ public class DirectDistributionSystem {
     }
 
     @WebMethod
-    public WSFlightResult[][] searchAvailableFlights(String origin, String destination, Date date, int passengerCount, int travelClass, int travelDuration) {
+    public WSFlightResult[][] searchAvailableFlights(@WebParam(name="origin") String origin, @WebParam(name="destination") String destination, @WebParam(name="date") Date date, @WebParam(name="passengerCount") int passengerCount, @WebParam(name="travelClass") int travelClass, @WebParam(name="travelDuration") int travelDuration) {
         List<FlightSearchResult> flightSearchResults = flightSearchBean.searchAvailableFlights(origin, destination, date, passengerCount, travelClass, travelDuration);
         ArrayList<ArrayList<WSFlightResult>> searchResults = new ArrayList<>();
         for (FlightSearchResult flightSearchResult : flightSearchResults) {
@@ -38,9 +39,9 @@ public class DirectDistributionSystem {
                 WSFlightResult flightResult = new WSFlightResult();
                 flightResult.id = flightSearchItem.getFlight().getId();
                 flightResult.flightNumber = flightSearchItem.getFlight().getCode();
-                flightResult.depatureTime = flightSearchItem.getFlight().getDepartureTime();
-                flightResult.arrivalTIme = flightSearchItem.getFlight().getArrivalTime();
-                flightResult.orign = flightSearchItem.getFlight().getAircraftAssignment().getRoute().getOrigin().getId();
+                flightResult.departureTime = flightSearchItem.getFlight().getDepartureTime();
+                flightResult.arrivalTime = flightSearchItem.getFlight().getArrivalTime();
+                flightResult.origin = flightSearchItem.getFlight().getAircraftAssignment().getRoute().getOrigin().getId();
                 flightResult.destination = flightSearchItem.getFlight().getAircraftAssignment().getRoute().getDestination().getId();
                 flightResult.bookingClasses = new ArrayList<>();
                 for (BookingClass bookingClass : flightSearchItem.getBookingClasses()) {
