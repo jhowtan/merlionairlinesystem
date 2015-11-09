@@ -1,7 +1,6 @@
 package MAS.ManagedBean.ManagementReporting;
 
 import MAS.Bean.*;
-import MAS.Entity.BookingClass;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -51,8 +50,8 @@ public class ReportingDataManagedBean {
             case "topPerformingFlights":
                 showTopPerformingFlights();
                 return;
-            case "topPerformingBookingClass":
-                showTopPerformingBookingClasses();
+            case "worstPerformingFlights":
+                showWorstPerformingFlights();
                 return;
             default:
                 return;
@@ -86,43 +85,24 @@ public class ReportingDataManagedBean {
         Gson gson = new Gson();
         String json = gson.toJson(resultItems);
 
-        if(!authManagedBean.isAuthenticated()) {
-            json = "[]";
-        }
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
-        response.setContentLength(json.length());
-        response.setContentType("application/json");
-
-        try {
-            response.getOutputStream().write(json.getBytes());
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ctx.responseComplete();
+        outputJSON(json);
     }
 
-    public void showTopPerformingBookingClasses() throws NotFoundException {
+    public void showWorstPerformingFlights() throws NotFoundException {
         ArrayList<ReportItem> reportItems = new ArrayList<>();
-        List<BookingClass> bookingClasses = bookingClassBean.getAllBookingClasses();
-        for (BookingClass bookingClass : bookingClasses) {
-            ReportItem bookingClassItem = new ReportItem();
-            bookingClassItem.name = bookingClass.getName() + ": " +
-                    bookingClass.getFlight().getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
-                    bookingClass.getFlight().getAircraftAssignment().getRoute().getDestination().getId() + " (" + bookingClass.getFlight().getCode() + ")";
-            bookingClassItem.value = profitabilityReportManagedBean.getProfitabilityByBookingClass(bookingClass.getFlight(), bookingClass);
-            reportItems.add(bookingClassItem);
+        List<Flight> flights = flightScheduleBean.getAllFlights();
+        for (Flight flight : flights) {
+            ReportItem flightItem = new ReportItem();
+            flightItem.name = flight.getCode() + " (" + commonManagedBean.formatDate("dd MMM yy, HH:mm", flight.getDepartureTime()) + ")";
+            flightItem.value = profitabilityReportManagedBean.getProfitabilityByFlight(flight);
+            reportItems.add(flightItem);
         }
         Collections.sort(reportItems, new Comparator<ReportItem>() {
             @Override
             public int compare(ReportItem o1, ReportItem o2) {
-                if (o1.value < o2.value)
+                if (o1.value > o2.value)
                     return 1;
-                else if (o1.value > o2.value)
+                else if (o1.value < o2.value)
                     return -1;
                 return 0;
             }
@@ -131,9 +111,14 @@ public class ReportingDataManagedBean {
         for (int i = 0; i < 5; i++) {
             resultItems.add(reportItems.get(i));
         }
+
         Gson gson = new Gson();
         String json = gson.toJson(resultItems);
 
+        outputJSON(json);
+    }
+
+    public void outputJSON(String json) {
         if(!authManagedBean.isAuthenticated()) {
             json = "[]";
         }
