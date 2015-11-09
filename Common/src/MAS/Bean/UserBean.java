@@ -9,6 +9,7 @@ import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "UserEJB")
-@LocalBean
 public class UserBean {
     @PersistenceContext
     private EntityManager em;
