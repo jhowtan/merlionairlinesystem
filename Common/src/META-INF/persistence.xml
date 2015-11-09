@@ -40,6 +40,8 @@
         <class>MAS.Entity.FlightReport</class>
         <class>MAS.Entity.MaintenanceReport</class>
         <class>MAS.Entity.MaintenanceShift</class>
+        <class>MAS.Entity.Campaign</class>
+        <class>MAS.Entity.CampaignGroup</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create" />

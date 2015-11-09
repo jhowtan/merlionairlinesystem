@@ -27,10 +27,12 @@ public class Permissions {
     public static final String MANAGE_FLIGHT_BID = "MANAGE_FLIGHT_BID";
 
     public static final String MANAGE_CUSTOMERS = "MANAGE_CUSTOMERS";
+    public static final String MANAGE_CAMPAIGNS = "MANAGE_CAMPAIGNS";
 
     public static final String CHECK_IN = "CHECK_IN";
     public static final String GATE_CONTROL = "GATE_CONTROL";
 
     public static final String MANAGE_REPORTING = "MANAGE_REPORTING";
+
 
 }

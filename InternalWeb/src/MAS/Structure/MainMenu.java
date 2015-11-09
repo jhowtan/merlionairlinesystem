@@ -103,6 +103,12 @@ public class MainMenu {
                         new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT)
                 )
         );
+
+        entries.add(
+                new MenuEntry("Customer Engagement", "thumbs-o-up",
+                        new MenuEntry("Campaign Management", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN)
+                )
+        );
     }
 
     public List<MenuEntry> getEntries() {

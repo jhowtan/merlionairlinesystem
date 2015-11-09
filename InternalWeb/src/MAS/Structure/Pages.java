@@ -113,4 +113,7 @@ public class Pages {
     public static final Page HELPDESK_UPDATE_CUSTOMER_PROFILE = new Page("/App/CustomerRelations/Helpdesk/updateCustomerProfile", Permissions.MANAGE_CUSTOMERS);
     public static final Page HELPDESK_UPDATE_MEMBERSHIP = new Page("/App/CustomerRelations/Helpdesk/updateMembership", Permissions.MANAGE_CUSTOMERS);
     public static final Page HELPDESK_ISSUE_CARD = new Page("/App/CustomerRelations/Helpdesk/issueCard", Permissions.MANAGE_CUSTOMERS);
+
+    public static final Page VIEW_CAMPAIGNS = new Page("/App/CustomerRelations/campaigns", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page CREATE_CAMPAIGN = new Page("/App/CustomerRelations/createCampaign", Permissions.MANAGE_CAMPAIGNS);
 }
