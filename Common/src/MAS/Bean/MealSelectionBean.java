@@ -9,6 +9,7 @@ import MAS.Exception.NotFoundException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
+import java.util.List;
 
 @Stateless(name = "MealSelectionEJB")
 public class MealSelectionBean {
@@ -20,11 +21,11 @@ public class MealSelectionBean {
 
     public int getMealsCount(Flight flight) {
         long flightTime = (flight.getArrivalTime().getTime() - flight.getDepartureTime().getTime()) / 1000 / 60;
-        // One meal every 4 hours
-        return (int) (flightTime / (4 * 60));
+        // One meal every 4 hours with a minimum of 1 meal
+        return Math.max(1, (int) (flightTime / (4 * 60)));
     }
 
-    public ArrayList<String> getMealSelections(ETicket eTicket) throws NotFoundException {
+    public List<String> getMealSelections(ETicket eTicket) throws NotFoundException {
         PNR pnr = eTicket.getPnr();
         Flight flight = eTicket.getFlight();
         int passengerNum = pnrBean.getPassengerNumber(pnr, eTicket.getPassengerName());
@@ -40,14 +41,15 @@ public class MealSelectionBean {
         return mealSelection;
     }
 
-    public void setMealSelections(ETicket eTicket, ArrayList<String> mealSelection) throws NotFoundException {
+    public void setMealSelections(ETicket eTicket, List<String> mealSelection) throws NotFoundException {
         PNR pnr = eTicket.getPnr();
         Flight flight = eTicket.getFlight();
         int passengerNum = pnrBean.getPassengerNumber(pnr, eTicket.getPassengerName());
         int itineraryNum = pnrBean.getItineraryNumber(pnr, flight);
-        for (int i = 0; i < getMealsCount(flight); i++) {
-            pnrBean.setSpecialServiceRequest(pnr, passengerNum, Constants.SSR_ACTION_CODE_MEAL + (i+1), mealSelection.get(i) ,itineraryNum);
+        for (int i = 0; i < mealSelection.size(); i++) {
+            pnrBean.setSpecialServiceRequest(pnr, passengerNum, Constants.SSR_ACTION_CODE_MEAL + (i+1), mealSelection.get(i), itineraryNum);
         }
+        pnrBean.updatePNR(pnr);
     }
 
 }

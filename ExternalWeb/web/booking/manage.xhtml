@@ -56,14 +56,25 @@
                                 <tr>
                                     <th width="150"><i class="fa fa-plane fa-fw"></i> Departs</th>
                                     <td>#{flightTicketCollection.flight.aircraftAssignment.route.origin.city.name} (#{flightTicketCollection.flight.aircraftAssignment.route.origin.id})</td>
-                                    <td>#{flightTicketCollection.flight.aircraftAssignment.route.origin.name}</td>
-                                    <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.departureTime)}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-map-pin"></i>
+                                        #{flightTicketCollection.flight.aircraftAssignment.route.origin.name}
+                                    </td>                                    <td width="200">
+                                        <i class="fa fa-fw fa-clock-o"></i>
+                                        #{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.departureTime)}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th width="150"><i class="fa fa-plane fa-fw"></i> Arrives</th>
+                                    <th><i class="fa fa-plane fa-fw"></i> Arrives</th>
                                     <td>#{flightTicketCollection.flight.aircraftAssignment.route.destination.city.name} (#{flightTicketCollection.flight.aircraftAssignment.route.destination.id})</td>
-                                    <td>#{flightTicketCollection.flight.aircraftAssignment.route.destination.name}</td>
-                                    <td width="200">#{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.arrivalTime)}</td>
+                                    <td>
+                                        <i class="fa fa-fw fa-map-pin"></i>
+                                        #{flightTicketCollection.flight.aircraftAssignment.route.destination.name}
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-fw fa-clock-o"></i>
+                                        #{commonManagedBean.formatDate("E, dd MMM yyyy, hh:mm", flightTicketCollection.flight.arrivalTime)}
+                                    </td>
                                 </tr>
                             </table>
 

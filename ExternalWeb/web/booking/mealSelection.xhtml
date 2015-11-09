@@ -28,15 +28,22 @@
                     <p class="text-center">Sorry, meal selection is not available to you at the moment.<br/>Please contact customer support.</p>
                 </h:panelGroup>
                 <h:panelGroup layout="block" rendered="#{! empty mealSelectionManagedBean.eTicket}" styleClass="text-center">
-                    <ui:repeat value="#{mealSelectionManagedBean.mealSelection}" var="meal">
-                        #{meal}
-                    </ui:repeat>
-                    <hr/>
                     <h:form>
-                        <h:panelGroup id="saveButtonContainer">
-                            <h:commandButton action="#{seatSelectionManagedBean.save()}" value="Select Meal" styleClass="btn btn-success btn-lg btn-no-uppercase"></h:commandButton>
-                        </h:panelGroup>
+                        <ui:repeat value="#{mealSelectionManagedBean.mealSelection}" var="meal" varStatus="varStatus">
+                            <div class="row">
+                                <div class="form-group col-md-6 col-md-push-3">
+                                    <label class="control-label" for="meal">Meal #{varStatus.index + 1}</label>
+                                    <h:selectOneMenu styleClass="form-control" id="meal" binding="#{meal}" value="#{mealSelectionManagedBean.mealSelection[varStatus.index]}">
+                                        <f:selectItems value="#{mealSelectionManagedBean.getAvailableMeals()}" />
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </ui:repeat>
 
+                        <hr/>
+                        <h:panelGroup id="saveButtonContainer">
+                            <h:commandButton action="#{mealSelectionManagedBean.save()}" value="Select Meal" styleClass="btn btn-success btn-lg btn-no-uppercase"></h:commandButton>
+                        </h:panelGroup>
                     </h:form>
                 </h:panelGroup>
             </div>
