@@ -11,10 +11,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Create Flight Report</h1>
-                    <!--<ul class="nav nav-tabs nav-justified">-->
-                        <!--<li role="presentation"><h:link outcome="certification">View Flight Reports</h:link></li>-->
-                        <!--<li role="presentation" class="active"><h:link outcome="createCertification">Create Flight Report</h:link></li>-->
-                    <!--</ul><br />-->
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation"><h:link outcome="flightReports">All Flight Reports</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="createFlightReport">Create Flight Report</h:link></li>
+                    </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
@@ -41,7 +41,7 @@
                                         <h:panelGroup styleClass="form-group col-lg-12 #{!flightStatus.valid ? 'has-error' : ''}" layout="block">
                                             <label class="control-label" for="flightStatus">Flight Status</label>
                                             <h:selectOneMenu id="flightStatus" binding="#{flightStatus}" value="#{createFlightReportManagedBean.flightReport.status}" styleClass="form-control">
-                                                <f:selectItems value="#{createFlightReportManagedBean.statusList}" var="a" itemLabel="#{a}" itemValue="#{createFlightReportManagedBean.statusList.getIndexOf(a)}" />
+                                                <f:selectItems value="#{createFlightReportManagedBean.statusList}" var="a" itemLabel="#{a}" itemValue="#{createFlightReportManagedBean.statusList.indexOf(a)}" />
                                             </h:selectOneMenu>
                                             <h:message for="flightStatus" styleClass="help-block" />
                                         </h:panelGroup>
@@ -50,7 +50,7 @@
                                             <label class="control-label" for="category">Category</label>
                                             <h:selectOneMenu id="category" binding="#{category}" value="#{createFlightReportManagedBean.flightReport.category}" styleClass="form-control"
                                                         required="true" requiredMessage="Please enter the language certified.">
-                                                <f:selectItems value="#{createFlightReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createFlightReportManagedBean.categoryList.getIndexOf(b)}" />
+                                                <f:selectItems value="#{createFlightReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createFlightReportManagedBean.categoryList.indexOf(b)}" />
                                             </h:selectOneMenu>
                                             <h:message for="category" styleClass="help-block" />
                                         </h:panelGroup>

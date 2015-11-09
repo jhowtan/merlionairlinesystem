@@ -78,7 +78,12 @@ public class ReportingDataManagedBean {
             }
         });
         ArrayList<ReportItem> resultItems = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        int size = 5;
+        if (reportItems.size() < 5) {
+            size = reportItems.size();
+        }
+
+        for (int i = 0; i < size; i++) {
             resultItems.add(reportItems.get(i));
         }
 
@@ -108,7 +113,12 @@ public class ReportingDataManagedBean {
             }
         });
         ArrayList<ReportItem> resultItems = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        int size = 5;
+        if (reportItems.size() < 5) {
+            size = reportItems.size();
+        }
+
+        for (int i = 0; i < size; i++) {
             resultItems.add(reportItems.get(i));
         }
 
