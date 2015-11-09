@@ -59,9 +59,6 @@
                             </table>
                         </div>
                     </div>
-                    <h:panelGroup class="text-right" rendered="#{!flightReportsManagedBean.isOpsReportManager()}">
-                        <h:link outcome="createFlightReport" styleClass="btn btn-default btn-md btn-success"><i class="fa fa-pencil"></i>Create Flight Report</h:link>
-                    </h:panelGroup>
                 </div>
                 <h:panelGroup id="flightReportDetails" styleClass="col-lg-12" rendered="#{flightReportsManagedBean.isOpsReportManager()}">
                     <div class="panel panel-default">
