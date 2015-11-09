@@ -83,6 +83,15 @@ public class Utils {
         return calendar.get(Calendar.MONTH);
     }
 
+    public static Date relativeMonth(Date date, int relativeMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + relativeMonth);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        return c.getTime();
+    }
+
     public static Date addTimeToDate(Date date, String time) {
         if (time.length() != 5)
             return null;
