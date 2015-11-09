@@ -14,7 +14,7 @@ public class Constants {
     public static final String[] MONTHS_OF_YEAR = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public static final String[] FLIGHT_REPORT_CATEGORIES = {"Crew Personnel", "Flight Procedure", "Emergency", "Passenger Related", "Others"};
     public static final String[] MAINTENANCE_REPORT_CATEGORIES = {"Routine", "Damage/Replacement", "Emergency", "Others"};
-    public static final String[] REPORT_STATUS = {"Pending", "Viewed", "Resolved"};
+    public static final String[] REPORT_STATUS = {"Pending", "Acknowledged", "Resolved"};
 
     public static final int FFP_TIER_BLUE = 1;
     public static final int FFP_TIER_SILVER = 2;

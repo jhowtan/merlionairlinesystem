@@ -4,7 +4,7 @@ import MAS.Common.Permissions;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
-    
+
 	// Common Infrastructure: System Admin
     public static final Page LIST_USERS = new Page("/App/SystemAdmin/users", Permissions.MANAGE_USERS);
     public static final Page CREATE_USER = new Page("/App/SystemAdmin/createUser", Permissions.MANAGE_USERS);
@@ -17,7 +17,7 @@ public class Pages {
     public static final Page LIST_WORKGROUPS = new Page("/App/SystemAdmin/workgroups", Permissions.MANAGE_WORKGROUPS);
     public static final Page CREATE_WORKGROUP = new Page("/App/SystemAdmin/createWorkgroup", Permissions.MANAGE_WORKGROUPS);
     public static final Page UPDATE_WORKGROUP = new Page("/App/SystemAdmin/updateWorkgroup", Permissions.MANAGE_WORKGROUPS);
-	
+
     public static final Page VIEW_AUDIT_LOG = new Page("/App/SystemAdmin/auditLog", Permissions.ACCESS_AUDIT_LOGS);
 
     // Airline Planning System: Fleet Planning Pages
@@ -84,13 +84,11 @@ public class Pages {
     public static final Page FLIGHT_BIDDING = new Page("/App/CrewOperations/flightBidding", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
     public static final Page FLIGHT_ROSTER = new Page("/App/CrewOperations/flightRoster", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
     public static final Page FLIGHT_DEFERMENT = new Page("/App/CrewOperations/flightDeferment", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
+    public static final Page LIST_FLIGHT_REPORTS = new Page("/App/CrewOperations/flightReports", Permissions.FLIGHT_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
+    public static final Page CREATE_FLIGHT_REPORT = new Page("/App/CrewOperations/createFlightReport", Permissions.FLIGHT_REPORTING);
+    public static final Page LIST_MAINTENANCE_REPORTS = new Page("/App/CrewOperations/maintenanceReports", Permissions.MAINTENANCE_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
+    public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/CrewOperations/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
     public static final Page FLIGHT_SIGNINOUT = new Page("/App/CrewOperations/signInOut", Permissions.FLIGHT_BID);
-
-    // AFOS: Operations Reporting
-    public static final Page LIST_FLIGHT_REPORTS = new Page("/App/OperationsReporting/flightReports", Permissions.FLIGHT_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
-    public static final Page CREATE_FLIGHT_REPORT = new Page("/App/OperationsReporting/createFlightReport", Permissions.FLIGHT_REPORTING);
-    public static final Page LIST_MAINTENANCE_REPORTS = new Page("/App/OperationsReporting/maintenanceReports", Permissions.MAINTENANCE_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
-    public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/OperationsReporting/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);

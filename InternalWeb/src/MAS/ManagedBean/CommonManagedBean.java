@@ -79,6 +79,10 @@ public class CommonManagedBean {
         return "$" + numberFormat.format(amount);
     }
 
+    public String reportStatusToString(int status){
+        return Constants.REPORT_STATUS[status];
+    }
+
     public List truncateList(List list, int size) {
         return list.subList(0, Math.min(size, list.size()));
     }

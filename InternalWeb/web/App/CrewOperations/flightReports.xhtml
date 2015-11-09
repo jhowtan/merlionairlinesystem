@@ -1,0 +1,155 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Flight Reports - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Flight Reports</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="flightReports">All Flight Reports</h:link></li>
+                        <li role="presentation"><h:link outcome="createFlightReport">Create Flight Report</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Flight Report Details</div>
+                        <div class="panel-body">
+                            <table class="table table-striped" id="flight_reports_table">
+                                <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Crew Staff</th>
+                                    <th>Flight</th>
+                                    <th>Origin-Destination</th>
+                                    <th>Status</th>
+                                    <h:panelGroup rendered="#{flightReportsManagedBean.isOpsReportManager()}">
+                                        <th>View Report</th>
+                                    </h:panelGroup>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{flightReportsManagedBean.getAllFlightReports()}" var="fr">
+                                    <tr>
+                                        <td>#{flightReportsManagedBean.categoryToString(fr.category)}</td>
+                                        <td>#{commonManagedBean.formatName(fr.user)}</td>
+                                        <td>#{fr.flight.code} (#{commonManagedBean.formatDate("dd/MM/yy, hh:mm", fr.flight.departureTime)})</td>
+                                        <td>#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}</td>
+                                        <td>#{commonManagedBean.reportStatusToString(fr.status)}</td>
+                                        <h:form rendered="#{flightReportsManagedBean.isOpsReportManager()}">
+                                            <td>
+                                                <h:commandLink action="#{flightReportsManagedBean.setSelectedFlightReport(fr)}"
+                                                               styleClass="btn btn-default btn-xs btn-primary" value="View">
+                                                    <f:ajax render="flightReportDetails" onevent="
+                                                                function(data) {
+                                                                    if (data.status == 'success') {
+                                                                        $('#flight-report-details').collapse();
+                                                                        $('html, body').animate({ scrollTop: $('#flight-report-details').offset().top }, 'slow');
+                                                                    }}"/>
+                                                </h:commandLink>
+                                            </td>
+                                        </h:form>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <h:panelGroup id="flightReportDetails" styleClass="col-lg-12">
+                    <h:panelGroup rendered="#{flightReportsManagedBean.displayDetails()}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="flight-report-heading">
+                                <a data-toggle="collapse" href="#flight-report-details" aria-controls="flight-report-details">
+                                    Flight Report Details
+                                </a>
+                            </div>
+                            <div class="panel-collapse collapse" id="flight-report-details" aria-labelledby="#flight-report-heading">
+                                <div class="panel-body container-fluid">
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Flight Details
+                                            </div>
+                                            <div class="panel-body">
+                                                <p>
+                                                    <strong>Flight:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.flight.code}
+                                                </p>
+                                                <p>
+                                                    <strong>Origin-Destination:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.route.origin.id} - #{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.route.destination.id}
+                                                </p>
+                                                <p>
+                                                    <strong>Date of Flight:</strong><br />
+                                                    #{commonManagedBean.formatDate("dd MMM yyyy, hh:mm a", flightReportsManagedBean.selectedFlightReport.flight.actualDepartureTime)}
+                                                </p>
+                                                <p>
+                                                    <strong>Aircraft:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.aircraft.seatConfig.name} (#{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.aircraft.tailNumber})
+                                                </p>
+                                                <p>
+                                                    <strong>Current Location:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.aircraft.currentLocation.name}, #{flightReportsManagedBean.selectedFlightReport.flight.aircraftAssignment.aircraft.currentLocation.city.name}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Report Details
+                                            </div>
+                                            <div class="panel-body">
+                                                <p id="fr-category">
+                                                    <strong>Category:</strong><br />
+                                                    #{flightReportsManagedBean.categoryToString(flightReportsManagedBean.selectedFlightReport.category)}
+                                                </p>
+                                                <p id="fr-user">
+                                                    <strong>Crew Member:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.user.firstName} #{flightReportsManagedBean.selectedFlightReport.user.lastName}
+                                                </p>
+                                                <p id="fr-status">
+                                                    <strong>Status</strong><br />
+                                                    #{commonManagedBean.reportStatusToString(flightReportsManagedBean.selectedFlightReport.status)}
+                                                </p>
+                                                <p id="fr-body">
+                                                    <strong>Report Contents:</strong><br />
+                                                    #{flightReportsManagedBean.selectedFlightReport.body}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <h:form>
+                                            <div class="btn-group">
+                                                <h:commandButton action="#{flightReportsManagedBean.updateReportStatus(1)}" value="Acknowledge" styleClass="btn btn-info" disabled="#{flightReportsManagedBean.selectedFlightReport.status gt 1}"/>
+                                                <h:commandButton action="#{flightReportsManagedBean.updateReportStatus(2)}" value="Resolve" styleClass="btn btn-success" disabled="#{flightReportsManagedBean.selectedFlightReport.status lt 1}"/>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!--END OF PANEL -->
+                    </h:panelGroup>
+                </h:panelGroup>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#flight_reports_table').DataTable({
+                "stateSave": true
+            });
+        </script>
+    </ui:define>
+</ui:composition>

@@ -29,9 +29,9 @@
                                     <div class="row">
                                         <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
                                             <label class="control-label" for="flight">Flight</label>
-                                            <h:selectOneMenu id="flight" binding="#{flight}" value="#{createFlightReportManagedBean.flight}" styleClass="form-control">
+                                            <h:selectOneMenu id="flight" binding="#{flight}" value="#{createFlightReportManagedBean.flightId}" styleClass="form-control">
                                                 <f:selectItems value="#{createFlightReportManagedBean.crewFlights}" var="f"
-                                                               itemValue="#{f}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
+                                                               itemValue="#{f.id}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
                                                 </f:selectItems>
                                                 <f:ajax render="@form" />
                                             </h:selectOneMenu>
@@ -42,8 +42,8 @@
                                             <h:panelGroup styleClass="form-group col-lg-12 #{!category.valid ? 'has-error' : ''}" layout="block">
                                                 <label class="control-label" for="category">Category</label>
                                                 <h:selectOneMenu id="category" binding="#{category}" value="#{createFlightReportManagedBean.flightReport.category}" styleClass="form-control"
-                                                                 required="true" requiredMessage="Please enter the language certified.">
-                                                    <f:selectItems value="#{createFlightReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createFlightReportManagedBean.categoryList.indexOf(b)}" />
+                                                                 required="true" requiredMessage="Please choose a category.">
+                                                    <f:selectItems value="#{createFlightReportManagedBean.categoryList}" var="c" itemLabel="#{c}" itemValue="#{createFlightReportManagedBean.categoryList.indexOf(c)}" />
                                                 </h:selectOneMenu>
                                                 <h:message for="category" styleClass="help-block" />
                                             </h:panelGroup>
