@@ -148,29 +148,33 @@ public class CheckInManagedBean {
         int index = 0;
         List<ETicket> selectedConnections = getSelectedConnections();
         for (ETicket eTicket : selectedConnections) {
-            if (!flightScheduleBean.isSeatAvailable(eTicket.getFlight(), seats[index++])) {
-                authManagedBean.createAuditLog("Checked in passenger: " + eTicket.getPassengerName(), "check_in");
-                FacesMessage m = new FacesMessage("The seat selected on flight " + eTicket.getFlight().getCode() + " is no longer available.");
-                m.setSeverity(FacesMessage.SEVERITY_ERROR);
-                FacesContext.getCurrentInstance().addMessage("check-in-status", m);
-                return;
+            if (!flightScheduleBean.isSeatAvailable(eTicket.getFlight(), seats[index])) {
+                System.out.println(eTicket.getSeatNumber() + "!!!");
+                System.out.println(seats[index] + "!!!");
+                if (eTicket.getSeatNumber() != seats[index]) {
+                    FacesMessage m = new FacesMessage("The seat selected on flight " + eTicket.getFlight().getCode() + " is no longer available.");
+                    m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    FacesContext.getCurrentInstance().addMessage("check-in-status", m);
+                    return;
+                }
             }
+            index++;
         }
         index = 0;
         for (ETicket eTicket : selectedConnections) {
-            // @TODO: Double check if seat is still available, if not show error message
 
             eTicket.setSeatNumber(seats[index]);
             if (!ffpNumber.trim().equals("")) {
                 eTicket.setFfpNumber(ffpProgram + "/" + ffpNumber.trim());
             }
             eTicket.setCheckedIn(true);
+            authManagedBean.createAuditLog("Checked in passenger: " + eTicket.getPassengerName(), "check_in");
             try {
                 eTicket.setNextConnection(selectedConnections.get(index + 1));
             } catch (IndexOutOfBoundsException e) {}
             try {
                 flightScheduleBean.updateETicket(eTicket);
-                WebSocketMessage.broadcastToChannel("gateCheckUpdate", "{\"checkedIn\": true, \"passenger\": \"" + eTicket.getPassengerName() + "\"}");
+                WebSocketMessage.broadcastToChannel("gateCheckUpdate-" + eTicket.getFlight().getId(), "{\"checkedIn\": true, \"passenger\": \"" + eTicket.getPassengerName() + "\"}");
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -88,7 +88,7 @@ public class RemoteManagedBean {
 
 
                 try {
-                    WebSocketMessage.broadcastToChannel("gateCheckUpdate", "{\"boarded\": true, \"passenger\": \"" + eticket.getPassengerName() + "\"}");
+                    WebSocketMessage.broadcastToChannel("gateCheckUpdate-" + eticket.getFlight().getId(), "{\"boarded\": true, \"passenger\": \"" + eticket.getPassengerName() + "\"}");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
