@@ -50,6 +50,7 @@ public class FlightRosterBean {
         flightRoster.setFlight(flight);
         flightRoster.setMembers(members);
         flightRoster.setComplete(complete);
+        flightRoster.setSignedIn(new ArrayList<>());
         em.persist(flightRoster);
         em.flush();
         return flightRoster.getId();
@@ -124,39 +125,39 @@ public class FlightRosterBean {
         if (user == null) throw new NotFoundException();
         List<User> userList = new ArrayList<>();
         userList.add(user);
-        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.members IN :userList").setParameter("userList", userList).getResultList();
+        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.members IN :userList", FlightRoster.class).setParameter("userList", userList).getResultList();
     }
 
     public List<FlightRoster> getAllFutureFlightRosters() {
-        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.flight.departureTime > :date").setParameter("date", new Date(), TemporalType.TIMESTAMP).getResultList();
+        return em.createQuery("SELECT fr from FlightRoster fr WHERE fr.flight.departureTime > :date", FlightRoster.class).setParameter("date", new Date(), TemporalType.TIMESTAMP).getResultList();
     }
 
     public List<FlightRoster> getAllFlightRosters() {
-        return em.createQuery("SELECT fr from FlightRoster fr").getResultList();
+        return em.createQuery("SELECT fr from FlightRoster fr", FlightRoster.class).getResultList();
     }
 
-//    public void signInFR(long flightRosterId, long userId) throws NotFoundException {
-//        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
-//        User user = em.find(User.class, userId);
-//        if (flightRoster == null || user == null) throw new NotFoundException();
-//        List<User> signedIn = flightRoster.getSignedIn();
-//        if (signedIn == null) signedIn = new ArrayList<>();
-//        if (signedIn.indexOf(user) == -1) signedIn.add(user);
-//        flightRoster.setSignedIn(signedIn);
-//        em.persist(flightRoster);
-//    }
-//
-//    public void signOutFR(long flightRosterId, long userId) throws NotFoundException {
-//        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
-//        User user = em.find(User.class, userId);
-//        if (flightRoster == null || user == null) throw new NotFoundException();
-//        List<User> signedOut = flightRoster.getSignedOut();
-//        if (signedOut == null) signedOut = new ArrayList<>();
-//        if (signedOut.indexOf(user) == -1) signedOut.add(user);
-//        flightRoster.setSignedOut(signedOut);
-//        user.setCurrentLocation(flightRoster.getFlight().getAircraftAssignment().getRoute().getDestination());
-//        em.persist(flightRoster);
-//    }
+    public void signInFR(long flightRosterId, long userId) throws NotFoundException {
+        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
+        User user = em.find(User.class, userId);
+        if (flightRoster == null || user == null) throw new NotFoundException();
+        List<User> signedIn = flightRoster.getSignedIn();
+        if (signedIn == null) signedIn = new ArrayList<>();
+        if (signedIn.indexOf(user) == -1) signedIn.add(user);
+        flightRoster.setSignedIn(signedIn);
+        em.persist(flightRoster);
+    }
+
+    public void signOutFR(long flightRosterId, long userId) throws NotFoundException {
+        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
+        User user = em.find(User.class, userId);
+        if (flightRoster == null || user == null) throw new NotFoundException();
+        List<User> signedOut = flightRoster.getSignedOut();
+        if (signedOut == null) signedOut = new ArrayList<>();
+        if (signedOut.indexOf(user) == -1) signedOut.add(user);
+        flightRoster.setSignedOut(signedOut);
+        user.setCurrentLocation(flightRoster.getFlight().getAircraftAssignment().getRoute().getDestination());
+        em.persist(flightRoster);
+    }
 
     public void allocateFlightJobs() {
         List<FlightBid> flightBids = flightBidBean.getFlightBidsWithStatus(0);

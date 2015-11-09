@@ -36,7 +36,6 @@
         <class>MAS.Entity.Certification</class>
         <class>MAS.Entity.FlightBid</class>
         <class>MAS.Entity.FlightRoster</class>
-        <class>MAS.Entity.RosterSignInOut</class>
         <class>MAS.Entity.FlightDeferment</class>
         <class>MAS.Entity.FlightReport</class>
         <class>MAS.Entity.MaintenanceReport</class>

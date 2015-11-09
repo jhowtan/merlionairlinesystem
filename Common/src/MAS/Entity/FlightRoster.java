@@ -31,6 +31,7 @@ public class FlightRoster {
     private List<User> members;
 
     @ManyToMany
+    @JoinTable(name="flightroster_members")
     public List<User> getMembers() {
         return members;
     }
@@ -50,4 +51,27 @@ public class FlightRoster {
         this.complete = complete;
     }
 
+    private List<User> signedIn;
+
+    @ManyToMany
+    @JoinTable(name="flightroster_signedin")
+    public List<User> getSignedIn() {
+        return signedIn;
+    }
+
+    public void setSignedIn(List<User> signedIn) {
+        this.signedIn = signedIn;
+    }
+
+    private List<User> signedOut;
+
+    @ManyToMany
+    @JoinTable(name="flightroster_signedout")
+    public List<User> getSignedOut() {
+        return signedOut;
+    }
+
+    public void setSignedOut(List<User> signedOut) {
+        this.signedOut = signedOut;
+    }
 }

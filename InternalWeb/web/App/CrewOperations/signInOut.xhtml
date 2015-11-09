@@ -19,7 +19,7 @@
                         </ui:repeat>
                     </div>
                 </div>
-                <h:panelGroup rendered="#{signInOutManagedBean.crewSignedIn()}">
+                <h:panelGroup rendered="#{!signInOutManagedBean.crewSignedIn()}">
                     <div class="form-group col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">Sign in for flight</div>
@@ -33,11 +33,11 @@
                                     <h:form>
                                         <h:panelGroup rendered="#{signInOutManagedBean.flightRosters.size() != 0}">
                                             <div class="form-group col-lg-12 #{!flightRoster.valid ? 'has-error' : ''}">
-                                                <label class="control-label" for="flightRoster">Choose Flight Code</label>
+                                                <label class="control-label" for="flightRoster">Choose Flight</label>
                                                 <h:selectOneMenu styleClass="form-control" id="flightRoster" value="#{signInOutManagedBean.flightRosterId}" binding="#{flightRoster}">
                                                     <f:selectItem itemLabel="Select a flight"/>
                                                     <f:selectItems value="#{signInOutManagedBean.flightRosters}" var="fr"
-                                                                   itemLabel="#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
+                                                                   itemLabel="#{fr.flight.code}: #{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fr.flight.getDepartureTime())}"
                                                                    itemValue="#{fr.id}" />
                                                 </h:selectOneMenu>
                                                 <h:message for="flightRoster" styleClass="help-block" />
@@ -49,6 +49,28 @@
                                             </div>
                                         </h:panelGroup>
                                     </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{signInOutManagedBean.crewSignedIn()}">
+                    <div class="form-group col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Sign out from flight</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>#{signInOutManagedBean.getSignOutText()}</h4>
+                                    </div>
+                                    <div class="col-lg-12 text-right">
+                                        <h:form>
+                                            <div class="btn-group">
+                                                <h:commandButton id="signOutProbBtn" action="#{signInOutManagedBean.signOut()}" value="Sign Out (Report issues)" styleClass="btn btn-dangers"/>
+                                                <h:commandButton id="signOutBtn" action="#{signInOutManagedBean.signOut()}" value="Sign Out (No issues)" styleClass="btn btn-success"/>
+                                            </div>
+                                        </h:form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
