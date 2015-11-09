@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Common/Common.iml" filepath="$PROJECT_DIR$/Common/Common.iml" />
       <module fileurl="file://$PROJECT_DIR$/ExternalWeb/ExternalWeb.iml" filepath="$PROJECT_DIR$/ExternalWeb/ExternalWeb.iml" />
       <module fileurl="file://$PROJECT_DIR$/InternalWeb/InternalWeb.iml" filepath="$PROJECT_DIR$/InternalWeb/InternalWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PartnerWeb/PartnerWeb.iml" filepath="$PROJECT_DIR$/PartnerWeb/PartnerWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebService/WebService.iml" filepath="$PROJECT_DIR$/WebService/WebService.iml" />
     </modules>
   </component>
 </project>

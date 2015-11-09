@@ -4,70 +4,88 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Flights - Merlion Airline System</ui:define>
+    <ui:define name="title">Flight Reports - Merlion Airline System</ui:define>
 
     <ui:define name="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Flight Schedule</h1>
+                    <h1 class="page-header">Flight Reports</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/flights">Flights</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createFlight">Create Flight</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="flightReports">All Flight Reports</h:link></li>
+                        <li role="presentation"><h:link outcome="createFlightReport">Create Flight Report</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
-                    <table class="table table-striped" id="flights_table">
-                        <thead>
-                        <tr>
-                            <th>Flight</th>
-                            <th>Aircraft</th>
-                            <th>Route</th>
-                            <th>Departure Time</th>
-                            <th>Arrival Time</th>
-                            <th>Estimated Cost Per Mile</th>
-                            <th>Recurring Group</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{flightsManagedBean.getAllFlights()}" var="fl">
-                            <tr>
-                                <td>#{fl.code}</td>
-                                <td>#{fl.aircraftAssignment.getAircraft().getTailNumber()}</td>
-                                <td>#{fl.aircraftAssignment.getRoute().getOrigin().getId()} - #{fl.aircraftAssignment.getRoute().getDestination().getId()}</td>
 
-                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.departureTime)}</td>
-                                <td>#{commonManagedBean.formatDate("dd MMM yy, HH:mm",fl.arrivalTime)}</td>
-                                <td>#{commonManagedBean.formatMoney(flightsManagedBean.estimatedCost(fl.id)/fl.aircraftAssignment.getRoute().getDistance())}</td>
-                                <td>
-                                    <h:link outcome="/App/FlightPlanning/updateFlightGroup" styleClass="btn btn-default btn-xs btn-primary #{fl.flightGroup == null ? 'disabled' : ''}"><f:param name="flightGroupId" value="#{fl.flightGroup != null ? fl.flightGroup.id : -1}"><i class="fa fa-pencil"></i> Edit Group #{fl.flightGroup.id}</f:param></h:link>
-                                </td>
-                                <td>
-                                    <h:form>
-                                        <div class="btn-group">
-                                            <h:link outcome="/App/FlightPlanning/updateFlight" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>
-                                            <h:commandLink action="#{flightsManagedBean.delete(fl.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete flight: #{fl.code}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
-                                        </div>
-                                    </h:form>
-                                </td>
-                            </tr>
-                        </ui:repeat>
-                        </tbody>
-                    </table>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Flight Report Details</div>
+                        <div class="panel-body">
+                            <table class="table table-striped" id="flight_reports_table">
+                                <thead>
+                                <tr>
+                                    <th>Crew Staff</th>
+                                    <th>Flight</th>
+                                    <th>Origin-Destination</th>
+                                    <th>View Report</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{flightReportsManagedBean.getAllFlightReports()}" var="fr">
+                                    <tr>
+                                        <td>#{commonManagedBean.formatName(fr.user)}</td>
+                                        <td>#{fr.flight.code} (#{commonManagedBean.formatDate("dd/MM/yy, hh:mm", fr.flight.departureTime)})</td>
+                                        <td>#{fr.flight.aircraftAssignment.route.origin.id} - #{fr.flight.aircraftAssignment.route.destination.id}</td>
+                                        <td>
+                                            <h:form>
+                                                <h:commandLink action="#{flightReportsManagedBean.setSelectedFlightReport(fr)}"
+                                                               styleClass="btn btn-default btn-xs btn-primary">
+                                                    <i class="fa fa-arrow-right"/>
+                                                    <f:ajax render="flightReportDetails" onevent="
+                                                                function(data) {
+                                                                    if (data.status == 'success') {
+                                                                        $('#flight-report-details').collapse();
+                                                                        $('html, body').animate({ scrollTop: $('#flight-report-details').offset().top }, 'slow');
+                                                                    }}"/>
+                                                </h:commandLink>
+                                            </h:form>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <h:panelGroup class="text-right" rendered="#{!flightReportsManagedBean.isOpsReportManager()}">
+                        <h:link outcome="createFlightReport" styleClass="btn btn-default btn-md btn-success"><i class="fa fa-pencil"></i>Create Flight Report</h:link>
+                    </h:panelGroup>
                 </div>
+                <h:panelGroup id="flightReportDetails" styleClass="col-lg-12" rendered="#{flightReportsManagedBean.isOpsReportManager()}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="flight-report-heading">
+                            <a data-toggle="collapse" href="#flight-report-details" aria-controls="flight-report-details">
+                                Flight Report Details
+                            </a>
+                        </div>
+                        <div class="panel-collapse collapse" id="flight-report-details" aria-labelledby="#flight-report-heading">
+                            <div class="panel-body">
+                                <!-- FLIGHT REPORT DETAILS-->
+                            </div>
+                        </div>
+                    </div> <!--END OF PANEL -->
+                </h:panelGroup>
             </div>
         </div>
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#flights_table').DataTable({
+            $('#flight_reports_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
                 ]
             });
         </script>

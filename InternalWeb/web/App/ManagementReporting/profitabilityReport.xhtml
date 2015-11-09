@@ -38,14 +38,14 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="bookclass-chart-heading">
-                            <a data-toggle="collapse" href="#bookclass-chart" aria-controls="bookclass-chart">
-                                Top Performing Booking Classes
+                        <div class="panel-heading" id="badflights-chart-heading">
+                            <a data-toggle="collapse" href="#badflights-chart" aria-controls="badflights-chart">
+                                Worst Performing Flights
                             </a>
                         </div>
-                        <div class="panel-collapse collapse in" id="bookclass-chart" aria-labelledby="#bookclass-chart-heading">
+                        <div class="panel-collapse collapse in" id="badflights-chart" aria-labelledby="#badflights-chart-heading">
                             <div class="panel-body">
-                                <div id="top-booking-classes"></div>
+                                <div id="bad-flights"></div>
                             </div>
                         </div>
                     </div>
@@ -335,17 +335,17 @@
                         flightsChart.setData(data);
                     }
                 });
-                var bookingClassChart = new Morris.Bar({
-                    element: 'top-booking-classes',
+                var badFlightsChart = new Morris.Bar({
+                    element: 'bad-flights',
                     data: [],
                     xkey: 'name',
                     ykeys: ['value'],
                     labels: ['Net Revenue Change']
                 });
                 $.ajax({
-                    url: 'reportingData.xhtml?q=topPerformingBookingClass',
+                    url: 'reportingData.xhtml?q=worstPerformingFlights',
                     success: function(data) {
-                        bookingClassChart.setData(data);
+                        badFlightsChart.setData(data);
                     }
                 });
                 bookingClassTableDataTable();
