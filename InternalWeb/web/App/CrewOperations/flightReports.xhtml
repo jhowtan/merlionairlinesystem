@@ -7,6 +7,7 @@
     <ui:define name="title">Flight Reports - Merlion Airline System</ui:define>
 
     <ui:define name="content">
+
         <h:panelGroup class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -47,9 +48,9 @@
                                         <td>#{commonManagedBean.reportStatusToString(fr.status)}</td>
                                         <h:form rendered="#{flightReportsManagedBean.isOpsReportManager()}">
                                             <td>
-                                                <h:commandLink action="#{flightReportsManagedBean.setSelectedFlightReport(fr)}"
+                                                <h:commandLink action="#{flightReportsManagedBean.viewSelectedReport(fr.id)}"
                                                                styleClass="btn btn-default btn-xs btn-primary" value="View">
-                                                    <f:ajax render="flightReportDetails" onevent="
+                                                    <f:ajax render="flightReportDetails ops-buttons" onevent="
                                                                 function(data) {
                                                                     if (data.status == 'success') {
                                                                         $('#flight-report-details').collapse();
@@ -130,9 +131,9 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <h:form>
+                                        <h:form id="ops-buttons">
                                             <div class="btn-group">
-                                                <h:commandButton action="#{flightReportsManagedBean.updateReportStatus(1)}" value="Acknowledge" styleClass="btn btn-info" disabled="#{flightReportsManagedBean.selectedFlightReport.status gt 1}"/>
+                                                <h:commandButton action="#{flightReportsManagedBean.updateReportStatus(1)}" value="Acknowledge" styleClass="btn btn-info" disabled="#{flightReportsManagedBean.selectedFlightReport.status ge 1}"/>
                                                 <h:commandButton action="#{flightReportsManagedBean.updateReportStatus(2)}" value="Resolve" styleClass="btn btn-success" disabled="#{flightReportsManagedBean.selectedFlightReport.status lt 1}"/>
                                             </div>
                                         </h:form>
