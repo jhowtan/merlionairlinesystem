@@ -9,10 +9,7 @@ import javax.faces.bean.ViewScoped;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 @ManagedBean
 @ViewScoped
@@ -34,6 +31,9 @@ public class BookingManagedBean {
     List<WsFlightResultArray> returnSearchResult;
     List<Long> selectedBookingClasses;
 
+    // Step 3
+    private List<PassengerDetails> passengersDetails;
+
     public void nextStep() throws DatatypeConfigurationException {
         step++;
         if (dds == null) {
@@ -41,6 +41,10 @@ public class BookingManagedBean {
         }
         switch (step) {
             case 2:
+                passengersDetails = new ArrayList<>();
+                for (int i = 0; i < passengers; i++) {
+                    passengersDetails.add(new PassengerDetails());
+                }
                 int travelDuration = 0;
                 if (returnDate != null) {
                     travelDuration = (int) ((returnDate.getTime() - departureDate.getTime()) / 1000 / 60 / 60 / 24);
@@ -48,12 +52,12 @@ public class BookingManagedBean {
                     returnDateG.setTime(returnDate);
                     XMLGregorianCalendar returnDateXML = DatatypeFactory.newInstance().newXMLGregorianCalendar(returnDateG );
                     returnSearchResult = dds.searchAvailableFlights(destination, origin, returnDateXML, passengers, travelClass, travelDuration);
-                    selectedBookingClasses = new ArrayList<>();
                 }
                 GregorianCalendar departureDateG = new GregorianCalendar();
                 departureDateG.setTime(departureDate);
                 XMLGregorianCalendar departureDateXML = DatatypeFactory.newInstance().newXMLGregorianCalendar(departureDateG);
                 outboundSearchResult = dds.searchAvailableFlights(origin, destination, departureDateXML, passengers, travelClass, travelDuration);
+                selectedBookingClasses = new ArrayList<>();
                 break;
         }
     }
@@ -68,6 +72,16 @@ public class BookingManagedBean {
 
     public boolean isBookingClassSelected(long id) {
         return selectedBookingClasses.contains(id);
+    }
+
+    public LinkedHashMap<String, String> getFFPAllianceList() {
+        String[] FFP_ALLIANCE_LIST_CODE = {"MA", "A3", "AC", "CA", "AI", "NZ", "NH", "OZ", "AV", "O6", "CM", "MS", "ET", "BR", "B6", "LH", "SK", "SQ", "SA", "JJ", "TP", "TG", "TK", "UA", "VX", "VS", "VA", "UK"};
+        String[] FFP_ALLIANCE_LIST_NAME = {"Merlion Airlines - MerlionFlyer Elite", "Aegean Airlines - Miles&Bonus", "Air Canada - Aeroplan", "Air China / Shenzhen Airlines - PhoenixMiles", "Air India - Flying Returns", "Air New Zealand - AirPoints", "ANA - ANA Mileage Club", "Asiana Airlines - Asiana Club", "Avianca - LifeMiles", "Avianca Brazil - Amigo", "Copa Airlines - ConnectMiles", "EgyptAir - EgyptAir Plus", "Ethiopian Airlines - ShebaMiles", "EVA Air - Infinity MileageLands", "JetBlue - TrueBlue", "Lufthansa - Miles & More", "Scandinavian Airlines - EuroBonus", "Singapore Airlines - KrisFlyer", "South African Airways - Voyager", "TAM Airlines - Fidelidade", "TAP Portugal - Victoria", "THAI - Royal Orchid Plus", "Turkish Airlines - Miles&Smiles", "United - MileagePlus", "Virgin America - Elevate", "Virgin Atlantic - Flying Club", "Virgin Australia - Velocity", "Vistara - Club Vistara"};
+        LinkedHashMap<String, String> ffpAllianceList = new LinkedHashMap<>();
+        for (int i = 0; i < FFP_ALLIANCE_LIST_CODE.length; i++) {
+            ffpAllianceList.put(FFP_ALLIANCE_LIST_NAME[i], FFP_ALLIANCE_LIST_CODE[i]);
+        }
+        return ffpAllianceList;
     }
 
     public void prevStep() {
@@ -152,5 +166,52 @@ public class BookingManagedBean {
 
     public void setSelectedBookingClasses(List<Long> selectedBookingClasses) {
         this.selectedBookingClasses = selectedBookingClasses;
+    }
+
+    public List<PassengerDetails> getPassengersDetails() {
+        return passengersDetails;
+    }
+
+    public void setPassengersDetails(List<PassengerDetails> passengersDetails) {
+        this.passengersDetails = passengersDetails;
+    }
+
+    public class PassengerDetails {
+        private String firstName;
+        private String lastName;
+        private String ffpProgram;
+        private String ffpNumber;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getFfpProgram() {
+            return ffpProgram;
+        }
+
+        public void setFfpProgram(String ffpProgram) {
+            this.ffpProgram = ffpProgram;
+        }
+
+        public String getFfpNumber() {
+            return ffpNumber;
+        }
+
+        public void setFfpNumber(String ffpNumber) {
+            this.ffpNumber = ffpNumber;
+        }
     }
 }

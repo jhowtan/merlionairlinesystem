@@ -123,7 +123,7 @@
                 </h:panelGroup>
 
 
-                <h:panelGroup styleClass="panel panel-default" layout="block">
+                <h:panelGroup styleClass="panel panel-default" layout="block" rendered="#{! empty bookingManagedBean.returnDate}">
                     <div class="panel-heading">
                         <h3 class="panel-title">Return Flights</h3>
                     </div>
@@ -172,6 +172,58 @@
             </h:form>
         </h:panelGroup>
 
+        <h:panelGroup styleClass="container" rendered="#{bookingManagedBean.step == 3}" layout="block">
+            <h:form>
+
+                <ui:repeat value="#{bookingManagedBean.passengersDetails}" var="passengerDetails" varStatus="varStatus">
+                    <h2>Passenger #{varStatus.index + 1}</h2>
+                    <hr />
+                    <div class="form-group #{!firstName.valid ? 'has-error' : ''}">
+                        <label class="control-label" for="firstName">First Name</label>
+                        <h:inputText value="#{passengerDetails.firstName}" binding="#{firstName}" class="form-control" id="firstName"
+                                     required="true" requiredMessage="Please enter the passenger's first name.">
+                        </h:inputText>
+                        <h:message for="firstName" styleClass="help-block" />
+                    </div>
+
+                    <div class="form-group #{!lastName.valid ? 'has-error' : ''}">
+                        <label class="control-label" for="lastName">Last Name</label>
+                        <h:inputText value="#{passengerDetails.lastName}" binding="#{lastName}" class="form-control" id="lastName"
+                                     required="true" requiredMessage="Please enter the passenger's last name.">
+                        </h:inputText>
+                        <h:message for="lastName" styleClass="help-block" />
+                    </div>
+
+                    <div class="form-group #{!ffpProgram.valid ? 'has-error' : ''}">
+                        <label class="control-label" for="ffpProgram">Frequent Flyer Program</label>
+                        <h:selectOneMenu id="ffpProgram"
+                                         binding="#{ffpProgram}"
+                                         value="#{passengerDetails.ffpProgram}"
+                                         styleClass="form-control">
+                            <f:selectItems value="#{bookingManagedBean.getFFPAllianceList()}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="form-group #{!ffpNumber.valid ? 'has-error' : ''}">
+                        <label class="control-label" for="ffpNumber">Frequent Flyer Number <small class="text-muted">(optional)</small></label>
+                        <h:inputText value="#{passengerDetails.ffpNumber}" binding="#{ffpNumber}" class="form-control" id="ffpNumber">
+                        </h:inputText>
+                        <h:message for="ffpNumber" styleClass="help-block" />
+                    </div>
+                    <br />
+                </ui:repeat>
+
+                <div class="text-center">
+                    <div class="pull-left">
+                        <h:commandButton immediate="true" action="#{bookingManagedBean.prevStep()}" value="Back" styleClass="btn btn-primary btn-lg" />
+                    </div>
+                    <div class="pull-right">
+                        <h:commandButton action="#{bookingManagedBean.nextStep()}" value="Make Booking" styleClass="btn btn-success btn-lg" disabled="#{bookingManagedBean.selectedBookingClasses.size() == 0}" />
+                    </div>
+                </div>
+            </h:form>
+        </h:panelGroup>
+        <br />
     </div>
 
 </h:body>
