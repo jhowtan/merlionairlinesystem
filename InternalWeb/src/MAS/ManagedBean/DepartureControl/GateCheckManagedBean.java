@@ -33,6 +33,8 @@ public class GateCheckManagedBean {
     FFPBean ffpBean;
     @EJB
     CustomerLogBean customerLogBean;
+    @EJB
+    PartnerMilesBean partnerMilesBean;
 
     private Flight flight;
 
@@ -73,17 +75,17 @@ public class GateCheckManagedBean {
             if (!Arrays.asList(Constants.FFP_ALLIANCE_LIST_CODE).contains(parts[0])) continue;
             if (!eticket.isGateChecked()) continue;
 
-            if (parts[0].equals("MA")) {
-                try {
+            try {
+                FareRule fareRule = eticket.getBookingClass().getFareRule();
+
+                int miles = (milesFlown * fareRule.getMilesAccrual()) / 100;
+                miles = (miles * travelClassMultiplier(eticket)) / 100;
+
+                int eliteMiles = milesFlown;
+                eliteMiles = (eliteMiles * travelClassMultiplier(eticket)) / 100;
+
+                if (parts[0].equals("MA")) {
                     Customer customer = customerBean.getCustomer(Long.parseLong(parts[1]));
-                    FareRule fareRule = eticket.getBookingClass().getFareRule();
-
-                    int miles = (milesFlown * fareRule.getMilesAccrual()) / 100;
-                    miles = (miles * travelClassMultiplier(eticket)) / 100;
-
-                    int eliteMiles = milesFlown;
-                    eliteMiles = (eliteMiles * travelClassMultiplier(eticket)) / 100;
-
                     ffpBean.creditEliteMiles(customer.getId(), eliteMiles);
                     ffpBean.creditMiles(customer.getId(), miles);
 
@@ -95,11 +97,11 @@ public class GateCheckManagedBean {
                             eliteMiles + " Elite Miles earned for flight " + flight.getCode() +
                                     " from " + flight.getAircraftAssignment().getRoute().getOrigin() +
                                     " to " + flight.getAircraftAssignment().getRoute().getDestination(), "elite_miles");
-                } catch (NotFoundException e) {
-                    continue;
+                } else {
+                    partnerMilesBean.awardMiles(ffp, miles);
                 }
-            } else {
-                // @TODO: Credit Partner Miles
+            } catch (NotFoundException e) {
+                continue;
             }
         }
     }
