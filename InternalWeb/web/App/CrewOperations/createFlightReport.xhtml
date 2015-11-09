@@ -33,7 +33,6 @@
                                                 <f:selectItems value="#{createFlightReportManagedBean.crewFlights}" var="f"
                                                                itemValue="#{f.id}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
                                                 </f:selectItems>
-                                                <f:ajax render="@form" />
                                             </h:selectOneMenu>
                                             <h:message for="flight" styleClass="help-block" />
                                         </div>
