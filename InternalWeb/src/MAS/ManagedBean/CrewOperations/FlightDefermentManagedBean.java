@@ -42,6 +42,10 @@ public class FlightDefermentManagedBean {
 
     @PostConstruct
     private void init() {
+        load();
+    }
+
+    private void load() {
         try {
             if (!isCrewManager()) {
                 flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
@@ -82,6 +86,7 @@ public class FlightDefermentManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public boolean hasFlightDeferment() {
@@ -114,6 +119,7 @@ public class FlightDefermentManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public boolean hasFlightRoster() {

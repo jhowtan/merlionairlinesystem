@@ -33,6 +33,10 @@ public class SignInOutManagedBean {
 
     @PostConstruct
     private void init() {
+        load();
+    }
+
+    private void load() {
         try {
             flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
             for (int i = 0; i < flightRosters.size(); i++) {
@@ -66,6 +70,7 @@ public class SignInOutManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public void signOut() {
@@ -80,6 +85,7 @@ public class SignInOutManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public String signOutProblem() {

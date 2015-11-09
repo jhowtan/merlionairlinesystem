@@ -49,6 +49,10 @@ public class FlightBiddingManagedBean {
 
     @PostConstruct
     private void init() {
+        load();
+    }
+
+    private void load() {
         flightsBidded = new ArrayList<>();
         try {
             FlightBid pastBid = flightBidBean.getFlightBidOfUser(authManagedBean.getUserId());
@@ -131,6 +135,7 @@ public class FlightBiddingManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public String getSendButtonText() {

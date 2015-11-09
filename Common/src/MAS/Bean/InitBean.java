@@ -233,6 +233,7 @@ public class InitBean {
                 ArrayList<Long> flightCrewPermissions = new ArrayList<>();
                 flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_BID).getId());
                 flightCrewPermissions.add(roleBean.findPermission(Permissions.CREW_CERTIFICATION).getId());
+                flightCrewPermissions.add(roleBean.findPermission(Permissions.FLIGHT_REPORTING).getId());
                 long roleId = roleBean.createRole("Flight Crew", flightCrewPermissions);
                 for (int i = 0; i < 200; i ++) { //Cabin crew
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];

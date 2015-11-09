@@ -51,10 +51,16 @@ public class FlightRosterManagedBean {
 
     @PostConstruct
     private void init() {
+        load();
+    }
+
+    private void load() {
         Date start = new Date();
         Date end = Utils.monthEnd(2);
         flights = flightScheduleBean.getFlightWithinDate(start, end);
         crew = new ArrayList<>();
+        flightRoster = null;
+        flightId = 0;
     }
 
     public void flightCodeChangeListener(AjaxBehaviorEvent event) {
@@ -108,6 +114,7 @@ public class FlightRosterManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+        load();
     }
 
     public boolean hasFlight() {
