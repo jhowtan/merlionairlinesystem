@@ -68,7 +68,20 @@ public class FlightDefermentManagedBean {
     }
 
     public void replaceFlightCrew(User replacement) {
-
+        try {
+            flightDefermentBean.setReplacement(flightDeferment.getId(), replacement.getId());
+            flightRosterBean.setReplacement(flightDeferment.getFlightRoster().getId(), flightDeferment.getDeferrer().getId(), replacement.getId());
+            flightDefermentBean.changeDefermentStatus(flightDeferment.getId(), 1);
+            flightDeferment = null;
+            FacesMessage m = new FacesMessage("Flight deferment resolved.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesMessage m = new FacesMessage("Unable to resolve flight deferment.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public boolean hasFlightDeferment() {

@@ -51,4 +51,19 @@ public class FlightDefermentBean {
     public List<FlightDeferment> getUnresolvedDeferments() {
         return em.createQuery("SELECT fd from FlightDeferment fd WHERE fd.status = 0", FlightDeferment.class).getResultList();
     }
+
+    public void setReplacement(long id, long replacementId) throws NotFoundException {
+        FlightDeferment flightDeferment = em.find(FlightDeferment.class, id);
+        User replacement = em.find(User.class, replacementId);
+        if (flightDeferment == null || replacement == null) throw new NotFoundException();
+        flightDeferment.setReplacement(replacement);
+        em.persist(flightDeferment);
+    }
+
+    public void changeDefermentStatus(long id, int status) throws NotFoundException {
+        FlightDeferment flightDeferment = em.find(FlightDeferment.class, id);
+        if (flightDeferment == null) throw new NotFoundException();
+        flightDeferment.setStatus(status);
+        em.persist(flightDeferment);
+    }
 }

@@ -242,13 +242,42 @@ public class FlightRosterBean {
         }
     }
 
+    public void setReplacement(long flightRosterId, long deferrerId, long replacementId) throws NotFoundException{
+        FlightRoster flightRoster = em.find(FlightRoster.class, flightRosterId);
+        User deferrer = em.find(User.class, deferrerId);
+        User replacement = em.find(User.class, replacementId);
+        if (flightRoster == null || deferrer == null || replacement == null) throw new NotFoundException();
+        List<User> crew = flightRoster.getMembers();
+        if (crew.indexOf(deferrer) != -1) {
+            crew.remove(deferrer);
+            crew.add(replacement);
+        }
+        flightRoster.setMembers(crew);
+        em.persist(flightRoster);
+    }
+
     public List<User> getReplacement(Flight flight, int jobId) {
         List<User> result = new ArrayList<>();
         try {
             result = userBean.getUsersAtAirportWithJob(flight.getAircraftAssignment().getRoute().getOrigin().getId(), jobId);
-            System.out.println(result);
+            Airport airport = flight.getAircraftAssignment().getRoute().getOrigin();
+            for (int i = 0; i < result.size(); i++) {
+                User user = result.get(i);
+                List<FlightRoster> flightRosters = getFlightRostersOfUser(user.getId());
+                for (int j = 0; j < flightRosters.size(); j++) {
+                    FlightRoster flightRoster = flightRosters.get(j);
+                    if (flightRoster.getFlight().getAircraftAssignment().getRoute().getOrigin().equals(airport)) {
+                        if (flight.getDepartureTime().compareTo(flightRoster.getFlight().getDepartureTime()) >= 0) {
+                            result.remove(i);
+                            i--;
+                            break;
+                        }
+                    }
+                }
+            }
+            return result;
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return result;
     }
