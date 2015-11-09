@@ -171,6 +171,19 @@ public class SeatConfigObject {
         return result;
     }
 
+    public int getFirstSeatInTravelClass(int travelClass) throws NotFoundException {
+        int prevCabins = 0;
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < cabins.size(); i++) {
+            Cabin currCabin = cabins.get(i);
+            if (currCabin.getTravelClass() == travelClass) {
+                return prevCabins;
+            }
+            prevCabins += currCabin.seatCount();
+        }
+        throw new NotFoundException();
+    }
+
     public LinkedHashMap<String, Integer> getAvailableSeatsNameForTravelClass(int travelClass) {
         List<Integer> seats = getAvailableSeatsForTravelClass(travelClass);
         LinkedHashMap<String, Integer> availableSeatsName = new LinkedHashMap<>();
@@ -185,7 +198,7 @@ public class SeatConfigObject {
     }
 
     public String convertIntToString(int seatNumber) throws NotFoundException {
-        if (seatNumber > getTotalSeats())
+        if (seatNumber > getTotalSeats() || seatNumber < 0)
             throw new NotFoundException();
         int inCabin = findInCabin(seatNumber);
         int row = 0;
@@ -242,7 +255,7 @@ public class SeatConfigObject {
     private int findRowInCabin(int rowNumber) throws NotFoundException {
         for (int i = 0; i < cabins.size(); i++) {
             Cabin currCabin = cabins.get(i);
-            if (rowNumber < currCabin.getNumRows())
+            if (rowNumber <= currCabin.getNumRows())
                 return i;
             else
                 rowNumber -= currCabin.getNumRows();

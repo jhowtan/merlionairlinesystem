@@ -328,4 +328,9 @@ public class FlightScheduleBean {
                 .getSingleResult() == 0;
     }
 
+    public List<ETicket> getCustomerEtickets(Long id) {
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.ffpNumber = :ffpNumber", ETicket.class)
+                .setParameter("ffpNumber", "MA/" + id)
+                .getResultList();
+    }
 }

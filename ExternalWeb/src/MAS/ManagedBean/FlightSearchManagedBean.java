@@ -1,22 +1,16 @@
 package MAS.ManagedBean;
 
-import MAS.Bean.BookFlightBean;
-import MAS.Bean.FlightSearchBean;
-import MAS.Bean.PNRBean;
-import MAS.Bean.RouteBean;
+import MAS.Bean.*;
 import MAS.Common.Constants;
 import MAS.Common.FlightSearchItem;
 import MAS.Common.FlightSearchResult;
-import MAS.Entity.Airport;
-import MAS.Entity.BookingClass;
-import MAS.Entity.PNR;
-import MAS.Entity.Route;
-import MAS.Exception.BookingException;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.*;
 
@@ -31,7 +25,16 @@ public class FlightSearchManagedBean {
     @EJB
     BookFlightBean bookFlightBean;
     @EJB
+    FlightScheduleBean flightScheduleBean;
+    @EJB
     PNRBean pnrBean;
+    @EJB
+    FFPBean ffpBean;
+    @EJB
+    CustomerLogBean customerLogBean;
+
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
 
     private int step = 1;
 
@@ -57,12 +60,18 @@ public class FlightSearchManagedBean {
 
     // Step 4
     private double totalPricePerPerson;
+    private double totalPrice;
     private List<PassengerDetails> passengersDetails;
     private String paymentName;
     private String paymentCard;
+    private int milesRedeemed;
 
     // Step 5
     private PNR pnr;
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
 
     public class PassengerDetails {
         private String firstName;
@@ -106,6 +115,18 @@ public class FlightSearchManagedBean {
     @PostConstruct
     public void init() {
         setAirports(routeBean.getAllAirports());
+    }
+
+    public boolean canRedeemMiles() {
+        return authManagedBean.isAuthenticated();
+    }
+
+    public double getTotalPayable() {
+        return Math.max(0, (totalPrice * 100 - milesRedeemed * Constants.MILES_TO_CENTS) / 100);
+    }
+
+    public int maxMilesRedeemable() {
+        return Math.min(authManagedBean.retrieveCustomer().getMiles(), (int) Math.ceil(totalPrice * 100 / Constants.MILES_TO_CENTS));
     }
 
     public LinkedHashMap<String, String> getFFPAllianceList() {
@@ -190,7 +211,16 @@ public class FlightSearchManagedBean {
                 }
                 passengersDetails = new ArrayList<>();
                 for (int i = 0; i < passengers; i++) {
-                    passengersDetails.add(new PassengerDetails());
+                    if (authManagedBean.isAuthenticated() && i == 0) {
+                        PassengerDetails p = new PassengerDetails();
+                        p.firstName = authManagedBean.retrieveCustomer().getFirstName();
+                        p.lastName = authManagedBean.retrieveCustomer().getLastName();
+                        p.ffpNumber = String.valueOf(authManagedBean.getCustomerId());
+                        p.ffpProgram = "MA";
+                        passengersDetails.add(p);
+                    } else {
+                        passengersDetails.add(new PassengerDetails());
+                    }
                 }
                 break;
             case 3:
@@ -206,6 +236,8 @@ public class FlightSearchManagedBean {
                 for (BookingClass bookingClass : selectedBookingClasses.values()) {
                     totalPricePerPerson += bookingClass.getPrice();
                 }
+                totalPrice = totalPricePerPerson * passengers;
+                milesRedeemed = 0;
                 break;
             case 5:
                 try {
@@ -221,6 +253,31 @@ public class FlightSearchManagedBean {
                         pnrBean.setSpecialServiceRequest(pnr, pnrBean.getPassengerNumber(pnr, passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase()), Constants.SSR_ACTION_CODE_FFP, passengerDetails.ffpProgram + "/" + passengerDetails.ffpNumber);
                     }
                     pnrBean.updatePNR(pnr);
+                    for (String passenger : pnr.getPassengers()) {
+                        int passengerNum = pnrBean.getPassengerNumber(pnr, passenger);
+                        String ffpNumber = null;
+                        for (PassengerDetails passengerDetails : passengersDetails) {
+                            if (passenger.toUpperCase().equals(passengerDetails.lastName.toUpperCase() + "/" + passengerDetails.firstName.toUpperCase())) {
+                                if (passengerDetails.ffpNumber != null && !passengerDetails.ffpNumber.equals("")) {
+                                    ffpNumber = passengerDetails.getFfpProgram() + "/" + passengerDetails.ffpNumber;
+                                }
+                                break;
+                            }
+                        }
+                        if (ffpNumber != null) {
+                            for (SpecialServiceRequest ssr : pnrBean.getPassengerSpecialServiceRequests(pnr, passengerNum)) {
+                                if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+                                    ETicket eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+                                    eTicket.setFfpNumber(ffpNumber);
+                                    flightScheduleBean.updateETicket(eTicket);
+                                }
+                            }
+                        }
+                    }
+                    if (milesRedeemed > 0) {
+                        ffpBean.redeemMiles(authManagedBean.getCustomerId(), milesRedeemed);
+                        customerLogBean.createCustomerLog(authManagedBean.getCustomerId(), "Redeemed miles for booking " + pnr.getBookingReference(), "redeem_miles");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -408,5 +465,21 @@ public class FlightSearchManagedBean {
 
     public void setPnr(PNR pnr) {
         this.pnr = pnr;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getMilesRedeemed() {
+        return milesRedeemed;
+    }
+
+    public void setMilesRedeemed(int milesRedeemed) {
+        this.milesRedeemed = milesRedeemed;
     }
 }

@@ -13,6 +13,10 @@ body {
     font-weight: 300;
 }
 
+.btn-no-uppercase {
+    text-transform: none;
+}
+
 /* Bootstrap Navbar Color */
 
 .navbar-merlion {
@@ -315,6 +319,49 @@ section.splash.home {
     section.splash.home .booking-form {
         margin-top: 50px;
     }
+}
+
+/* FFP Main Page */
+div.summary-header {
+    margin-bottom: 50px;
+}
+
+
+section.content h1.ffp-title{
+    color: #3755A6;
+    font-weight: 300;
+    font-size: 42px;
+    letter-spacing: -2px;
+    word-spacing: 10px;
+    line-height: 1.1;
+    margin-bottom: 25px;
+}
+
+section.content h1.miles-summary{
+    font-weight: lighter;
+    font-size: 42px;
+    letter-spacing: -2px;
+    word-spacing: 10px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+section.content div.cust-display{
+    margin-top: 20px;
+}
+
+section.content span.miles-count{
+    display: inline-block;
+    font-size: 2em;
+    font-weight: lighter;
+    line-height: 2;
+}
+
+section.content span.miles-expiry{
+    display: inline-block;
+    font-size: 1.2em;
+    font-weight: 500;
+    line-height: 1.1;
 }
 
 /* Authentication Splash */

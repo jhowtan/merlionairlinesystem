@@ -47,7 +47,7 @@
                 <ul class="nav navbar-nav navbar-nav-primary">
                     <li><a href="#{commonManagedBean.getRoot()}/booking">Book</a></li>
                     <li><a href="#">Check In</a></li>
-                    <li><a href="#">Manage</a></li>
+                    <li><a href="#{commonManagedBean.getRoot()}/booking/manage.xhtml">Manage</a></li>
                 </ul>
 
                 <div class="nav navbar-nav navbar-divider"></div>
@@ -59,7 +59,7 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right navbar-nav-tertiary">
-                    <li><a href="#"><i class="fa fa-fw fa-plane"></i> <strong>MerlionFlyer</strong></a></li>
+                    <li><a href="#{commonManagedBean.getRoot()}/ffp"><i class="fa fa-fw fa-plane"></i> <strong>MerlionFlyer</strong></a></li>
 
                     <ui:fragment rendered="#{authManagedBean.authenticated}">
                         <li class="dropdown hidden-xs">
