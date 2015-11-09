@@ -46,16 +46,32 @@ public class CampaignBean {
         campaign.setDiscount(discount);
         campaign.setCode(code);
         campaign.setBookingClasses(bookingClasses);
+        campaign.setUsage(0);
+        campaign.setCampaignGroups(new ArrayList<>());
         em.persist(campaign);
         em.flush();
         return campaign.getId();
     }
 
-    public void setCampaignGroup(long campaignId, long campaignGrpId) throws NotFoundException {
+    public void addCampaignGroup(long campaignId, long campaignGrpId) throws NotFoundException {
         Campaign campaign = em.find(Campaign.class, campaignId);
         CampaignGroup campaignGroup = em.find(CampaignGroup.class, campaignGrpId);
         if (campaign == null || campaignGroup == null) throw new NotFoundException();
-        campaign.setCampaignGroup(campaignGroup);
+        List<CampaignGroup> campaignGroups = campaign.getCampaignGroups();
+        if (campaignGroups.indexOf(campaignGroup) == -1)
+            campaignGroups.add(campaignGroup);
+        campaign.setCampaignGroups(campaignGroups);
+        em.persist(campaign);
+    }
+
+    public void removeCampaignGroup(long campaignId, long campaignGrpId) throws NotFoundException {
+        Campaign campaign = em.find(Campaign.class, campaignId);
+        CampaignGroup campaignGroup = em.find(CampaignGroup.class, campaignGrpId);
+        if (campaign == null || campaignGroup == null) throw new NotFoundException();
+        List<CampaignGroup> campaignGroups = campaign.getCampaignGroups();
+        if (campaignGroups.indexOf(campaignGroup) != -1)
+            campaignGroups.remove(campaignGroup);
+        campaign.setCampaignGroups(campaignGroups);
         em.persist(campaign);
     }
 
@@ -63,6 +79,10 @@ public class CampaignBean {
         Campaign campaign = em.find(Campaign.class, id);
         if (campaign == null) throw new NotFoundException();
         em.remove(campaign);
+    }
+
+    public List<Campaign> getAllCampaigns() {
+        return em.createQuery("SELECT c from Campaign c", Campaign.class).getResultList();
     }
 
     public long createCampaignGroup(List<Long> customerIds) throws NotFoundException {
@@ -89,5 +109,9 @@ public class CampaignBean {
         CampaignGroup campaignGroup = em.find(CampaignGroup.class, id);
         if (campaignGroup == null) throw new NotFoundException();
         return campaignGroup;
+    }
+
+    public List<CampaignGroup> getAllCampaignGroups() {
+        return em.createQuery("SELECT c from CampaignGroup c", CampaignGroup.class).getResultList();
     }
 }

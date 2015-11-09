@@ -102,17 +102,6 @@ public class Campaign {
         this.targetEndDate = targetEndDate;
     }
 
-    private CampaignGroup campaignGroup;
-
-    @ManyToOne
-    public CampaignGroup getCampaignGroup() {
-        return campaignGroup;
-    }
-
-    public void setCampaignGroup(CampaignGroup campaignGroup) {
-        this.campaignGroup = campaignGroup;
-    }
-
     private List<String> bookingClasses;
 
     @ElementCollection
@@ -133,5 +122,27 @@ public class Campaign {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    private int usage;
+
+    @Basic
+    public int getUsage() {
+        return usage;
+    }
+
+    public void setUsage(int usage) {
+        this.usage = usage;
+    }
+
+    private List<CampaignGroup> campaignGroups;
+
+    @ManyToMany
+    public List<CampaignGroup> getCampaignGroups() {
+        return campaignGroups;
+    }
+
+    public void setCampaignGroups(List<CampaignGroup> campaignGroups) {
+        this.campaignGroups = campaignGroups;
     }
 }
