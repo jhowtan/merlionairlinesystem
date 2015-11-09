@@ -1,0 +1,110 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Passenger Service - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Passenger Service</h1>
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                </div>
+                <h:panelGroup rendered="#{empty passengerServiceManagedBean.flight}">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Departing Flights from #{departureControlManagedBean.retrieveBaseAirport().name}</div>
+                            <div class="panel-body">
+                                <table class="table" id="flight_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Flight Code</th>
+                                        <th>Route</th>
+                                        <th>Departure Time</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{departureControlManagedBean.retrieveDepartingFlightsFromBaseAirportForPassengerService()}" var="flight">
+                                        <tr>
+                                            <td>#{flight.code}</td>
+                                            <td>#{flight.aircraftAssignment.route.origin.id} - #{flight.aircraftAssignment.route.destination.id}</td>
+                                            <td>#{commonManagedBean.formatDate("dd MMM, hh:mm a", departureControlManagedBean.retrieveBaseAirport().city.timezone, flight.departureTime)}</td>
+                                            <td>#{departureControlManagedBean.showStatusName(flight)}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <h:form>
+                                                        <h:link value="Generate Report" styleClass="btn btn-primary btn-xs">
+                                                            <f:param name="flight" value="#{flight.id}" />
+                                                        </h:link>
+                                                    </h:form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{! empty passengerServiceManagedBean.flight}">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Flight #{passengerServiceManagedBean.flight.code}</div>
+                            <div class="panel-body">
+                                <textarea readonly="readonly" class="report" rows="28">
+--------------------------------------
+  PASSENGER REPORT FOR FLIGHT #{passengerServiceManagedBean.flight.code}
+--------------------------------------
+<ui:repeat value="#{passengerServiceManagedBean.getPassengers()}" var="eticket" varStatus="varStatus">
+#{varStatus.index + 1}. #{eticket.passengerName}
+     > TRAVEL CLASS: #{commonManagedBean.getTravelClassString(eticket.travelClass)}
+     > SEAT: <ui:fragment rendered="#{eticket.seatNumber != -1}">#{passengerServiceManagedBean.getSeatName(eticket.seatNumber)}</ui:fragment><ui:fragment rendered="#{eticket.seatNumber == -1}">Unallocated</ui:fragment>
+    <ui:repeat value="#{passengerServiceManagedBean.getMeals(eticket)}" var="meal" varStatus="mealVarStatus">
+     > MEAL #{mealVarStatus.index + 1}: #{meal == '' ? 'Normal Meal' : meal}</ui:repeat>
+     > SPCIAL REQUEST: None
+</ui:repeat>
+
+
+*** GENERATED ON #{commonManagedBean.formatDate("dd MMM yyyy, hh:mm:ss", null)} ***
+</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </div>
+        </div>
+
+        <style type="text/css">
+            textarea.report {
+                width: 100%;
+                font-family: "Courier New", Courier, monospace;
+                padding: 25px;
+                color: #000;
+                font-size: 15px;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#flight_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    {'bSortable': false, 'bSearchable': false, 'aTargets': [4]}
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>

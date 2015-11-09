@@ -96,7 +96,7 @@ public class Pages {
     // DCS: Gate Control
     public static final Page GATE_CHECK = new Page("/App/DepartureControl/gateCheck", Permissions.GATE_CONTROL);
     public static final Page GATE_CHECK_2 = new Page("/App/DepartureControl/gateCheck2", Permissions.GATE_CONTROL);
-    public static final Page MEALS = new Page("/App/DepartureControl/meals", Permissions.MANAGE_MEAL);
+    public static final Page PASSENGER_SERVICE = new Page("/App/DepartureControl/passengerService", Permissions.PASSENGER_SERVICE);
 
     // AAS: MANAGEMENT REPORTING
     public static final Page PROFITABILITY_REPORT = new Page("/App/ManagementReporting/profitabilityReport", Permissions.MANAGE_REPORTING);
