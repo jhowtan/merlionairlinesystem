@@ -9,6 +9,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless(name = "RouteEJB")
@@ -48,6 +49,7 @@ public class RouteBean {
     }
 
     public Airport getAirport(String id) throws NotFoundException {
+        if (id == null) throw new NotFoundException();
         id = id.toUpperCase();
         Airport airport = em.find(Airport.class, id);
         if (airport == null) throw new NotFoundException();
@@ -206,6 +208,27 @@ public class RouteBean {
         Route route = em.find(Route.class, id);
         if (route == null) throw new NotFoundException();
         return route;
+    }
+
+    public List<Airport> getDestinationByOrigin(Airport origin) {
+        List<Airport> directFlightDestinations =
+                em.createQuery("SELECT r.destination FROM Route r WHERE r.origin = :origin", Airport.class)
+                .setParameter("origin", origin)
+                .getResultList();
+
+        List<Airport> connectingFlightDestinations =
+                em.createQuery("SELECT r2.destination FROM Route r1, Route r2 WHERE r1.origin = :origin AND r1.destination = r2.origin AND r1.origin <> r2.destination", Airport.class)
+                .setParameter("origin", origin)
+                .getResultList();
+
+        ArrayList<Airport> allFlightDestinationsByOrigin = new ArrayList<>();
+        allFlightDestinationsByOrigin.addAll(directFlightDestinations);
+        for (Airport airport : connectingFlightDestinations) {
+            if (!allFlightDestinationsByOrigin.contains(airport)) {
+                allFlightDestinationsByOrigin.add(airport);
+            }
+        }
+        return allFlightDestinationsByOrigin;
     }
 
     //-----------------AIRCRAFT ASSIGNMENTS---------------------------

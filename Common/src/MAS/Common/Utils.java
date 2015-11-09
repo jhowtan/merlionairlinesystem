@@ -146,12 +146,12 @@ public class Utils {
         return duration;
     }
 
-    public static String convertBookingReference(long BookingReferenceLong) {
-        return Long.toString(BookingReferenceLong, 36).toUpperCase();
+    public static String convertBookingReference(long bookingReferenceLong) {
+        return Long.toString(bookingReferenceLong, 36).toUpperCase();
     }
 
-    public static long convertBookingReference(String BookingReferenceString) {
-        return Long.parseLong(BookingReferenceString, 36);
+    public static long convertBookingReference(String bookingReferenceString) {
+        return Long.parseLong(bookingReferenceString, 36);
     }
 
     public static double makeNiceMoney(double amount) {

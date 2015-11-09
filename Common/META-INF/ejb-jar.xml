@@ -93,5 +93,11 @@
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>
+        <session>
+            <ejb-name>FlightSearchEJB</ejb-name>
+            <ejb-class>MAS.Bean.FlightSearchBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
     </enterprise-beans>
 </ejb-jar>

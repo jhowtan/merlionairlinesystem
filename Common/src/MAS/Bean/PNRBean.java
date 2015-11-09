@@ -1,18 +1,14 @@
 package MAS.Bean;
 
-import MAS.Entity.Flight;
-import MAS.Entity.Itinerary;
-import MAS.Entity.PNR;
-import MAS.Entity.SpecialServiceRequest;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Stateless(name = "PNREJB")
 @LocalBean
@@ -20,7 +16,52 @@ public class PNRBean {
     @PersistenceContext
     EntityManager em;
 
+    @EJB
+    CustomerBean customerBean;
+
     public PNRBean() {
+    }
+
+    public PNR getPNR(long id) throws NotFoundException {
+        PNR pnr = em.find(PNR.class, id);
+        if (pnr == null) throw new NotFoundException();
+        return pnr;
+    }
+
+    public PNR getPNR(long id, String passengerLastName) throws NotFoundException {
+        PNR pnr = getPNR(id);
+        for(String passenger : pnr.getPassengers()) {
+            String[] parts = passenger.split("/");
+            if (parts[0].toUpperCase().equals(passengerLastName.trim().toUpperCase())) {
+                return pnr;
+            }
+        }
+        throw new NotFoundException();
+    }
+
+    public List<PNR> getCustomerPNR(long custId) throws NotFoundException {
+        Customer customer = customerBean.getCustomer(custId);
+        List<PNR> pnrList = em.createQuery("SELECT p FROM PNR p", PNR.class).getResultList();
+        List<PNR> customerPNR = new ArrayList<>();
+        for (PNR pnr : pnrList) {
+            for (String passenger : pnr.getPassengers()) {
+                String[] parts = passenger.split("/");
+                if (parts[0].toUpperCase().equals(customer.getLastName().trim().toUpperCase())) {
+                    customerPNR.add(pnr);
+                }
+            }
+        }
+        Collections.sort(customerPNR, new Comparator<PNR>() {
+            @Override
+            public int compare(PNR o1, PNR o2) {
+                return o1.getCreated().compareTo(o2.getCreated());
+            }
+        });
+        return customerPNR;
+    }
+
+    public List<ETicket> getETicketsByPNR(PNR pnr) {
+        return em.createQuery("SELECT e FROM ETicket e WHERE e.pnr = :pnr", ETicket.class).setParameter("pnr", pnr).getResultList();
     }
 
     public void updatePNR(PNR pnr) throws NotFoundException {

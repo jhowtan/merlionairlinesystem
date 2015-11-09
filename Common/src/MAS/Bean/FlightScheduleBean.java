@@ -246,12 +246,21 @@ public class FlightScheduleBean {
         }
     }
 
-    public List<Flight> findDepartingFlightsByAirport(Airport baseAirport) {
+    public List<Flight> findDepartingFlightsByAirportForCheckIn(Airport baseAirport) {
         return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
-                "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.departureTime > current_timestamp " +
+                "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.status < 4 " +
                 "AND f.departureTime < :date", Flight.class)
                 .setParameter("baseAirport", baseAirport)
-                .setParameter("date", Utils.hoursFromNow(24), TemporalType.TIMESTAMP)
+                .setParameter("date", Utils.hoursFromNow(48), TemporalType.TIMESTAMP)
+                .getResultList();
+    }
+
+    public List<Flight> findDepartingFlightsByAirportForGateControl(Airport baseAirport) {
+        return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
+                "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.status < 6 " +
+                "AND f.departureTime < :date", Flight.class)
+                .setParameter("baseAirport", baseAirport)
+                .setParameter("date", Utils.hoursFromNow(48), TemporalType.TIMESTAMP)
                 .getResultList();
     }
 
@@ -298,6 +307,12 @@ public class FlightScheduleBean {
         return baggage.getId();
     }
 
+    public void removeBaggageItem(long id) throws NotFoundException {
+        Baggage baggage = em.find(Baggage.class, id);
+        if (baggage == null) throw new NotFoundException();
+        em.remove(baggage);
+    }
+
     public Baggage getBaggageItem(long id) throws NotFoundException {
         Baggage baggage = em.find(Baggage.class, id);
         if (baggage == null) throw new NotFoundException();
@@ -316,4 +331,9 @@ public class FlightScheduleBean {
                 .getSingleResult() == 0;
     }
 
+    public List<ETicket> getCustomerEtickets(Long id) {
+        return em.createQuery("SELECT et FROM ETicket et WHERE et.ffpNumber = :ffpNumber", ETicket.class)
+                .setParameter("ffpNumber", "MA/" + id)
+                .getResultList();
+    }
 }

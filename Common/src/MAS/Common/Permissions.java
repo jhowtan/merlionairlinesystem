@@ -28,4 +28,6 @@ public class Permissions {
     public static final String CHECK_IN = "CHECK_IN";
     public static final String GATE_CONTROL = "GATE_CONTROL";
 
+    public static final String MANAGE_REPORTING = "MANAGE_REPORTING";
+
 }

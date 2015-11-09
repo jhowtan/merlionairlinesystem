@@ -31,7 +31,7 @@ public class LoginManagedBean {
             boolean successfulLogin = authManagedBean.login(Long.parseLong(customerIdString), password);
             if (successfulLogin) {
                 try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT_EXT + "");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT_EXT + "ffp");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -56,6 +56,12 @@ public class LoginManagedBean {
             // Redirect to login page with flag
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT_EXT + "login.xhtml?invalid=1");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT_EXT + "ffp");
             } catch (IOException e) {
                 e.printStackTrace();
             }

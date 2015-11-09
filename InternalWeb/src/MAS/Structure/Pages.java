@@ -1,7 +1,6 @@
 package MAS.Structure;
 
 import MAS.Common.Permissions;
-import MAS.Entity.Permission;
 
 public class Pages {
     public static final Page DASHBOARD = new Page("/App/index");
@@ -92,6 +91,13 @@ public class Pages {
     // DCS: Gate Control
     public static final Page GATE_CHECK = new Page("/App/DepartureControl/gateCheck", Permissions.GATE_CONTROL);
     public static final Page GATE_CHECK_2 = new Page("/App/DepartureControl/gateCheck2", Permissions.GATE_CONTROL);
+
+    // AAS: MANAGEMENT REPORTING
+    public static final Page PROFITABILITY_REPORT = new Page("/App/ManagementReporting/profitabilityReport", Permissions.MANAGE_REPORTING);
+    public static final Page CREW_REPORT = new Page("/App/ManagementReporting/crewReport", Permissions.MANAGE_REPORTING);
+    public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING);
+    public static final Page FLIGHT_REPORT = new Page("/App/ManagementReporting/flightReport", Permissions.MANAGE_REPORTING);
+    public static final Page MAINTENANCE_REPORT = new Page("/App/ManagementReporting/maintenanceReport", Permissions.MANAGE_REPORTING);
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);

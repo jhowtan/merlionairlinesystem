@@ -148,7 +148,7 @@ public class ScheduleDevelopmentBean {
         route.setDistance(distance);
         hypoRoute.routes.add(route);
         hypoRoute.actualDistance = distance;
-        hypoRoute.costDistance = distance;// * Constants.RANGE_INERTIA;
+        hypoRoute.costDistance = distance;
         return hypoRoute;
     }
 
@@ -224,7 +224,6 @@ public class ScheduleDevelopmentBean {
                     routeOutputTable.add(routeOutput);
                     return null;
                 }
-
             } else {
                 routeOutput[1] = "Destination is a near a hub, routing not required.";
                 try {

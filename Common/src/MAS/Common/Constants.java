@@ -17,6 +17,9 @@ public class Constants {
     public static final String FFP_TIER_BLUE_LABEL = "Elite Blue";
     public static final String FFP_TIER_SILVER_LABEL = "Elite Silver";
     public static final String FFP_TIER_GOLD_LABEL = "Elite Gold";
+    public static final int FFP_TIER_SILVER_REQUIREMENT = 25000;
+    public static final int FFP_TIER_GOLD_REQUIREMENT = 50000;
+
 
     public static final String[] FFP_ALLIANCE_LIST_CODE = {"MA", "A3", "AC", "CA", "AI", "NZ", "NH", "OZ", "AV", "O6", "CM", "MS", "ET", "BR", "B6", "LH", "SK", "SQ", "SA", "JJ", "TP", "TG", "TK", "UA", "VX", "VS", "VA", "UK"};
     public static final String[] FFP_ALLIANCE_LIST_NAME = {"Merlion Airlines - MerlionFlyer Elite", "Aegean Airlines - Miles&Bonus", "Air Canada - Aeroplan", "Air China / Shenzhen Airlines - PhoenixMiles", "Air India - Flying Returns", "Air New Zealand - AirPoints", "ANA - ANA Mileage Club", "Asiana Airlines - Asiana Club", "Avianca - LifeMiles", "Avianca Brazil - Amigo", "Copa Airlines - ConnectMiles", "EgyptAir - EgyptAir Plus", "Ethiopian Airlines - ShebaMiles", "EVA Air - Infinity MileageLands", "JetBlue - TrueBlue", "Lufthansa - Miles & More", "Scandinavian Airlines - EuroBonus", "Singapore Airlines - KrisFlyer", "South African Airways - Voyager", "TAM Airlines - Fidelidade", "TAP Portugal - Victoria", "THAI - Royal Orchid Plus", "Turkish Airlines - Miles&Smiles", "United - MileagePlus", "Virgin America - Elevate", "Virgin Atlantic - Flying Club", "Virgin Australia - Velocity", "Vistara - Club Vistara"};
@@ -29,6 +32,12 @@ public class Constants {
     public static final int COST_FUEL = 3;
     public static final int COST_ANNUAL = 4;
     public static final int COST_PROFIT_MARGIN = 5;
+
+    public static final double BAGGAGE_ALLOWANCE_FIRSTCLASS = 40;
+    public static final double BAGGAGE_ALLOWANCE_BUSINESS = 30;
+    public static final double BAGGAGE_ALLOWANCE_PECONOMY = 25;
+    public static final double BAGGAGE_ALLOWANCE_ECONOMY = 20;
+    public static final double EXCESS_BAGGAGE_CHARGE = 15;
 
     public static final String FARE_NORMAL = "NNMA";
     public static final String FARE_LATE = "LTH";
@@ -69,4 +78,6 @@ public class Constants {
     public static final String SSR_ACTION_CODE_FFP = "FFP";
 
     public static int MAX_CONNECTION_TIME_MINUTES = 1440;
+
+    public static int MILES_TO_CENTS = 3;
 }

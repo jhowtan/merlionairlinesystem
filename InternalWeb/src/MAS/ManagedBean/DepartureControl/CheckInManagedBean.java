@@ -64,10 +64,17 @@ public class CheckInManagedBean {
                 relatedPassengersCheckDisable.put(eTicket.getId(), eTicket.getId().equals(primaryETicket.getId()));
             }
 
-            // @TODO: Populate seat array with allocated seat in ticket
-
             connections = getPossibleConnections(primaryETicket);
             seats = new Integer[connections.size()];
+
+            int i = 0;
+            for (ETicket connection : connections) {
+                if (connection.getSeatNumber() != -1) {
+                    seats[i] = connection.getSeatNumber();
+                }
+                i++;
+            }
+
             finalDestination = connections.get(connections.size() - 1).getFlight().getAircraftAssignment().getRoute().getDestination().getId();
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,13 +104,44 @@ public class CheckInManagedBean {
 
     public LinkedHashMap<String, Integer> availableSeatsName(ETicket eTicket) {
         SeatConfigObject seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
-        seatConfigObject.addTakenSeats(flightScheduleBean.getSeatsTakenForFlight(eTicket.getFlight()));
+        List<Integer> seatsTakenForFlight = flightScheduleBean.getSeatsTakenForFlight(eTicket.getFlight());
+        Iterator<Integer> it = seatsTakenForFlight.iterator();
+        while (it.hasNext()) {
+            Integer seatNumber = it.next();
+            if (seatNumber == eTicket.getSeatNumber()) {
+                it.remove();
+                break;
+            }
+        }
+        seatConfigObject.addTakenSeats(seatsTakenForFlight);
         return seatConfigObject.getAvailableSeatsNameForTravelClass(eTicket.getTravelClass());
     }
 
     public String getNiceSeatName(ETicket eTicket) throws NotFoundException {
         SeatConfigObject seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
         return seatConfigObject.convertIntToString(eTicket.getSeatNumber());
+    }
+
+    public double calculateAllowance() {
+        switch (primaryETicket.getTravelClass()) {
+            case 0 : // First class
+                return Constants.BAGGAGE_ALLOWANCE_FIRSTCLASS;
+            case 1 : // Business
+                return Constants.BAGGAGE_ALLOWANCE_BUSINESS;
+            case 2 : // Premium Economy
+                return Constants.BAGGAGE_ALLOWANCE_PECONOMY;
+            case 3 : // Economy
+                return Constants.BAGGAGE_ALLOWANCE_ECONOMY;
+        }
+        return 0;
+    }
+
+    public double calculateExcessBaggageCharge() {
+        double excessWeight = countTotalWeight() - calculateAllowance();
+        if (excessWeight <= 0) {
+            return 0;
+        }
+        return excessWeight * Constants.EXCESS_BAGGAGE_CHARGE;
     }
 
     public void checkIn() {
@@ -154,7 +192,25 @@ public class CheckInManagedBean {
         baggageWeight = 0;
     }
 
-    public void printBaggageTag() {
+    public void removeBaggageFromETicket(long id) {
+        try {
+            List<Baggage> baggageList = primaryETicket.getBaggages();
+            Iterator<Baggage> it = baggageList.iterator();
+            while (it.hasNext()) {
+                Baggage baggage = it.next();
+                if (baggage.getId() == id) {
+                    it.remove();
+                }
+            }
+            flightScheduleBean.updateETicket(primaryETicket);
+            flightScheduleBean.removeBaggageItem(id);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void printBaggageTag(long id) {
+        //@TODO: Print Baggage Tag
     }
 
     public double countTotalWeight() {

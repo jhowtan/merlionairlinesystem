@@ -1,0 +1,183 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Costs - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Costs</h1>
+                    <!--<ul class="nav nav-tabs nav-justified">-->
+                    <!--<li role="presentation" class="active"><h:link outcome="/App/CostManagement/costs">Costs</h:link></li>-->
+                    <!--<li role="presentation"><h:link outcome="/App/CostManagement/createCost">Create Cost</h:link></li>-->
+                    <!--</ul><br />-->
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Cost Type</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="control-label" for="type">Select:</label>
+                                <br/>
+                                <h:form>
+                                    <h:selectOneMenu styleClass="form-control"
+                                                     id="type" value="#{costManagedBean.type}">
+                                        <f:selectItems value="#{costManagedBean.costTypes}" var="ctype"
+                                                       itemLabel="#{ctype}" itemValue="#{costManagedBean.costIndex(ctype)}" />
+                                        <f:ajax listener="#{costManagedBean.costTypeChangeListener}" render="costsForm costsTable"
+                                                onevent="function(data) {
+                                                if (data.status == 'success') {
+                                                    costTableDataTable();
+                                                }} "/>
+                                    </h:selectOneMenu>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Market Fuel Cost Trends</div>
+                        <div class="panel-body">
+                            <div id="costs_chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h:form id="costsForm">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Create Cost</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 #{!comments.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="comments">Comments</label>
+                                        <h:inputText id="comments" binding="#{comments}" value="#{costManagedBean.comments}" styleClass="form-control"
+                                                     pt:placeholder="e.g. Aircraft Purchase" required="true" requiredMessage="Comments are required.">
+                                        </h:inputText>
+                                        <h:message for="comments" styleClass="help-block" />
+                                    </div>
+                                    <div class="form-group col-lg-12 #{!amount.valid ? 'has-error' : ''}">
+                                        <label class="control-label" for="amount">Amount</label>
+                                        <h:inputText id="amount" binding="#{amount}" value="#{costManagedBean.amount}" styleClass="form-control"
+                                                     pt:placeholder="e.g. 100,000.50" required="true" requiredMessage="Amount is required."
+                                                     pt:type="number" pt:min="0.01" pt:step="0.01">
+                                        </h:inputText>
+                                        <h:message for="amount" styleClass="help-block" />
+                                    </div>
+                                    <h:panelGroup rendered="#{costManagedBean.type == 1 || costManagedBean.type == 2}">
+                                        <div class="form-group col-lg-12">
+                                            <label class="control-label" for="aircraft">Aircraft</label>
+                                            <br/>
+                                            <h:selectOneMenu styleClass="form-control"
+                                                             id="aircraft" value="#{costManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
+                                                <f:selectItems value="#{costManagedBean.aircraftList}" var="ac"
+                                                               itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="aircraft" styleClass="help-block" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{costManagedBean.type == 0 || costManagedBean.type == 5}">
+                                        <div class="form-group col-lg-12">
+                                            <label class="control-label" for="acAssignment">Aircraft Assignment</label>
+                                            <br/>
+                                            <h:selectOneMenu styleClass="form-control"
+                                                             id="acAssignment" value="#{costManagedBean.assocId}">
+                                                <f:selectItem itemLabel="All" itemValue="-1" />
+                                                <f:selectItems value="#{costManagedBean.aaList}" var="aa"
+                                                               itemLabel="#{commonManagedBean.formatAA(aa)}" itemValue="#{aa.id}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="acAssignment" styleClass="help-block" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <div class="col-lg-12 text-right">
+                                        <div class="btn-group">
+                                            <h:commandButton action="#{costManagedBean.createCost()}" value="Create Cost" styleClass="btn btn-success"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+
+                </div>
+            </div>
+            <!-- END ROW -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Summary Table</div>
+                        <div class="panel-body">
+                            <h:form id="costsTable">
+                                <table class="table table-striped" id="costs_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Comments</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{costManagedBean.displayCosts}" var="cost">
+                                        <tr>
+                                            <td>#{costManagedBean.displayComments(cost)}</td>
+                                            <td>#{commonManagedBean.formatMoney(cost.amount)}</td>
+                                            <td>#{commonManagedBean.formatDate("dd MMMM yyyy",cost.date)}</td>
+                                            <td>
+                                                <h:commandLink action="#{costManagedBean.delete(cost.id)}"
+                                                               styleClass="btn btn-default btn-xs btn-danger"
+                                                               onclick="return confirm('Are you sure you wish to delete cost: #{cost.comments}?');">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </h:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </h:form>
+                        </div>
+                    </div> <!--END OF PANEL -->
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
+        <script type="text/javascript">
+            var costTableDataTable = function() {
+                $('#costs_table').DataTable({
+                    "stateSave": true,
+                    "order": [[2, 'desc']],
+                    "aoColumnDefs": [
+                        { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                    ]
+                });
+            };
+            costTableDataTable();
+            costsChart = new Morris.Area({
+                element: 'costs_chart',
+                data: [],
+                xkey: 'date',
+                ykeys: ['value'],
+                labels: ['Price']
+            });
+            $.ajax({
+                url: 'costData.xhtml?q=3',
+                success: function(data) {
+                    costsChart.setData(data);
+                }
+            });
+        </script>
+    </ui:define>
+</ui:composition>

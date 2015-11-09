@@ -668,10 +668,6 @@ body {
   height: 100%;
 }
 
-body {
-  overflow-x: scroll;
-}
-
 .navbar {
   background: #293a4b;
   margin: 0;
