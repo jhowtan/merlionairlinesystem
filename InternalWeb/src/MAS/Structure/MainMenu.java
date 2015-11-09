@@ -72,7 +72,9 @@ public class MainMenu {
                         new MenuEntry("Crew Certification", null, Pages.CREW_CERTIFICATION, Pages.CREATE_CREW_CERTIFICATION, Pages.VIEW_CREW_CERTIFICATION),
                         new MenuEntry("Flight Bidding", null, Pages.FLIGHT_BIDDING),
                         new MenuEntry("Flight Roster", null, Pages.FLIGHT_ROSTER),
-                        new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT)
+                        new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT),
+                        new MenuEntry("Flight Reporting", null, Pages.LIST_FLIGHT_REPORTS, Pages.CREATE_FLIGHT_REPORT),
+                        new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT)
                 )
         );
 
@@ -87,13 +89,6 @@ public class MainMenu {
                 new MenuEntry("Customer Relations", "user",
                         new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER),
                         new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD)
-                )
-        );
-
-        entries.add(
-                new MenuEntry("Operations Reporting", "crosshairs",
-                        new MenuEntry("Flight Reporting", null, Pages.LIST_FLIGHT_REPORTS, Pages.CREATE_FLIGHT_REPORT),
-                        new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT)
                 )
         );
 

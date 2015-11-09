@@ -3,6 +3,7 @@ package MAS.ManagedBean.OperationsReporting;
 import MAS.Bean.FlightRosterBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.OperationsReportingBean;
+import MAS.Bean.UserBean;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.Flight;
@@ -28,6 +29,9 @@ public class CreateFlightReportManagedBean {
     private AuthManagedBean authManagedBean;
 
     @EJB
+    UserBean userBean;
+
+    @EJB
     FlightScheduleBean flightScheduleBean;
 
     @EJB
@@ -39,7 +43,7 @@ public class CreateFlightReportManagedBean {
     private List<Flight> crewFlights;
     private List<String> categoryList;
 
-    private Flight flight;
+    private long flightId;
     private FlightReport flightReport;
 
     @PostConstruct
@@ -48,7 +52,7 @@ public class CreateFlightReportManagedBean {
             List<FlightRoster> flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
             crewFlights = new ArrayList<>();
             for (FlightRoster flightRoster : flightRosters) {
-                if ( flightRoster.getFlight().getActualDepartureTime().compareTo(new Date()) == -1) {
+                if ( flightRoster.getFlight().getActualDepartureTime().compareTo(new Date()) < 0) {
                     if ( flightRoster.getFlight().getActualDepartureTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
                         crewFlights.add(flightRoster.getFlight());
                 }
@@ -62,11 +66,17 @@ public class CreateFlightReportManagedBean {
     }
 
     public void createFlightReport() {
-        flightReport = operationsReportingBean.createFlightReport(flightReport);
-        authManagedBean.createAuditLog("Created new flight report: " + flightReport.getFlight().getCode() + " - " + flightReport.getId() + " @ ", "create_flight_report");
-        FacesMessage m = new FacesMessage("Flight report created for" + flightReport.getFlight().getCode() + " successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+        try {
+            flightReport.setUser(userBean.getUser(authManagedBean.getUserId()));
+            flightReport.setFlight(flightScheduleBean.getFlight(flightId));
+            flightReport = operationsReportingBean.createFlightReport(flightReport);
+            authManagedBean.createAuditLog("Created new flight report: " + flightReport.getFlight().getCode() + " - " + flightReport.getId() + " @ ", "create_flight_report");
+            FacesMessage m = new FacesMessage("Flight report created for " + flightReport.getFlight().getCode() + " successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Flight> getCrewFlights() {
@@ -85,12 +95,12 @@ public class CreateFlightReportManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public long getFlightId() {
+        return flightId;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlightId(long flightId) {
+        this.flightId = flightId;
     }
 
     public FlightReport getFlightReport() {
