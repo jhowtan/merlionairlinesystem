@@ -94,7 +94,7 @@ public class Utils {
 
     public static Date addTimeToDate(Date date, String time) {
         if (time.length() != 5)
-            return null;
+            return date;
         try {
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
@@ -105,7 +105,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return date;
     }
 
     public static Calendar getCalendar(Date date) {
