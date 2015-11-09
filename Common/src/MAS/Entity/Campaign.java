@@ -124,15 +124,15 @@ public class Campaign {
         this.code = code;
     }
 
-    private int usage;
+    private int usageCount;
 
     @Basic
-    public int getUsage() {
-        return usage;
+    public int getUsageCount() {
+        return usageCount;
     }
 
-    public void setUsage(int usage) {
-        this.usage = usage;
+    public void setUsageCount(int usage) {
+        this.usageCount = usage;
     }
 
     private List<CampaignGroup> campaignGroups;

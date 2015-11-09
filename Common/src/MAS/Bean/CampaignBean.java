@@ -46,7 +46,7 @@ public class CampaignBean {
         campaign.setDiscount(discount);
         campaign.setCode(code);
         campaign.setBookingClasses(bookingClasses);
-        campaign.setUsage(0);
+        campaign.setUsageCount(0);
         campaign.setCampaignGroups(new ArrayList<>());
         em.persist(campaign);
         em.flush();

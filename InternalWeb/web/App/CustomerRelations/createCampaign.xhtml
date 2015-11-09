@@ -1,6 +1,8 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Campaigns - Merlion Airline System</ui:define>
 
@@ -10,11 +12,15 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Create Campaign</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation"><h:link outcome="/App/CustomerRelations/campaigns">Campaigns</h:link></li>
-                        <li role="presentation" class="active"><h:link outcome="/App/CustomerRelations/createCampaign">Create Campaign</h:link></li>
-                    </ul><br />
+                        <li role="presentation"><h:link outcome="/App/CustomerRelations/campaigns">Campaigns</h:link>
+                        </li>
+                        <li role="presentation" class="active"><h:link
+                                outcome="/App/CustomerRelations/createCampaign">Create Campaign</h:link></li>
+                    </ul>
+                    <br/>
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                        <h:panelGroup layout="block"
+                                      styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
@@ -24,15 +30,80 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Campaign Details</div>
                             <div class="panel-body">
-                                <div class="row">
-                                    LALA
+                                <div class="form-group col-lg-12 #{!campaignName.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="campaignName">Campaign Name</label>
+                                    <h:inputText id="campaignName" binding="#{campaignName}" value="#{campaignsManagedBean.campaignName}" styleClass="form-control" pt:placeholder="e.g. Holidays" required="true" requiredMessage="Campaign name is required.">
+                                    </h:inputText>
+                                    <h:message for="campaignName" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12 #{!code.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="code">Code</label>
+                                    <h:inputText id="code" binding="#{code}" value="#{campaignsManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. FLYCHEAP" required="true" requiredMessage="Campaign code is required.">
+                                    </h:inputText>
+                                    <h:message for="code" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-12 #{!discount.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="discount">Discount</label>
+                                    <h:inputText id="discount" binding="#{discount}" pt:type="number" pt:step="0.1" pt:min="0.0" pt:max="0.99" value="#{campaignsManagedBean.discount}" styleClass="form-control" required="true" requiredMessage="Campaign discount is required.">
+                                    </h:inputText>
+                                    <h:message for="discount" styleClass="help-block" />
+                                </div>
+                                <div class="form-group col-lg-6 #{!startDate.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="startDate">Campaign Start Date</label>
+                                    <h:inputText binding="#{startDate}" id="startDate"
+                                                 value="#{campaignsManagedBean.startDate}" styleClass="form-control"
+                                                 pt:type="date"
+                                                 pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                 size="20" required="true"
+                                                 requiredMessage="Start date is required.">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="startDate" styleClass="help-block"/>
+                                </div>
+                                <div class="form-group col-lg-6 #{!endDate.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="endDate">Campaign End Date</label>
+                                    <h:inputText binding="#{endDate}" id="endDate"
+                                                 value="#{campaignsManagedBean.endDate}" styleClass="form-control"
+                                                 pt:type="date"
+                                                 pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                 size="20" required="true"
+                                                 requiredMessage="End date is required.">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="endDate" styleClass="help-block"/>
+                                </div>
+                                <div class="form-group col-lg-6 #{!rstartDate.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="rstartDate">Targeted Flights Date Range Start</label>
+                                    <h:inputText binding="#{rstartDate}" id="rstartDate"
+                                                 value="#{campaignsManagedBean.targetStartDate}" styleClass="form-control"
+                                                 pt:type="date"
+                                                 pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                 size="20" required="true"
+                                                 requiredMessage="Start date is required.">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="rstartDate" styleClass="help-block"/>
+                                </div>
+                                <div class="form-group col-lg-6 #{!rendDate.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="rendDate">Targeted Flights Date Range Start</label>
+                                    <h:inputText binding="#{rendDate}" id="rendDate"
+                                                 value="#{campaignsManagedBean.targetEndDate}" styleClass="form-control"
+                                                 pt:type="date"
+                                                 pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
+                                                 size="20" required="true"
+                                                 requiredMessage="End date is required.">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="rendDate" styleClass="help-block"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12 text-right">
                             <div class="btn-group">
-                                <h:link outcome="/App/CustomerRelations/campaigns" class="btn btn-default" value="Cancel" />
-                                <h:commandButton action="#{campaignsManagedBean.createCampaign()}" value="Create Campaign" styleClass="btn btn-success"/>
+                                <h:link outcome="/App/CustomerRelations/campaigns" class="btn btn-default"
+                                        value="Cancel"/>
+                                <h:commandButton action="#{campaignsManagedBean.createCampaign()}"
+                                                 value="Create Campaign" styleClass="btn btn-success"/>
                             </div>
                         </div>
                     </h:form>
