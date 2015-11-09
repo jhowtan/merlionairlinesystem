@@ -23,4 +23,8 @@ public class CampaignsManagedBean {
     private void load() {
         campaigns = campaignBean.getAllCampaigns();
     }
+
+    public void createCampaign() {
+
+    }
 }

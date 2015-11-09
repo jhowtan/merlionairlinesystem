@@ -89,7 +89,8 @@ public class MainMenu {
         entries.add(
                 new MenuEntry("Customer Relations", "user",
                         new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER),
-                        new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD)
+                        new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD),
+                        new MenuEntry("Campaigns", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN)
                 )
         );
 
@@ -101,12 +102,6 @@ public class MainMenu {
                         new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
                         new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
                         new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT)
-                )
-        );
-
-        entries.add(
-                new MenuEntry("Customer Engagement", "thumbs-o-up",
-                        new MenuEntry("Campaign Management", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN)
                 )
         );
     }

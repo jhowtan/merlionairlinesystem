@@ -2,7 +2,6 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Campaigns - Merlion Airline System</ui:define>
 
@@ -13,7 +12,7 @@
                     <h1 class="page-header">Campaigns</h1>
                     <ul class="nav nav-tabs nav-justified">
                         <li role="presentation" class="active"><h:link outcome="/App/CustomerRelations/campaigns">Campaigns</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/CustomerRelations/campaigns">Create Campaign</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/CustomerRelations/createCampaign">Create Campaign</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
@@ -56,7 +55,7 @@
             $('#campaigns_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [5] }
                 ]
             });
         </script>
