@@ -84,6 +84,7 @@ public class Pages {
     public static final Page FLIGHT_BIDDING = new Page("/App/CrewOperations/flightBidding", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
     public static final Page FLIGHT_ROSTER = new Page("/App/CrewOperations/flightRoster", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
     public static final Page FLIGHT_DEFERMENT = new Page("/App/CrewOperations/flightDeferment", Permissions.FLIGHT_BID, Permissions.MANAGE_FLIGHT_BID);
+    public static final Page FLIGHT_SIGNINOUT = new Page("/App/CrewOperations/signInOut", Permissions.FLIGHT_BID);
 
     // AFOS: Operations Reporting
     public static final Page LIST_FLIGHT_REPORTS = new Page("/App/OperationsReporting/flightReports", Permissions.FLIGHT_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);

@@ -72,7 +72,8 @@ public class MainMenu {
                         new MenuEntry("Crew Certification", null, Pages.CREW_CERTIFICATION, Pages.CREATE_CREW_CERTIFICATION, Pages.VIEW_CREW_CERTIFICATION),
                         new MenuEntry("Flight Bidding", null, Pages.FLIGHT_BIDDING),
                         new MenuEntry("Flight Roster", null, Pages.FLIGHT_ROSTER),
-                        new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT)
+                        new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT),
+                        new MenuEntry("Flight Sign In/Out", null, Pages.FLIGHT_SIGNINOUT)
                 )
         );
 
