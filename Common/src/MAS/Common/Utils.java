@@ -36,6 +36,17 @@ public class Utils {
         return calendar.getTime();
     }
 
+    public static Date getStartOfMonth(int month, int relativeYear) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) + relativeYear);
+        return c.getTime();
+    }
+
     public static Date monthStart(int plusMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);

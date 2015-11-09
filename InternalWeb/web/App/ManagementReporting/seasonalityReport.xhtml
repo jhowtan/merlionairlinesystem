@@ -1,0 +1,35 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:define name="title">Seasonality Reporting - Merlion Airline System</ui:define>
+
+<ui:define name="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Seasonality Report</h1>
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
+                <h:form>
+                    <div class="form-group col-lg-12">
+                        <label class="control-label" for="airport">Select Destination</label>
+                        <br/>
+                        <h:selectOneMenu styleClass="form-control" id="airport" value="#{seasonalityReportManagedBean.airportId}" binding="#{airport}">
+                            <f:selectItem itemLabel="Select an airport"/>
+                            <f:selectItems value="#{seasonalityReportManagedBean.airports}" var="ap"
+                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
+                            <f:ajax event="change" listener="#{seasonalityReportManagedBean.airportChangeListener}"/>
+                        </h:selectOneMenu>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </div>
+</ui:define>
+</ui:composition>

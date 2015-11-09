@@ -29,7 +29,7 @@ public class CommonManagedBean {
         return Utils.truncate(str, chars);
     }
 
-    public String formatDate(String format, Date date) {
+    public static String formatDate(String format, Date date) {
         if (date == null) {
             date = new Date();
         }
@@ -40,7 +40,7 @@ public class CommonManagedBean {
         }
     }
 
-    public String formatDate(String format, String timezone, Date date) {
+    public static String formatDate(String format, String timezone, Date date) {
         if (date == null) {
             date = new Date();
         }

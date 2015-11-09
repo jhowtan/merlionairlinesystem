@@ -104,6 +104,7 @@ public class Pages {
     public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING);
     public static final Page FLIGHT_REPORT = new Page("/App/ManagementReporting/flightReport", Permissions.MANAGE_REPORTING);
     public static final Page MAINTENANCE_REPORT = new Page("/App/ManagementReporting/maintenanceReport", Permissions.MANAGE_REPORTING);
+    public static final Page SEASONALITY_REPORT = new Page("/App/ManagementReporting/seasonalityReport", Permissions.MANAGE_REPORTING);
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);

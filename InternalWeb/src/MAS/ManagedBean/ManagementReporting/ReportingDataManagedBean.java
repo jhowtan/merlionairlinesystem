@@ -29,9 +29,6 @@ public class ReportingDataManagedBean {
     @EJB
     private FlightScheduleBean flightScheduleBean;
 
-    @ManagedProperty(value="#{commonManagedBean}")
-    CommonManagedBean commonManagedBean;
-
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
@@ -64,7 +61,7 @@ public class ReportingDataManagedBean {
         List<Flight> flights = flightScheduleBean.getAllFlights();
         for (Flight flight : flights) {
             ReportItem flightItem = new ReportItem();
-            flightItem.name = flight.getCode() + " (" + commonManagedBean.formatDate("dd MMM yy, HH:mm", flight.getDepartureTime()) + ")";
+            flightItem.name = flight.getCode() + " (" + CommonManagedBean.formatDate("dd MMM yy, HH:mm", flight.getDepartureTime()) + ")";
             flightItem.value = profitabilityReportManagedBean.getProfitabilityByFlight(flight);
             reportItems.add(flightItem);
         }
@@ -152,14 +149,6 @@ public class ReportingDataManagedBean {
         }
 
         ctx.responseComplete();
-    }
-
-    public CommonManagedBean getCommonManagedBean() {
-        return commonManagedBean;
-    }
-
-    public void setCommonManagedBean(CommonManagedBean commonManagedBean) {
-        this.commonManagedBean = commonManagedBean;
     }
 
     public ProfitabilityReportManagedBean getProfitabilityReportManagedBean() {

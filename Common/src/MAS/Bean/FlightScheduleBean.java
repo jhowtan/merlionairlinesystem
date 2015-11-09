@@ -336,4 +336,65 @@ public class FlightScheduleBean {
                 .setParameter("ffpNumber", "MA/" + id)
                 .getResultList();
     }
+
+    public int[] getNumFlightsByMonthForDestination(String airportId) throws NotFoundException {
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        int[] flightCount = new int[12];
+        for (int i = 0; i < 12; i++) {
+            Date startOfMonth = Utils.getStartOfMonth(i, 0);
+            Date endOfMonth;
+            if (i < 11)
+                endOfMonth = Utils.getStartOfMonth(i + 1, 0);
+            else
+                endOfMonth = Utils.getStartOfMonth(0, 1);
+
+            flightCount[i] = Integer.parseInt(em.createQuery("SELECT COUNT(f) FROM Flight f WHERE f.aircraftAssignment.route.destination = :destination AND f.departureTime >= :startOfMonth AND f.departureTime < :endOfMonth", Long.class)
+                    .setParameter("destination", airport)
+                    .setParameter("startOfMonth", startOfMonth)
+                    .setParameter("endOfMonth", endOfMonth)
+                    .getSingleResult().toString());
+        }
+        return flightCount;
+    }
+
+    public double[] getFlightUtilisationByMonthForDestination(String airportId) throws NotFoundException {
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        double[] flightUtil = new double[12];
+        for (int i = 0; i < 12; i++) {
+            double total = 0;
+            Date startOfMonth = Utils.getStartOfMonth(i, 0);
+            Date endOfMonth;
+            if (i < 11)
+                endOfMonth = Utils.getStartOfMonth(i + 1, 0);
+            else
+                endOfMonth = Utils.getStartOfMonth(0, 1);
+            List<Flight> flightsThisMonth = em.createQuery("SELECT f FROM Flight f WHERE f.aircraftAssignment.route.destination = :destination AND f.departureTime >= :startOfMonth AND f.departureTime < :endOfMonth", Flight.class)
+                    .setParameter("destination", airport)
+                    .setParameter("startOfMonth", startOfMonth)
+                    .setParameter("endOfMonth", endOfMonth)
+                    .getResultList();
+            for(int j = 0; j < flightsThisMonth.size(); j++) {
+                total += getUtilisationOfFlight(flightsThisMonth.get(j).getId());
+            }
+            if (flightsThisMonth.size() == 0)
+                flightUtil[i] = 0;
+            else
+                flightUtil[i] = total / flightsThisMonth.size();
+        }
+        return flightUtil;
+    }
+
+    public double getUtilisationOfFlight(long flightId) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        double usedSeats = Double.parseDouble(em.createQuery("SELECT COUNT(et) FROM ETicket et WHERE et.flight = :flight AND et.gateChecked = true", Long.class)
+                .setParameter("flight", flight)
+                .getSingleResult().toString());
+        SeatConfigObject seatConfigObject = new SeatConfigObject();
+        seatConfigObject.parse(flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+        double maxSeats = seatConfigObject.getTotalSeats();
+        return usedSeats/maxSeats;
+    }
 }
