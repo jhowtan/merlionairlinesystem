@@ -2,22 +2,20 @@ package MAS.ManagedBean;
 
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.MealSelectionBean;
-import MAS.Common.Cabin;
 import MAS.Common.Constants;
-import MAS.Common.SeatConfigObject;
 import MAS.Entity.ETicket;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
-import com.google.gson.Gson;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @ManagedBean
 @ViewScoped

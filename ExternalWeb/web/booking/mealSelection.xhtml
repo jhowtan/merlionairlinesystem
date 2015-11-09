@@ -8,16 +8,32 @@
     <ui:define name="title">Meal Selection - Merlion Airlines</ui:define>
 
     <ui:define name="content">
+        <h:panelGroup rendered="#{! empty mealSelectionManagedBean.eTicket and mealSelectionManagedBean.eTicket.travelClass != 3}">
+            <div class="splash-food"></div>
+        </h:panelGroup>
         <section class="content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-offset-1 col-lg-10 text-center">
-                        <h1 class="title">Meal Selection</h1>
-                        <p class="lead">Select your meal ahead of time before your flight.</p>
+            <h:panelGroup rendered="#{empty mealSelectionManagedBean.eTicket or mealSelectionManagedBean.eTicket.travelClass == 3}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-10 text-center">
+                            <h1 class="title">Meal Selection</h1>
+                            <p class="lead">Select your meal ahead of time before your flight.</p>
+                        </div>
                     </div>
+                    <hr/>
                 </div>
-                <hr/>
-            </div>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{! empty mealSelectionManagedBean.eTicket and mealSelectionManagedBean.eTicket.travelClass != 3}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-10 text-center">
+                            <h1 class="title">Jeff the Chef</h1>
+                            <p class="lead">You deserve it, dine at the best restaurant in the sky!</p>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </h:panelGroup>
             <div class="container">
                 <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                     <h:panelGroup layout="block" styleClass="alert alert-danger">
