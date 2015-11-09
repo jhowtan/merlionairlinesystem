@@ -74,7 +74,7 @@ public class MainMenu {
                         new MenuEntry("Flight Roster", null, Pages.FLIGHT_ROSTER),
                         new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT),
                         new MenuEntry("Flight Reporting", null, Pages.LIST_FLIGHT_REPORTS, Pages.CREATE_FLIGHT_REPORT),
-                        new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT)
+                        new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT),
                         new MenuEntry("Flight Sign In/Out", null, Pages.FLIGHT_SIGNINOUT)
                 )
         );
