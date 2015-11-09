@@ -6,4 +6,8 @@
                 name='DirectDistributionSystem'
                 implementation='MAS.WebService.DirectDistributionSystem'
                 url-pattern='/services/DirectDistributionSystem'/>
+        <endpoint
+                name='FFPAlliance'
+                implementation='MAS.WebService.FFPAlliance'
+                url-pattern='/services/FFPAlliance'/>
 </endpoints>
