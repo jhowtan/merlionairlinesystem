@@ -48,22 +48,27 @@
                                         <td>#{gateCheckManagedBean.showStatusName(gateCheckManagedBean.flight)}</td>
                                         <h:form>
                                             <td>
-                                                <h:inputText id="gateNumber" binding="#{gateNumber}" value="#{gateCheckManagedBean.flight.gateNumber}"
-                                                             rendered="#{gateCheckManagedBean.flight.status lt 2}" styleClass="form-control" pt:placeholder="e.g. A19"/>
-                                                <h:panelGroup rendered="#{gateCheckManagedBean.flight.status ge 2}">
-                                                    #{gateCheckManagedBean.flight.gateNumber}
-                                                </h:panelGroup>
+                                                <div class="#{!gateNumber.valid ? 'has-error' : ''}">
+                                                    <h:inputText id="gateNumber" binding="#{gateNumber}" value="#{gateCheckManagedBean.flight.gateNumber}"
+                                                                 styleClass="form-control"
+                                                                 required="true" requiredMessage="Please enter the gate number for this flight"
+                                                                 rendered="#{gateCheckManagedBean.flight.status lt 2}" pt:placeholder="e.g. A19"/>
+                                                    <h:panelGroup rendered="#{gateCheckManagedBean.flight.status ge 2}">
+                                                        #{gateCheckManagedBean.flight.gateNumber}
+                                                    </h:panelGroup>
+                                                    <h:message for="gateNumber" styleClass="help-block" />
+                                                </div>
                                             </td>
                                             <td>
                                                 <div class="btn-group">
                                                     <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 1)}"
                                                                    rendered="#{gateCheckManagedBean.flight.status == 0}" disabled="#{gateCheckManagedBean.flight.status >= 2}"
-                                                                   styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
+                                                                   styleClass="btn btn-default btn-xs #{(gateCheckManagedBean.flight.status ge 2) ? 'disabled' : ''}">
                                                         <i class="fa fa-sign-in fw"></i> Open Gate
                                                         <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                                     </h:commandLink>
                                                     <h:commandLink action="#{gateCheckManagedBean.changeGateStatus(gateCheckManagedBean.flight, 2)}"
-                                                                   styleClass="btn btn-success btn-xs #{(gateCheckManagedBean.flight.status >= 2) ? 'disabled' : ''}">
+                                                                   styleClass="btn btn-success btn-xs #{(gateCheckManagedBean.flight.status ge 2 || gateCheckManagedBean.flight.status == 0) ? 'disabled' : ''}">
                                                         <i class="fa fa-sign-in fw"></i> Begin Boarding
                                                         <f:param name="flight" value="#{gateCheckManagedBean.flight.id}"/>
                                                     </h:commandLink>
