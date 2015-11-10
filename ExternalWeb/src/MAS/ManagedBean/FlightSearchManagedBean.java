@@ -12,6 +12,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.util.*;
 
 @ManagedBean
@@ -48,6 +49,8 @@ public class FlightSearchManagedBean {
     private int travelClass = 3;
     private boolean roundTrip = true;
 
+    private PassengerDetails prefilledPassengerDetails;
+
     // Step 2
     private List<FlightSearchResult> outboundSearchResult;
     private List<FlightSearchResult> returnSearchResult;
@@ -69,52 +72,18 @@ public class FlightSearchManagedBean {
     // Step 5
     private PNR pnr;
 
-    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
-        this.authManagedBean = authManagedBean;
-    }
-
-    public class PassengerDetails {
-        private String firstName;
-        private String lastName;
-        private String ffpProgram;
-        private String ffpNumber;
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
-        public String getFfpProgram() {
-            return ffpProgram;
-        }
-
-        public void setFfpProgram(String ffpProgram) {
-            this.ffpProgram = ffpProgram;
-        }
-
-        public String getFfpNumber() {
-            return ffpNumber;
-        }
-
-        public void setFfpNumber(String ffpNumber) {
-            this.ffpNumber = ffpNumber;
-        }
-    }
 
     @PostConstruct
     public void init() {
         setAirports(routeBean.getAllAirports());
+        Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if (params.containsKey("firstName") && params.containsKey("lastName") && params.containsKey("ffpNumber")) {
+            prefilledPassengerDetails = new PassengerDetails();
+            prefilledPassengerDetails.firstName = params.get("firstName");
+            prefilledPassengerDetails.lastName = params.get("lastName");
+            prefilledPassengerDetails.ffpNumber = params.get("ffpNumber");
+            prefilledPassengerDetails.ffpProgram = "MA";
+        }
     }
 
     public boolean canRedeemMiles() {
@@ -211,7 +180,9 @@ public class FlightSearchManagedBean {
                 }
                 passengersDetails = new ArrayList<>();
                 for (int i = 0; i < passengers; i++) {
-                    if (authManagedBean.isAuthenticated() && i == 0) {
+                    if (prefilledPassengerDetails != null && i == 0) {
+                        passengersDetails.add(prefilledPassengerDetails);
+                    } else if (authManagedBean.isAuthenticated() && i == 0) {
                         PassengerDetails p = new PassengerDetails();
                         p.firstName = authManagedBean.retrieveCustomer().getFirstName();
                         p.lastName = authManagedBean.retrieveCustomer().getLastName();
@@ -481,5 +452,48 @@ public class FlightSearchManagedBean {
 
     public void setMilesRedeemed(int milesRedeemed) {
         this.milesRedeemed = milesRedeemed;
+    }
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
+
+    public class PassengerDetails {
+        private String firstName;
+        private String lastName;
+        private String ffpProgram;
+        private String ffpNumber;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getFfpProgram() {
+            return ffpProgram;
+        }
+
+        public void setFfpProgram(String ffpProgram) {
+            this.ffpProgram = ffpProgram;
+        }
+
+        public String getFfpNumber() {
+            return ffpNumber;
+        }
+
+        public void setFfpNumber(String ffpNumber) {
+            this.ffpNumber = ffpNumber;
+        }
     }
 }

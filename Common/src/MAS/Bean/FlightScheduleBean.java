@@ -406,4 +406,63 @@ public class FlightScheduleBean {
         double maxSeats = seatConfigObject.getTotalSeats();
         return usedSeats/maxSeats;
     }
+
+    public int getFlightSalesVolume(long flightId) throws NotFoundException {
+        Flight flight = em.find(Flight.class, flightId);
+        if (flight == null) throw new NotFoundException();
+        return Integer.parseInt(em.createQuery("SELECT COUNT(et) FROM ETicket et WHERE et.flight = :flight AND et.gateChecked = true", Long.class)
+                .setParameter("flight", flight)
+                .getSingleResult().toString());
+    }
+
+    public int[] getFlightSalesVolumeByMonthForDestination(String airportId) throws NotFoundException {
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        int[] flightSales = new int[12];
+        for (int i=0; i<12; i++) {
+            int total = 0;
+            Date startOfMonth = Utils.getStartOfMonth(i, 0);
+            Date endOfMonth;
+            if (i < 11)
+                endOfMonth = Utils.getStartOfMonth(i + 1, 0);
+            else
+                endOfMonth = Utils.getStartOfMonth(0, 1);
+            List<Flight> flightsThisMonth = em.createQuery("SELECT f FROM Flight f WHERE f.aircraftAssignment.route.destination = :destination AND f.departureTime >= :startOfMonth AND f.departureTime < :endOfMonth", Flight.class)
+                    .setParameter("destination", airport)
+                    .setParameter("startOfMonth", startOfMonth)
+                    .setParameter("endOfMonth", endOfMonth)
+                    .getResultList();
+            for (int j = 0; j < flightsThisMonth.size(); j++) {
+                total += getFlightSalesVolume(flightsThisMonth.get(j).getId());
+            }
+            if (flightsThisMonth.size() == 0)
+                flightSales[i] = 0;
+            else
+                flightSales[i] = total / flightsThisMonth.size();
+        }
+        return flightSales;
+    }
+
+    public double[] getSalesVarianceOfFlightForDestination(String airportId) throws NotFoundException {
+        int[] flightSalesVolume = getFlightSalesVolumeByMonthForDestination(airportId);
+        double aggregate = getAggregateFlightSalesForDestination(airportId);
+        double[] salesVariance = new double[12];
+        for (int i = 0; i<12; i++ ) {
+            if (aggregate == 0) {
+                salesVariance[i] = 0;
+                continue;
+            }
+            salesVariance[i] = (double) flightSalesVolume[i] / aggregate;
+        }
+        return salesVariance;
+    }
+
+    public double getAggregateFlightSalesForDestination(String airportId) throws NotFoundException {
+        int[] flightSalesForMonth = getFlightSalesVolumeByMonthForDestination(airportId);
+        int totalFlightSalesInYear = 0;
+        for (int i = 0; i < 12; i++) {
+            totalFlightSalesInYear += flightSalesForMonth[i];
+        }
+        return (double) totalFlightSalesInYear / 12;
+    }
 }
