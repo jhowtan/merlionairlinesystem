@@ -1,0 +1,68 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Campaigns - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Campaigns</h1>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li role="presentation" class="active"><h:link outcome="/App/CustomerRelations/campaigns">Campaigns</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/CustomerRelations/createCampaign">Create Campaign</h:link></li>
+                    </ul><br />
+                    <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                        <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                            #{message.detail}
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <table class="table table-striped" id="campaigns_table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Code</th>
+                            <th>Discount</th>
+                            <th>Usage Count</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{campaignsManagedBean.campaigns}" var="cm">
+                            <tr>
+                                <td>#{cm.name}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.startDate)}</td>
+                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.endDate)}</td>
+                                <td>#{cm.code}</td>
+                                <td>#{cm.discount}</td>
+                                <td>#{cm.usageCount}</td>
+                                <td>
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <!--<h:link outcome="/App/CustomerRelations/viewCampaign" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>-->
+                                            <h:commandLink action="#{campaignsManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete campaign: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                        </div>
+                                    </h:form>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            $('#campaigns_table').DataTable({
+                "stateSave": true,
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [5] }
+                ]
+            });
+        </script>
+    </ui:define>
+</ui:composition>
