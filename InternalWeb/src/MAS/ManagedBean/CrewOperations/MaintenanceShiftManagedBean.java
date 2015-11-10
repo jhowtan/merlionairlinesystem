@@ -60,6 +60,7 @@ public class MaintenanceShiftManagedBean {
     public void removeShift() {
         try {
             maintenanceShiftBean.deleteMaintenanceShift(maintenanceShift.getId());
+            maintenanceShift = null;
         } catch (NotFoundException e) {
             FacesMessage m = new FacesMessage("Unable to delete this maintenance shift for it may not exist.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
