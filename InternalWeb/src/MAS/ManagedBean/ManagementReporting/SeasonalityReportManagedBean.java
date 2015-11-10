@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -23,19 +24,46 @@ public class SeasonalityReportManagedBean {
     private List<Airport> airports;
     private int[] flightCountByMonth;
     private double[] flightUtilByMonth;
+    private List<String> flightUtilArray;
+    private List<String> flightCountArray;
 
     @PostConstruct
     private void init() {
         airports = routeBean.getAllAirports();
     }
 
-    public void airportChangeListener() {
+    public void airportChangeListener(AjaxBehaviorEvent event) {
         try {
             flightCountByMonth = flightScheduleBean.getNumFlightsByMonthForDestination(airportId);
             flightUtilByMonth = flightScheduleBean.getFlightUtilisationByMonthForDestination(airportId);
+
+            flightUtilArray = new ArrayList<>();
+            for (int i = 0; i < flightUtilByMonth.length; i++) {
+                flightUtilArray.add(String.valueOf(flightUtilByMonth[i]));
+            }
+            flightCountArray = new ArrayList<>();
+            for (int i = 0; i < flightCountByMonth.length; i++) {
+                flightCountArray.add(String.valueOf(flightCountByMonth[i]));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> getFlightCountArray() {
+        return flightCountArray;
+    }
+
+    public void setFlightCountArray(List<String> flightCountArray) {
+        this.flightCountArray = flightCountArray;
+    }
+
+    public List<String> getFlightUtilArray() {
+        return flightUtilArray;
+    }
+
+    public void setFlightUtilArray(List<String> flightUtilArray) {
+        this.flightUtilArray = flightUtilArray;
     }
 
     public int[] getFlightCountByMonth() {

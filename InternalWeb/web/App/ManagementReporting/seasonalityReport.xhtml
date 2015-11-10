@@ -8,31 +8,100 @@
 
 <ui:define name="content">
     <div class="container-fluid">
+        <h1 class="page-header">Seasonality Report</h1>
+        <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+            <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                #{message.detail}
+            </h:panelGroup>
+        </ui:repeat>
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Seasonality Report</h1>
-                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
-                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
-                        #{message.detail}
-                    </h:panelGroup>
-                </ui:repeat>
-                <h:form>
-                    <div class="form-group col-lg-12">
-                        <label class="control-label" for="airport">Select Destination</label>
-                        <br/>
-                        <h:selectOneMenu styleClass="form-control" id="airport" value="#{seasonalityReportManagedBean.airportId}" binding="#{airport}">
-                            <f:selectItem itemLabel="Select an airport"/>
-                            <f:selectItems value="#{seasonalityReportManagedBean.airports}" var="ap"
-                                           itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
-                            <f:ajax event="change" listener="#{seasonalityReportManagedBean.airportChangeListener}"/>
-                        </h:selectOneMenu>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Filter Options
                     </div>
-                </h:form>
-                <h:panelGroup id="statsPanel">
-
-                </h:panelGroup>
+                    <div class="panel-body">
+                        <h:form>
+                            <div class="form-group">
+                                <label class="control-label" for="airport">Select Destination</label>
+                                <br/>
+                                <h:selectOneMenu styleClass="form-control" id="airport" value="#{seasonalityReportManagedBean.airportId}" binding="#{airport}">
+                                    <f:selectItem itemLabel="Select an airport"/>
+                                    <f:selectItems value="#{seasonalityReportManagedBean.airports}" var="ap"
+                                                   itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
+                                    <f:ajax event="change" render="statsPanel" listener="#{seasonalityReportManagedBean.airportChangeListener}" />
+                                </h:selectOneMenu>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
             </div>
+            <h:panelGroup id="statsPanel">
+                <h:panelGroup rendered="#{! empty seasonalityReportManagedBean.airportId}">
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Number of Flights
+                            </div>
+                            <div class="panel-body container-fluid">
+                                <div id="count-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Flight Utilisation
+                            </div>
+                            <div class="panel-body container-fluid">
+                                <div id="utilisation-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        var airportId = '#{seasonalityReportManagedBean.airportId}';
+                        if (reloadCharts) {
+                            reloadCharts(airportId);
+                        }
+                    </script>
+                </h:panelGroup>
+            </h:panelGroup>
         </div>
     </div>
+</ui:define>
+
+<ui:define name="javascript">
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
+    <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
+    <script type="text/javascript">
+        var reloadCharts = function(airportId) {
+            var utilChart = new Morris.Bar({
+                element: 'utilisation-chart',
+                data: [],
+                xkey: 'month',
+                ykeys: ['value'],
+                labels: ['% Utilisation']
+            });
+            var countChart = new Morris.Bar({
+                element: 'count-chart',
+                data: [],
+                xkey: 'month',
+                ykeys: ['value'],
+                labels: ['Number of Flights']
+            });
+            $.ajax({
+                url: 'reportingData.xhtml?q=flightUtilByMonth&amp;id=' + airportId,
+                success: function (data) {
+                    utilChart.setData(data);
+                }
+            });
+            $.ajax({
+                url: 'reportingData.xhtml?q=flightCountByMonth&amp;id=' + airportId,
+                success: function (data) {
+                    countChart.setData(data);
+                }
+            });
+        }
+    </script>
 </ui:define>
 </ui:composition>

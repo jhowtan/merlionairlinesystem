@@ -1,6 +1,7 @@
 package MAS.ManagedBean.ManagementReporting;
 
 import MAS.Bean.*;
+import MAS.Common.Constants;
 import MAS.Entity.Flight;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -39,9 +40,15 @@ public class ReportingDataManagedBean {
         public Double value;
     }
 
+    private class MonthItem {
+        public String month;
+        public String value;
+    }
+
     public void search() throws NotFoundException {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String query = params.get("q");
+        String id = params.get("id");
 
         switch (query) {
             case "topPerformingFlights":
@@ -49,6 +56,12 @@ public class ReportingDataManagedBean {
                 return;
             case "worstPerformingFlights":
                 showWorstPerformingFlights();
+                return;
+            case "flightCountByMonth":
+                showFlightCountByMonth(id);
+                return;
+            case "flightUtilByMonth":
+                showFlightUtilByMonth(id);
                 return;
             default:
                 return;
@@ -121,6 +134,40 @@ public class ReportingDataManagedBean {
 
         Gson gson = new Gson();
         String json = gson.toJson(resultItems);
+
+        outputJSON(json);
+    }
+
+    public void showFlightCountByMonth(String airportId) throws NotFoundException {
+        ArrayList<MonthItem> monthItems = new ArrayList<>();
+        int[] flightCountByMonth = flightScheduleBean.getNumFlightsByMonthForDestination(airportId);
+        List<String> months = Arrays.asList(Constants.MONTHS_OF_YEAR);
+        for (int i = 0; i < months.size(); i++) {
+            MonthItem monthItem = new MonthItem();
+            monthItem.month = months.get(i);
+            monthItem.value = String.valueOf(flightCountByMonth[i]);
+            monthItems.add(monthItem);
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(monthItems);
+
+        outputJSON(json);
+    }
+
+    public void showFlightUtilByMonth(String airportId) throws NotFoundException {
+        ArrayList<MonthItem> monthItems = new ArrayList<>();
+        double[] flightUtilByMonth = flightScheduleBean.getFlightUtilisationByMonthForDestination(airportId);
+        List<String> months = Arrays.asList(Constants.MONTHS_OF_YEAR);
+        for (int i = 0; i < months.size(); i++) {
+            MonthItem monthItem = new MonthItem();
+            monthItem.month = months.get(i);
+            monthItem.value = String.valueOf(flightUtilByMonth[i]);
+            monthItems.add(monthItem);
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(monthItems);
 
         outputJSON(json);
     }
