@@ -37,21 +37,12 @@
                                 <div class="form-group col-lg-12 #{!flight.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="flight">Choose Flight Code</label>
                                     <h:selectOneMenu styleClass="form-control" id="flight" value="#{createBookingClassManagedBean.flightId}" binding="#{flight}">
+                                        <f:selectItem itemLabel="Select a flight"/>
                                         <f:selectItems value="#{createBookingClassManagedBean.flights}" var="fl"
                                                        itemLabel="#{fl.getCode()} (#{fl.aircraftAssignment.route.origin.id} - #{fl.aircraftAssignment.route.destination.id}, #{commonManagedBean.formatDate('dd MMM yy', fl.getDepartureTime())})" itemValue="#{fl.id}" />
                                         <f:ajax event="change" render="price" listener="#{createBookingClassManagedBean.flightCodeChangeListener}"/>
                                     </h:selectOneMenu>
                                     <h:message for="flight" styleClass="help-block" />
-                                </div>
-                                <div class="form-group col-lg-12 #{!price.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="price">Price</label>
-                                    <h:inputText id="price" binding="#{price}" value="#{createBookingClassManagedBean.price}" styleClass="form-control"
-                                                 pt:placeholder="e.g. 199.99" required="true" requiredMessage="Price is required."
-                                                 pt:type="number" pt:min="1" pt:step="0.01">
-                                        <f:ajax event="change" listener="#{createBookingClassManagedBean.priceChangeListener}" render="allocation" />
-                                        <f:ajax event="focus" listener="#{createBookingClassManagedBean.priceChangeListener}" render="allocation" />
-                                    </h:inputText>
-                                    <h:message for="price" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!fareRule.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="flight">Choose Fare Rule</label>
@@ -70,6 +61,16 @@
                                                        itemLabel="#{tc}" itemValue="#{createBookingClassManagedBean.getClassIndex(tc)}" />
                                         <f:ajax event="change" listener="#{createBookingClassManagedBean.travelClassChangeListener}" render="price"/>
                                     </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-lg-12 #{!price.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="price">Price</label>
+                                    <h:inputText id="price" binding="#{price}" value="#{createBookingClassManagedBean.price}" styleClass="form-control"
+                                                 pt:placeholder="e.g. 199.99" required="true" requiredMessage="Price is required."
+                                                 pt:type="number" pt:min="1" pt:step="0.01">
+                                        <f:ajax event="change" listener="#{createBookingClassManagedBean.priceChangeListener}" render="allocation" />
+                                        <f:ajax event="focus" listener="#{createBookingClassManagedBean.priceChangeListener}" render="allocation" />
+                                    </h:inputText>
+                                    <h:message for="price" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-3 #{!allocation.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="allocation">Seats to Allocate</label>
