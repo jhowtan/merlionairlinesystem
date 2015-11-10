@@ -1,6 +1,9 @@
 package MAS.Bean;
 
+import MAS.Common.Constants;
+import MAS.Common.Utils;
 import MAS.Entity.*;
+import MAS.Exception.CancelException;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -8,6 +11,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.rmi.CORBA.Util;
 import java.util.*;
 
 @Stateless(name = "PNREJB")
@@ -18,6 +22,10 @@ public class PNRBean {
 
     @EJB
     CustomerBean customerBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
+    @EJB
+    BookingClassBean bookingClassBean;
 
     public PNRBean() {
     }
@@ -142,4 +150,29 @@ public class PNRBean {
         setSpecialServiceRequest(pnr, passengerNumber, actionCode, value, -1);
     }
 
+    public void cancel(long pnrId) throws CancelException {
+        try {
+            PNR pnr = getPNR(pnrId);
+            ArrayList<ETicket> eTickets = new ArrayList<>();
+            for (SpecialServiceRequest ssr : pnr.getSpecialServiceRequests()) {
+                if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+                    ETicket eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+                    if (eTicket.getFlight().getDepartureTime().before(Utils.hoursFromNow(24 * 2))) {
+                        throw new CancelException();
+                    }
+                    eTickets.add(eTicket);
+                }
+            }
+            for (ETicket eTicket : eTickets) {
+                BookingClass bookingClass = bookingClassBean.getBookingClass(eTicket.getBookingClass().getId());
+                bookingClass.setOccupied(bookingClass.getOccupied() - 1);
+                em.persist(bookingClass);
+                em.remove(eTicket);
+            }
+            em.remove(pnr);
+            em.flush();
+        } catch (Exception e) {
+            throw new CancelException();
+        }
+    }
 }

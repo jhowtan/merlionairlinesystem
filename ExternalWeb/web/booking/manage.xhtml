@@ -19,9 +19,15 @@
                         <h:panelGroup rendered="#{! empty manageBookingManagedBean.pnr}">
                             <p class="lead">Manage your flights for booking number #{manageBookingManagedBean.pnr.bookingReference}.</p>
                         </h:panelGroup>
+
                     </div>
                 </div>
                 <hr/>
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
             </div>
             <div class="container">
                 <h:panelGroup layout="block" styleClass="alert alert-warning" rendered="#{empty manageBookingManagedBean.pnr and ! empty manageBookingManagedBean.bookingReference and ! empty manageBookingManagedBean.passengerLastName}">Sorry, we were unable to retrieve your booking.</h:panelGroup>
@@ -111,7 +117,11 @@
                             </table>
                         </div>
                     </ui:repeat>
-
+                    <h:panelGroup rendered="#{manageBookingManagedBean.canCancel()}">
+                        <h:form>
+                            <h:commandButton action="#{manageBookingManagedBean.cancel()}" onclick="return confirm('Are you sure you want to cancel this booking?')" styleClass="btn btn-sm btn-danger btn-no-uppercase" value="Cancel Booking" />
+                        </h:form>
+                    </h:panelGroup>
                 </h:panelGroup>
             </div>
         </section>

@@ -7,16 +7,19 @@ import MAS.Common.Constants;
 import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
 import MAS.Entity.*;
+import MAS.Exception.CancelException;
 import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.*;
 
 @ManagedBean
+@ViewScoped
 public class ManageBookingManagedBean {
 
     private String bookingReference;
@@ -40,7 +43,6 @@ public class ManageBookingManagedBean {
         try {
             pnr = pnrBean.getPNR(Utils.convertBookingReference(bookingReference), passengerLastName);
         } catch (Exception e) {
-            e.printStackTrace();
             pnr = null;
         }
     }
@@ -52,6 +54,32 @@ public class ManageBookingManagedBean {
         } catch (NotFoundException e) {
             return "N/A";
         }
+    }
+
+    public void cancel() {
+        try {
+            pnrBean.cancel(pnr.getId());
+            pnr = null;
+            bookingReference = null;
+            passengerLastName = null;
+            FacesMessage m = new FacesMessage("Booking successfully cancelled.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (CancelException e) {
+            FacesMessage m = new FacesMessage("Unable to cancel your booking. Please contact customer support to make changes to your booking!");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public boolean canCancel() {
+        Date cancel = Utils.hoursFromNow(24 * 2);
+        for (Itinerary itinerary : pnr.getItineraries()) {
+            if (itinerary.getDepartureDate().before(cancel)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public List<FlightTicketCollection> getFlightTicketCollections(PNR pnr) {

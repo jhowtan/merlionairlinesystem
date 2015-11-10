@@ -21,7 +21,7 @@ public class ETicket {
 
     private PNR pnr;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     public PNR getPnr() {
         return pnr;
     }
