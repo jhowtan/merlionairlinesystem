@@ -11,10 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @ManagedBean
 public class CampaignsManagedBean {
@@ -23,6 +20,7 @@ public class CampaignsManagedBean {
     @EJB
     RouteBean routeBean;
 
+    private Map<String,String> params;
     private List<Campaign> campaigns;
     private List<Route> routes;
     private List<CampaignGroup> campaignGroups;
@@ -35,10 +33,40 @@ public class CampaignsManagedBean {
     private double discount;
     private String code;
     private List<String> routeIds;
+    private List<String> campaignGroupIds;
     private String bookingClassesString;
+    private Campaign campaign;
 
     @PostConstruct
     private void init() {
+        try {
+            params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            long campaignId = Long.parseLong(params.get("campaignId"));
+            campaign = campaignBean.getCampaign(campaignId);
+            startDate = campaign.getStartDate();
+            endDate = campaign.getEndDate();
+            targetStartDate = campaign.getTargetStartDate();
+            targetEndDate = campaign.getTargetEndDate();
+            campaignName = campaign.getName();
+            discount = campaign.getDiscount();
+            code = campaign.getCode();
+            campaignGroupIds = new ArrayList<>();
+            for (int i = 0; i < campaign.getCampaignGroups().size(); i++) {
+                campaignGroupIds.add(String.valueOf(campaign.getCampaignGroups().get(i).getId()));
+            }
+            routeIds = new ArrayList<>();
+            for (int i = 0; i < campaign.getRoutes().size(); i++) {
+                routeIds.add(String.valueOf(campaign.getRoutes().get(i).getId()));
+            }
+            System.out.println(routeIds + " " + campaign.getRoutes());
+            bookingClassesString = "";
+            for (int i = 0; i < campaign.getBookingClasses().size(); i++) {
+                bookingClassesString = bookingClassesString.concat(campaign.getBookingClasses().get(i) + ",");
+            }
+            if (bookingClassesString.length() > 1) bookingClassesString = bookingClassesString.substring(0, bookingClassesString.length() - 1);
+        } catch (Exception e) {
+
+        }
         load();
     }
 
@@ -55,6 +83,7 @@ public class CampaignsManagedBean {
             for (String s : routeIds) {
                 routeIdLongs.add(Long.parseLong(s));
             }
+            System.out.println(routeIdLongs);
             campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
             FacesMessage m = new FacesMessage("Campaign: " + campaignName + " created.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -65,6 +94,10 @@ public class CampaignsManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+    }
+
+    public void saveCampaign(long id) {
+
     }
 
     public void delete(Campaign campaign) {
@@ -175,5 +208,13 @@ public class CampaignsManagedBean {
 
     public void setBookingClassesString(String bookingClassesString) {
         this.bookingClassesString = bookingClassesString;
+    }
+
+    public List<String> getCampaignGroupIds() {
+        return campaignGroupIds;
+    }
+
+    public void setCampaignGroupIds(List<String> campaignGroupIds) {
+        this.campaignGroupIds = campaignGroupIds;
     }
 }

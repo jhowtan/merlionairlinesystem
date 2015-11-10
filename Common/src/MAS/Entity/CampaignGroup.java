@@ -1,9 +1,6 @@
 package MAS.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -32,5 +29,16 @@ public class CampaignGroup {
 
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
+    }
+
+    private String name;
+
+    @Basic
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -48,6 +48,7 @@ public class CampaignBean {
         campaign.setBookingClasses(bookingClasses);
         campaign.setUsageCount(0);
         campaign.setCampaignGroups(new ArrayList<>());
+        campaign.setRoutes(routes);
         em.persist(campaign);
         em.flush();
         return campaign.getId();
@@ -79,6 +80,12 @@ public class CampaignBean {
         Campaign campaign = em.find(Campaign.class, id);
         if (campaign == null) throw new NotFoundException();
         em.remove(campaign);
+    }
+
+    public Campaign getCampaign(long id) throws NotFoundException {
+        Campaign campaign = em.find(Campaign.class, id);
+        if (campaign == null) throw new NotFoundException();
+        return campaign;
     }
 
     public List<Campaign> getAllCampaigns() {
