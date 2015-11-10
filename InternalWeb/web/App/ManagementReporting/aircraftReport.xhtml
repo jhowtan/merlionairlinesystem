@@ -16,15 +16,15 @@
                         <h:form>
                             <div class="input-group">
                                 <span class="input-group-addon">Tail Numbers</span>
-                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{flightTimetableManagedBean.aircraftIdInputs}">
-                                    <f:selectItems value="#{flightTimetableManagedBean.aircrafts}" var="ac"
+                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{aircraftReportManagedBean.aircraftIdInputs}">
+                                    <f:selectItems value="#{aircraftReportManagedBean.aircrafts}" var="ac"
                                                    itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
                                 </h:selectManyListbox>
                             </div>
                             <br/>
                             <div class="text-left">
                                 <div class="btn-group">
-                                    <h:commandButton action="#{flightTimetableManagedBean.saveAircraft()}" value="Select Aircraft" styleClass="btn btn-success"/>
+                                    <h:commandButton action="#{aircraftReportManagedBean.saveAircraft()}" value="Select Aircraft" styleClass="btn btn-success"/>
                                 </div>
                             </div>
                         </h:form>
@@ -50,10 +50,9 @@
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $.get("getAircraftTimetable.xhtml?aircraftIds=#{flightTimetableManagedBean.aircraftIds}", function(data) {
+            $.get("reportingData.xhtml?q=aircraftTimetable&amp;aircraftIds=#{aircraftReportManagedBean.aircraftIds}", function(data) {
                 $(document).ready(function() {
                     $('#calendar').fullCalendar({
-                        //height: 420,
                         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
                         aspectRatio: 1.35,
                         editable: false,
