@@ -34,7 +34,7 @@ public class CreateMaintenanceShiftManagedBean {
     @EJB
     RouteBean routeBean;
 
-    private List<User> crewMembers;
+    private List<String> crewMemberIds;
     private List<User> allCrewMembers;
     private List<Airport> airports;
     private String airport;
@@ -42,7 +42,7 @@ public class CreateMaintenanceShiftManagedBean {
     @PostConstruct
     public void init() {
         airports = new ArrayList<>();
-        crewMembers = new ArrayList<>();
+        crewMemberIds = new ArrayList<>();
         airports = routeBean.getAllAirports();
         try {
             allCrewMembers = userBean.getUsersAtAirportWithJob(airports.get(0).getId(), Constants.maintenanceCrewJobId);
@@ -62,18 +62,26 @@ public class CreateMaintenanceShiftManagedBean {
     }
 
     public void createShift() {
-        MaintenanceShift maintenanceShift = new MaintenanceShift();
-        maintenanceShift.setCrew(crewMembers);
         try {
+            MaintenanceShift maintenanceShift = new MaintenanceShift();
+            List<User> selectedCrewMembers = new ArrayList<>();
+            for (int i = 0; i < crewMemberIds.size(); i++) {
+                selectedCrewMembers.add(userBean.getUser(Long.parseLong(crewMemberIds.get(i))));
+            }
+            maintenanceShift.setCrew(selectedCrewMembers);
             maintenanceShift.setAirport(routeBean.getAirport(airport));
             maintenanceShiftBean.createMaintenanceShift(maintenanceShift);
+
             FacesMessage m = new FacesMessage("Created maintenance shift for chosen users successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+            authManagedBean.createAuditLog("Created maintenance shift: " + maintenanceShift.getId(), "create_maintenance_shift");
+
         } catch (NotFoundException e) {
             FacesMessage m = new FacesMessage("Unable to create maintenance shift for chosen users.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage("status", m);        }
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public AuthManagedBean getAuthManagedBean() {
@@ -84,12 +92,12 @@ public class CreateMaintenanceShiftManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
-    public List<User> getCrewMembers() {
-        return crewMembers;
+    public List<String> getCrewMemberIds() {
+        return crewMemberIds;
     }
 
-    public void setCrewMembers(List<User> crewMembers) {
-        this.crewMembers = crewMembers;
+    public void setCrewMemberIds(List<String> crewMemberIds) {
+        this.crewMemberIds = crewMemberIds;
     }
 
     public List<User> getAllCrewMembers() {
