@@ -21,6 +21,10 @@ public class MailBean {
     }
 
     public boolean send(String recipientEmail, String recipientName, String subject, String body) {
+        if (recipientEmail.contains("@example.com")) {
+            // Ignore emails to this domain
+            return true;
+        }
         MimeMessage msg = new MimeMessage(session);
         try {
             msg.setFrom(new InternetAddress(session.getProperty("mail.from"), "Merlion Airlines"));
