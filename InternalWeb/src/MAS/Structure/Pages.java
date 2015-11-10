@@ -89,6 +89,8 @@ public class Pages {
     public static final Page LIST_MAINTENANCE_REPORTS = new Page("/App/CrewOperations/maintenanceReports", Permissions.MAINTENANCE_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
     public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/CrewOperations/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
     public static final Page FLIGHT_SIGNINOUT = new Page("/App/CrewOperations/signInOut", Permissions.FLIGHT_BID);
+    public static final Page MAINTENANCE_SHIFTS = new Page("/App/CrewOperations/maintenanceShifts", Permissions.MANAGE_MAINTENANCE_SHIFT);
+    public static final Page CREATE_MAINTENANCE_SHIFT = new Page("/App/CrewOperations/createMaintenanceShift", Permissions.MANAGE_MAINTENANCE_SHIFT);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
