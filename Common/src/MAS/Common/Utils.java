@@ -26,7 +26,7 @@ public class Utils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.YEAR, 1);
-        return calendar.getTime();
+        return addTimeToDate(calendar.getTime(), "00:00");
     }
 
     public static Date minutesLater(Date date, int minutes) {
