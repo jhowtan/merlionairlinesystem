@@ -10,10 +10,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.*;
 
 @ManagedBean
+@ViewScoped
 public class CampaignsManagedBean {
     @EJB
     CampaignBean campaignBean;
@@ -58,7 +60,6 @@ public class CampaignsManagedBean {
             for (int i = 0; i < campaign.getRoutes().size(); i++) {
                 routeIds.add(String.valueOf(campaign.getRoutes().get(i).getId()));
             }
-            System.out.println(routeIds + " " + campaign.getRoutes());
             bookingClassesString = "";
             for (int i = 0; i < campaign.getBookingClasses().size(); i++) {
                 bookingClassesString = bookingClassesString.concat(campaign.getBookingClasses().get(i) + ",");
@@ -83,7 +84,6 @@ public class CampaignsManagedBean {
             for (String s : routeIds) {
                 routeIdLongs.add(Long.parseLong(s));
             }
-            System.out.println(routeIdLongs);
             campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
             FacesMessage m = new FacesMessage("Campaign: " + campaignName + " created.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -96,8 +96,22 @@ public class CampaignsManagedBean {
         }
     }
 
-    public void saveCampaign(long id) {
-
+    public void saveCampaign() {
+        try {
+            List<String> bkClasses = Arrays.asList(bookingClassesString.replaceAll("^[,\\s]+", "").split("[,\\s]+"));
+            List<Long> routeIdLongs = new ArrayList<>();
+            for (String s : routeIds) {
+                routeIdLongs.add(Long.parseLong(s));
+            }
+            campaignBean.updateCampaign(campaign.getId(), campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
+            FacesMessage m = new FacesMessage("Campaign: " + campaign.getName() + " updated.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Campaign: " + campaign.getName() + " could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void delete(Campaign campaign) {

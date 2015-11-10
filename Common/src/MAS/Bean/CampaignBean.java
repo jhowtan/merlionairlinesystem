@@ -30,7 +30,7 @@ public class CampaignBean {
     }
 
     public long createCampaign(String name, Date startDate, Date endDate, double discount, List<String> bookingClasses,
-                               List<Long> routeIds, Date targetStartDate, Date targetEndDate, String code) throws NotFoundException{
+                               List<Long> routeIds, Date targetStartDate, Date targetEndDate, String code) throws NotFoundException {
         List<Route> routes = new ArrayList<>();
         for (int i = 0; i < routeIds.size(); i++) {
             Route route = routeBean.getRoute(routeIds.get(i));
@@ -52,6 +52,29 @@ public class CampaignBean {
         em.persist(campaign);
         em.flush();
         return campaign.getId();
+    }
+
+    public void updateCampaign(long id, String name, Date startDate, Date endDate, double discount, List<String> bookingClasses, List<Long> routeIds,
+                               Date targetStartDate, Date targetEndDate, String code) throws NotFoundException {
+        List<Route> routes = new ArrayList<>();
+        for (int i = 0; i < routeIds.size(); i++) {
+            Route route = routeBean.getRoute(routeIds.get(i));
+            if (route == null) throw new NotFoundException();
+            routes.add(route);
+        }
+        Campaign campaign = em.find(Campaign.class, id);
+        if (campaign == null) throw new NotFoundException();
+        campaign.setName(name);
+        campaign.setStartDate(startDate);
+        campaign.setEndDate(endDate);
+        campaign.setTargetEndDate(targetEndDate);
+        campaign.setTargetStartDate(targetStartDate);
+        campaign.setDiscount(discount);
+        campaign.setCode(code);
+        campaign.setBookingClasses(bookingClasses);
+        campaign.setCampaignGroups(new ArrayList<>());
+        campaign.setRoutes(routes);
+        em.persist(campaign);
     }
 
     public void addCampaignGroup(long campaignId, long campaignGrpId) throws NotFoundException {

@@ -51,7 +51,7 @@
                                 <div class="form-group col-lg-6 #{!startDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="startDate">Campaign Start Date</label>
                                     <h:inputText binding="#{startDate}" id="startDate"
-                                                 value="#{campaignsManagedBean.startDate}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.startDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -63,7 +63,7 @@
                                 <div class="form-group col-lg-6 #{!endDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="endDate">Campaign End Date</label>
                                     <h:inputText binding="#{endDate}" id="endDate"
-                                                 value="#{campaignsManagedBean.endDate}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.endDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -75,7 +75,7 @@
                                 <div class="form-group col-lg-6 #{!rstartDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="rstartDate">Targeted Flights Date Range Start</label>
                                     <h:inputText binding="#{rstartDate}" id="rstartDate"
-                                                 value="#{campaignsManagedBean.targetStartDate}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.targetStartDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -87,7 +87,7 @@
                                 <div class="form-group col-lg-6 #{!rendDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="rendDate">Targeted Flights Date Range Start</label>
                                     <h:inputText binding="#{rendDate}" id="rendDate"
-                                                 value="#{campaignsManagedBean.targetEndDate}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.targetEndDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
