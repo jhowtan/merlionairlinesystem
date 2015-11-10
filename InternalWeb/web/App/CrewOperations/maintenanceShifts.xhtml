@@ -20,32 +20,83 @@
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
-                    <table class="table table-striped" id="maintenance-shift-table">
-                        <thead>
-                        <tr>
-                            <th>Airport</th>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>No. of Hangars</th>
-                            <th>Crew Assigned</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{maintenanceShiftManagedBean.getAllMaintenanceShifts()}" var="ms">
-                            <tr>
-                                <td>#{ms.airport.name} (#{ms.airport.id})</td>
-                                <td>#{ms.airport.city.name}</td>
-                                <td>#{ms.airport.city.country.name}</td>
-                                <td>#{ms.airport.hangars}</td>
-                                <td>#{ms.crew.size()}</td>
-                                <td>
-                                    test
-                                </td>
-                            </tr>
-                        </ui:repeat>
-                        </tbody>
-                    </table>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Maintenance Shifts</div>
+                        <div class="panel-body">
+                            <table class="table table-striped" id="maintenance-shift-table">
+                                <thead>
+                                <tr>
+                                    <th>Airport</th>
+                                    <th>City</th>
+                                    <th>Country</th>
+                                    <th>No. of Hangars</th>
+                                    <th>Crew Assigned</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{maintenanceShiftManagedBean.getAllMaintenanceShifts()}" var="ms">
+                                    <tr>
+                                        <td>#{ms.airport.name} (#{ms.airport.id})</td>
+                                        <td>#{ms.airport.city.name}</td>
+                                        <td>#{ms.airport.city.country.name}</td>
+                                        <td>#{ms.airport.hangars}</td>
+                                        <td>#{ms.crew.size()}</td>
+                                        <td>
+                                            <h:commandLink action="#{flightReportsManagedBean.viewSelectedReport(fr.id)}"
+                                                           styleClass="btn btn-default btn-xs btn-primary" value="View">
+                                                <f:ajax render="shiftDetails ops-buttons" onevent="
+                                                                function(data) {
+                                                                    if (data.status == 'success') {
+                                                                        $('#shift-details').collapse();
+                                                                        $('html, body').animate({ scrollTop: $('#shift-details').offset().top }, 'slow');
+                                                                    }}"/>
+                                            </h:commandLink>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- END TOP PANEL -->
+                    <h:panelGroup id="shiftDetails" rendered="#{maintenanceShiftManagedBean.displayDetails()}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="shift-heading">
+                                <a data-toggle="collapse" href="#shift-details" aria-controls="shift-details">
+                                    Maintenance Shift Details
+                                </a>
+                            </div>
+                            <div class="panel-collapse collapse" id="shift-details" aria-labelledby="#shift-heading">
+                                <div class="panel-body container-fluid">
+                                    <p>
+                                        <strong>Airport:</strong><br/>
+                                        #{maintenanceShiftManagedBean.maintenanceShift.airport.name}, #{maintenanceShiftManagedBean.maintenanceShift.airport.city}<br/>
+                                    </p>
+                                    <p>
+                                        <strong>Airport Code:</strong><br/>
+                                        #{maintenanceShiftManagedBean.maintenanceShift.airport.id}
+                                    </p>
+                                    <p>
+                                        <strong>Hangars</strong><br/>
+                                        #{maintenanceShiftManagedBean.maintenanceShift.airport.hangars}
+                                    </p>
+                                    <p>
+                                        <strong>Crew Members:</strong><br />
+                                        <ui:repeat value="#{maintenanceShiftManagedBean.maintenanceShift.crew}" var="cm">
+                                            #{cm.firstName} #{cm.lastName}<br/>
+                                        </ui:repeat>
+                                    </p>
+                                    <div class="text-right">
+                                        <h:form id="ops-buttons">
+                                            <div class="btn-group">
+                                                <h:commandButton action="#{maintenanceShiftManagedBean.removeShift()}" value="Delete" styleClass="btn btn-danger" />
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- END BOTTOM PANEL -->
+                    </h:panelGroup>
                 </div>
             </div>
         </div>

@@ -19,10 +19,22 @@ public class MaintenanceShiftBean {
     public MaintenanceShiftBean() {
     }
 
+    public MaintenanceShift getMaintenanceShift(long id) throws NotFoundException {
+        MaintenanceShift maintenanceShift = em.find(MaintenanceShift.class, id);
+        if (maintenanceShift == null) throw new NotFoundException();
+        return maintenanceShift;
+    }
+
     public long createMaintenanceShift(MaintenanceShift maintenanceShift) {
         em.persist(maintenanceShift);
         em.flush();
         return maintenanceShift.getId();
+    }
+
+    public void deleteMaintenanceShift(long id) throws NotFoundException {
+        MaintenanceShift maintenanceShift = em.find(MaintenanceShift.class, id);
+        if (maintenanceShift == null) throw new NotFoundException();
+        em.remove(maintenanceShift);
     }
 
     public List<MaintenanceShift> getAllMaintenanceShifts() {

@@ -23,6 +23,8 @@ public class MaintenanceShiftManagedBean {
     @EJB
     MaintenanceShiftBean maintenanceShiftBean;
 
+    private MaintenanceShift maintenanceShift;
+
     public List<MaintenanceShift> getAllMaintenanceShifts() {
         try {
             Airport baseAirport = userBean.getUser(authManagedBean.getUserId()).getBaseAirport();
@@ -39,7 +41,39 @@ public class MaintenanceShiftManagedBean {
         return authManagedBean;
     }
 
+    public boolean displayDetails() {
+        return maintenanceShift != null;
+    }
+
+    public void viewMaintenanceShift(long id) {
+        try {
+            maintenanceShift = maintenanceShiftBean.getMaintenanceShift(id);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Cannot find view this maintenance shift for it may not exist.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public void removeShift() {
+        try {
+            maintenanceShiftBean.deleteMaintenanceShift(maintenanceShift.getId());
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Unable to delete this maintenance shift for it may not exist.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public MaintenanceShift getMaintenanceShift() {
+        return maintenanceShift;
+    }
+
+    public void setMaintenanceShift(MaintenanceShift maintenanceShift) {
+        this.maintenanceShift = maintenanceShift;
     }
 }
