@@ -1,0 +1,43 @@
+<ui:composition template="/App/CustomerRelations/Helpdesk/customer.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="helpdesk-main">
+        <h:panelGroup class="panel panel-primary #{helpdeskManagedBean.animateClass()} fadeIn" layout="block">
+            <div class="panel-heading">
+                <i class="fa fa-pencil fa-fw"></i>
+                Customer Flight Bookings
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Booking Reference</th>
+                        <th>Flight</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{flightBookingsManagedBean.getCustomerEtickets()}" var="eticket">
+                        <tr>
+                            <td style="vertical-align: middle;">#{eticket.pnr.bookingReference}</td>
+                            <td style="vertical-align: middle;">#{eticket.flight.code} / #{eticket.flight.aircraftAssignment.route.origin.id} - #{eticket.flight.aircraftAssignment.route.destination.id}</td>
+                            <td style="vertical-align: middle;">#{commonManagedBean.formatDate("E dd MMM, hh:mm", eticket.flight.departureTime)}</td>
+                            <td style="vertical-align: middle;" class="text-right">
+                                <a target="_blank" href="/ExternalWeb_war_exploded/booking/manage.xhtml?bookingReference=#{eticket.pnr.bookingReference}&amp;passengerLastName=#{flightBookingsManagedBean.customer.lastName}" class="btn btn-primary btn-sm">
+                                    Manage
+                                </a>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>
