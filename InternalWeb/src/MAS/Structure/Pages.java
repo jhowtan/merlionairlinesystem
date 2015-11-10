@@ -102,10 +102,12 @@ public class Pages {
     // AAS: MANAGEMENT REPORTING
     public static final Page PROFITABILITY_REPORT = new Page("/App/ManagementReporting/profitabilityReport", Permissions.MANAGE_REPORTING);
     public static final Page CREW_REPORT = new Page("/App/ManagementReporting/crewReport", Permissions.MANAGE_REPORTING);
-    public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING, Permissions.MANAGE_FLIGHT);
+    public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING);
     public static final Page FLIGHT_REPORT = new Page("/App/ManagementReporting/flightReport", Permissions.MANAGE_REPORTING);
     public static final Page MAINTENANCE_REPORT = new Page("/App/ManagementReporting/maintenanceReport", Permissions.MANAGE_REPORTING);
     public static final Page SEASONALITY_REPORT = new Page("/App/ManagementReporting/seasonalityReport", Permissions.MANAGE_REPORTING);
+    public static final Page CAMPAIGN_REPORT = new Page("/App/ManagementReporting/campaignReport", Permissions.MANAGE_REPORTING);
+
 
     // CRM
     public static final Page LIST_CUSTOMERS = new Page("/App/CustomerRelations/customers", Permissions.MANAGE_CUSTOMERS);

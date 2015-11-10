@@ -4,11 +4,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Crew Reporting - Merlion Airline System</ui:define>
+    <ui:define name="title">Campaign Reporting - Merlion Airline System</ui:define>
 
     <ui:define name="content">
         <div class="container-fluid">
-            <h1 class="page-header">Crew Reporting</h1>
+            <h1 class="page-header">Campaign Reporting</h1>
             <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                 <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                     #{message.detail}
@@ -22,7 +22,7 @@
                             Filter Options
                         </div>
                         <div class="panel-body">
-                           TEST
+                            <!-- CONTENT DATA HERE -->
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-           // <!-- MORRIS CHART STUFF HERE -->
+            // <!-- MORRIS CHART STUFF HERE -->
         </script>
     </ui:define>
 </ui:composition>
