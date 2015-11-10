@@ -9,7 +9,9 @@ import MAS.Entity.User;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -103,6 +105,14 @@ public class CommonManagedBean {
         DecimalFormat formatter = new DecimalFormat(format);
         formatter.setRoundingMode(RoundingMode.HALF_UP);
         return formatter.format(value);
+    }
+
+    public String urlEncode(String str) {
+        try {
+            return URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
     }
 
     public static String getDayString(int day) {

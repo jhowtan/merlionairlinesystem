@@ -76,20 +76,24 @@
                                                     <div class="panel-heading">
                                                         <i class="fa fa-plane fa-4x"></i>
                                                     </div>
-                                                    <a href="#">
+                                                    <h:outputLink value="bookFlight.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
                                                         <div class="panel-footer">
                                                             <span class="pull-left">Book a Flight</span>
                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                    </a>
-                                                    <a href="#">
+                                                    </h:outputLink>
+                                                    <h:outputLink value="flightBookings.xhtml">
+                                                        <f:param name="customerId" value="#{helpdeskManagedBean.customerId}" />
+                                                        <f:param name="animate" value="1" />
                                                         <div class="panel-footer">
                                                             <span class="pull-left">Retrieve Flight Bookings</span>
                                                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                                             <div class="clearfix"></div>
                                                         </div>
-                                                    </a>
+                                                    </h:outputLink>
                                                 </div>
                                             </div>
 
