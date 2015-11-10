@@ -43,7 +43,8 @@
                                         <td>#{ms.airport.hangars}</td>
                                         <td>#{ms.crew.size()}</td>
                                         <td>
-                                            <h:commandLink action="#{flightReportsManagedBean.viewSelectedReport(fr.id)}"
+                                            <h:form>
+                                            <h:commandLink action="#{maintenanceShiftManagedBean.viewMaintenanceShift(ms.id)}"
                                                            styleClass="btn btn-default btn-xs btn-primary" value="View">
                                                 <f:ajax render="shiftDetails ops-buttons" onevent="
                                                                 function(data) {
@@ -52,6 +53,7 @@
                                                                         $('html, body').animate({ scrollTop: $('#shift-details').offset().top }, 'slow');
                                                                     }}"/>
                                             </h:commandLink>
+                                            </h:form>
                                         </td>
                                     </tr>
                                 </ui:repeat>
@@ -59,7 +61,8 @@
                             </table>
                         </div>
                     </div> <!-- END TOP PANEL -->
-                    <h:panelGroup id="shiftDetails" rendered="#{maintenanceShiftManagedBean.displayDetails()}">
+                    <h:panelGroup id="shiftDetails">
+                        <h:panelGroup rendered="#{maintenanceShiftManagedBean.displayDetails()}">
                         <div class="panel panel-default">
                             <div class="panel-heading" id="shift-heading">
                                 <a data-toggle="collapse" href="#shift-details" aria-controls="shift-details">
@@ -96,6 +99,7 @@
                                 </div>
                             </div>
                         </div> <!-- END BOTTOM PANEL -->
+                        </h:panelGroup>
                     </h:panelGroup>
                 </div>
             </div>
