@@ -277,6 +277,27 @@ public class InitBean {
                         crewCertificationBean.createCrewCertification(certification);
                     }
                 }
+                for (int i = 0; i < 50; i ++) { //Maintenance crew
+                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
+                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
+                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
+                    long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
+                            "+65 6555-4325", airports.get(i % airports.size()));
+                    userBean.changePassword(userId, "password");
+                    userBean.setRoles(userId, Arrays.asList(roleId));
+                    userBean.changeJob(userId, Constants.maintenanceCrewJobId);
+                    List<AircraftType> acTypes = fleetBean.getAllAircraftTypes();
+                    for (int j = 0; j < acTypes.size(); j++) {
+                        Certification certification = new Certification();
+                        certification.setAircraftType(acTypes.get(j));
+                        certification.setExpiry(Utils.oneYearLater());
+                        certification.setApprovalDate(new Date());
+                        certification.setApprover(userBean.searchForUser("crewmgr").get(0));
+                        certification.setApprovalStatus(1);
+                        certification.setOwner(userBean.getUser(userId));
+                        crewCertificationBean.createCrewCertification(certification);
+                    }
+                }
 //                // INITIALIZE FLIGHT & BOOKING CLASS FOR 2ND SYS RELEASE
 //                long r1 = routeBean.createRoute("SIN", "HKG");
 //                long r2 = routeBean.createRoute("HKG", "SFO");
