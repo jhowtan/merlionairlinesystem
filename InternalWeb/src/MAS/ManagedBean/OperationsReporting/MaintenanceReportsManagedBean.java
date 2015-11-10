@@ -3,7 +3,7 @@ package MAS.ManagedBean.OperationsReporting;
 import MAS.Bean.OperationsReportingBean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
-import MAS.Entity.FlightReport;
+import MAS.Entity.MaintenanceReport;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
@@ -17,23 +17,23 @@ import java.util.List;
 
 @ManagedBean
 @ViewScoped
-public class FlightReportsManagedBean {
+public class MaintenanceReportsManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
     @EJB
     private OperationsReportingBean operationsReportingBean;
-    private FlightReport selectedFlightReport;
+    private MaintenanceReport selectedMaintenanceReport;
 
     public String categoryToString(int category) {
-        return Constants.FLIGHT_REPORT_CATEGORIES[category];
+        return Constants.MAINTENANCE_REPORT_CATEGORIES[category];
     }
 
     public void updateReportStatus(int status) {
         try {
-            operationsReportingBean.updateFlightReportStatus(selectedFlightReport.getId(), status);
+            operationsReportingBean.updateMaintenanceReportStatus(selectedMaintenanceReport.getId(), status);
         } catch (NotFoundException e) {
-            FacesMessage m = new FacesMessage("Cannot acknowledge/resolve a flight report that does not exist!");
+            FacesMessage m = new FacesMessage("Cannot acknowledge/resolve a maintenance report that does not exist!");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
@@ -41,7 +41,7 @@ public class FlightReportsManagedBean {
 
     public void viewSelectedReport(long id) {
         try {
-            selectedFlightReport = operationsReportingBean.getFlightReport(id);
+            selectedMaintenanceReport = operationsReportingBean.getMaintenanceReport(id);
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -51,22 +51,22 @@ public class FlightReportsManagedBean {
     }
 
     public boolean displayDetails() {
-        return isOpsReportManager() && selectedFlightReport != null;
+        return isOpsReportManager() && selectedMaintenanceReport != null;
     }
 
-    public List<FlightReport> getAllFlightReports() {
+    public List<MaintenanceReport> getAllMaintenanceReports() {
         if (isOpsReportManager())
-            return operationsReportingBean.getAllFlightReports();
+            return operationsReportingBean.getAllMaintenanceReports();
         else
-            return operationsReportingBean.getFlightReportsByUser(authManagedBean.getUserId());
+            return operationsReportingBean.getMaintenanceReportsByUser(authManagedBean.getUserId());
     }
 
-    public FlightReport getSelectedFlightReport() {
-        return selectedFlightReport;
+    public MaintenanceReport getSelectedMaintenanceReport() {
+        return selectedMaintenanceReport;
     }
 
-    public void setSelectedFlightReport(FlightReport selectedFlightReport) {
-        this.selectedFlightReport = selectedFlightReport;
+    public void setSelectedMaintenanceReport(MaintenanceReport selectedMaintenanceReport) {
+        this.selectedMaintenanceReport = selectedMaintenanceReport;
     }
 
     public AuthManagedBean getAuthManagedBean() {

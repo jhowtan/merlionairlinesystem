@@ -52,9 +52,11 @@ public class CreateMaintenanceReportManagedBean {
             List<AircraftMaintenanceSlot> airportMaintenanceSlots = aircraftMaintenanceSlotBean.findSlotByAirport(baseAirport.getId());
             crewMaintenanceSlots = new ArrayList<>();
             for (AircraftMaintenanceSlot maintenanceSlot : airportMaintenanceSlots) {
-                if ( maintenanceSlot.getStartTime().compareTo(new Date()) < 0) {
-                    if ( maintenanceSlot.getStartTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
-                        crewMaintenanceSlots.add(maintenanceSlot);
+                if (maintenanceSlot.getAirport().equals(baseAirport)) {
+                    if ( maintenanceSlot.getStartTime().compareTo(new Date()) < 0) {
+                        if ( maintenanceSlot.getStartTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
+                            crewMaintenanceSlots.add(maintenanceSlot);
+                    }
                 }
             }
         } catch (NotFoundException e) {
