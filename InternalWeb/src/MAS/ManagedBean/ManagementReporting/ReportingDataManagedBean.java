@@ -63,10 +63,50 @@ public class ReportingDataManagedBean {
             case "flightUtilByMonth":
                 showFlightUtilByMonth(id);
                 return;
+            case "flightSalesByMonth":
+                showFlightSalesByMonth(id);
+                return;
+            case "salesVarianceByMonth":
+                showSalesVarianceByMonth(id);
+                return;
             default:
                 return;
         }
     }
+
+    private void showSalesVarianceByMonth(String id) throws NotFoundException{
+        ArrayList<MonthItem> monthItems = new ArrayList<>();
+        double[] salesVariancePerMonth = flightScheduleBean.getSalesVarianceOfFlightForDestination(id);
+        List<String> months = Arrays.asList(Constants.MONTHS_OF_YEAR);
+        for (int i = 0; i < months.size(); i++) {
+            MonthItem monthItem = new MonthItem();
+            monthItem.month = months.get(i);
+            monthItem.value = String.valueOf(salesVariancePerMonth[i]);
+            monthItems.add(monthItem);
+        }
+        Gson gson = new Gson();
+        String json = gson.toJson(monthItems);
+
+        outputJSON(json);
+    }
+
+    private void showFlightSalesByMonth(String id) throws NotFoundException{
+        ArrayList<MonthItem> monthItems = new ArrayList<>();
+        int[] flightSalesPerMonth = flightScheduleBean.getFlightSalesVolumeByMonthForDestination(id);
+        List<String> months = Arrays.asList(Constants.MONTHS_OF_YEAR);
+        for (int i = 0; i < months.size(); i++) {
+            MonthItem monthItem = new MonthItem();
+            monthItem.month = months.get(i);
+            monthItem.value = String.valueOf(flightSalesPerMonth[i]);
+            monthItems.add(monthItem);
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(monthItems);
+
+        outputJSON(json);
+    }
+
 
     public void showTopPerformingFlights() throws NotFoundException {
         ArrayList<ReportItem> reportItems = new ArrayList<>();
