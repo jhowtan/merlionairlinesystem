@@ -3,9 +3,7 @@ package MAS.ManagedBean.ManagementReporting;
 import MAS.Bean.*;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
-import MAS.Entity.Aircraft;
-import MAS.Entity.AircraftMaintenanceSlot;
-import MAS.Entity.Flight;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import MAS.ManagedBean.CommonManagedBean;
@@ -34,6 +32,10 @@ public class ReportingDataManagedBean {
     private FlightScheduleBean flightScheduleBean;
     @EJB
     private AircraftMaintenanceSlotBean aircraftMaintenanceSlotBean;
+    @EJB
+    private UserBean userBean;
+    @EJB
+    private FlightRosterBean flightRosterBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -51,12 +53,12 @@ public class ReportingDataManagedBean {
         public String value;
     }
 
-    private class CalendarData {
-        public List<CalendarEntry> entries;
-        public List<CalendarResource> resources;
+    private class AircraftCalendarData {
+        public List<AircraftCalendarEntry> entries;
+        public List<AircraftCalendarResource> resources;
     }
 
-    private class CalendarEntry {
+    private class AircraftCalendarEntry {
         public String title;
         public Date start;
         public Date end;
@@ -66,9 +68,30 @@ public class ReportingDataManagedBean {
         public String aircraftId;
     }
 
-    private class CalendarResource {
+    private class AircraftCalendarResource {
         public String id;
         public String tailNumber;
+    }
+
+    private class CrewCalendarData {
+        public List<CrewCalendarEntry> entries;
+        public List<CrewCalendarResource> resources;
+    }
+
+    private class CrewCalendarEntry {
+        public String title;
+        public Date start;
+        public Date end;
+        public String info;
+        public String color;
+        public String userId;
+        public ArrayList<String> className;
+    }
+
+    private class CrewCalendarResource {
+        public String id;
+        public String fullName;
+        public String job;
     }
 
     public void search() throws NotFoundException {
@@ -76,10 +99,14 @@ public class ReportingDataManagedBean {
         String query = params.get("q");
         String id = params.get("id");
         String aircraftIds = params.get("aircraftIds");
+        String jobIds = params.get("jobIds");
 
         switch (query) {
             case "aircraftTimetable":
                 showAircraftTimetable(aircraftIds);
+                return;
+            case "crewTimetable":
+                showCrewTimetable(jobIds);
                 return;
             case "topPerformingFlights":
                 showTopPerformingFlights();
@@ -104,26 +131,103 @@ public class ReportingDataManagedBean {
         }
     }
 
+    private void showCrewTimetable(String jobIds) throws NotFoundException {
+        String[] jobIdsString = jobIds.split("-");
+        ArrayList<CrewCalendarEntry> calendarEntries = new ArrayList<>();
+        ArrayList<CrewCalendarResource> crewCalendarResources = new ArrayList<>();
+        List<User> crewStaff;
+        if (jobIdsString[0].equals("")) {
+            String json = "[]";
+            outputJSON(json);
+        }
+        System.out.println(jobIdsString.length + " " + jobIdsString[0]);
+        for (String jobIdString : jobIdsString) {
+            // Deal with users for job
+            int jobId = Integer.parseInt(jobIdString);
+            crewStaff = userBean.getUsersWithJobs(jobId);
+            for (User crew : crewStaff) {
+                // Deal with individual user for job
+                CrewCalendarResource cr = new CrewCalendarResource();
+
+                // Cockpit Crew / Cabin Crew
+                if (jobId == Constants.cockpitCrewJobId || jobId == Constants.cabinCrewJobId) {
+                    List<FlightRoster> crewFlightRosters = flightRosterBean.getFlightRostersOfUser(crew.getId());
+                    for (FlightRoster fr : crewFlightRosters) {
+                        CrewCalendarEntry c = new CrewCalendarEntry();
+                        Flight f = fr.getFlight();
+                        c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
+                                f.getAircraftAssignment().getRoute().getDestination().getId();
+                        c.start = f.getDepartureTime();
+                        c.end = f.getArrivalTime();
+                        c.className = new ArrayList<>();
+                        if (jobId == Constants.cockpitCrewJobId) {
+                            c.className.add("calendar-green-event");
+                        } else {
+                            c.className.add("calendar-blue-event");
+                        }
+                        c.info = f.getCode();
+                        c.userId = String.valueOf(crew.getId());
+                        calendarEntries.add(c);
+
+                        cr.id = String.valueOf(crew.getId());
+                        cr.fullName = crew.getFirstName() + " " + crew.getLastName();
+                        cr.job = (jobId == Constants.cockpitCrewJobId) ? "Cockpit Crew" : "Cabin Crew";
+                        crewCalendarResources.add(cr);
+                    }
+                }
+                // Maintenance Crew
+                if (jobId == Constants.maintenanceCrewJobId) {
+                    List<AircraftMaintenanceSlot> resultMaint = aircraftMaintenanceSlotBean.findSlotByAirport(crew.getBaseAirport().getId());
+                    for (AircraftMaintenanceSlot m : resultMaint) {
+                        CrewCalendarEntry c = new CrewCalendarEntry();
+                        c.title = m.getAirport().getId();
+                        c.start = m.getStartTime();
+                        c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
+                        c.className = new ArrayList<>();
+                        c.className.add("calendar-red-event");
+                        c.userId = String.valueOf(crew.getId());
+                        c.info = "Maintenance";
+                        calendarEntries.add(c);
+
+                        cr.id = String.valueOf(crew.getId());
+                        cr.fullName = crew.getFirstName() + " " + crew.getLastName();
+                        cr.job = "Maintenance Crew";
+                        crewCalendarResources.add(cr);
+                    }
+                }
+
+            }
+        }
+        CrewCalendarData cd = new CrewCalendarData();
+        cd.entries = calendarEntries;
+        cd.resources = crewCalendarResources;
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+        String json = gson.toJson(cd);
+
+        outputJSON(json);
+    }
+
     private void showAircraftTimetable(String aircraftIds) {
         try {
             String[] aircraftIdsString = aircraftIds.split("-");
 
-            ArrayList<CalendarEntry> calendarEntries = new ArrayList<>();
-            ArrayList<CalendarResource> calendarResources = new ArrayList<>();
+            ArrayList<AircraftCalendarEntry> calendarEntries = new ArrayList<>();
+            ArrayList<AircraftCalendarResource> aircraftCalendarResources = new ArrayList<>();
             for (String aircraftIdString : aircraftIdsString) {
                 long aircraftId = Long.parseLong(aircraftIdString);
 
                 Aircraft ac = fleetBean.getAircraft(aircraftId);
-                CalendarResource cr = new CalendarResource();
+                AircraftCalendarResource cr = new AircraftCalendarResource();
                 cr.id = aircraftIdString;
                 cr.tailNumber = ac.getTailNumber();
-                calendarResources.add(cr);
+                aircraftCalendarResources.add(cr);
 
                 List<Flight> resultFlights = flightScheduleBean.getFlightOfAc(aircraftId);
                 List<AircraftMaintenanceSlot> resultMaint = aircraftMaintenanceSlotBean.findSlotByAircraft(aircraftId);
 
                 for (Flight f : resultFlights) {
-                    CalendarEntry c = new CalendarEntry();
+                    AircraftCalendarEntry c = new AircraftCalendarEntry();
                     c.title = f.getAircraftAssignment().getRoute().getOrigin().getId() + " - " +
                             f.getAircraftAssignment().getRoute().getDestination().getId();
                     c.start = f.getDepartureTime();
@@ -136,7 +240,7 @@ public class ReportingDataManagedBean {
                 }
 
                 for (AircraftMaintenanceSlot m : resultMaint) {
-                    CalendarEntry c = new CalendarEntry();
+                    AircraftCalendarEntry c = new AircraftCalendarEntry();
                     c.title = m.getAirport().getId();
                     c.start = m.getStartTime();
                     c.end = Utils.minutesLater(m.getStartTime(), (int) m.getDuration());
@@ -148,9 +252,9 @@ public class ReportingDataManagedBean {
                 }
             }
 
-            CalendarData cd = new CalendarData();
+            AircraftCalendarData cd = new AircraftCalendarData();
             cd.entries = calendarEntries;
-            cd.resources = calendarResources;
+            cd.resources = aircraftCalendarResources;
 
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
             String json = gson.toJson(cd);

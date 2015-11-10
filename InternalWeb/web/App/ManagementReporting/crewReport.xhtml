@@ -22,19 +22,99 @@
                             Filter Options
                         </div>
                         <div class="panel-body">
-                           TEST
+                            <div class="form-group">
+                                <label class="control-label">Select Crew Job</label>
+                                <h:form>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Job Type</span>
+                                        <h:selectManyListbox styleClass="form-control" required="true" requiredMessage="Job selection is required" value="#{crewReportManagedBean.jobInputs}">
+                                            <f:selectItems value="#{crewReportManagedBean.jobs}" var="job"
+                                                           itemLabel="#{job}" itemValue="#{job}" />
+                                        </h:selectManyListbox>
+                                    </div>
+                                    <br/>
+                                    <div class="text-left">
+                                        <div class="btn-group">
+                                            <h:commandButton action="#{crewReportManagedBean.filter()}" value="Select Crew" styleClass="btn btn-success"/>
+                                        </div>
+                                    </div>
+                                </h:form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Crew Timetable
+                        </div>
+                        <div class="panel-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+        <style type="text/css">
+            .calendar-red-event {
+                background: palevioletred;
+            }
+            .calendar-blue-event {
+                background: deepskyblue;
+            }
+            .calendar-green-event {
+                background: forestgreen;
+            }
+        </style>
     </ui:define>
     <ui:define name="javascript">
-        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
-        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-           // <!-- MORRIS CHART STUFF HERE -->
+            $.get("reportingData.xhtml?q=crewTimetable&amp;jobIds=#{crewReportManagedBean.jobIds}", function(data) {
+                $(document).ready(function() {
+                    $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                        aspectRatio: 1.5,
+                        editable: false,
+                        header: {
+                            left: 'prev,next, today',
+                            center: 'title',
+                            right: 'timelineDay,timelineWeek,timelineMonth,timelineYear'
+                        },
+                        buttonText: {
+                            next: 'Next',
+                            prev: 'Prev'
+                        },
+                        views: {
+                        },
+                        resourceColumns: [
+                            {
+                                labelText: 'Crew Staff',
+                                field: 'fullName'
+                            },
+                            {
+                                labelText: 'Job',
+                                field: 'job'
+                            }
+                        ],
+                        resourceAreaWidth: "20%",
+                        defaultView: 'timelineWeek',
+                        allDaySlot: false,
+                        eventAfterRender: function(event, element, view) {
+                            $(element).tooltip({
+                                title: event.info + ": " + event.title,
+                                trigger: 'hover',
+                                placement: 'bottom',
+                                container: 'body'
+                            });
+                        },
+                        eventResourceField: 'userId',
+                        events: data.entries,
+                        resources: data.resources
+                    });
+                });
+            });
         </script>
     </ui:define>
 </ui:composition>
