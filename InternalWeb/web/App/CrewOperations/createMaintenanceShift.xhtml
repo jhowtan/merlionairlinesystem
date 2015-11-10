@@ -25,28 +25,27 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Maintenance Shift Details</div>
                             <div class="panel-body">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label class="control-label" for="airport">Airport:</label>
-                                        <h:form>
-                                            <h:selectOneMenu styleClass="form-control"
-                                                             id="airport" value="#{createMaintenanceShiftManagedBean.airport}">
-                                                <f:selectItems value="#{createMaintenanceShiftManagedBean.airports}" var="ap"
-                                                               itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
-                                                <f:ajax listener="#{createMaintenanceShiftManagedBean.airportChangeListener}" render="crew-list"/>
-                                            </h:selectOneMenu>
-                                        </h:form>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label" for="airport">Airport:</label>
-                                        <h:form>
-                                            <h:selectManyListbox styleClass="form-control"
-                                                             id="crew" value="#{createMaintenanceShiftManagedBean.crewMembers}">
-                                                <f:selectItems value="#{createMaintenanceShiftManagedBean.allCrewMembers}" var="cm"
-                                                               itemLabel="#{cm.firstName} #{cm.lastName}" itemValue="#{cm.id}" />
-                                            </h:selectManyListbox>
-                                        </h:form>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="airport">Airport:</label>
+                                    <h:selectOneMenu styleClass="form-control"
+                                                     id="airport" value="#{createMaintenanceShiftManagedBean.airport}">
+                                        <f:selectItems value="#{createMaintenanceShiftManagedBean.airports}" var="ap"
+                                                       itemLabel="#{ap.id} - #{ap.name}" itemValue="#{ap.id}" />
+                                        <f:ajax listener="#{createMaintenanceShiftManagedBean.airportChangeListener}" render="crew-list"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="airport">Crew Members:</label>
+                                    <h:panelGroup rendered="#{createMaintenanceShiftManagedBean.allCrewMembers.size() != 0}">
+                                        <h:selectManyListbox styleClass="form-control"
+                                                             id="crew-list" value="#{createMaintenanceShiftManagedBean.crewMembers}">
+                                            <f:selectItems value="#{createMaintenanceShiftManagedBean.allCrewMembers}" var="cm"
+                                                           itemLabel="#{cm.firstName} #{cm.lastName}" itemValue="#{cm.id}" />
+                                        </h:selectManyListbox>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{createMaintenanceShiftManagedBean.allCrewMembers.size() == 0}">
+                                        <p><strong>There are no crew members who are responsible for maintenance at this airport</strong></p>
+                                    </h:panelGroup>
                                 </div>
                             </div>
                         </div>

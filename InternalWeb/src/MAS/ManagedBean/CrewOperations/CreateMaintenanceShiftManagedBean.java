@@ -1,15 +1,12 @@
 package MAS.ManagedBean.CrewOperations;
 
-import MAS.Bean.AircraftMaintenanceSlotBean;
-import MAS.Bean.MaintenanceShiftBean;
-import MAS.Bean.UserBean;
+import MAS.Bean.*;
 import MAS.Common.Constants;
 import MAS.Entity.Airport;
 import MAS.Entity.MaintenanceShift;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
-import MAS.ManagedBean.RoutePlanning.AirportsManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -33,26 +30,30 @@ public class CreateMaintenanceShiftManagedBean {
     @EJB
     AircraftMaintenanceSlotBean aircraftMaintenanceSlotBean;
     @EJB
-    AirportsManagedBean airportsManagedBean;
-    @EJB
     MaintenanceShiftBean maintenanceShiftBean;
+    @EJB
+    RouteBean routeBean;
 
     private List<User> crewMembers;
     private List<User> allCrewMembers;
     private List<Airport> airports;
-    private Airport airport;
+    private String airport;
 
     @PostConstruct
     public void init() {
         airports = new ArrayList<>();
         crewMembers = new ArrayList<>();
-        allCrewMembers = new ArrayList<>();
-        airports = airportsManagedBean.getAllAirports();
+        airports = routeBean.getAllAirports();
+        try {
+            allCrewMembers = userBean.getUsersAtAirportWithJob(airports.get(0).getId(), Constants.maintenanceCrewJobId);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void airportChangeListener(AjaxBehaviorEvent event) {
         try {
-            allCrewMembers = userBean.getUsersAtAirportWithJob(airport.getId(), Constants.maintenanceCrewJobId);
+            allCrewMembers = userBean.getUsersAtAirportWithJob(airport, Constants.maintenanceCrewJobId);
         } catch (NotFoundException e) {
             FacesMessage m = new FacesMessage("Cannot find users for chosen airport in system, airport may not exist.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -63,11 +64,16 @@ public class CreateMaintenanceShiftManagedBean {
     public void createShift() {
         MaintenanceShift maintenanceShift = new MaintenanceShift();
         maintenanceShift.setCrew(crewMembers);
-        maintenanceShift.setAirport(airport);
-        maintenanceShiftBean.createMaintenanceShift(maintenanceShift);
-        FacesMessage m = new FacesMessage("Created maintenance shift for chosen users successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+        try {
+            maintenanceShift.setAirport(routeBean.getAirport(airport));
+            maintenanceShiftBean.createMaintenanceShift(maintenanceShift);
+            FacesMessage m = new FacesMessage("Created maintenance shift for chosen users successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Unable to create maintenance shift for chosen users.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);        }
     }
 
     public AuthManagedBean getAuthManagedBean() {
@@ -102,11 +108,11 @@ public class CreateMaintenanceShiftManagedBean {
         this.airports = airports;
     }
 
-    public Airport getAirport() {
+    public String getAirport() {
         return airport;
     }
 
-    public void setAirport(Airport airport) {
+    public void setAirport(String airport) {
         this.airport = airport;
     }
 }
