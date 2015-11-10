@@ -8,11 +8,10 @@
 
     <ui:define name="content">
         <div class="container-fluid">
+            <h1 class="page-header">Aircraft Reporting</h1>
             <div class="row">
-                <h:form>
                 <div class="col-lg-12">
-                    <h1 class="page-header">Aircraft Reporting</h1>
-                    <div class="form-group col-lg-12">
+                    <div class="form-group">
                         <label class="control-label">Select Aircraft</label>
                         <h:form>
                             <div class="input-group">
@@ -23,7 +22,7 @@
                                 </h:selectManyListbox>
                             </div>
                             <br/>
-                            <div class="col-lg-12">
+                            <div class="text-left">
                                 <div class="btn-group">
                                     <h:commandButton action="#{flightTimetableManagedBean.saveAircraft()}" value="Select Aircraft" styleClass="btn btn-success"/>
                                 </div>
@@ -38,7 +37,6 @@
                         <br/>
                     </div>
                 </h:panelGroup>
-                </h:form>
             </div>
         </div>
         <style type="text/css">
