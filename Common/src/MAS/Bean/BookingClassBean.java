@@ -30,7 +30,7 @@ public class BookingClassBean {
         bookingClass.setTravelClass(travelClass);
         bookingClass.setAllocation(allocation);
         bookingClass.setOccupied(0);
-        bookingClass.setOpen(false);
+        bookingClass.setOpen(true);
         bookingClass.setFareRule(fareRule);
         bookingClass.setFlight(flight);
         bookingClass.setPrice(price);
