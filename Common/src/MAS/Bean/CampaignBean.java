@@ -122,6 +122,7 @@ public class CampaignBean {
             if (customer == null) throw new NotFoundException();
             customers.add(customer);
         }
+        System.out.println(customers);
         CampaignGroup campaignGroup = new CampaignGroup();
         campaignGroup.setCustomers(customers);
         campaignGroup.setName(name);
@@ -129,6 +130,20 @@ public class CampaignBean {
         em.persist(campaignGroup);
         em.flush();
         return campaignGroup.getId();
+    }
+
+    public void updateCampaignGroup(long id, List<Long> customerIds, String name, String description) throws NotFoundException {
+        List<Customer> customers = new ArrayList<>();
+        for (int i = 0; i < customerIds.size(); i++) {
+            Customer customer = customerBean.getCustomer(customerIds.get(i));
+            if (customer == null) throw new NotFoundException();
+            customers.add(customer);
+        }
+        CampaignGroup campaignGroup = em.find(CampaignGroup.class, id);
+        if (campaignGroup == null) throw new NotFoundException();
+        campaignGroup.setCustomers(customers);
+        campaignGroup.setName(name);
+        campaignGroup.setDescription(description);
     }
 
     public void removeCampaignGroup(long id) throws NotFoundException {

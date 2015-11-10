@@ -66,9 +66,8 @@ public class CampaignManagedBean {
             }
             if (bookingClassesString.length() > 1) bookingClassesString = bookingClassesString.substring(0, bookingClassesString.length() - 1);
         } catch (Exception e) {
-
+            load();
         }
-        load();
     }
 
     private void load() {

@@ -220,4 +220,9 @@ public class Customer {
     public void setMiles(int miles) {
         this.miles = miles;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Customer && this.id.equals(((Customer) obj).getId());
+    }
 }

@@ -1,49 +1,44 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Campaigns - Merlion Airline System</ui:define>
+    <ui:define name="title">Customer Groups - Merlion Airline System</ui:define>
 
     <ui:define name="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Campaigns</h1>
+                    <h1 class="page-header">Customer Groups</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation" class="active"><h:link outcome="/App/CustomerRelations/campaigns">Campaigns</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/CustomerRelations/createCampaign">Create Campaign</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="/App/CustomerRelations/customerGroups">Customer Group</h:link></li>
+                        <li role="presentation"><h:link outcome="/App/CustomerRelations/createCustomerGroup">Create Customer Group</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
-                    <table class="table table-striped" id="campaigns_table">
+                    <table class="table table-striped" id="campaignGrp_table">
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Code</th>
-                            <th>Discount</th>
-                            <th>Usage Count</th>
+                            <th>Desc</th>
+                            <th>Number of Members</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <ui:repeat value="#{campaignManagedBean.campaigns}" var="cm">
+                        <ui:repeat value="#{campaignGroupManagedBean.campaignGroups}" var="cm">
                             <tr>
                                 <td>#{cm.name}</td>
-                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.startDate)}</td>
-                                <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.endDate)}</td>
-                                <td>#{cm.code}</td>
-                                <td>#{cm.discount}</td>
-                                <td>#{cm.usageCount}</td>
+                                <td>#{cm.description}</td>
+                                <td>#{cm.customers.size()}</td>
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
-                                            <!--<h:link outcome="/App/CustomerRelations/viewCampaign" styleClass="btn btn-default btn-xs btn-info"><f:param name="flId" value="#{fl.id}"><i class="fa fa-pencil"></i> Edit Flight</f:param></h:link>-->
-                                            <h:commandLink action="#{campaignManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete campaign: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                            <h:link outcome="/App/CustomerRelations/viewCustomerGroup" styleClass="btn btn-default btn-xs btn-info"><f:param name="cmGrpId" value="#{cm.id}"><i class="fa fa-pencil"></i> Edit Group</f:param></h:link>
+                                            <h:commandLink action="#{campaignGroupManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete customer group: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                         </div>
                                     </h:form>
                                 </td>
@@ -57,10 +52,10 @@
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#campaigns_table').DataTable({
+            $('#campaignGrp_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [5] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [2] }
                 ]
             });
         </script>

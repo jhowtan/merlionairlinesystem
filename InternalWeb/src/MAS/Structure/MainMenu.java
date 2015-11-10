@@ -90,8 +90,8 @@ public class MainMenu {
                 new MenuEntry("Customer Relations", "user",
                         new MenuEntry("FFP Customers", null, Pages.LIST_CUSTOMERS, Pages.VIEW_CUSTOMER),
                         new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD),
-                        new MenuEntry("Campaigns", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN, Pages.UPDATE_CAMPAIGNGROUP),
-                        new MenuEntry("Customer Groups", null, Pages.VIEW_CAMPAIGNGROUPS, Pages.CREATE_CAMPAIGNGROUP, Pages.UPDATE_CAMPAIGNGROUP)
+                        new MenuEntry("Campaigns", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN, Pages.UPDATE_CAMPAIGN),
+                        new MenuEntry("Customer Groups", null, Pages.VIEW_CUSTOMERGROUPS, Pages.CREATE_CUSTOMERGROUP, Pages.UPDATE_CUSTOMERGROUP)
                 )
         );
 

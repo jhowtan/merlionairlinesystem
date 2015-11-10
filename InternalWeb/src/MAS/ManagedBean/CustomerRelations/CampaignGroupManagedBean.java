@@ -7,12 +7,17 @@ import MAS.Entity.Customer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @ManagedBean
+@ViewScoped
 public class CampaignGroupManagedBean {
 
     @EJB
@@ -27,9 +32,27 @@ public class CampaignGroupManagedBean {
     private List<Customer> customers;
     private Map<Long, Boolean> customerMap;
 
+    private Map<String,String> params;
+    private CampaignGroup campaignGroup;
+    private long campaignGroupId;
+
     @PostConstruct
     private void init() {
-        populateCustomers();
+        try {
+            params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            campaignGroupId = Long.parseLong(params.get("cmGrpId"));
+            campaignGroup = campaignBean.getCampaignGroup(campaignGroupId);
+            groupName = campaignGroup.getName();
+            desc = campaignGroup.getDescription();
+            populateExistingCustomers();
+        } catch (Exception e) {
+            populateCustomers();
+            load();
+        }
+    }
+
+    private void load() {
+        campaignGroups = campaignBean.getAllCampaignGroups();
     }
 
     private void populateCustomers() {
@@ -40,12 +63,73 @@ public class CampaignGroupManagedBean {
         }
     }
 
+    private void populateExistingCustomers() {
+        customers = customerBean.getAllCustomers();
+        customerMap = new HashMap<>();
+        List<Customer> groupMembers = campaignGroup.getCustomers();
+        for (Customer customer : customers) {
+            if (groupMembers.contains(customer)){
+                customerMap.put(customer.getId(), Boolean.TRUE);
+            } else {
+                customerMap.put(customer.getId(), Boolean.FALSE);
+            }
+        }
+    }
+
     public void createCampaignGroup() {
         try {
-
+            ArrayList<Long> customerIds = new ArrayList<>();
+            for (Object o : customerMap.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
+                if ((Boolean) pair.getValue()) {
+                    customerIds.add((Long) pair.getKey());
+                }
+            }
+            campaignBean.createCampaignGroup(customerIds, groupName, desc);
+            groupName = "";
+            desc = "";
+            FacesMessage m = new FacesMessage("Customer created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (Exception e) {
-
+            FacesMessage m = new FacesMessage("Could not create customer group.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
+    }
+
+    public void saveCampaignGroup() {
+        try {
+            ArrayList<Long> customerIds = new ArrayList<>();
+            for (Object o : customerMap.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
+                if ((Boolean) pair.getValue()) {
+                    customerIds.add((Long) pair.getKey());
+                }
+            }
+            campaignBean.updateCampaignGroup(campaignGroup.getId(), customerIds, groupName, desc);
+            FacesMessage m = new FacesMessage("Customer group updated successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Customer group could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public void delete(CampaignGroup campaignGroup) {
+        try {
+            campaignBean.removeCampaignGroup(campaignGroup.getId());
+            FacesMessage m = new FacesMessage("Customer group: " + campaignGroup.getName() + " deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Customer group: " + campaignGroup.getName() + " could not be deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+        load();
     }
 
     public List<CampaignGroup> getCampaignGroups() {
