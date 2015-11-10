@@ -36,15 +36,13 @@ public class MainMenu {
                         new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS),
                         new MenuEntry("Routes", null, Pages.LIST_ROUTES, Pages.VISUALIZE_ROUTES, Pages.CREATE_ROUTES, Pages.UPDATE_ROUTES),
                         new MenuEntry("Aircraft Assignment", null, Pages.LIST_AIRCRAFT_ASSIGNMENT, Pages.CREATE_AIRCRAFT_ASSIGNMENT, Pages.UPDATE_AIRCRAFT_ASSIGNMENT)
-
                 )
         );
 
         entries.add(
                 new MenuEntry("Flight Planning", "plane",
                         new MenuEntry("Flights", null, Pages.LIST_FLIGHTS, Pages.CREATE_FLIGHT, Pages.CREATE_FLIGHT_SINGLE, Pages.CREATE_FLIGHT_RECURRING, Pages.UPDATE_FLIGHT),
-                        new MenuEntry("Maintenance", null, Pages.LIST_MAINTENANCE_SLOTS, Pages.CREATE_MAINTENANCE_SLOT, Pages.UPDATE_MAINTENANCE_SLOT),
-                        new MenuEntry("Aircraft Timetable", null, Pages.FLIGHT_TIMETABLE)
+                        new MenuEntry("Maintenance", null, Pages.LIST_MAINTENANCE_SLOTS, Pages.CREATE_MAINTENANCE_SLOT, Pages.UPDATE_MAINTENANCE_SLOT)
                 )
         );
 
@@ -100,7 +98,7 @@ public class MainMenu {
                         new MenuEntry("Profitability Reporting", null, Pages.PROFITABILITY_REPORT),
                         new MenuEntry("Seasonality Reporting", null, Pages.SEASONALITY_REPORT),
                         new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),
-                        new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
+                        new MenuEntry("Aircraft Reporting", null, Pages.FLIGHT_TIMETABLE),
                         new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
                         new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT)
                 )
