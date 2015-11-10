@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="bookingClasses" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="passengersDetails" type="{http://WebService.MAS/}wsPassengerDetails" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="partnerId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "book", propOrder = {
     "bookingClasses",
-    "passengersDetails"
+    "passengersDetails",
+    "partnerId"
 })
 public class Book {
 
@@ -40,6 +42,7 @@ public class Book {
     protected List<Long> bookingClasses;
     @XmlElement(nillable = true)
     protected List<WsPassengerDetails> passengersDetails;
+    protected String partnerId;
 
     /**
      * Gets the value of the bookingClasses property.
@@ -97,6 +100,30 @@ public class Book {
             passengersDetails = new ArrayList<WsPassengerDetails>();
         }
         return this.passengersDetails;
+    }
+
+    /**
+     * Gets the value of the partnerId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    /**
+     * Sets the value of the partnerId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPartnerId(String value) {
+        this.partnerId = value;
     }
 
 }

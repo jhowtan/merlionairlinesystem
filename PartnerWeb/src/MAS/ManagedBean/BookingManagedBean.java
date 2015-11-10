@@ -15,6 +15,8 @@ public class BookingManagedBean {
 
     DirectDistributionSystem dds;
 
+    private String partnerId;
+
     private String origin;
     private String destination;
     private Date departureDate;
@@ -64,7 +66,7 @@ public class BookingManagedBean {
                 break;
             case 4:
                 try {
-                    bookingReference = dds.book(selectedBookingClasses, passengersDetails);
+                    bookingReference = dds.book(selectedBookingClasses, passengersDetails, partnerId);
                 } catch (BookingException_Exception e) {
                     e.printStackTrace();
                 }
@@ -193,5 +195,13 @@ public class BookingManagedBean {
 
     public void setBookingReference(String bookingReference) {
         this.bookingReference = bookingReference;
+    }
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
     }
 }

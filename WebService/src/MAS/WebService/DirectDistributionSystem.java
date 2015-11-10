@@ -80,7 +80,7 @@ public class DirectDistributionSystem {
     }
 
     @WebMethod
-    public String book(@WebParam(name="bookingClasses") long[] bookingClasses, @WebParam(name="passengersDetails") WSPassengerDetails[] passengersDetails) throws BookingException {
+    public String book(@WebParam(name="bookingClasses") long[] bookingClasses, @WebParam(name="passengersDetails") WSPassengerDetails[] passengersDetails, @WebParam(name="partnerId") String partnerId) throws BookingException {
         PNR pnr = null;
         ArrayList<BookingClass> b = new ArrayList<>();
         for (long bookingClass : bookingClasses) {

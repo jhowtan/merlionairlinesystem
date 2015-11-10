@@ -4,6 +4,12 @@
 <xsd:import namespace="http://WebService.MAS/" schemaLocation="http://localhost:8080/WebService_war_exploded/services/DirectDistributionSystem?xsd=1"/>
 </xsd:schema>
 </types>
+<message name="searchAvailableFlights">
+<part name="parameters" element="tns:searchAvailableFlights"/>
+</message>
+<message name="searchAvailableFlightsResponse">
+<part name="parameters" element="tns:searchAvailableFlightsResponse"/>
+</message>
 <message name="book">
 <part name="parameters" element="tns:book"/>
 </message>
@@ -13,25 +19,28 @@
 <message name="BookingException">
 <part name="fault" element="tns:BookingException"/>
 </message>
-<message name="searchAvailableFlights">
-<part name="parameters" element="tns:searchAvailableFlights"/>
-</message>
-<message name="searchAvailableFlightsResponse">
-<part name="parameters" element="tns:searchAvailableFlightsResponse"/>
-</message>
 <portType name="DirectDistributionSystem">
+<operation name="searchAvailableFlights">
+<input wsam:Action="http://WebService.MAS/DirectDistributionSystem/searchAvailableFlightsRequest" message="tns:searchAvailableFlights"/>
+<output wsam:Action="http://WebService.MAS/DirectDistributionSystem/searchAvailableFlightsResponse" message="tns:searchAvailableFlightsResponse"/>
+</operation>
 <operation name="book">
 <input wsam:Action="http://WebService.MAS/DirectDistributionSystem/bookRequest" message="tns:book"/>
 <output wsam:Action="http://WebService.MAS/DirectDistributionSystem/bookResponse" message="tns:bookResponse"/>
 <fault message="tns:BookingException" name="BookingException" wsam:Action="http://WebService.MAS/DirectDistributionSystem/book/Fault/BookingException"/>
 </operation>
-<operation name="searchAvailableFlights">
-<input wsam:Action="http://WebService.MAS/DirectDistributionSystem/searchAvailableFlightsRequest" message="tns:searchAvailableFlights"/>
-<output wsam:Action="http://WebService.MAS/DirectDistributionSystem/searchAvailableFlightsResponse" message="tns:searchAvailableFlightsResponse"/>
-</operation>
 </portType>
 <binding name="DirectDistributionSystemPortBinding" type="tns:DirectDistributionSystem">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+<operation name="searchAvailableFlights">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
 <operation name="book">
 <soap:operation soapAction=""/>
 <input>
@@ -43,15 +52,6 @@
 <fault name="BookingException">
 <soap:fault name="BookingException" use="literal"/>
 </fault>
-</operation>
-<operation name="searchAvailableFlights">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
 </operation>
 </binding>
 <service name="DirectDistributionSystemService">
