@@ -98,7 +98,7 @@ public class MainMenu {
                         new MenuEntry("Profitability Reporting", null, Pages.PROFITABILITY_REPORT),
                         new MenuEntry("Seasonality Reporting", null, Pages.SEASONALITY_REPORT),
                         new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),
-                        new MenuEntry("Aircraft Reporting", null, Pages.FLIGHT_TIMETABLE),
+                        new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
                         new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
                         new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT)
                 )
