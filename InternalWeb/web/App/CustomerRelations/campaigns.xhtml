@@ -32,7 +32,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <ui:repeat value="#{campaignsManagedBean.campaigns}" var="cm">
+                        <ui:repeat value="#{campaignManagedBean.campaigns}" var="cm">
                             <tr>
                                 <td>#{cm.name}</td>
                                 <td>#{commonManagedBean.formatDate("dd MMM yyyy", cm.startDate)}</td>
@@ -44,7 +44,7 @@
                                     <h:form>
                                         <div class="btn-group">
                                             <h:link outcome="/App/CustomerRelations/viewCampaign" styleClass="btn btn-default btn-xs btn-info"><f:param name="campaignId" value="#{cm.id}"><i class="fa fa-pencil"></i> Edit Campaign</f:param></h:link>
-                                            <h:commandLink action="#{campaignsManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete campaign: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
+                                            <h:commandLink action="#{campaignManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete campaign: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                         </div>
                                     </h:form>
                                 </td>

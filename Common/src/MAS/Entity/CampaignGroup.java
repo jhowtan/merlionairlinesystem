@@ -3,9 +3,6 @@ package MAS.Entity;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Daryl on 9/11/2015.
- */
 @Entity
 public class CampaignGroup {
     private long id;
@@ -40,5 +37,17 @@ public class CampaignGroup {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private String description;
+
+    @Basic
+    @Lob
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

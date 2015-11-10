@@ -2,7 +2,6 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Flights - Merlion Airline System</ui:define>
 
@@ -19,7 +18,7 @@
                                 <span class="input-group-addon">Tail Numbers</span>
                                 <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{flightTimetableManagedBean.aircraftIdInputs}">
                                     <f:selectItems value="#{flightTimetableManagedBean.aircrafts}" var="ac"
-                                                   itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
+                                                   itemLabel="#{ac.tailNumber} (#{ac.seatConfig.aircraftType.name})" itemValue="#{ac.id}" />
                                 </h:selectManyListbox>
                             </div>
                             <br/>

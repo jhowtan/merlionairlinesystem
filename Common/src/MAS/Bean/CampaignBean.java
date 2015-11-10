@@ -115,7 +115,7 @@ public class CampaignBean {
         return em.createQuery("SELECT c from Campaign c", Campaign.class).getResultList();
     }
 
-    public long createCampaignGroup(List<Long> customerIds) throws NotFoundException {
+    public long createCampaignGroup(List<Long> customerIds, String name, String description) throws NotFoundException {
         List<Customer> customers = new ArrayList<>();
         for (int i = 0; i < customerIds.size(); i++) {
             Customer customer = customerBean.getCustomer(customerIds.get(i));
@@ -124,6 +124,8 @@ public class CampaignBean {
         }
         CampaignGroup campaignGroup = new CampaignGroup();
         campaignGroup.setCustomers(customers);
+        campaignGroup.setName(name);
+        campaignGroup.setDescription(description);
         em.persist(campaignGroup);
         em.flush();
         return campaignGroup.getId();

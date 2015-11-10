@@ -16,7 +16,7 @@ import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class CampaignsManagedBean {
+public class CampaignManagedBean {
     @EJB
     CampaignBean campaignBean;
     @EJB

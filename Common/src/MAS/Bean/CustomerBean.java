@@ -2,7 +2,9 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.Utils;
+import MAS.CustomerAnalysis.AnalysedCustomer;
 import MAS.Entity.Customer;
+import MAS.Entity.ETicket;
 import MAS.Exception.InvalidLoginException;
 import MAS.Exception.NotFoundException;
 
@@ -10,6 +12,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +68,35 @@ public class CustomerBean {
         } catch (Exception e) {
             throw new InvalidLoginException();
         }
+    }
+
+    public List<AnalysedCustomer> analyseCustomer() {
+        List<AnalysedCustomer> result = new ArrayList<>();
+        List<Customer> customers = getAllCustomers();
+        Date startDate = Utils.getStartOfMonth(-12, 0);
+        Date endDate = new Date();
+        for (Customer customer : customers) {
+            List<ETicket> eTickets = em.createQuery("SELECT e from ETicket e WHERE e.ffpNumber = :ffp AND e.gateChecked = true AND e.flight.actualDepartureTime > :startDate AND " +
+                    "e.flight.actualDepartureTime < :endDate", ETicket.class)
+                    .setParameter("ffp", "MA/".concat(customer.getId().toString()))
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
+                    .getResultList();
+            if (eTickets.size() >= 2) {
+                AnalysedCustomer anaCustomer = new AnalysedCustomer();
+                anaCustomer.customer = customer;
+                anaCustomer.flightCount = eTickets.size();
+                anaCustomer.revenuePerMile = 0;
+                for (ETicket eTicket : eTickets) {
+                    anaCustomer.revenuePerMile += Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
+                                                    eTicket.getBookingClass().getFareRule().getPriceMul();
+                }
+                anaCustomer.analyseSegment();
+                result.add(anaCustomer);
+            } else
+                continue;
+        }
+        return result;
     }
 
 }

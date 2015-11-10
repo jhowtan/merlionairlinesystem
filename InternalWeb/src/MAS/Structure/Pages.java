@@ -116,4 +116,8 @@ public class Pages {
 
     public static final Page VIEW_CAMPAIGNS = new Page("/App/CustomerRelations/campaigns", Permissions.MANAGE_CAMPAIGNS);
     public static final Page CREATE_CAMPAIGN = new Page("/App/CustomerRelations/createCampaign", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page UPDATE_CAMPAIGN = new Page("/App/CustomerRelations/viewCampaign", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page VIEW_CAMPAIGNGROUPS = new Page("/App/CustomerRelations/campaignGroups", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page CREATE_CAMPAIGNGROUP = new Page("/App/CustomerRelations/createCampaignGroup", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page UPDATE_CAMPAIGNGROUP = new Page("/App/CustomerRelations/viewCampaignGroup", Permissions.MANAGE_CAMPAIGNS);
 }

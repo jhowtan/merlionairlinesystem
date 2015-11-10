@@ -26,26 +26,26 @@
                             <div class="panel-body">
                                 <div class="form-group col-lg-12 #{!campaignName.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="campaignName">Campaign Name</label>
-                                    <h:inputText id="campaignName" binding="#{campaignName}" value="#{campaignsManagedBean.campaignName}" styleClass="form-control" pt:placeholder="e.g. Holidays" required="true" requiredMessage="Campaign name is required.">
+                                    <h:inputText id="campaignName" binding="#{campaignName}" value="#{campaignManagedBean.campaignName}" styleClass="form-control" pt:placeholder="e.g. Holidays" required="true" requiredMessage="Campaign name is required.">
                                     </h:inputText>
                                     <h:message for="campaignName" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!code.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="code">Code</label>
-                                    <h:inputText id="code" binding="#{code}" value="#{campaignsManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. FLYCHEAP" required="true" requiredMessage="Campaign code is required.">
+                                    <h:inputText id="code" binding="#{code}" value="#{campaignManagedBean.code}" styleClass="form-control" pt:placeholder="e.g. FLYCHEAP" required="true" requiredMessage="Campaign code is required.">
                                     </h:inputText>
                                     <h:message for="code" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!discount.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="discount">Discount (0.01 to 0.99)</label>
-                                    <h:inputText id="discount" binding="#{discount}" pt:type="number" pt:step="0.01" pt:min="0.01" pt:max="0.99" value="#{campaignsManagedBean.discount}" styleClass="form-control" required="true" requiredMessage="Campaign discount is required.">
+                                    <h:inputText id="discount" binding="#{discount}" pt:type="number" pt:step="0.01" pt:min="0.01" pt:max="0.99" value="#{campaignManagedBean.discount}" styleClass="form-control" required="true" requiredMessage="Campaign discount is required.">
                                     </h:inputText>
                                     <h:message for="discount" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-6 #{!startDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="startDate">Campaign Start Date</label>
                                     <h:inputText binding="#{startDate}" id="startDate"
-                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.startDate)}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignManagedBean.startDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -57,7 +57,7 @@
                                 <div class="form-group col-lg-6 #{!endDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="endDate">Campaign End Date</label>
                                     <h:inputText binding="#{endDate}" id="endDate"
-                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.endDate)}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignManagedBean.endDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -69,7 +69,7 @@
                                 <div class="form-group col-lg-6 #{!rstartDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="rstartDate">Targeted Flights Date Range Start</label>
                                     <h:inputText binding="#{rstartDate}" id="rstartDate"
-                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.targetStartDate)}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignManagedBean.targetStartDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -81,7 +81,7 @@
                                 <div class="form-group col-lg-6 #{!rendDate.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="rendDate">Targeted Flights Date Range Start</label>
                                     <h:inputText binding="#{rendDate}" id="rendDate"
-                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignsManagedBean.targetEndDate)}" styleClass="form-control"
+                                                 value="#{commonManagedBean.formatDate('yyyy-MM-dd',campaignManagedBean.targetEndDate)}" styleClass="form-control"
                                                  pt:type="date"
                                                  pt:min="#{commonManagedBean.formatDate('yyyy-MM-dd', null)}"
                                                  size="20" required="true"
@@ -92,15 +92,15 @@
                                 </div>
                                 <div class="form-group col-lg-12 #{!bkClasses.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="bkClasses">Booking Class Names (Separate with comma ',')</label>
-                                    <h:inputText id="bkClasses" binding="#{bkClasses}" value="#{campaignsManagedBean.bookingClassesString}" styleClass="form-control" pt:placeholder="e.g. A,B,C" required="true" requiredMessage="Booking class names are required.">
+                                    <h:inputText id="bkClasses" binding="#{bkClasses}" value="#{campaignManagedBean.bookingClassesString}" styleClass="form-control" pt:placeholder="e.g. A,B,C" required="true" requiredMessage="Booking class names are required.">
                                     </h:inputText>
                                     <h:message for="bkClasses" styleClass="help-block" />
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group input-group #{!routes.valid ? 'has-error' : ''}">
                                         <span class="input-group-addon">Routes</span>
-                                        <h:selectManyListbox id="routes" binding="#{routes}" styleClass="form-control" required="true" requiredMessage="Routes are required" value="#{campaignsManagedBean.routeIds}">
-                                            <f:selectItems value="#{campaignsManagedBean.routes}" var="rt"
+                                        <h:selectManyListbox id="routes" binding="#{routes}" styleClass="form-control" required="true" requiredMessage="Routes are required" value="#{campaignManagedBean.routeIds}">
+                                            <f:selectItems value="#{campaignManagedBean.routes}" var="rt"
                                                            itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.id}" />
                                         </h:selectManyListbox>
                                     </div>
@@ -109,8 +109,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group input-group #{!cmpGrp.valid ? 'has-error' : ''}">
                                         <span class="input-group-addon">Campaign Groups</span>
-                                        <h:selectManyListbox id="cmpGrp" binding="#{cmpGrp}" styleClass="form-control" value="#{campaignsManagedBean.campaignGroupIds}">
-                                            <f:selectItems value="#{campaignsManagedBean.campaignGroups}" var="cm"
+                                        <h:selectManyListbox id="cmpGrp" binding="#{cmpGrp}" styleClass="form-control" value="#{campaignManagedBean.campaignGroupIds}">
+                                            <f:selectItems value="#{campaignManagedBean.campaignGroups}" var="cm"
                                                            itemLabel="#{cm.name}" itemValue="#{cm.id}" />
                                         </h:selectManyListbox>
                                     </div>
@@ -122,7 +122,7 @@
                             <div class="btn-group">
                                 <h:link outcome="/App/CustomerRelations/campaigns" class="btn btn-default"
                                         value="Back"/>
-                                <h:commandButton action="#{campaignsManagedBean.saveCampaign()}"
+                                <h:commandButton action="#{campaignManagedBean.saveCampaign()}"
                                                  value="Save" styleClass="btn btn-success"/>
                             </div>
                         </div>
