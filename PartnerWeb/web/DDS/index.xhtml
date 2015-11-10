@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Partner Airline</title>
+
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap/dist/css/bootstrap.min.css" />
+</h:head>
+
+<h:body>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                Partner List
+                <small>Merlion Airlines Partner</small>
+            </h1>
+        </div>
+        <ol>
+            <li><h:link outcome="partner1">Chan Brother's Travel</h:link></li>
+            <li><h:link outcome="partner2">CTC Travel Singapore</h:link></li>
+            <li><h:link outcome="partner3">Global Travel Pte Ltd</h:link></li>
+            <li><h:link outcome="partner4">Hong Thai Travel Services</h:link></li>
+            <li><h:link outcome="partner5">Trafalgar Tours Singapore</h:link></li>
+        </ol>
+    </div>
+
+</h:body>
+</html>
