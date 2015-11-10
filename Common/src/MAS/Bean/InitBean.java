@@ -3,13 +3,17 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Common.Utils;
-import MAS.Entity.*;
+import MAS.Entity.AircraftType;
+import MAS.Entity.Airport;
+import MAS.Entity.Certification;
+import MAS.Entity.Customer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Singleton
@@ -41,6 +45,8 @@ public class InitBean {
     BookFlightBean bookFlightBean;
     @EJB
     CrewCertificationBean crewCertificationBean;
+    @EJB
+    CustomerBean customerBean;
 
     @PostConstruct
     public void init() {
@@ -277,6 +283,27 @@ public class InitBean {
                         crewCertificationBean.createCrewCertification(certification);
                     }
                 }
+                for (int i = 0; i < 50; i ++) { //Maintenance crew
+                    String selFName = firstNames[(int)(Math.random() * firstNames.length)];
+                    String selLName = lastNames[(int)(Math.random() * lastNames.length)];
+                    String username = selFName.concat(selLName).toLowerCase().concat(String.valueOf(i));
+                    long userId = userBean.createUserWithoutEmail(username, selFName, selLName, "merlionairlines+".concat(username).concat("@ma.com"),
+                            "+65 6555-4325", airports.get(i % airports.size()));
+                    userBean.changePassword(userId, "password");
+                    userBean.setRoles(userId, Arrays.asList(roleId));
+                    userBean.changeJob(userId, Constants.maintenanceCrewJobId);
+                    List<AircraftType> acTypes = fleetBean.getAllAircraftTypes();
+                    for (int j = 0; j < acTypes.size(); j++) {
+                        Certification certification = new Certification();
+                        certification.setAircraftType(acTypes.get(j));
+                        certification.setExpiry(Utils.oneYearLater());
+                        certification.setApprovalDate(new Date());
+                        certification.setApprover(userBean.searchForUser("crewmgr").get(0));
+                        certification.setApprovalStatus(1);
+                        certification.setOwner(userBean.getUser(userId));
+                        crewCertificationBean.createCrewCertification(certification);
+                    }
+                }
 //                // INITIALIZE FLIGHT & BOOKING CLASS FOR 2ND SYS RELEASE
 //                long r1 = routeBean.createRoute("SIN", "HKG");
 //                long r2 = routeBean.createRoute("HKG", "SFO");
@@ -379,6 +406,29 @@ public class InitBean {
                 costsBean.createCost(Constants.COST_ANNUAL, 1000000, "Licensing Fees", -1);
                 costsBean.createCost(Constants.COST_PROFIT_MARGIN, 1.4, "Baseline Profit Margin", -1);
                 //costsBean.createCost(Constants.COST_ANNUAL, 100000000, "Misc Fees", -1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // INITIALIZE CUSTOMERS
+            try {
+                String[] firstNames = {"Gretchen", "Tonda", "Kellye", "Israel", "Michiko", "Camila", "Hellen", "Tifany", "Alfredia", "Nyla", "Sheryll", "Shantelle", "Noelia", "Fei", "Shirley", "Gail", "Darwin", "Gilma", "Harmony", "Lillian", "Dakota", "Niesha", "Erna", "Maris", "Fanny", "Erline", "Delila", "Garfield", "Maryanna", "Reginia"};
+                String[] lastNames = {"Hougland", "Hallee", "Encarnacion", "Connell", "Laporte", "Zurita", "Mccullar", "Repp", "Winfrey", "Murray", "Chicoine", "Sulzer", "Abramowitz", "Pier", "Pye", "Barber", "Wiggins", "Nims", "Kemper", "Sowers", "Hoisington", "Halperin", "Aylward", "Mccawley", "Mucha", "Smits", "Defrank", "Vestal", "Brungardt", "Deckert"};
+                String[] birthDates = {"6/4/1998", "2/12/1964", "3/10/1994", "17/11/1973", "1/6/1980", "20/10/1959", "19/2/1962", "20/8/1966", "25/6/1989", "4/4/1968", "3/11/1959", "15/11/1956", "14/3/1975", "26/2/1959", "16/12/1995", "17/11/1958", "3/10/1955", "10/8/1958", "3/6/1984", "25/7/1998", "13/4/1982", "11/7/1965", "13/9/1993", "19/1/1992", "5/12/1974", "1/8/1977", "21/10/1975", "6/5/1951", "21/2/1963", "4/9/1959"};
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                for (int i = 0; i < firstNames.length; i++) {
+                    Customer customer = new Customer();
+                    customer.setFirstName(firstNames[i]);
+                    customer.setLastName(lastNames[i]);
+                    customer.setNationality("Singaporean");
+                    customer.setCountry("Singapore");
+                    customer.setDateOfBirth(df.parse(birthDates[i]));
+                    customer.setPhone("91234567");
+                    customer.setDisplayName(firstNames[i] + " " + lastNames[i]);
+                    customer.setEmail(firstNames[i].toLowerCase() + "@example.com");
+                    customer.setAddress("123 West Coast Rd");
+                    customerBean.createCustomer(customer, "password");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

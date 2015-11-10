@@ -64,7 +64,7 @@
             <transaction-type>Container</transaction-type>
         </session>
         <session>
-            <ejb-name>BookFlightBeanEJB</ejb-name>
+            <ejb-name>BookFlightEJB</ejb-name>
             <ejb-class>MAS.Bean.BookFlightBean</ejb-class>
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
@@ -114,6 +114,12 @@
         <session>
             <ejb-name>MaintenanceShiftEJB</ejb-name>
             <ejb-class>MAS.Bean.MaintenanceShiftBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+		<session>
+            <ejb-name>MealSelectionEJB</ejb-name>
+            <ejb-class>MAS.Bean.MealSelectionBean</ejb-class>
             <session-type>Stateless</session-type>
             <transaction-type>Container</transaction-type>
         </session>

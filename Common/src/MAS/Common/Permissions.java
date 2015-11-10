@@ -23,6 +23,7 @@ public class Permissions {
     public static final String FLIGHT_REPORTING = "FLIGHT_REPORTING";
     public static final String MAINTENANCE_REPORTING = "MAINTENANCE_REPORTING";
 
+    public static final String MANAGE_MAINTENANCE_SHIFT = "MANAGE_MAINTENANCE_SHIFT";
     public static final String FLIGHT_BID = "FLIGHT_BID";
     public static final String MANAGE_FLIGHT_BID = "MANAGE_FLIGHT_BID";
 
@@ -31,6 +32,7 @@ public class Permissions {
 
     public static final String CHECK_IN = "CHECK_IN";
     public static final String GATE_CONTROL = "GATE_CONTROL";
+    public static final String PASSENGER_SERVICE = "PASSENGER_SERVICE";
 
     public static final String MANAGE_REPORTING = "MANAGE_REPORTING";
 

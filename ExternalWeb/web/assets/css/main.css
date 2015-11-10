@@ -395,3 +395,11 @@ span.stopover-display {
 .table tbody>tr>td.vert-align{
     vertical-align: middle;
 }
+
+/* Jeff the Chef */
+.splash-food {
+    background: url(../img/meal.jpg) center;
+    background-size: cover;
+    width: 100%;
+    height: 500px;
+}

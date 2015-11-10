@@ -71,6 +71,10 @@ public class DepartureControlManagedBean {
         return flightScheduleBean.findDepartingFlightsByAirportForGateControl(retrieveBaseAirport());
     }
 
+    public List<Flight> retrieveDepartingFlightsFromBaseAirportForPassengerService() {
+        return flightScheduleBean.findDepartingFlightsByAirportForPassengerService(retrieveBaseAirport());
+    }
+
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
     }

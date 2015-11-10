@@ -13,10 +13,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @ManagedBean
 public class CommonManagedBean {
@@ -123,6 +120,11 @@ public class CommonManagedBean {
                 return "Sunday";
         }
         return "";
+    }
+
+    public List<String> getMonthsOfYear() {
+        ArrayList<String> monthsOfYear = new ArrayList<>(Arrays.asList(Constants.MONTHS_OF_YEAR));
+        return monthsOfYear;
     }
 
     public String getTierString(int tier) {

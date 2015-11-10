@@ -7,59 +7,147 @@
     <ui:define name="title">Maintenance Slots - Merlion Airline System</ui:define>
 
     <ui:define name="content">
-        <div class="container-fluid">
+        <h:panelGroup class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Maintenance Slots</h1>
                     <ul class="nav nav-tabs nav-justified">
-                        <li role="presentation" class="active"><h:link outcome="/App/FlightPlanning/maintenanceSlots">Maintenance Slots</h:link></li>
-                        <li role="presentation"><h:link outcome="/App/FlightPlanning/createMaintenanceSlot">Create Maintenance Slots</h:link></li>
+                        <li role="presentation" class="active"><h:link outcome="maintenanceReports">Maintenance Slots</h:link></li>
+                        <li role="presentation"><h:link outcome="createMaintenanceReport">Create Maintenance Slots</h:link></li>
                     </ul><br />
                     <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
                         <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
-                    <table class="table table-striped" id="maintenance_table">
-                        <thead>
-                        <tr>
-                            <th>Aircraft Tail Number</th>
-                            <th>Airport</th>
-                            <th>Start Time</th>
-                            <th>Estimated Duration</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{maintenanceSlotManagedBean.getAllSlots()}" var="ms">
-                            <tr>
-                                <td>#{ms.aircraft.getTailNumber()}</td>
-                                <td>#{ms.airport.getName()}</td>
-                                <td>#{ms.getStartTime()}</td>
-                                <td>#{commonManagedBean.formateDoubleRounded(ms.duration)} minutes</td>
-                                <td>
-                                    <h:form>
-                                        <div class="btn-group">
-                                            <h:link outcome="/App/FlightPlanning/updateMaintenanceSlot" styleClass="btn btn-default btn-xs btn-info"><f:param name="msId" value="#{ms.id}"><i class="fa fa-pencil"></i> Edit</f:param></h:link>
-                                            <h:commandLink action="#{maintenanceSlotManagedBean.delete(ms.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete this maintenance slot for #{ms.aircraft.getTailNumber()}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
-                                        </div>
-                                    </h:form>
-                                </td>
-                            </tr>
-                        </ui:repeat>
-                        </tbody>
-                    </table>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Flight Report Details</div>
+                        <div class="panel-body">
+                            <table class="table table-striped" id="maintenance_reports_table">
+                                <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Crew Staff</th>
+                                    <th>Aircraft</th>
+                                    <th>Airport</th>
+                                    <th>Status</th>
+                                    <h:panelGroup rendered="#{maintenanceReportsManagedBean.isOpsReportManager()}">
+                                        <th>View Report</th>
+                                    </h:panelGroup>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{maintenanceReportsManagedBean.getAllMaintenanceReports()}" var="mr">
+                                    <tr>
+                                        <td>#{maintenanceReportsManagedBean.categoryToString(mr.category)}</td>
+                                        <td>#{commonManagedBean.formatName(mr.user)}</td>
+                                        <td>#{mr.maintenanceSlot.aircraft.tailNumber} (#{mr.maintenanceSlot.aircraft.seatConfig.name})</td>
+                                        <td>#{mr.maintenanceSlot.airport.name}, #{mr.maintenanceSlot.airport.city.name} (#{mr.maintenanceSlot.airport.id})</td>
+                                        <td>#{commonManagedBean.reportStatusToString(mr.status)}</td>
+                                        <h:form rendered="#{maintenanceReportsManagedBean.isOpsReportManager()}">
+                                            <td>
+                                                <h:commandLink action="#{maintenanceReportsManagedBean.viewSelectedReport(mr.id)}"
+                                                               styleClass="btn btn-default btn-xs btn-primary" value="View">
+                                                    <f:ajax render="maintenanceReportDetails ops-buttons" onevent="
+                                                                function(data) {
+                                                                    if (data.status == 'success') {
+                                                                        $('#maintenance-report-details').collapse();
+                                                                        $('html, body').animate({ scrollTop: $('#maintenance-report-details').offset().top }, 'slow');
+                                                                    }}"/>
+                                                </h:commandLink>
+                                            </td>
+                                        </h:form>
+                                    </tr>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+                <h:panelGroup id="maintenanceReportDetails" styleClass="col-lg-12">
+                    <h:panelGroup rendered="#{maintenanceReportsManagedBean.displayDetails()}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" id="maintenance-report-heading">
+                                <a data-toggle="collapse" href="#maintenance-report-details" aria-controls="maintenance-report-details">
+                                    Maintenance Report Details
+                                </a>
+                            </div>
+                            <div class="panel-collapse collapse" id="maintenance-report-details" aria-labelledby="#maintenance-report-heading">
+                                <div class="panel-body container-fluid">
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Aircraft Details
+                                            </div>
+                                            <div class="panel-body">
+                                                <p>
+                                                    <strong>Aircraft:</strong><br />
+                                                    #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.tailNumber}, #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.seatConfig.name}
+                                                </p>
+                                                <p>
+                                                    <strong>Manufactured Date:</strong><br />
+                                                    #{commonManagedBean.formatDate("dd MMM yyyy", maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.manufacturedDate)}
+                                                </p>
+                                                <p>
+                                                    <strong>Distance Travelled Since Last Maintenance</strong><br />
+                                                    #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.milesSinceLastMaint} miles
+                                                </p>
+                                                <p>
+                                                    <strong>Date of Maintenance:</strong><br />
+                                                    #{commonManagedBean.formatDate("dd MMM yyyy, hh:mm a", maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.startTime)} (Duration: #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.duration} hrs)
+                                                </p>
+                                                <p>
+                                                    <strong>Current Location:</strong><br />
+                                                    #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.currentLocation.name}, #{maintenanceReportsManagedBean.selectedMaintenanceReport.maintenanceSlot.aircraft.currentLocation.city.name}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Report Details
+                                            </div>
+                                            <div class="panel-body">
+                                                <p id="fr-category">
+                                                    <strong>Category:</strong><br />
+                                                    #{maintenanceReportsManagedBean.categoryToString(maintenanceReportsManagedBean.selectedMaintenanceReport.category)}
+                                                </p>
+                                                <p id="fr-user">
+                                                    <strong>Crew Member:</strong><br />
+                                                    #{maintenanceReportsManagedBean.selectedMaintenanceReport.user.firstName} #{maintenanceReportsManagedBean.selectedMaintenanceReport.user.lastName}
+                                                </p>
+                                                <p id="fr-status">
+                                                    <strong>Status</strong><br />
+                                                    #{commonManagedBean.reportStatusToString(maintenanceReportsManagedBean.selectedMaintenanceReport.status)}
+                                                </p>
+                                                <p id="fr-body">
+                                                    <strong>Report Contents:</strong><br />
+                                                    #{maintenanceReportsManagedBean.selectedMaintenanceReport.body}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <h:form id="ops-buttons">
+                                            <div class="btn-group">
+                                                <h:commandButton action="#{maintenanceReportsManagedBean.updateReportStatus(1)}" value="Acknowledge" styleClass="btn btn-info" disabled="#{maintenanceReportsManagedBean.selectedMaintenanceReport.status ge 1}"/>
+                                                <h:commandButton action="#{maintenanceReportsManagedBean.updateReportStatus(2)}" value="Resolve" styleClass="btn btn-success" disabled="#{maintenanceReportsManagedBean.selectedMaintenanceReport.status lt 1}"/>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!--END OF PANEL -->
+                    </h:panelGroup>
+                </h:panelGroup>
             </div>
-        </div>
+        </h:panelGroup>
     </ui:define>
     <ui:define name="javascript">
         <script type="text/javascript">
-            $('#maintenance_table').DataTable({
-                "stateSave": true,
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
-                ]
+            $('#maintenance_reports_table').DataTable({
+                "stateSave": true
             });
         </script>
     </ui:define>

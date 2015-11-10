@@ -62,7 +62,7 @@
                         </div>
                         <div class="text-center">
                             <div class="pull-right">
-                                <h:link outcome="/booking/index" styleClass="btn btn-info btn-lg btn-block">Redeem Flights</h:link>
+                                <h:link outcome="/booking/index" styleClass="btn btn-info btn-lg btn-inline">Redeem Flights</h:link>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,13 @@
             <div class="container">
                 <h1 class="ffp-title">Your Upcoming Flights</h1>
                 <h:panelGroup styleClass="panel panel-default" layout="block">
-                    <div class="panel-body">
+                    <div class="panel-body text-center">
+                        <h:panelGroup rendered="#{empty ffpManagedBean.getCustomerEtickets()}">
+                            <p>You have not purchased any tickets, choose a destination from the many we serve today!</p>
+                            <h:link outcome="/booking/index" styleClass="btn btn-info btn-lg">Book Flights</h:link>
+
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{!empty ffpManagedBean.getCustomerEtickets()}">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -80,7 +86,6 @@
                                 <th width="30%">Origin to Destination</th>
                                 <th width="30%">Date</th>
                                 <th width="10%">Manage</th>
-                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -99,6 +104,7 @@
                                 </ui:repeat>
                             </tbody>
                         </table>
+                        </h:panelGroup>
                     </div>
                 </h:panelGroup>
             </div>

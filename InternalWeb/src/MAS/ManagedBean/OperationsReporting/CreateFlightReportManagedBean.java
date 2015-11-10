@@ -52,9 +52,14 @@ public class CreateFlightReportManagedBean {
             List<FlightRoster> flightRosters = flightRosterBean.getFlightRostersOfUser(authManagedBean.getUserId());
             crewFlights = new ArrayList<>();
             for (FlightRoster flightRoster : flightRosters) {
-                if ( flightRoster.getFlight().getActualDepartureTime().compareTo(new Date()) < 0) {
-                    if ( flightRoster.getFlight().getActualDepartureTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
-                        crewFlights.add(flightRoster.getFlight());
+                if (flightRoster.getFlight().getActualDepartureTime() != null) {
+                    if ( flightRoster.getFlight().getActualDepartureTime().compareTo(new Date()) < 0) {
+                        if ( flightRoster.getFlight().getActualDepartureTime().compareTo(Utils.relativeMonth(new Date(), -1)) >= 0)
+                            crewFlights.add(flightRoster.getFlight());
+                    }
+                }
+                else {
+                    continue;
                 }
             }
         } catch (NotFoundException e) {

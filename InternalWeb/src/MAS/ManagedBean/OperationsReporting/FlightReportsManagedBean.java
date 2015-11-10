@@ -11,10 +11,12 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.util.List;
 
 @ManagedBean
+@ViewScoped
 public class FlightReportsManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -29,15 +31,21 @@ public class FlightReportsManagedBean {
 
     public void updateReportStatus(int status) {
         try {
-            System.out.println(selectedFlightReport.getId() + " " + status);
             operationsReportingBean.updateFlightReportStatus(selectedFlightReport.getId(), status);
         } catch (NotFoundException e) {
-            FacesMessage m = new FacesMessage("Cannot approve/resolve a flight report that does not exist!");
+            FacesMessage m = new FacesMessage("Cannot acknowledge/resolve a flight report that does not exist!");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 
+    public void viewSelectedReport(long id) {
+        try {
+            selectedFlightReport = operationsReportingBean.getFlightReport(id);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean isOpsReportManager() {
         return authManagedBean.hasPermission(Permissions.MANAGE_OPERATIONS_REPORTING);
     }

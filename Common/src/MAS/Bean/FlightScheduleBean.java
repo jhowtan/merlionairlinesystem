@@ -264,6 +264,15 @@ public class FlightScheduleBean {
                 .getResultList();
     }
 
+    public List<Flight> findDepartingFlightsByAirportForPassengerService(Airport baseAirport) {
+        return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
+                "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.status < 6 " +
+                "AND f.departureTime < :date", Flight.class)
+                .setParameter("baseAirport", baseAirport)
+                .setParameter("date", Utils.hoursFromNow(96), TemporalType.TIMESTAMP)
+                .getResultList();
+    }
+
     public List<ETicket> getETicketsForFlight(Flight flight) {
         return em.createQuery("SELECT et FROM ETicket et WHERE et.flight = :flight", ETicket.class)
                 .setParameter("flight", flight)

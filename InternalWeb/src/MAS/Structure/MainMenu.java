@@ -36,15 +36,13 @@ public class MainMenu {
                         new MenuEntry("Airports", null, Pages.LIST_AIRPORTS, Pages.CREATE_AIRPORTS, Pages.UPDATE_AIRPORTS),
                         new MenuEntry("Routes", null, Pages.LIST_ROUTES, Pages.VISUALIZE_ROUTES, Pages.CREATE_ROUTES, Pages.UPDATE_ROUTES),
                         new MenuEntry("Aircraft Assignment", null, Pages.LIST_AIRCRAFT_ASSIGNMENT, Pages.CREATE_AIRCRAFT_ASSIGNMENT, Pages.UPDATE_AIRCRAFT_ASSIGNMENT)
-
                 )
         );
 
         entries.add(
                 new MenuEntry("Flight Planning", "plane",
                         new MenuEntry("Flights", null, Pages.LIST_FLIGHTS, Pages.CREATE_FLIGHT, Pages.CREATE_FLIGHT_SINGLE, Pages.CREATE_FLIGHT_RECURRING, Pages.UPDATE_FLIGHT),
-                        new MenuEntry("Maintenance", null, Pages.LIST_MAINTENANCE_SLOTS, Pages.CREATE_MAINTENANCE_SLOT, Pages.UPDATE_MAINTENANCE_SLOT),
-                        new MenuEntry("Aircraft Timetable", null, Pages.FLIGHT_TIMETABLE)
+                        new MenuEntry("Maintenance", null, Pages.LIST_MAINTENANCE_SLOTS, Pages.CREATE_MAINTENANCE_SLOT, Pages.UPDATE_MAINTENANCE_SLOT)
                 )
         );
 
@@ -73,6 +71,7 @@ public class MainMenu {
                         new MenuEntry("Flight Bidding", null, Pages.FLIGHT_BIDDING),
                         new MenuEntry("Flight Roster", null, Pages.FLIGHT_ROSTER),
                         new MenuEntry("Flight Deferment", null, Pages.FLIGHT_DEFERMENT),
+                        new MenuEntry("Maintenance Shifts", null, Pages.MAINTENANCE_SHIFTS, Pages.CREATE_MAINTENANCE_SHIFT),
                         new MenuEntry("Flight Reporting", null, Pages.LIST_FLIGHT_REPORTS, Pages.CREATE_FLIGHT_REPORT),
                         new MenuEntry("Maintenance Reporting", null, Pages.LIST_MAINTENANCE_REPORTS, Pages.CREATE_MAINTENANCE_REPORT),
                         new MenuEntry("Flight Sign In/Out", null, Pages.FLIGHT_SIGNINOUT)
@@ -82,7 +81,8 @@ public class MainMenu {
         entries.add(
                 new MenuEntry("Departure Control", "suitcase",
                         new MenuEntry("Check In", null, Pages.CHECK_IN, Pages.CHECK_IN_2),
-                        new MenuEntry("Gate Control", null, Pages.GATE_CHECK, Pages.GATE_CHECK_2)
+                        new MenuEntry("Gate Control", null, Pages.GATE_CHECK, Pages.GATE_CHECK_2),
+                        new MenuEntry("Passenger Service", null, Pages.PASSENGER_SERVICE)
                 )
         );
 

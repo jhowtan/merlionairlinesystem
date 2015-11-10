@@ -61,8 +61,6 @@ public class Pages {
     public static final Page CREATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/createMaintenanceSlot", Permissions.MANAGE_FLIGHT);
     public static final Page UPDATE_MAINTENANCE_SLOT = new Page("/App/FlightPlanning/updateMaintenanceSlot", Permissions.MANAGE_FLIGHT);
 
-    public static final Page FLIGHT_TIMETABLE = new Page("/App/FlightPlanning/flightTimetable", Permissions.MANAGE_FLIGHT);
-
     // Airline Planning System: Schedule Development Pages
     public static final Page SCHEDULE_DEVELOPMENT = new Page("/App/ScheduleDev/scheduleDev", Permissions.MANAGE_AIRCRAFT_SCHEDULE);
 
@@ -89,18 +87,22 @@ public class Pages {
     public static final Page LIST_MAINTENANCE_REPORTS = new Page("/App/CrewOperations/maintenanceReports", Permissions.MAINTENANCE_REPORTING, Permissions.MANAGE_OPERATIONS_REPORTING);
     public static final Page CREATE_MAINTENANCE_REPORT = new Page("/App/CrewOperations/createMaintenanceReport", Permissions.MAINTENANCE_REPORTING);
     public static final Page FLIGHT_SIGNINOUT = new Page("/App/CrewOperations/signInOut", Permissions.FLIGHT_BID);
+    public static final Page MAINTENANCE_SHIFTS = new Page("/App/CrewOperations/maintenanceShifts", Permissions.MANAGE_MAINTENANCE_SHIFT);
+    public static final Page CREATE_MAINTENANCE_SHIFT = new Page("/App/CrewOperations/createMaintenanceShift", Permissions.MANAGE_MAINTENANCE_SHIFT);
 
     // DCS: Check In
     public static final Page CHECK_IN = new Page("/App/DepartureControl/checkIn", Permissions.CHECK_IN);
     public static final Page CHECK_IN_2 = new Page("/App/DepartureControl/checkIn2", Permissions.CHECK_IN);
+
     // DCS: Gate Control
     public static final Page GATE_CHECK = new Page("/App/DepartureControl/gateCheck", Permissions.GATE_CONTROL);
     public static final Page GATE_CHECK_2 = new Page("/App/DepartureControl/gateCheck2", Permissions.GATE_CONTROL);
+    public static final Page PASSENGER_SERVICE = new Page("/App/DepartureControl/passengerService", Permissions.PASSENGER_SERVICE);
 
     // AAS: MANAGEMENT REPORTING
     public static final Page PROFITABILITY_REPORT = new Page("/App/ManagementReporting/profitabilityReport", Permissions.MANAGE_REPORTING);
     public static final Page CREW_REPORT = new Page("/App/ManagementReporting/crewReport", Permissions.MANAGE_REPORTING);
-    public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING);
+    public static final Page AIRCRAFT_REPORT = new Page("/App/ManagementReporting/aircraftReport", Permissions.MANAGE_REPORTING, Permissions.MANAGE_FLIGHT);
     public static final Page FLIGHT_REPORT = new Page("/App/ManagementReporting/flightReport", Permissions.MANAGE_REPORTING);
     public static final Page MAINTENANCE_REPORT = new Page("/App/ManagementReporting/maintenanceReport", Permissions.MANAGE_REPORTING);
     public static final Page SEASONALITY_REPORT = new Page("/App/ManagementReporting/seasonalityReport", Permissions.MANAGE_REPORTING);
