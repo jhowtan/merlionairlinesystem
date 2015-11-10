@@ -70,7 +70,7 @@ public class CustomerBean {
         }
     }
 
-    public List<AnalysedCustomer> analyseCustomer() {
+    public List<AnalysedCustomer> analyseCustomers() {
         List<AnalysedCustomer> result = new ArrayList<>();
         List<Customer> customers = getAllCustomers();
         Date startDate = Utils.getStartOfMonth(-12, 0);

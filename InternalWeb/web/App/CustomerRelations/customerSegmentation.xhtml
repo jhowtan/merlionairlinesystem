@@ -1,0 +1,20 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Customer Segmentation - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Customer Segmentation</h1>
+                    <ui:repeat value="#{customerSegmentationManagedBean.customers}" var="c">
+                        #{c.flightCount} #{c.revenuePerMile}
+                    </ui:repeat>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="javascript">
+    </ui:define>
+</ui:composition>
