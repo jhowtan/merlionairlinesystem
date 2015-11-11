@@ -563,41 +563,45 @@ public class ScheduleDevelopmentBean {
     }
 
     public int saveSuggestedFlights(Date startTime) throws ScheduleClashException{
-        int result = 0;
-        List<HypoTransit> allHappenings = ta.getAllHistory();
-        for (int i = 0; i < allHappenings.size(); i++) {
-            HypoTransit happenings = allHappenings.get(i);
-            Aircraft aircraft = happenings.hypoAircraft.aircraft;
-            for (int j = 0; j < happenings.pathHistory.size(); j++) {
-                double relativeTime = happenings.pathTimes.get(j);
-                Date dateTime = Utils.minutesLater(startTime, (int)relativeTime);
-                Route route = happenings.pathHistory.get(j);
-                AircraftAssignment aircraftAssignment;
-                try {
-                    route = routeBean.matchRoute(route);
+        try {
+            int result = 0;
+            List<HypoTransit> allHappenings = ta.getAllHistory();
+            for (int i = 0; i < allHappenings.size(); i++) {
+                HypoTransit happenings = allHappenings.get(i);
+                Aircraft aircraft = happenings.hypoAircraft.aircraft;
+                for (int j = 0; j < happenings.pathHistory.size(); j++) {
+                    double relativeTime = happenings.pathTimes.get(j);
+                    Date dateTime = Utils.minutesLater(startTime, (int) relativeTime);
+                    Route route = happenings.pathHistory.get(j);
+                    AircraftAssignment aircraftAssignment;
                     try {
-                        aircraftAssignment = routeBean.findAAByAcAndRoute(aircraft.getId(), route.getId());
+                        route = routeBean.matchRoute(route);
+                        try {
+                            aircraftAssignment = routeBean.findAAByAcAndRoute(aircraft.getId(), route.getId());
+                        } catch (NotFoundException e) {
+                            aircraftAssignment = routeBean.getAircraftAssignment(routeBean.createAircraftAssignment(aircraft.getId(), route.getId()));
+                        }
+                        flightScheduleBean.createFlight("MA" + aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int) Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
+                                aircraftAssignment.getId(), true);
+                        result++;
                     } catch (NotFoundException e) {
-                        aircraftAssignment = routeBean.getAircraftAssignment( routeBean.createAircraftAssignment(aircraft.getId(), route.getId()) );
+                        continue;
                     }
-                    flightScheduleBean.createFlight("MA"+aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int)Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
-                            aircraftAssignment.getId(), true);
-                    result ++;
-                } catch (NotFoundException e) {
-                    continue;
+                }
+                for (int j = 0; j < happenings.maintHistory.size(); j++) {
+                    double relativeTime = happenings.maintTimes.get(j);
+                    Date dateTime = Utils.minutesLater(startTime, (int) relativeTime);
+                    try {
+                        aircraftMaintenanceSlotBean.createSlot(dateTime, acMaintTime, happenings.maintHistory.get(j).getId(), aircraft.getId());
+                    } catch (NotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            for (int j = 0; j <happenings.maintHistory.size(); j++) {
-                double relativeTime = happenings.maintTimes.get(j);
-                Date dateTime = Utils.minutesLater(startTime, (int)relativeTime);
-                try {
-                    aircraftMaintenanceSlotBean.createSlot(dateTime, acMaintTime, happenings.maintHistory.get(j).getId(), aircraft.getId());
-                } catch (NotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+            return result;
+        } catch (ScheduleClashException e) {
+            throw e;
         }
-        return result;
     }
 
     private void debugAllRoutes(List<HypoRoute> routeList) {
