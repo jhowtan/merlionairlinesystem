@@ -49,7 +49,8 @@ public class Utils {
 
     public static Date monthStart(int plusMonth) {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
+        //c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
+        c.add(Calendar.MONTH, plusMonth);
         c.set(Calendar.DAY_OF_MONTH, 1);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
@@ -59,7 +60,8 @@ public class Utils {
 
     public static Date monthEnd(int plusMonth) {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
+        //c.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + plusMonth);
+        c.add(Calendar.MONTH, plusMonth);
         c.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
         c.set(Calendar.HOUR_OF_DAY, 23);
         c.set(Calendar.MINUTE, 59);

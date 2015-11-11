@@ -73,8 +73,10 @@ public class CustomerBean {
     public List<AnalysedCustomer> analyseCustomers() {
         List<AnalysedCustomer> result = new ArrayList<>();
         List<Customer> customers = getAllCustomers();
-        Date startDate = Utils.getStartOfMonth(-12, 0);
+        Date startDate = Utils.monthStart(-12);
         Date endDate = new Date();
+        Date CLVmaxDate = Utils.monthStart(-6);
+        Date CLVminDate = Utils.monthStart(-3);
         for (Customer customer : customers) {
             List<ETicket> eTickets = em.createQuery("SELECT e from ETicket e WHERE e.ffpNumber = :ffp AND e.gateChecked = true AND e.flight.actualDepartureTime > :startDate AND " +
                     "e.flight.actualDepartureTime < :endDate", ETicket.class)
@@ -90,8 +92,13 @@ public class CustomerBean {
                 for (ETicket eTicket : eTickets) {
                     anaCustomer.revenuePerMile += Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
                                                     eTicket.getBookingClass().getFareRule().getPriceMul();
+
+                    //Calculate CLV
+                    anaCustomer.cV += Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
+                            eTicket.getBookingClass().getFareRule().getPriceMul();
                 }
                 anaCustomer.analyseSegment();
+
                 result.add(anaCustomer);
             } else
                 continue;

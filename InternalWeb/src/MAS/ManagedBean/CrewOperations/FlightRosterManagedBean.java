@@ -55,7 +55,7 @@ public class FlightRosterManagedBean {
     }
 
     private void load() {
-        Date start = new Date();
+        Date start = Utils.monthStart(-1);
         Date end = Utils.monthEnd(2);
         flights = flightScheduleBean.getFlightWithinDate(start, end);
         crew = new ArrayList<>();

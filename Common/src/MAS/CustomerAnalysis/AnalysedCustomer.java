@@ -7,6 +7,8 @@ public class AnalysedCustomer {
     public int segment;
     public double revenuePerMile;
     public int flightCount;
+    public double cV;
+    public double pV;
 
     public void analyseSegment() {
         if (flightCount >= 6) {

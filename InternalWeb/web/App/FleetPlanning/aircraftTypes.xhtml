@@ -2,7 +2,6 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Aircraft Types - Merlion Airline System</ui:define>
 
@@ -65,7 +64,7 @@
             $('#aircraftTypes_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [3] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [7] }
                 ]
             });
         </script>
