@@ -146,6 +146,13 @@ public class CampaignBean {
         campaignGroup.setDescription(description);
     }
 
+    public void updateCampaignUsage(long id, int num) throws NotFoundException{
+        Campaign campaign = em.find(Campaign.class, id);
+        if (campaign == null) throw new NotFoundException();
+        campaign.setUsageCount(campaign.getUsageCount() + num);
+        em.persist(campaign);
+    }
+
     public void removeCampaignGroup(long id) throws NotFoundException {
         CampaignGroup campaignGroup = em.find(CampaignGroup.class, id);
         if (campaignGroup == null) throw new NotFoundException();
@@ -160,5 +167,38 @@ public class CampaignBean {
 
     public List<CampaignGroup> getAllCampaignGroups() {
         return em.createQuery("SELECT c from CampaignGroup c", CampaignGroup.class).getResultList();
+    }
+
+    public boolean validateCode(String code, long customerId) {
+        Customer customer = em.find(Customer.class, customerId);
+        if (customer == null) return false;
+        List<Campaign> possibleCampaigns = em.createQuery("SELECT c from Campaign c where c.code = :code", Campaign.class)
+                .setParameter("code", code).getResultList();
+        for (int i = 0; i < possibleCampaigns.size(); i ++) {
+            List<CampaignGroup> campaignGroups = possibleCampaigns.get(i).getCampaignGroups();
+            for (CampaignGroup campaignGroup : campaignGroups) {
+                if (campaignGroup.getCustomers().contains(customer)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public double useCode(String code, long customerId) throws NotFoundException {
+        Customer customer = em.find(Customer.class, customerId);
+        if (customer == null) throw new NotFoundException();
+        List<Campaign> possibleCampaigns = em.createQuery("SELECT c from Campaign c where c.code = :code", Campaign.class)
+                .setParameter("code", code).getResultList();
+        for (int i = 0; i < possibleCampaigns.size(); i ++) {
+            List<CampaignGroup> campaignGroups = possibleCampaigns.get(i).getCampaignGroups();
+            for (CampaignGroup campaignGroup : campaignGroups) {
+                if (campaignGroup.getCustomers().contains(customer)) {
+                    updateCampaignUsage(possibleCampaigns.get(i).getId(), 1);
+                    return possibleCampaigns.get(i).getDiscount();
+                }
+            }
+        }
+        throw new NotFoundException();
     }
 }
