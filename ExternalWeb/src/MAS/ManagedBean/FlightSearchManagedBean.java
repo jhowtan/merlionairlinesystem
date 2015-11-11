@@ -9,6 +9,7 @@ import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -286,6 +287,10 @@ public class FlightSearchManagedBean {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    prevStep();
+                    FacesMessage m = new FacesMessage("One or more of the flights you selected is no longer available.");
+                    m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    FacesContext.getCurrentInstance().addMessage("status", m);
                 }
                 break;
 

@@ -20,6 +20,8 @@ public class BookFlightBean {
     private EntityManager em;
     @EJB
     PNRBean pnrBean;
+    @EJB
+    BookingClassBean bookingClassBean;
 
     public BookFlightBean() {
     }
@@ -33,6 +35,14 @@ public class BookFlightBean {
     }
 
     public PNR bookFlights(List<BookingClass> bookingClasses, List<String> passengerNames) throws BookingException {
+        for (int i = 0; i < bookingClasses.size(); i++) {
+            try {
+                bookingClasses.set(i, bookingClassBean.getBookingClass(bookingClasses.get(i).getId()));
+            } catch (NotFoundException e) {
+                throw new BookingException();
+            }
+        }
+
         // Ensure enough seats available on all booking class and flights before proceeding
         for (BookingClass bookingClass : bookingClasses) {
             if (bookingClass.getAllocation() - bookingClass.getOccupied() < passengerNames.size()) {
