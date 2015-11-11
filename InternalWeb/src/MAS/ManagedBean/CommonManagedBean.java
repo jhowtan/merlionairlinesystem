@@ -78,6 +78,11 @@ public class CommonManagedBean {
         return "$" + numberFormat.format(amount);
     }
 
+    public String formatDoubleTwoDecimal(double amount) {
+        NumberFormat numberFormat = new DecimalFormat("#,##0.00");
+        return numberFormat.format(amount);
+    }
+
     public String reportStatusToString(int status){
         return Constants.REPORT_STATUS[status];
     }

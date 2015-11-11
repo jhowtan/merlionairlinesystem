@@ -55,6 +55,10 @@ public class FleetBean {
         return aircraft;
     }
 
+    public List<Aircraft> getAircraftNeedingMaintenance (){
+        return em.createQuery("SELECT a from Aircraft a WHERE a.milesSinceLastMaint > :miles", Aircraft.class).setParameter("miles", Constants.MILES_BEFORE_MAINTENANCE).getResultList();
+    }
+
     public void changeAircraftConfig(long id, long seatConfigId) throws NotFoundException {
         Aircraft aircraft = em.find(Aircraft.class, id);
         if (aircraft == null) throw new NotFoundException();

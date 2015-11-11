@@ -286,7 +286,8 @@ public class ScheduleDevManagedBean {
             step = 4;
             success = 1;
             breadcrumbs.add("End");
-        } catch (ScheduleClashException e) {step = 4;
+        } catch (ScheduleClashException e) {
+            e.printStackTrace();
             step = 4;
             success = 2;
             breadcrumbs.add("End");

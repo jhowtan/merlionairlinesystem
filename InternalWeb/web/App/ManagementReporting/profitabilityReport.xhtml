@@ -64,7 +64,7 @@
                                         <div class="row">
                                             <div class="form-group col-lg-6">
                                                 <label class="control-label" for="originDest">Origin-Destination</label>
-                                                <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.routeIds}"
+                                                <h:selectManyListbox styleClass="form-control" size="10" value="#{profitabilityReportManagedBean.routeIds}"
                                                                  id="originDest">
                                                     <f:selectItems value="#{profitabilityReportManagedBean.getAllRoutes()}" var="route"
                                                                    itemLabel="#{route.origin.id} - #{route.destination.id}"
@@ -79,7 +79,7 @@
                                             </div>
                                             <div class="form-group col-lg-6">
                                                 <label class="control-label">Months of Year</label>
-                                                <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.months}">
+                                                <h:selectManyListbox styleClass="form-control" size="10" value="#{profitabilityReportManagedBean.months}">
                                                     <f:selectItems value="#{profitabilityReportManagedBean.allMonths}" var="month"
                                                                    itemLabel="#{month}" itemValue="#{profitabilityReportManagedBean.allMonths.indexOf(month)}" />
                                                     <f:ajax event="change" render="flightTable"
@@ -141,7 +141,7 @@
                                             <div class="row">
                                                 <div class="input-group col-md-12">
                                                     <span class="input-group-addon">Aircraft Types</span>
-                                                    <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.aircraftTypeIds}">
+                                                    <h:selectManyListbox styleClass="form-control" size="10" value="#{profitabilityReportManagedBean.aircraftTypeIds}">
                                                         <f:selectItems value="#{profitabilityReportManagedBean.allAircraftTypes}" var="acType"
                                                                        itemLabel="#{acType.name}" itemValue="#{acType.id}" />
                                                         <f:ajax event="change" render="flightTable"
@@ -155,7 +155,7 @@
                                                 <br/>
                                                 <div class="input-group col-md-12">
                                                     <span class="input-group-addon">Aircraft</span>
-                                                    <h:selectManyListbox styleClass="form-control" value="#{profitabilityReportManagedBean.aircraftIds}">
+                                                    <h:selectManyListbox styleClass="form-control" size="10" value="#{profitabilityReportManagedBean.aircraftIds}">
                                                         <f:selectItems value="#{profitabilityReportManagedBean.allAircraft}" var="ac"
                                                                        itemLabel="#{ac.tailNumber} (#{ac.seatConfig.aircraftType.name})" itemValue="#{ac.id}" />
                                                         <f:ajax event="change" render="flightTable"

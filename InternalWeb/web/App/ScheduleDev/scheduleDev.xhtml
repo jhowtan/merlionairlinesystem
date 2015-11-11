@@ -42,7 +42,7 @@
                                         <h:form>
                                             <div class="input-group">
                                                 <span class="input-group-addon">Airport Names</span>
-                                                <h:selectManyListbox id="apNames" styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.selectAirportsId}">
+                                                <h:selectManyListbox id="apNames" size="10" styleClass="form-control"  required="true" requiredMessage="Airports are required" value="#{scheduleDevManagedBean.selectAirportsId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allAirports}" var="ap"
                                                                    itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                                     <f:ajax event="change" render="hubSelection hubStrength apSaveButtons" listener="#{scheduleDevManagedBean.selectAirportAjaxListener}" />
@@ -56,7 +56,7 @@
                                                 </blockquote>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">Airport Names</span>
-                                                    <h:selectManyListbox id="hubNames" styleClass="form-control" value="#{scheduleDevManagedBean.hubAirportsId}">
+                                                    <h:selectManyListbox id="hubNames" size="10" styleClass="form-control" value="#{scheduleDevManagedBean.hubAirportsId}">
                                                         <f:selectItems value="#{scheduleDevManagedBean.selectAirports}" var="ap"
                                                                        itemLabel="#{ap.name}" itemValue="#{ap.id}" />
                                                         <f:ajax event="change" render="hubStrength" listener="#{scheduleDevManagedBean.hubAirportAjaxListener}" />
@@ -115,7 +115,7 @@
                                         <h:form>
                                             <div class="input-group">
                                                 <span class="input-group-addon">Tail Numbers</span>
-                                                <h:selectManyListbox styleClass="form-control"  required="true" requiredMessage="Aircrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
+                                                <h:selectManyListbox styleClass="form-control"  size="10" required="true" requiredMessage="Aircrafts are required" value="#{scheduleDevManagedBean.selectAircraftsId}">
                                                     <f:selectItems value="#{scheduleDevManagedBean.allAircrafts}" var="ac"
                                                                    itemLabel="#{ac.tailNumber}" itemValue="#{ac.id}" />
                                                     <f:ajax event="change" render="aircraftLocation acSaveButtons" listener="#{scheduleDevManagedBean.selectAircraftsAjaxListener}" />
@@ -176,7 +176,7 @@
                                             <h:panelGroup id="routeList">
                                                 <div class="input-group #{!routes.valid ? 'has-error' : ''}">
                                                     <span class="input-group-addon">Routes</span>
-                                                    <h:selectManyListbox id="routes" binding="#{routes}" styleClass="form-control" required="true" requiredMessage="Routes are required" value="#{scheduleDevManagedBean.selectRoutesId}">
+                                                    <h:selectManyListbox id="routes" size="10" binding="#{routes}" styleClass="form-control" required="true" requiredMessage="Routes are required" value="#{scheduleDevManagedBean.selectRoutesId}">
                                                         <f:selectItems value="#{scheduleDevManagedBean.allRoutes}" var="rt"
                                                                        itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.origin.id.concat(' '.concat(rt.destination.id))}" />
                                                     </h:selectManyListbox>

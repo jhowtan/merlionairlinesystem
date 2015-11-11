@@ -96,4 +96,6 @@ public class Constants {
     public static int MAX_CONNECTION_TIME_MINUTES = 1440;
 
     public static int MILES_TO_CENTS = 3;
+
+    public static String[] CUSTOMER_SEGMENT_NAMES = {"Business Travellers", "Family Travellers", "Globetrotters", "Casual Travellers"};
 }

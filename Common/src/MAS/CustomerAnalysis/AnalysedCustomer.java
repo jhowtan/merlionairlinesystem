@@ -24,4 +24,52 @@ public class AnalysedCustomer {
                 segment = 3;
         }
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public int getSegment() {
+        return segment;
+    }
+
+    public void setSegment(int segment) {
+        this.segment = segment;
+    }
+
+    public double getRevenuePerMile() {
+        return revenuePerMile;
+    }
+
+    public void setRevenuePerMile(double revenuePerMile) {
+        this.revenuePerMile = revenuePerMile;
+    }
+
+    public int getFlightCount() {
+        return flightCount;
+    }
+
+    public void setFlightCount(int flightCount) {
+        this.flightCount = flightCount;
+    }
+
+    public double getcV() {
+        return cV;
+    }
+
+    public void setcV(double cV) {
+        this.cV = cV;
+    }
+
+    public double getpV() {
+        return pV;
+    }
+
+    public void setpV(double pV) {
+        this.pV = pV;
+    }
 }

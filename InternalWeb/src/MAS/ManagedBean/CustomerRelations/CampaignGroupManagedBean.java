@@ -88,7 +88,7 @@ public class CampaignGroupManagedBean {
             campaignBean.createCampaignGroup(customerIds, groupName, desc);
             groupName = "";
             desc = "";
-            FacesMessage m = new FacesMessage("Customer created successfully.");
+            FacesMessage m = new FacesMessage("Customer group created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (Exception e) {
