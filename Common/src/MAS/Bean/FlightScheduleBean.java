@@ -16,10 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Stateless(name = "FlightScheduleEJB")
@@ -38,6 +35,15 @@ public class FlightScheduleBean {
     AttributesBean attributesBean;
     @EJB
     FleetBean fleetBean;
+
+    @EJB
+    FFPBean ffpBean;
+    @EJB
+    CustomerLogBean customerLogBean;
+    @EJB
+    CustomerBean customerBean;
+    @EJB
+    PartnerMilesBean partnerMilesBean;
 
     public FlightScheduleBean() {
     }
@@ -464,5 +470,63 @@ public class FlightScheduleBean {
             totalFlightSalesInYear += flightSalesForMonth[i];
         }
         return (double) totalFlightSalesInYear / 12;
+    }
+
+    public void departFlight(Flight flight, Date date) {
+        flight.setActualDepartureTime(date);
+        try {
+            fleetBean.changeAircraftLocation(flight.getAircraftAssignment().getAircraft().getId(), flight.getAircraftAssignment().getRoute().getDestination().getId());
+        } catch (Exception e) {}
+        int milesFlown = new Double(flight.getAircraftAssignment().getRoute().getDistance()).intValue();
+        List<ETicket> etickets = getETicketsForFlight(flight);
+        for (ETicket eticket : etickets) {
+            String ffp = eticket.getFfpNumber();
+            if (ffp == null) continue;
+            String[] parts = ffp.split("/");
+
+            if (parts.length != 2) continue;
+            if (!Arrays.asList(Constants.FFP_ALLIANCE_LIST_CODE).contains(parts[0])) continue;
+            if (!eticket.isGateChecked()) continue;
+
+            try {
+                FareRule fareRule = eticket.getBookingClass().getFareRule();
+
+                int miles = (milesFlown * fareRule.getMilesAccrual()) / 100;
+                miles = (miles * travelClassMultiplier(eticket)) / 100;
+
+                int eliteMiles = milesFlown;
+                eliteMiles = (eliteMiles * travelClassMultiplier(eticket)) / 100;
+
+                if (parts[0].equals("MA")) {
+                    Customer customer = customerBean.getCustomer(Long.parseLong(parts[1]));
+                    ffpBean.creditEliteMiles(customer.getId(), eliteMiles);
+                    ffpBean.creditMiles(customer.getId(), miles);
+
+                    customerLogBean.createCustomerLog(customer.getId(),
+                            miles + " Miles earned for flight " + flight.getCode() +
+                                    " from " + flight.getAircraftAssignment().getRoute().getOrigin() +
+                                    " to " + flight.getAircraftAssignment().getRoute().getDestination(), "miles");
+                    customerLogBean.createCustomerLog(customer.getId(),
+                            eliteMiles + " Elite Miles earned for flight " + flight.getCode() +
+                                    " from " + flight.getAircraftAssignment().getRoute().getOrigin() +
+                                    " to " + flight.getAircraftAssignment().getRoute().getDestination(), "elite_miles");
+                } else {
+                    partnerMilesBean.awardMiles(ffp, miles);
+                }
+            } catch (NotFoundException e) {
+                continue;
+            }
+        }
+    }
+
+    private int travelClassMultiplier(ETicket eticket) {
+        switch (eticket.getBookingClass().getTravelClass()) {
+            case 0:
+                return 150;
+            case 1:
+                return 125;
+            default:
+                return 100;
+        }
     }
 }

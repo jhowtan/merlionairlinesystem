@@ -3,10 +3,7 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Common.Utils;
-import MAS.Entity.AircraftType;
-import MAS.Entity.Airport;
-import MAS.Entity.Certification;
-import MAS.Entity.Customer;
+import MAS.Entity.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -429,6 +426,38 @@ public class InitBean {
                     customer.setAddress("123 West Coast Rd");
                     customerBean.createCustomer(customer, "password");
                 }
+
+                long r1 = routeBean.createRoute("SIN", "HKG");
+                long r2 = routeBean.createRoute("HKG", "SFO");
+                long r3 = routeBean.createRoute("SFO", "HKG");
+                long r4 = routeBean.createRoute("HKG", "SIN");
+                long r5 = routeBean.createRoute("SIN", "ICN");
+                long r6 = routeBean.createRoute("ICN", "SFO");
+                long r7 = routeBean.createRoute("SFO", "ICN");
+                long r8 = routeBean.createRoute("ICN", "SIN");
+                List<Aircraft> aircrafts = fleetBean.getAllAircraft();
+                for (int i = 0; i < aircrafts.size(); i ++) {
+                    long acId = aircrafts.get(i).getId();
+                    long aa1Id = routeBean.createAircraftAssignment(acId, r1);
+                    long aa2Id = routeBean.createAircraftAssignment(acId, r2);
+                    long aa3Id = routeBean.createAircraftAssignment(acId, r3);
+                    long aa4Id = routeBean.createAircraftAssignment(acId, r4);
+                    long aa5Id = routeBean.createAircraftAssignment(acId, r5);
+                    long aa6Id = routeBean.createAircraftAssignment(acId, r6);
+                    long aa7Id = routeBean.createAircraftAssignment(acId, r7);
+                    long aa8Id = routeBean.createAircraftAssignment(acId, r8);
+                    long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "12:00"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "15:00"), aa1Id, true);
+                    long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "16:05"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 2), "05:11"), aa2Id, true);
+                    long flight3Id = flightScheduleBean.createFlight("MA13", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "08:15"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "21:14"), aa3Id, true);
+                    long flight4Id = flightScheduleBean.createFlight("MA14", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "22:30"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 9), "02:01"), aa4Id, true);
+                    long flight5Id = flightScheduleBean.createFlight("MA21", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "06:00"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "11:00"), aa5Id, true);
+                    long flight6Id = flightScheduleBean.createFlight("MA22", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "13:05"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 2), "01:23"), aa6Id, true);
+                    long flight7Id = flightScheduleBean.createFlight("MA23", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "05:15"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "17:02"), aa7Id, true);
+                    long flight8Id = flightScheduleBean.createFlight("MA24", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "19:30"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 9), "02:01"), aa8Id, true);
+
+
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
