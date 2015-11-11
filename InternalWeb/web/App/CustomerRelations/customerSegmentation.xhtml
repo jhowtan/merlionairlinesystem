@@ -20,8 +20,22 @@
                             <div id="cust-segment-chart">
                                 <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
                             </div>
+                                <h:form>
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <div class="button-group">
+                                            <ui:repeat value="#{customerSegmentationManagedBean.grpNames}" var="grp" varStatus="varStatus">
+                                                <h:commandButton action="#{customerSegmentationManagedBean.createSegmentGroup(varStatus.index)}"
+                                                             disabled="#{customerSegmentationManagedBean.segmentedCustomers.get(varStatus.index).size() == 0}" value="Create Group for #{grp}" styleClass="#{customerSegmentationManagedBean.getButtonColour(varStatus.index)}"/>
+                                            </ui:repeat>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:form>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-12">
                     <h:form>
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -64,7 +78,7 @@
                                 </table>
                                 <div class="text-right">
                                     <div class="btn-group">
-                                        <h:commandButton action="#{customerSegmentationManagedBean.createCampaignGroup()}" value="Create Campaign Group" styleClass="btn btn-success"/>
+                                        <h:commandButton action="#{customerSegmentationManagedBean.createCampaignGroup()}" value="Create Customer Group" styleClass="btn btn-success"/>
                                     </div>
                                 </div>
                             </div>
@@ -90,9 +104,7 @@
             $.get("getCustomerSegments.xhtml", function(data) {
                 $(document).ready(function() {
                     var chartData = [];
-                    console.log(data);
                     for (var i = 0; i < 4; i++){
-                        console.log(data[i]);
                         chartData.push({
                             key: data[i].key,
                             values: data[i].data

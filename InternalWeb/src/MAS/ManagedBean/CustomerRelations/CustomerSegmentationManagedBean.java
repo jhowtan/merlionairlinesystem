@@ -32,6 +32,7 @@ public class CustomerSegmentationManagedBean {
     private List<AnalysedCustomer> customers;
     private List<List<AnalysedCustomer>> segmentedCustomers;
     private Map<Long, Boolean> customerMap;
+    private List<String> grpNames = Arrays.asList(Constants.CUSTOMER_SEGMENT_NAMES);
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
@@ -118,6 +119,19 @@ public class CustomerSegmentationManagedBean {
         ctx.responseComplete();
     }
 
+    public String getButtonColour(String grp) {
+        switch (grp) {
+            default:
+                return "btn btn-primary";
+            case "1":
+                return "btn btn-success";
+            case "2":
+                return "btn btn-info";
+            case "3":
+                return "btn btn-warning";
+        }
+    }
+
     public void createCampaignGroup() {
         try {
             ArrayList<Long> customerIds = new ArrayList<>();
@@ -138,6 +152,22 @@ public class CustomerSegmentationManagedBean {
         }
     }
 
+    public void createSegmentGroup(int grp) {try {
+        ArrayList<Long> customerIds = new ArrayList<>();
+        for (AnalysedCustomer customer : segmentedCustomers.get(grp)) {
+            customerIds.add(customer.customer.getId());
+        }
+        campaignBean.createCampaignGroup(customerIds, grpNames.get(grp) + "  analysed on " + CommonManagedBean.formatDate("dd-MMM-yy", new Date()), "Auto-generated group from customer analysis for " + grpNames.get(grp));
+        FacesMessage m = new FacesMessage("Customer group created successfully.");
+        m.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage("status", m);
+    } catch (Exception e) {
+        FacesMessage m = new FacesMessage("Could not create customer group.");
+        m.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage("status", m);
+    }
+    }
+
     public String displaySegment(AnalysedCustomer customer) {
         return Constants.CUSTOMER_SEGMENT_NAMES[customer.segment];
     }
@@ -156,6 +186,14 @@ public class CustomerSegmentationManagedBean {
 
     public void setSegmentedCustomers(List<List<AnalysedCustomer>> segmentedCustomers) {
         this.segmentedCustomers = segmentedCustomers;
+    }
+
+    public List<String> getGrpNames() {
+        return grpNames;
+    }
+
+    public void setGrpNames(List<String> grpNames) {
+        this.grpNames = grpNames;
     }
 
     public Map<Long, Boolean> getCustomerMap() {
