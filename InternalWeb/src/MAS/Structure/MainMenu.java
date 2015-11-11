@@ -103,7 +103,6 @@ public class MainMenu {
                         new MenuEntry("Aircraft Reporting", null, Pages.AIRCRAFT_REPORT),
                         new MenuEntry("Flight Reporting", null, Pages.FLIGHT_REPORT),
                         new MenuEntry("Crew Reporting", null, Pages.CREW_REPORT),
-                        new MenuEntry("Maintenance Reporting", null, Pages.MAINTENANCE_REPORT),
                         new MenuEntry("Campaign Reporting", null, Pages.CAMPAIGN_REPORT)
                 )
         );
