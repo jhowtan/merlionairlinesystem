@@ -18,6 +18,20 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
+                        <div class="panel-heading" id="campaign-chart-heading">
+                            <a data-toggle="collapse" href="#campaign-chart" aria-controls="campaign-chart">
+                                Campaign Overview
+                            </a>
+                        </div>
+                        <div class="panel-collapse collapse in" id="campaign-chart" aria-labelledby="#campaign-chart-heading">
+                            <div class="panel-body">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
                         <div class="panel-heading" id="filter-heading">
                             <a data-toggle="collapse" href="#filter" aria-controls="filter">
                                 Filter Options
@@ -35,7 +49,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" id="campaign-table-heading">
                                 <a data-toggle="collapse" href="#campaign-table" aria-controls="campaign-table">
-                                    Campaigns
+                                    Campaigns Table
                                 </a>
                             </div>
                             <div class="panel-collapse collapse in" id="campaign-table" aria-labelledby="#campaign-table-heading">
@@ -59,13 +73,17 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Campaign Details
+                        <div class="panel-heading" id="campaign-details-heading">
+                            <a data-toggle="collapse" href="#campaign-details" aria-controls="campaign-details">
+                                Campaign Details
+                            </a>
                         </div>
-                        <div class="panel-body">
-                            <!-- CONTENT DATA HERE -->
+                        <div class="panel-collapse collapse in" id="campaign-details" aria-labelledby="#campaign-details-heading">
+                            <div class="panel-body">
+                                <!-- CAMPAIGN DETAIL ITEMS HERE -->
+                            </div>
                         </div>
-                    </div>
+                    </div> <!--END OF PANEL -->
                 </div>
             </div>
 
@@ -75,7 +93,49 @@
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/raphael/raphael-min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/morrisjs/morris.min.js"></script>
         <script type="text/javascript">
-            // <!-- MORRIS CHART STUFF HERE -->
+            $('#campaign_table').DataTable({
+                "stateSave": true
+            });
+            $.get("reportingData.xhtml?q=campaignTimetable&amp;campaignIds=#{campaignReportManagedBean.campaignIds}", function(data) {
+                $(document).ready(function() {
+                    $('#calendar').fullCalendar({
+                        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                        aspectRatio: 3,
+                        editable: false,
+                        header: {
+                            left: 'prev,next, today',
+                            center: 'title',
+                            right: 'timelineWeek,timelineMonth,timelineYear'
+                        },
+                        buttonText: {
+                            next: 'Next',
+                            prev: 'Prev'
+                        },
+                        views: {
+                        },
+                        resourceColumns: [
+                            {
+                                labelText: 'Campaign',
+                                field: 'name'
+                            }
+                        ],
+                        resourceAreaWidth: "10%",
+                        defaultView: 'timelineMonth',
+                        allDaySlot: false,
+                        eventAfterRender: function(event, element, view) {
+                            $(element).tooltip({
+                                title: event.info + ": " + event.title,
+                                trigger: 'hover',
+                                placement: 'bottom',
+                                container: 'body'
+                            });
+                        },
+                        eventResourceField: 'campaignId',
+                        events: data.entries,
+                        resources: data.resources
+                    });
+                });
+            });
         </script>
     </ui:define>
 </ui:composition>

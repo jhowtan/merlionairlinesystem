@@ -36,6 +36,8 @@ public class ReportingDataManagedBean {
     private UserBean userBean;
     @EJB
     private FlightRosterBean flightRosterBean;
+    @EJB
+    private CampaignBean campaignBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -94,14 +96,38 @@ public class ReportingDataManagedBean {
         public String job;
     }
 
+    private class CampaignCalendarData {
+        public List<CampaignCalendarEntry> entries;
+        public List<CampaignCalendarResource> resources;
+    }
+
+    private class CampaignCalendarEntry {
+        public String title;
+        public Date start;
+        public Date end;
+        public String info;
+        public String color;
+        public String campaignId;
+        public ArrayList<String> className;
+    }
+
+    private class CampaignCalendarResource {
+        public String id;
+        public String name;
+    }
+
     public void search() throws NotFoundException {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String query = params.get("q");
         String id = params.get("id");
         String aircraftIds = params.get("aircraftIds");
         String jobIds = params.get("jobIds");
+        String campaignIds = params.get("campaignIds");
 
         switch (query) {
+            case "campaignTimetable":
+                showCampaignTimetable(campaignIds);
+                return;
             case "aircraftTimetable":
                 showAircraftTimetable(aircraftIds);
                 return;
@@ -127,8 +153,48 @@ public class ReportingDataManagedBean {
                 showSalesVarianceByMonth(id);
                 return;
             default:
+                outputJSON("[]");
                 return;
         }
+    }
+
+    private void showCampaignTimetable(String campaignIds) throws NotFoundException {
+        String[] campaignIdsString = campaignIds.split("-");
+        if (campaignIdsString[0].equals("")) {
+            String json = "[]";
+            outputJSON(json);
+        }
+        ArrayList<CampaignCalendarEntry> calendarEntries = new ArrayList<>();
+        ArrayList<CampaignCalendarResource> calendarResources = new ArrayList<>();
+        for (String campaignIdString : campaignIdsString) {
+            if (campaignIdString.equals("")) {
+                continue;
+            }
+            Long id = Long.parseLong(campaignIdString);
+            Campaign campaign = campaignBean.getCampaign(id);
+            CampaignCalendarResource cr = new CampaignCalendarResource();
+            cr.id = campaignIdString;
+            cr.name = campaign.getName();
+            calendarResources.add(cr);
+            CampaignCalendarEntry c = new CampaignCalendarEntry();
+            c.campaignId = String.valueOf(campaign.getId());
+            c.title = String.valueOf(campaign.getCode()) + ": " + String.valueOf(campaign.getUsageCount());
+            c.className = new ArrayList<>();
+            c.className.add("calendar-green-event");
+            c.start = campaign.getStartDate();
+            c.end = campaign.getEndDate();
+            c.info = String.valueOf(campaign.getId());
+            calendarEntries.add(c);
+        }
+
+        CampaignCalendarData cd = new CampaignCalendarData();
+        cd.entries = calendarEntries;
+        cd.resources = calendarResources;
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+        String json = gson.toJson(cd);
+
+        outputJSON(json);
     }
 
     private void showCrewTimetable(String jobIds) throws NotFoundException {
