@@ -5,39 +5,87 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="title">Home - Merlion Airlines</ui:define>
     <ui:define name="content">
-        <section class="splash splash-full home">
-            <div class="container-fluid">
-                <h1 class="title animated fadeInDown">Experience the world with Merlion Airlines</h1>
-                <p class="lead animated fadeInDown">Fly across 24 different countries and 108 cities today</p>
+        <section class="home">
+            <div class="home-banner">
+                <div class="container-fluid">
+                    <div class="tagline animated fadeIn">
+                        <p class="lead animated fadeInLeft delay05s">"The world is your oyster."</p>
+                        <p class="sublead animated fadeInLeft delay1s">Start 2016 with Merlion...</p>
+                        <p class="action text-right animated fadeIn delay2s"><a href="booking" class="btn btn-blue btn-no-uppercase btn-not-rounded btn-lg">Book Now</a></p>
+                    </div>
+                </div>
             </div>
-            <div class="container">
-                <h:form styleClass="booking-form">
+            <div class="container container-larger">
+                <div>
+                    <h1>Promotions from Singapore</h1>
                     <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <h:inputText pt:type="text" id="origin" binding="#{origin}" value=""
-                                             pt:placeholder="Origin"
-                                             styleClass="form-control input-lg" required="true" requiredMessage="Please enter an origin"/>
+                        <div class="col-lg-6">
+                            <div class="info-block">
+                                <img class="img-responsive" src="#{commonManagedBean.getRoot()}/assets/img/golden-gate.jpg" />
+                                <div class="left">
+                                    <p class="sublead">Your journey starts here...</p>
+                                    <p class="lead">Explore the world with Merlion</p>
+                                </div>
+                                <div class="right">
+                                    <p class="action"><a href="booking" class="btn btn-blue btn-no-uppercase btn-not-rounded btn-lg">Book Now</a></p>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
-                            <h:message for="origin" styleClass="help-block" />
                         </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <h:inputText pt:type="text" id="destination" binding="#{destination}" value=""
-                                             pt:placeholder="Destination"
-                                             styleClass="form-control input-lg" required="true" requiredMessage="Please enter a destination"/>
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">Hong Kong</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>248*</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">Hanoi</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>268*</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">Beijing</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>518*</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">Tokyo</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>598*</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">Milan</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>1,138*</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="promo-block">
+                                        <div class="country">London</div>
+                                        <div class="class">Economy</div>
+                                        <div class="from">Prices from</div>
+                                        <div class="price"><span class="currency">SGD</span>1,335*</div>
+                                    </div>
+                                </div>
                             </div>
-                            <h:message for="destination" styleClass="help-block" />
-                        </div>
-                        <div class="col-md-2">
-                            <h:link outcome="/booking" value="Search" styleClass="btn btn-lg btn-primary btn-block">
-                                <f:param value="#{origin}" name="origin"/>
-                                <f:param value="#{destination}" name="destination"/>
-                            </h:link>
                         </div>
                     </div>
-
-                </h:form>
+                </div>
             </div>
         </section>
     </ui:define>
