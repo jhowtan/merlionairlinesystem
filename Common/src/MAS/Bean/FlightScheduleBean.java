@@ -537,28 +537,20 @@ public class FlightScheduleBean {
     }
 
     public boolean checkScheduleClash(long aircraftId, Date startTime, Date endTime) throws NotFoundException {
-        Aircraft aircraft = fleetBean.getAircraft(aircraftId);
+        Aircraft aircraft = em.find(Aircraft.class, aircraftId);
         if (aircraft == null) throw new NotFoundException();
         List<Flight> flights = em.createQuery("SELECT f from Flight f WHERE f.aircraftAssignment.aircraft = :aircraft AND " +
-                "(f.departureTime > :startTime AND f.departureTime < :endTime) " +
-                "OR (f.departureTime < :startTime AND f.arrivalTime > :endTime) OR (f.arrivalTime > :startTime AND f.arrivalTime < :endTime)", Flight.class)
+                "((f.departureTime > :startTime AND f.departureTime < :endTime) " +
+                "OR (f.departureTime < :startTime AND f.arrivalTime > :endTime) OR (f.arrivalTime > :startTime AND f.arrivalTime < :endTime))", Flight.class)
                 .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
                 .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
                 .setParameter("aircraft", aircraft).getResultList();
         List<AircraftMaintenanceSlot> maintenanceSlots = em.createQuery("SELECT m from AircraftMaintenanceSlot m WHERE m.aircraft = :aircraft " +
-                "AND (m.startTime > :startTime AND m.startTime < :endTime) OR (m.startTime < :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) > :endTime) " +
-                "OR (FUNCTION('ADDTIME', m.startTime, m.duration) > :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) < :endTime)", AircraftMaintenanceSlot.class)
+                "AND ((m.startTime > :startTime AND m.startTime < :endTime) OR (m.startTime < :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) > :endTime) " +
+                "OR (FUNCTION('ADDTIME', m.startTime, m.duration) > :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) < :endTime))", AircraftMaintenanceSlot.class)
                 .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
                 .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
                 .setParameter("aircraft", aircraft).getResultList();
-        String debug = startTime.toString() + " to " + endTime.toString() + "\n";
-        for (Flight flight : flights) {
-            debug = debug.concat(flight.getCode() + ": " + flight.getDepartureTime() + " to " + flight.getArrivalTime() + "\n");
-        }
-        for (AircraftMaintenanceSlot slot : maintenanceSlots) {
-            debug = debug.concat(slot.getId() + ": " + slot.getStartTime() + " of " + slot.getDuration() + "\n");
-        }
-        System.out.println(debug);
         return flights.size() != 0 || maintenanceSlots.size() != 0;
     }
 

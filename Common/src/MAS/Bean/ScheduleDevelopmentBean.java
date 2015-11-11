@@ -581,6 +581,7 @@ public class ScheduleDevelopmentBean {
                         } catch (NotFoundException e) {
                             aircraftAssignment = routeBean.getAircraftAssignment(routeBean.createAircraftAssignment(aircraft.getId(), route.getId()));
                         }
+                        System.out.println("Trying to create: MA" + aircraftAssignment.getId());
                         flightScheduleBean.createFlight("MA" + aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int) Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
                                 aircraftAssignment.getId(), true);
                         result++;
