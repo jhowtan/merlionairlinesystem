@@ -4,7 +4,6 @@ import MAS.Bean.FleetBean;
 import MAS.Common.Cabin;
 import MAS.Common.SeatConfigObject;
 import MAS.Entity.AircraftType;
-import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -44,17 +43,21 @@ public class CreateSeatConfigManagedBean {
         aircraftTypes = fleetBean.getAllAircraftTypes();
     }
 
-    public void createConfig() throws NotFoundException {
-        // Decide on whether to have multiple aircraft types with the same seat configuration
-        System.out.println(seatConfObj.toString());
-        fleetBean.createAircraftSeatConfig(seatConfObj.toString(), configName, weight, acTypeId);
+    public void createConfig() {
+        try {
+            fleetBean.createAircraftSeatConfig(seatConfObj.toString(), configName, weight, acTypeId);
 
-        setConfigName(null);
-        setWeight(0);
-        seatConfObj = new SeatConfigObject();
-        FacesMessage m = new FacesMessage("Seat Configuration created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+            setConfigName(null);
+            setWeight(0);
+            seatConfObj = new SeatConfigObject();
+            FacesMessage m = new FacesMessage("Seat Configuration created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Seat Configuration could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

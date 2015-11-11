@@ -56,7 +56,9 @@ public class CreateAircraftManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            FacesMessage m = new FacesMessage("Aircraft could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 

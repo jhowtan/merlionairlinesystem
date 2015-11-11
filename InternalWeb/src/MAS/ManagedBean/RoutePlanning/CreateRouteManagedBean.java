@@ -2,7 +2,6 @@ package MAS.ManagedBean.RoutePlanning;
 
 import MAS.Bean.RouteBean;
 import MAS.Entity.Airport;
-import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -31,15 +30,26 @@ public class CreateRouteManagedBean {
         setAirports(routeBean.getAllAirports());
     }
 
-    public void createRoute() throws NotFoundException {
-        routeBean.createRoute(originId, destinationId);
-        authManagedBean.createAuditLog("Created new route: " + routeBean.getAirport(originId).getName() + " - " +
-                routeBean.getAirport(destinationId).getName(), "create_route");
-        setOriginId(null);
-        setDestinationId(null);
-        FacesMessage m = new FacesMessage("Route created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createRoute() {
+        if (originId == destinationId) {
+            FacesMessage m = new FacesMessage("Origin and destination of the route must be different.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+        try {
+            routeBean.createRoute(originId, destinationId);
+            authManagedBean.createAuditLog("Created new route: " + routeBean.getAirport(originId).getName() + " - " +
+                    routeBean.getAirport(destinationId).getName(), "create_route");
+            setOriginId(null);
+            setDestinationId(null);
+            FacesMessage m = new FacesMessage("Route created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Route could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

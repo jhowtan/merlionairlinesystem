@@ -85,7 +85,9 @@ public class CreateBookingClassManagedBean {
 
             resetFields();
         } catch (Exception e) {
-            e.printStackTrace();
+            FacesMessage m = new FacesMessage("Booking class could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }
 

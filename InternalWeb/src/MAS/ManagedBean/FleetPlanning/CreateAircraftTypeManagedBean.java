@@ -26,13 +26,19 @@ public class CreateAircraftTypeManagedBean {
     private double speed;
 
     public void createType() {
-        fleetBean.createAircraftType(typeName, fuelCapacity, getCabinReq(), getCockpitReq(), getFuelEfficiency(), getSpeed(), getWeight());
-        authManagedBean.createAuditLog("Created new aircraft type: " + typeName, "create_aircraft_type");
-        setTypeName(null);
-        setFuelCapacity(0);
-        FacesMessage m = new FacesMessage("Aircraft Type created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+        try {
+            fleetBean.createAircraftType(typeName, fuelCapacity, getCabinReq(), getCockpitReq(), getFuelEfficiency(), getSpeed(), getWeight());
+            authManagedBean.createAuditLog("Created new aircraft type: " + typeName, "create_aircraft_type");
+            setTypeName(null);
+            setFuelCapacity(0);
+            FacesMessage m = new FacesMessage("Aircraft Type created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Aircraft Type could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public String getTypeName() {

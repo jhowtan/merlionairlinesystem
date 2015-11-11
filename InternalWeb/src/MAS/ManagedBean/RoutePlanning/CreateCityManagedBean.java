@@ -3,7 +3,6 @@ package MAS.ManagedBean.RoutePlanning;
 import MAS.Bean.RouteBean;
 import MAS.Entity.City;
 import MAS.Entity.Country;
-import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -38,16 +37,22 @@ public class CreateCityManagedBean {
         setCountries(routeBean.getAllCountries());
     }
 
-    public void createCity() throws NotFoundException {
-        routeBean.createCity(cityId, cityName, countryId, timezone);
-        authManagedBean.createAuditLog("Created new city: " + getCityName(), "create_city");
-        setCityName(null);
-        setCountryId(null);
-        setTimezone(null);
-        setCityId(null);
-        FacesMessage m = new FacesMessage("City created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createCity() {
+        try {
+            routeBean.createCity(cityId, cityName, countryId, timezone);
+            authManagedBean.createAuditLog("Created new city: " + getCityName(), "create_city");
+            setCityName(null);
+            setCountryId(null);
+            setTimezone(null);
+            setCityId(null);
+            FacesMessage m = new FacesMessage("City created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("City could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

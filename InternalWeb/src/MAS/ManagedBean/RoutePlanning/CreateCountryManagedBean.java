@@ -21,13 +21,19 @@ public class CreateCountryManagedBean {
     private String code;
 
     public void createCountry() {
-        routeBean.createCountry(getCountryName(), code);
-        authManagedBean.createAuditLog("Created new country: " + countryName, "create_country");
-        setCountryName(null);
-        setCode(null);
-        FacesMessage m = new FacesMessage("Country created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+        try {
+            routeBean.createCountry(getCountryName(), code);
+            authManagedBean.createAuditLog("Created new country: " + countryName, "create_country");
+            setCountryName(null);
+            setCode(null);
+            FacesMessage m = new FacesMessage("Country created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Country could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

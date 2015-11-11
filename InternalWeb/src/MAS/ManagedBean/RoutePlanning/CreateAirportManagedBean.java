@@ -2,7 +2,6 @@ package MAS.ManagedBean.RoutePlanning;
 
 import MAS.Bean.RouteBean;
 import MAS.Entity.City;
-import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -35,18 +34,24 @@ public class CreateAirportManagedBean {
         setCities(routeBean.getAllCities());
     }
 
-    public void createAirport() throws NotFoundException {
-        routeBean.createAirport(code, airportName, cityId, latitude, longitude, hangars);
-        authManagedBean.createAuditLog("Created new airport: " + airportName, "create_airport");
-        setAirportName(null);
-        setCode(null);
-        setLatitude(0);
-        setLongitude(0);
-        setCityId(null);
-        setHangars(0);
-        FacesMessage m = new FacesMessage("Airport created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createAirport() {
+        try {
+            routeBean.createAirport(code, airportName, cityId, latitude, longitude, hangars);
+            authManagedBean.createAuditLog("Created new airport: " + airportName, "create_airport");
+            setAirportName(null);
+            setCode(null);
+            setLatitude(0);
+            setLongitude(0);
+            setCityId(null);
+            setHangars(0);
+            FacesMessage m = new FacesMessage("Airport created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Airport could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

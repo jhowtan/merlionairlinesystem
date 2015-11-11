@@ -42,15 +42,21 @@ public class CreateFareRuleManagedBean {
     }
 
     public void createFareRule() {
-        fareRuleBean.createFareRule(name, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, freeCancellation, priceMul);
+        try {
+            fareRuleBean.createFareRule(name, minimumStay, maximumStay, advancePurchase, minimumPassengers, milesAccrual, freeCancellation, priceMul);
 
-        authManagedBean.createAuditLog("Created new fare rule: " + name, "create_fare_rule");
+            authManagedBean.createAuditLog("Created new fare rule: " + name, "create_fare_rule");
 
-        FacesMessage m = new FacesMessage("Fare rule created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+            FacesMessage m = new FacesMessage("Fare rule created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
 
-        resetFields();
+            resetFields();
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Fare rule could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

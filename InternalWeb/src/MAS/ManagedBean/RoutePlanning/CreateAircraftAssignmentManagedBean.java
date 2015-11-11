@@ -2,8 +2,8 @@ package MAS.ManagedBean.RoutePlanning;
 
 import MAS.Bean.FleetBean;
 import MAS.Bean.RouteBean;
-import MAS.Entity.*;
-import MAS.Exception.NotFoundException;
+import MAS.Entity.Aircraft;
+import MAS.Entity.Route;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -36,15 +36,21 @@ public class CreateAircraftAssignmentManagedBean {
         setRoutes(routeBean.getAllRoutes());
     }
 
-    public void createAircraftAssignment() throws NotFoundException {
-        routeBean.createAircraftAssignment(aircraftId, routeId);
-        authManagedBean.createAuditLog("Created new aircraft assignment: " + fleetBean.getAircraft(aircraftId).getTailNumber() + " : " +
-                routeBean.getRoute(routeId).getOrigin().getName() + " - " + routeBean.getRoute(routeId).getDestination().getName(), "create_aircraft_assignment");
-        setAircraftId(0);
-        setRouteId(0);
-        FacesMessage m = new FacesMessage("Route created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createAircraftAssignment() {
+        try {
+            routeBean.createAircraftAssignment(aircraftId, routeId);
+            authManagedBean.createAuditLog("Created new aircraft assignment: " + fleetBean.getAircraft(aircraftId).getTailNumber() + " : " +
+                    routeBean.getRoute(routeId).getOrigin().getName() + " - " + routeBean.getRoute(routeId).getDestination().getName(), "create_aircraft_assignment");
+            setAircraftId(0);
+            setRouteId(0);
+            FacesMessage m = new FacesMessage("Route created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Route could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public String formatRoute(Route route) {
