@@ -263,7 +263,11 @@ public class FlightRosterManagedBean {
 
         for (User user : users) {
             SearchResult r = new SearchResult();
-            r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + ")";
+            try {
+                r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + " @ " + flightRosterBean.getLastDestination(user.getId()).getId() + " from " + user.getBaseAirport().getId() + ")";
+            } catch (Exception e) {
+                r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + " @ " + user.getCurrentLocation() + " from " + user.getBaseAirport().getId() + ")";
+            }
             r.value = String.valueOf(user.getId());
             searchResults.add(r);
         }
