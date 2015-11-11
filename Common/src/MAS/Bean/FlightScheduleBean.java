@@ -90,14 +90,14 @@ public class FlightScheduleBean {
             int seatsLeft = seatsInClass;
             double cabinPrice = costPerSeat * Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[i];
 
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 0], seatsLeft, i, fareEx.getId(), flightId, Utils.makeNiceMoney(cabinPrice * fareEx.getPriceMul()));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 0], seatsLeft, i, fareEx, flight, Utils.makeNiceMoney(cabinPrice * fareEx.getPriceMul()), false);
             seatsLeft -= costsBean.getSeatTraffic(seatsInClass, cabinPrice, Utils.makeNiceMoney(cabinPrice * 1.5));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 1], seatsLeft, i, fareL.getId(), flightId, Utils.makeNiceMoney(cabinPrice * fareL.getPriceMul()));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 1], seatsLeft, i, fareL, flight, Utils.makeNiceMoney(cabinPrice * fareL.getPriceMul()), false);
             seatsLeft -= costsBean.getSeatTraffic(seatsInClass, cabinPrice, Utils.makeNiceMoney(cabinPrice * 1.35));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 2], seatsLeft, i, fareN.getId(), flightId, Utils.makeNiceMoney(cabinPrice * fareN.getPriceMul()));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 3], seatsLeft, i, fareD.getId(), flightId, Utils.makeNiceMoney(cabinPrice * fareD.getPriceMul()));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 2], seatsLeft, i, fareN, flight, Utils.makeNiceMoney(cabinPrice * fareN.getPriceMul()), false);
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 3], seatsLeft, i, fareD, flight, Utils.makeNiceMoney(cabinPrice * fareD.getPriceMul()), false);
             seatsLeft -= costsBean.getSeatTraffic(seatsInClass, cabinPrice, Utils.makeNiceMoney(cabinPrice * 1));
-            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 4], seatsLeft, i, fareE.getId(), flightId, Utils.makeNiceMoney(cabinPrice * fareE.getPriceMul()));
+            bookingClassBean.createBookingClass(Constants.BOOKING_CLASS_NAMES[i * 5 + 4], seatsLeft, i, fareE, flight, Utils.makeNiceMoney(cabinPrice * fareE.getPriceMul()), false);
         }
     }
 
