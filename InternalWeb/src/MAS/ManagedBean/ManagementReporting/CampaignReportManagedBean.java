@@ -5,11 +5,14 @@ import MAS.Bean.CampaignBean;
 import MAS.Bean.CustomerBean;
 import MAS.Bean.RouteBean;
 import MAS.Entity.Campaign;
+import MAS.Exception.NotFoundException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class CampaignReportManagedBean {
     private double uptakeRate;
     private int minUsageCount;
     private int maxUsageCount;
+    private Campaign campaign;
 
     @PostConstruct
     public void init() {
@@ -40,6 +44,20 @@ public class CampaignReportManagedBean {
         for (Campaign c : campaignList) {
             campaignIds = campaignIds.concat(String.valueOf(c.getId())).concat("-");
         }
+    }
+
+    public void viewSelectedCampaign(long id) {
+        try {
+            campaign = campaignBean.getCampaign(id);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Unable to retrieve the campaign from the system, it may have already been deleted.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public boolean displayCampaignDetails() {
+        return campaign != null;
     }
 
     public List<Campaign> getCampaignList() {
@@ -96,5 +114,13 @@ public class CampaignReportManagedBean {
 
     public void setMaxUsageCount(int maxUsageCount) {
         this.maxUsageCount = maxUsageCount;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
     }
 }
