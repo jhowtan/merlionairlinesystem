@@ -544,11 +544,11 @@ public class FlightScheduleBean {
                 .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
                 .setParameter("aircraft", aircraft).getResultList();
         List<AircraftMaintenanceSlot> maintenanceSlots = em.createQuery("SELECT m from AircraftMaintenanceSlot m WHERE m.aircraft = :aircraft AND " +
-                "(m.startTime >= :startTime AND m.startTime <= :endTime) OR (m.startTime <= :startTime AND FUNCTION('ADDDATE', m.startTime, 1) >= :endTime) " +
-                "OR (FUNCTION('ADDDATE', m.startTime, 1) >= :startTime AND FUNCTION('ADDDATE', m.startTime, 1) <= :endTime)", AircraftMaintenanceSlot.class)
+                "(m.startTime >= :startTime AND m.startTime <= :endTime) OR (m.startTime <= :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) >= :endTime) " +
+                "OR (FUNCTION('ADDTIME', m.startTime, m.duration) >= :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) <= :endTime)", AircraftMaintenanceSlot.class)
                 .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
                 .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
                 .setParameter("aircraft", aircraft).getResultList();
-        return flights.size() != 0 && maintenanceSlots.size() != 0;
+        return flights.size() != 0 || maintenanceSlots.size() != 0;
     }
 }
