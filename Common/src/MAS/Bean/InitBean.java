@@ -3,7 +3,10 @@ package MAS.Bean;
 import MAS.Common.Constants;
 import MAS.Common.Permissions;
 import MAS.Common.Utils;
-import MAS.Entity.*;
+import MAS.Entity.AircraftType;
+import MAS.Entity.Airport;
+import MAS.Entity.Certification;
+import MAS.Entity.Customer;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -188,6 +191,7 @@ public class InitBean {
 
             // INITIALIZE SOME AIRCRAFT TYPES AND SEAT CONFIGS
             try {
+                String[] tailNumberArray = {"AA", "AB", "AC", "AR", "TR", "AD", "AU", "LO", "PO", "AS", "DA", "SS", "CZ", "DF", "AS", "OI"};
                 long acTypeId = fleetBean.createAircraftType("A380 NR", 323546, 30, 2, 0.120, 634, 276800);
                 long seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
                         "s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
@@ -196,8 +200,11 @@ public class InitBean {
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/_3e", "A380 NR Normal", 20580, acTypeId);
-                long acId = fleetBean.createAircraft("9V-ABC", new Date(), routeBean.getAirport("SIN").getId());
-                fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+
+                for (int i = 0; i < 10; i++) {
+                    long acId = fleetBean.createAircraft("9V-A" + tailNumberArray[i], randDate(2000, 2014), routeBean.getAirport("SIN").getId());
+                    fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                }
                 fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/" +
                         "s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/" +
                         "s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/" +
@@ -208,22 +215,28 @@ public class InitBean {
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B747 300-ER Normal", 20310, acTypeId);
-                acId = fleetBean.createAircraft("9V-ABD", new Date(), routeBean.getAirport("SIN").getId());
-                fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                for (int i = 0; i < 10; i++) {
+                    long acId = fleetBean.createAircraft("9V-B" + tailNumberArray[i], randDate(2000, 2014), routeBean.getAirport("SIN").getId());
+                    fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                }
 
                 acTypeId = fleetBean.createAircraftType("B777 200-ER", 171177, 25, 2, 0.0765, 590, 138100);
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 20041, acTypeId);
-                acId = fleetBean.createAircraft("9V-AET", new Date(), routeBean.getAirport("SIN").getId());
-                fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                for (int i = 0; i < 10; i++) {
+                    long acId = fleetBean.createAircraft("9V-C" + tailNumberArray[i], randDate(2000, 2014), routeBean.getAirport("SIN").getId());
+                    fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                }
 
                 acTypeId = fleetBean.createAircraftType("B777 300-ER", 181283, 25, 2, 0.0765, 590, 167800);
                 seatConfId = fleetBean.createAircraftSeatConfig("s|s/s|s/s|s/s|s/s|s/s|s/_0s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/s|s|s/_1ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/" +
                         "ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/ss|ss|ss/_2sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/" +
                         "sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/sss|ssss|sss/_3e", "B777 300-ER Normal", 23500, acTypeId);
-                acId = fleetBean.createAircraft("9V-DET", new GregorianCalendar(2005, 05, 05).getTime(), routeBean.getAirport("SIN").getId());
-                fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                for (int i = 0; i < 10; i++) {
+                    long acId = fleetBean.createAircraft("9V-D" + tailNumberArray[i], randDate(2000, 2014), routeBean.getAirport("SIN").getId());
+                    fleetBean.getAircraft(acId).setSeatConfig(fleetBean.getAircraftSeatConfig(seatConfId));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -427,41 +440,81 @@ public class InitBean {
                     customerBean.createCustomer(customer, "password");
                 }
 
-                long r1 = routeBean.createRoute("SIN", "HKG");
-                long r2 = routeBean.createRoute("HKG", "SFO");
-                long r3 = routeBean.createRoute("SFO", "HKG");
-                long r4 = routeBean.createRoute("HKG", "SIN");
-                long r5 = routeBean.createRoute("SIN", "ICN");
-                long r6 = routeBean.createRoute("ICN", "SFO");
-                long r7 = routeBean.createRoute("SFO", "ICN");
-                long r8 = routeBean.createRoute("ICN", "SIN");
-                List<Aircraft> aircrafts = fleetBean.getAllAircraft();
-                for (int i = 0; i < aircrafts.size(); i ++) {
-                    long acId = aircrafts.get(i).getId();
-                    long aa1Id = routeBean.createAircraftAssignment(acId, r1);
-                    long aa2Id = routeBean.createAircraftAssignment(acId, r2);
-                    long aa3Id = routeBean.createAircraftAssignment(acId, r3);
-                    long aa4Id = routeBean.createAircraftAssignment(acId, r4);
-                    long aa5Id = routeBean.createAircraftAssignment(acId, r5);
-                    long aa6Id = routeBean.createAircraftAssignment(acId, r6);
-                    long aa7Id = routeBean.createAircraftAssignment(acId, r7);
-                    long aa8Id = routeBean.createAircraftAssignment(acId, r8);
-                    long flight1Id = flightScheduleBean.createFlight("MA11", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "12:00"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "15:00"), aa1Id, true);
-                    long flight2Id = flightScheduleBean.createFlight("MA12", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "16:05"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 2), "05:11"), aa2Id, true);
-                    long flight3Id = flightScheduleBean.createFlight("MA13", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "08:15"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "21:14"), aa3Id, true);
-                    long flight4Id = flightScheduleBean.createFlight("MA14", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "22:30"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 9), "02:01"), aa4Id, true);
-                    long flight5Id = flightScheduleBean.createFlight("MA21", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "06:00"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "11:00"), aa5Id, true);
-                    long flight6Id = flightScheduleBean.createFlight("MA22", Utils.addTimeToDate(Utils.hoursFromNow(24 * 1), "13:05"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 2), "01:23"), aa6Id, true);
-                    long flight7Id = flightScheduleBean.createFlight("MA23", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "05:15"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "17:02"), aa7Id, true);
-                    long flight8Id = flightScheduleBean.createFlight("MA24", Utils.addTimeToDate(Utils.hoursFromNow(24 * 8), "19:30"), Utils.addTimeToDate(Utils.hoursFromNow(24 * 9), "02:01"), aa8Id, true);
-
-
+//                List<Long> routeIds = new ArrayList<>();
+//                routeIds.add(routeBean.createRoute("SIN", "HKG"));
+//                routeIds.add(routeBean.createRoute("HKG", "SFO"));
+//                routeIds.add(routeBean.createRoute("SFO", "HKG"));
+//                routeIds.add(routeBean.createRoute("HKG", "SIN"));
+//                routeIds.add(routeBean.createRoute("SIN", "ICN"));
+//                routeIds.add(routeBean.createRoute("ICN", "SIN"));
+//                routeIds.add(routeBean.createRoute("SIN", "DXB"));
+//                routeIds.add(routeBean.createRoute("DXB", "SIN"));
+//                List<Aircraft> aircrafts = fleetBean.getAllAircraft();
+//                for (int i = 0; i < aircrafts.size(); i++) {
+//                    long acId = aircrafts.get(i).getId();
+//                    System.out.println("--SEEDING FLIGHTS FOR AIRCRAFT: " + acId +" /" + aircrafts.size());
+//                    for (Long routeId : routeIds) {
+//                        System.out.println("--SEEDING FLIGHTS FOR ROUTE: " + routeId + " /" + routeIds.size());
+//                        long aaId = routeBean.createAircraftAssignment(acId, routeId);
+//                        Date randomDate = randDate(2015, 2015);
+//                        AircraftAssignment aa = routeBean.getAircraftAssignment(aaId);
+//                        double duration = Utils.calculateDuration(aa.getRoute().getDistance(), aa.getAircraft().getSeatConfig().getAircraftType().getSpeed());
+//                        long flightId = flightScheduleBean.createFlight("MA" + aaId, randomDate, Utils.minutesLater(randomDate, (int) duration), aaId, true);
+//                        Flight flight = flightScheduleBean.getFlight(flightId);
+//                        SeatConfigObject sco = new SeatConfigObject();
+//                        sco.parse(aa.getAircraft().getSeatConfig().getSeatConfig());
+//
+//                        int occupancy = Utils.randBetween(70, 100);
+//                        int numSeats = (int)(sco.getTotalSeats() * 0.01 * occupancy);
+//                        List<BookingClass> bkClasses = bookingClassBean.findBookingClassByFlight(flightId);
+//                        BookingClass bkClass = bkClasses.get(Utils.randBetween(0, bkClasses.size() - 1));
+//                        for (int j = 0; j < numSeats; j++) {
+//                            ETicket eTicket = null;
+//                            int randCustomer = Utils.randBetween(1, firstNames.length*10);
+//                            try {
+//                                if (randCustomer < firstNames.length) {
+//                                    Customer customer = customerBean.getAllCustomers().get(randCustomer);
+//                                    PNR pnr = bookFlightBean.bookFlights(Collections.singletonList(bkClass), Collections.singletonList(customer.getLastName().toUpperCase() + "/" + customer.getFirstName().toUpperCase()));
+//                                    for (SpecialServiceRequest ssr : pnr.getSpecialServiceRequests()) {
+//                                        if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+//                                            eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+//                                            eTicket.setFfpNumber("MA/" + String.valueOf(customer.getId()));
+//                                        }
+//                                    }
+//                                } else {
+//                                    PNR pnr = bookFlightBean.bookFlights(bkClasses, Collections.singletonList("DOE/JOHN"));
+//                                    for (SpecialServiceRequest ssr : pnr.getSpecialServiceRequests()) {
+//                                        if (ssr.getActionCode().equals(Constants.SSR_ACTION_CODE_TICKET_NUMBER)) {
+//                                            eTicket = flightScheduleBean.getETicket(Long.parseLong(ssr.getValue()));
+//                                        }
+//                                    }
+//                                }
+//                                eTicket.setCheckedIn(true);
+//                                eTicket.setGateChecked(true);
+//                                flightScheduleBean.updateETicket(eTicket);
+//                            } catch (Exception e) {
+//
+//                            }
+//                        }
+//                        flightScheduleBean.departFlight(flight, flight.getDepartureTime());
+//                        System.out.println("--SEEDEND FLIGHTS FOR ROUTE: " + routeId + " /" + routeIds.size());
+//                    }
+//                    System.out.println("--SEEDEND FLIGHTS FOR AIRCRAFT: " + acId +" /" + aircrafts.size());
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Date randDate(int startYear, int endYear) {
+        GregorianCalendar gc = new GregorianCalendar();
+        int year = Utils.randBetween(startYear, endYear);
+        gc.set(gc.YEAR, year);
+        int dayOfYear = Utils.randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
+        gc.set(gc.DAY_OF_YEAR, dayOfYear);
+        return gc.getTime();
     }
 
 }
