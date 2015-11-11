@@ -500,7 +500,7 @@ public class InitBean {
 //                        System.out.println("--SEEDEND FLIGHTS FOR ROUTE: " + routeId + " /" + routeIds.size());
 //                    }
 //                    System.out.println("--SEEDEND FLIGHTS FOR AIRCRAFT: " + acId +" /" + aircrafts.size());
-                }
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();

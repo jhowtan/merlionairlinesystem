@@ -162,8 +162,7 @@
                                     <div class="btn-group">
                                         <h:commandButton id="spamBtn" action="#{flightBiddingManagedBean.spamFlightBids()}" value="Test Flight Bids" styleClass="btn btn-info"/>
                                         <h:commandButton id="closeBtn" action="#{flightBiddingManagedBean.toggleBiddingPeriod()}" value="Close Bidding Period" styleClass="btn btn-default"/>
-                                        <h:commandButton id="allocateRosterBtn" disabled="#{flightBiddingManagedBean.unresolvedBids() == 0}"
-                                                         action="#{flightBiddingManagedBean.allocateFlightJobs()}" value="Allocate Flight Bids" styleClass="btn btn-success"/>
+                                        <h:commandButton id="allocateRosterBtn" action="#{flightBiddingManagedBean.allocateFlightJobs()}" value="Allocate Flight Bids" styleClass="btn btn-success"/>
                                     </div>
                                 </div>
                             </h:form>
