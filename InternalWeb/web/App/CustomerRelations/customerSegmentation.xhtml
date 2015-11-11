@@ -17,9 +17,11 @@
                     <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="segment">
                         __Segment__
                         <ui:repeat value="#{segment}" var="c">
-                            ME
                         </ui:repeat>
                     </ui:repeat>
+                    <div id="cust-segment-chart">
+                        <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
+                    </div>
                 </div>
                 <div class="col-lg-12">
                     <table class="table table-striped" id="customer_table">
@@ -67,13 +69,59 @@
             </div>
         </div>
     </ui:define>
+
     <ui:define name="javascript">
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/d3/d3.min.js"></script>
+        <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/nvd3/build/nv.d3.min.js"></script>
         <script type="text/javascript">
             $('#customer_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
                 ]
+            });
+            var dataLoad = function(groups, points) {
+                var data = [],
+                        shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+                        random = d3.random.normal();
+                // <![CDATA[
+                for (i = 0; i < groups; i++) {
+                    data.push({
+                        key: 'Group ' + i,
+                        values: []
+                    });
+
+                    for (j = 0; j < points; j++) {
+                        data[i].values.push({
+                            x: random()
+                            , y: random()
+                            , size: Math.random()
+                            , shape: shapes[j % 6]
+                        });
+                    }
+                }
+                // ]]>
+
+                return data;
+            };
+
+            nv.addGraph(function() {
+                var chart = nv.models.scatterChart()
+                        .showDistX(true)
+                        .showDistY(true)
+                        .color(d3.scale.category10().range());
+                console.log(chart);
+                chart.xAxis.tickFormat(d3.format('.02f'));
+                chart.yAxis.tickFormat(d3.format('.02f'));
+
+                d3.select('#cust-segment-chart svg')
+                        .datum(dataLoad(4,40))
+                        .transition().duration(500)
+                        .call(chart);
+
+                nv.utils.windowResize(chart.update);
+
+                return chart;
             });
         </script>
     </ui:define>
