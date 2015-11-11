@@ -22,13 +22,13 @@ public class BookingClassBean {
 
     //-----------------Booking classes---------------------------
     public long createBookingClass(String name, int allocation, int travelClass, long fareRuleId, long flightId, double price) throws NotFoundException {
-        return createBookingClass(name, allocation, travelClass, fareRuleId, flightId, price, true);
-    }
-
-    public long createBookingClass(String name, int allocation, int travelClass, long fareRuleId, long flightId, double price, boolean shouldFlush) throws NotFoundException {
         FareRule fareRule = em.find(FareRule.class, fareRuleId);
         Flight flight = em.find(Flight.class, flightId);
         if (fareRule == null || flight == null) throw new NotFoundException();
+        return createBookingClass(name, allocation, travelClass, fareRule, flight, price, true);
+    }
+
+    public long createBookingClass(String name, int allocation, int travelClass, FareRule fareRule, Flight flight, double price, boolean shouldFlush) {
         BookingClass bookingClass = new BookingClass();
         bookingClass.setName(name);
         bookingClass.setTravelClass(travelClass);
