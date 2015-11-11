@@ -1,6 +1,7 @@
 package MAS.ManagedBean.SystemAdmin;
 
 import MAS.Bean.UserBean;
+import MAS.Common.Constants;
 import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -53,6 +54,14 @@ public class UserManagedBean {
             FacesMessage m = new FacesMessage("The user cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+    }
+
+    public String displayJob(User user) {
+        if (user.getJob() >= 3) {
+            return Constants.JOB_NAMES[user.getJob()];
+        } else {
+            return "Untitled";
         }
     }
 

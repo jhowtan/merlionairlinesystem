@@ -27,6 +27,7 @@
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Base Airport</th>
+                                <th>Job</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -37,6 +38,7 @@
                                     <td>#{user.firstName} #{user.lastName}</td>
                                     <td>#{user.email}</td>
                                     <td>#{user.baseAirport.id}</td>
+                                    <td>#{userManagedBean.displayJob(user)}</td>
                                     <td>
                                         <h:form>
                                             <div class="btn-group">
@@ -62,7 +64,7 @@
             $('#users_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [4] }
+                    { 'bSortable': false, 'bSearchable': false, 'aTargets': [5] }
                 ]
             });
         </script>
