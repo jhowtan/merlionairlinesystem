@@ -80,6 +80,7 @@
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/d3/d3.min.js"></script>
         <script type="text/javascript" src="#{commonManagedBean.getRoot()}/assets/vendor/nvd3/build/nv.d3.min.js"></script>
         <script type="text/javascript">
+            //<![CDATA[
             $('#customer_table').DataTable({
                 "stateSave": true,
                 "aoColumnDefs": [
@@ -89,21 +90,31 @@
             $.get("getCustomerSegments.xhtml", function(data) {
                 $(document).ready(function() {
                     var chartData = [];
-                    chartData.push({
-                        key: 'Customer',
-                        values: data
-                    })
-
-
+                    console.log(data);
+                    for (var i = 0; i < 4; i++){
+                        console.log(data[i]);
+                        chartData.push({
+                            key: data[i].key,
+                            values: data[i].data
+                        });
+                    }
 
                     nv.addGraph(function() {
                         var chart = nv.models.scatterChart()
+                                .showDistX(true)
+                                .showDistY(true)
                                 .color(d3.scale.category10().range())
                                 .xDomain([150,250])
                                 .yDomain([300,500]);
 
-                        chart.tooltipContent(function(key) {
-                            return '<h3 style="padding: 5px;">' + key.point.name + '</h3>';
+                        chart.xAxis.tickFormat(d3.format('.f'));
+                        chart.yAxis.tickFormat(d3.format('.01f'));
+
+                        chart.tooltip.contentGenerator(function(key) {
+                            return '<div class="text-center"><strong>'+ key.point.name +'</strong>' +
+                                    '<p>Customer ID: ' + key.point.custId + '</p>' +
+                                    '<p>Current value: ' + key.point.cV + '</p>' +
+                                    '<p>Potential value: ' + key.point.pV + '</p></div>';
                         });
 
                         // HANDLE DATA CALLBACK HERE
@@ -118,7 +129,7 @@
                     });
                 });
             });
-
+            //]]>
 
         </script>
     </ui:define>

@@ -25,6 +25,7 @@ public class CustomerSegmentationManagedBean {
     @EJB
     CampaignBean campaignBean;
 
+
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
@@ -36,11 +37,18 @@ public class CustomerSegmentationManagedBean {
         this.authManagedBean = authManagedBean;
     }
 
+    private class CustomerSegment {
+        private String key;
+        private List<CustomerItem> data;
+    }
     private class CustomerItem {
+        public String shape;
+        public String custId;
         public String name;
         public String y;
         public String x;
         public String cV;
+        public String pV;
         public String size;
     }
 
@@ -63,23 +71,28 @@ public class CustomerSegmentationManagedBean {
     }
 
     public void getSegmentJSON() {
-        ArrayList<CustomerItem> custItems = new ArrayList<>();
-
+        ArrayList<CustomerSegment> custSegments = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
+            CustomerSegment custSegment = new CustomerSegment();
+            custSegment.key = Constants.CUSTOMER_SEGMENT_NAMES[i];
+            custSegment.data = new ArrayList<>();
             for (int j = 0; j < segmentedCustomers.get(i).size(); j++) {
                 AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
                 CustomerItem customerItem = new CustomerItem();
+                customerItem.custId = String.valueOf(customer.customer.getId());
                 customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
                 customerItem.x = String.valueOf(customer.flightCount);
                 customerItem.y = CommonManagedBean.formatDoubleTwoDecimal(customer.revenuePerMile);
                 customerItem.cV = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
+                customerItem.pV = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
                 customerItem.size = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
-                custItems.add(customerItem);
+                custSegment.data.add(customerItem);
             }
+            custSegments.add(custSegment);
         }
 
         Gson gson = new Gson();
-        String json = gson.toJson(custItems);
+        String json = gson.toJson(custSegments);
 
         outputJSON(json);
     }
