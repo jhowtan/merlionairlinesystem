@@ -220,6 +220,22 @@ public class CampaignBean {
         throw new NotFoundException();
     }
 
+    public Campaign getCampaign(String code, long customerId) throws NotFoundException {
+        Customer customer = em.find(Customer.class, customerId);
+        if (customer == null) throw new NotFoundException();
+        List<Campaign> possibleCampaigns = em.createQuery("SELECT c from Campaign c where c.code = :code", Campaign.class)
+                .setParameter("code", code).getResultList();
+        for (int i = 0; i < possibleCampaigns.size(); i ++) {
+            List<CampaignGroup> campaignGroups = possibleCampaigns.get(i).getCampaignGroups();
+            for (CampaignGroup campaignGroup : campaignGroups) {
+                if (campaignGroup.getCustomers().contains(customer)) {
+                    return possibleCampaigns.get(i);
+                }
+            }
+        }
+        throw new NotFoundException();
+    }
+
     public int getCampaignUsage(long id) throws NotFoundException{
         Campaign campaign = em.find(Campaign.class, id);
         if (campaign == null) throw new NotFoundException();

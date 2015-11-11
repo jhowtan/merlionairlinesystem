@@ -355,15 +355,16 @@
                                 <p class="form-subheading">Enter your promo code if you have one.</p>
                             </div>
                             <div class="col-lg-5 col-lg-offset-1">
-                                <div class="form-group #{!promoCode.valid ? 'has-error' : ''}">
-                                    <label class="control-label" for="promoCode">Promotional Code</label>
-                                    <h:inputText value="#{flightSearchManagedBean.promoCode}" binding="#{promoCode}" class="form-control" id="promoCode">
-                                        <f:ajax render="milesRedemption paymentSelection" />
-                                        <f:attribute name="customerId" value="#{authManagedBean.customerId}" />
-                                        <f:validator validatorId="promoCodeValidator" />
-                                    </h:inputText>
-                                    <h:message for="promoCode" styleClass="help-block" />
-                                </div>
+                                <h:panelGroup id="campaignCodeContainer">
+                                    <div class="form-group #{(empty flightSearchManagedBean.campaign and ! empty flightSearchManagedBean.promoCode) ? 'has-error' : ''} #{! empty flightSearchManagedBean.campaign ? 'has-success' : ''}">
+                                        <label class="control-label" for="promoCode">Promotional Code</label>
+                                        <h:inputText value="#{flightSearchManagedBean.promoCode}" binding="#{promoCode}" class="form-control" id="promoCode">
+                                            <f:ajax render="milesRedemption paymentSelection campaignCodeContainer" listener="#{flightSearchManagedBean.updateCampaignCodeListener}" />
+\                                        </h:inputText>
+                                        <h:panelGroup styleClass="help-block" rendered="#{! empty flightSearchManagedBean.campaign}">Promotional code for #{commonManagedBean.displayDouble(flightSearchManagedBean.campaign.discount, "0%")} successfully applied!</h:panelGroup>
+                                        <h:panelGroup styleClass="help-block" rendered="#{empty flightSearchManagedBean.campaign and ! empty flightSearchManagedBean.promoCode}">This promotional code is not valid.</h:panelGroup>
+                                    </div>
+                                </h:panelGroup>
                             </div>
                         </div>
                         <hr/>
@@ -379,7 +380,7 @@
                                 <table class="table">
                                     <tr>
                                         <th>Subtotal</th>
-                                        <td>$#{commonManagedBean.displayDouble(flightSearchManagedBean.totalPrice, "0.00")}</td>
+                                        <td>$#{commonManagedBean.displayDouble(flightSearchManagedBean.getSubtotal(), "0.00")}</td>
                                     </tr>
                                     <tr>
                                         <th>Miles Available</th>
@@ -415,7 +416,7 @@
                             <div class="row">
                                 <div class="col-lg-4 col-lg-offset-1">
                                     <h2 class="form-heading">Payment</h2>
-                                    <p class="form-subheading">Please enter your payment details. By doing so, you agree for Merlion Airlines to debit a total of <h:panelGroup id="totalPrice2">$#{commonManagedBean.displayDouble(flightSearchManagedBean.getTotalPayable(), "0.00")}</h:panelGroup> from your credit card.</p>
+                                    <p class="form-subheading">By entering your payment details you agree to be debited a total of <strong>SGD <h:panelGroup id="totalPrice2">$#{commonManagedBean.displayDouble(flightSearchManagedBean.getTotalPayable(), "0.00")}</h:panelGroup></strong> from your credit card.</p>
                                 </div>
                                 <div class="col-lg-5 col-lg-offset-1">
                                     <div class="form-group #{!paymentName.valid ? 'has-error' : ''}">

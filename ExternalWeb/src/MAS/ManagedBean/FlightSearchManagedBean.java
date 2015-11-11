@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.util.*;
 
 @ManagedBean
@@ -33,6 +34,8 @@ public class FlightSearchManagedBean {
     FFPBean ffpBean;
     @EJB
     CustomerLogBean customerLogBean;
+    @EJB
+    CampaignBean campaignBean;
 
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
@@ -69,6 +72,7 @@ public class FlightSearchManagedBean {
     private String paymentCard;
     private int milesRedeemed;
     private String promoCode;
+    private Campaign campaign;
 
     // Step 5
     private PNR pnr;
@@ -87,16 +91,43 @@ public class FlightSearchManagedBean {
         }
     }
 
+    public void updateCampaignCodeListener(AjaxBehaviorEvent ajaxBehaviorEvent) {
+        campaign = null;
+        if (!authManagedBean.isAuthenticated()) return;
+        ArrayList<Long> bookingClassIds = new ArrayList<>();
+        for (BookingClass bookingClass : getSelectedBookingClass()) {
+            bookingClassIds.add(bookingClass.getId());
+        }
+        if (! campaignBean.validateCode(promoCode, authManagedBean.getCustomerId(), bookingClassIds)) return;
+        try {
+            campaign = campaignBean.getCampaign(promoCode, authManagedBean.getCustomerId());
+            if (milesRedeemed > maxMilesRedeemable()) {
+                milesRedeemed = maxMilesRedeemable();
+            }
+        } catch (NotFoundException e) {}
+    }
+
+    public List<BookingClass> getSelectedBookingClass() {
+        return new ArrayList<>(selectedBookingClasses.values());
+    }
+
     public boolean canRedeemMiles() {
         return authManagedBean.isAuthenticated();
     }
 
+    public double getSubtotal() {
+        if (campaign == null) {
+            return totalPrice;
+        }
+        return Math.round(totalPrice * (1 - campaign.getDiscount()) * 100) / 100;
+    }
+
     public double getTotalPayable() {
-        return Math.max(0, (totalPrice * 100 - milesRedeemed * Constants.MILES_TO_CENTS) / 100);
+        return Math.max(0, (getSubtotal() * 100 - milesRedeemed * Constants.MILES_TO_CENTS) / 100);
     }
 
     public int maxMilesRedeemable() {
-        return Math.min(authManagedBean.retrieveCustomer().getMiles(), (int) Math.ceil(totalPrice * 100 / Constants.MILES_TO_CENTS));
+        return Math.min(authManagedBean.retrieveCustomer().getMiles(), (int) Math.ceil(getSubtotal() * 100 / Constants.MILES_TO_CENTS));
     }
 
     public LinkedHashMap<String, String> getFFPAllianceList() {
@@ -250,6 +281,9 @@ public class FlightSearchManagedBean {
                         ffpBean.redeemMiles(authManagedBean.getCustomerId(), milesRedeemed);
                         customerLogBean.createCustomerLog(authManagedBean.getCustomerId(), "Redeemed miles for booking " + pnr.getBookingReference(), "redeem_miles");
                     }
+                    if (promoCode != null) {
+                        campaignBean.useCode(promoCode, authManagedBean.getCustomerId());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -324,6 +358,14 @@ public class FlightSearchManagedBean {
 
     public void setPromoCode(String promoCode) {
         this.promoCode = promoCode;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
     }
 
     private class AirportComparator implements Comparator<Airport> {
