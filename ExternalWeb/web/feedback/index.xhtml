@@ -1,0 +1,65 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">Feedback - Merlion Airlines</ui:define>
+
+    <ui:define name="content">
+        <section class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-lg-10 text-center">
+                        <h1 class="title">Customer Feedback</h1>
+                        <p class="lead">We love to hear from you! Use this form to contact Merlion Airlines for any feedback or suggestions.</p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="container">
+                <h:form>
+                    <h:panelGroup rendered="#{!feedbackManagedBean.submitted}">
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-push-2">
+                                <div class="form-group #{!email.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="email">Email Address</label>
+                                    <h:inputText pt:type="email" value="#{feedbackManagedBean.email}" binding="#{email}" class="form-control" id="email">
+                                        <f:validator validatorId="emailValidator" />
+                                    </h:inputText>
+                                    <h:message for="email" styleClass="help-block" />
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-lg-push-2">
+                                <div class="form-group #{!subject.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="subject">Subject</label>
+                                    <h:inputText pt:type="subject" value="#{feedbackManagedBean.subject}" binding="#{subject}" class="form-control" id="subject" required="true" requiredMessage="Please enter a subject.">
+                                    </h:inputText>
+                                    <h:message for="subject" styleClass="help-block" />
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-lg-push-2">
+                                <div class="form-group #{!message.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="message">Message</label>
+                                    <h:inputTextarea rows="10" pt:type="message" value="#{feedbackManagedBean.message}" binding="#{message}" class="form-control" id="message" required="true" requiredMessage="Please enter a message." />
+                                    <h:message for="message" styleClass="help-block" />
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-6 col-md-push-3 col-lg-6 col-lg-push-3">
+                                <h:commandButton action="#{feedbackManagedBean.send()}" value="Send Feedback" styleClass="btn btn-primary btn-lg btn-block" />
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{feedbackManagedBean.submitted}">
+                            <p class="text-center">Thank you, your feedback has been submitted!</p>
+                    </h:panelGroup>
+                </h:form>
+            </div>
+        </section>
+    </ui:define>
+
+</ui:composition>

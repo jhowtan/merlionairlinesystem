@@ -44,6 +44,7 @@ public class Feedback {
     private String body;
 
     @Basic
+    @Lob
     public String getBody() {
         return body;
     }
