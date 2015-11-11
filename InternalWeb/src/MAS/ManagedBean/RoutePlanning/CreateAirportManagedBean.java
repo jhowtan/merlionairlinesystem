@@ -43,7 +43,7 @@ public class CreateAirportManagedBean {
             setLatitude(0);
             setLongitude(0);
             setCityId(null);
-            setHangars(0);
+            setHangars(hangars);
             FacesMessage m = new FacesMessage("Airport created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);

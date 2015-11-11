@@ -119,7 +119,6 @@ public class CampaignBean {
             if (customer == null) throw new NotFoundException();
             customers.add(customer);
         }
-        System.out.println(customers);
         CampaignGroup campaignGroup = new CampaignGroup();
         campaignGroup.setCustomers(customers);
         campaignGroup.setName(name);

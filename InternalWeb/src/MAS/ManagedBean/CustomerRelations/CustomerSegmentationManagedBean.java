@@ -114,7 +114,7 @@ public class CustomerSegmentationManagedBean {
                     customerIds.add((Long) pair.getKey());
                 }
             }
-            campaignBean.createCampaignGroup(customerIds, "Customer group analysed on " + CommonManagedBean.formatDate("dd,MMM,yy", new Date()), "Auto-generated group from customer analysis.");
+            campaignBean.createCampaignGroup(customerIds, "Customer group analysed on " + CommonManagedBean.formatDate("dd-MMM-yy", new Date()), "Auto-generated group from customer analysis.");
             FacesMessage m = new FacesMessage("Customer group created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);

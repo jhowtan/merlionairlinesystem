@@ -22,54 +22,54 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Customer Table
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-striped" id="customer_table">
-                                <thead>
-                                <tr>
-                                    <th>FFP Number</th>
-                                    <th>Name</th>
-                                    <th>Value/Mile</th>
-                                    <th>Flight Count</th>
-                                    <th>cV</th>
-                                    <th>pV</th>
-                                    <th>Customer Segment</th>
-                                    <th>Include</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="cList">
-                                    <ui:repeat value="#{cList}" var="c">
-                                        <tr>
-                                            <td>#{c.customer.id}</td>
-                                            <td>#{c.customer.firstName} #{c.customer.lastName}</td>
-                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.revenuePerMile)}</td>
-                                            <td>#{c.flightCount}</td>
-                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.cV)}</td>
-                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.pV)}</td>
-                                            <td>#{customerSegmentationManagedBean.displaySegment(c)}</td>
-                                            <td>
-                                                <label>
-                                                    <h:selectBooleanCheckbox value="#{customerSegmentationManagedBean.customerMap[c.customer.id]}" />
-                                                </label>
-                                            </td>
-                                        </tr>
+                    <h:form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Customer Table
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-striped" id="customer_table">
+                                    <thead>
+                                    <tr>
+                                        <th>FFP Number</th>
+                                        <th>Name</th>
+                                        <th>Value/Mile</th>
+                                        <th>Flight Count</th>
+                                        <th>cV</th>
+                                        <th>pV</th>
+                                        <th>Customer Segment</th>
+                                        <th>Include</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="cList">
+                                        <ui:repeat value="#{cList}" var="c">
+                                            <tr>
+                                                <td>#{c.customer.id}</td>
+                                                <td>#{c.customer.firstName} #{c.customer.lastName}</td>
+                                                <td>#{commonManagedBean.formatDoubleTwoDecimal(c.revenuePerMile)}</td>
+                                                <td>#{c.flightCount}</td>
+                                                <td>#{commonManagedBean.formatDoubleTwoDecimal(c.cV)}</td>
+                                                <td>#{commonManagedBean.formatDoubleTwoDecimal(c.pV)}</td>
+                                                <td>#{customerSegmentationManagedBean.displaySegment(c)}</td>
+                                                <td>
+                                                    <label>
+                                                        <h:selectBooleanCheckbox value="#{customerSegmentationManagedBean.customerMap[c.customer.id]}" />
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </ui:repeat>
                                     </ui:repeat>
-                                </ui:repeat>
-                                </tbody>
-                            </table>
-                            <h:form>
+                                    </tbody>
+                                </table>
                                 <div class="text-right">
                                     <div class="btn-group">
                                         <h:commandButton action="#{customerSegmentationManagedBean.createCampaignGroup()}" value="Create Campaign Group" styleClass="btn btn-success"/>
                                     </div>
                                 </div>
-                            </h:form>
+                            </div>
                         </div>
-                    </div>
+                    </h:form>
                 </div>
 
             </div>
