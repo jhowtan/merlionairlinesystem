@@ -7,7 +7,6 @@ import MAS.Entity.AircraftAssignment;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
-import MAS.Exception.ScheduleClashException;
 import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
 import MAS.ScheduleDev.HypoTransit;
@@ -562,8 +561,7 @@ public class ScheduleDevelopmentBean {
         em.flush();
     }
 
-    public int saveSuggestedFlights(Date startTime) throws ScheduleClashException{
-        try {
+    public int saveSuggestedFlights(Date startTime) {
             int result = 0;
             List<HypoTransit> allHappenings = ta.getAllHistory();
             for (int i = 0; i < allHappenings.size(); i++) {
@@ -581,28 +579,24 @@ public class ScheduleDevelopmentBean {
                         } catch (NotFoundException e) {
                             aircraftAssignment = routeBean.getAircraftAssignment(routeBean.createAircraftAssignment(aircraft.getId(), route.getId()));
                         }
-                        System.out.println("Trying to create: MA" + aircraftAssignment.getId());
                         flightScheduleBean.createFlight("MA" + aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int) Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
                                 aircraftAssignment.getId(), true);
-                        result++;
-                    } catch (NotFoundException e) {
-                        continue;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    result++;
                 }
                 for (int j = 0; j < happenings.maintHistory.size(); j++) {
                     double relativeTime = happenings.maintTimes.get(j);
                     Date dateTime = Utils.minutesLater(startTime, (int) relativeTime);
                     try {
                         aircraftMaintenanceSlotBean.createSlot(dateTime, acMaintTime, happenings.maintHistory.get(j).getId(), aircraft.getId());
-                    } catch (NotFoundException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
             return result;
-        } catch (ScheduleClashException e) {
-            throw e;
-        }
     }
 
     private void debugAllRoutes(List<HypoRoute> routeList) {
