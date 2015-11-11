@@ -27,15 +27,14 @@ public class AirportsManagedBean {
 
     public void delete(String id) {
         try {
+            String airportName = routeBean.getAirport(id).getName();
             routeBean.removeAirport(id);
-            authManagedBean.createAuditLog("Deleted airport: " + routeBean.getAirport(id).getName(), "delete_airport");
+            authManagedBean.createAuditLog("Deleted airport: " + airportName, "delete_airport");
         } catch (EJBException e) {
-            e.getMessage();
             FacesMessage m = new FacesMessage("Unable to delete the airport. There is an existing route that utilizes this airport.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }catch (NotFoundException e) {
-            e.getMessage();
             FacesMessage m = new FacesMessage("The airport cannot be found, or may have already been deleted.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
