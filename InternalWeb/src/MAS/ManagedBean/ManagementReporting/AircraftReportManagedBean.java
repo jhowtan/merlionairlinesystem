@@ -4,12 +4,14 @@ import MAS.Bean.AircraftMaintenanceSlotBean;
 import MAS.Bean.FleetBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Entity.Aircraft;
+import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
@@ -24,6 +26,7 @@ public class AircraftReportManagedBean {
     private AuthManagedBean authManagedBean;
 
     private List<Aircraft> aircrafts;
+    private List<Aircraft> selectedAircrafts;
     private List<String> aircraftIdInputs;
     private String aircraftIds;
     private Aircraft aircraft;
@@ -31,12 +34,19 @@ public class AircraftReportManagedBean {
     @PostConstruct
     private void init() {
         aircrafts = fleetBean.getAllAircraft();
+        selectedAircrafts = new ArrayList<>();
     }
 
     public void saveAircraft() {
         aircraftIds = "";
+        selectedAircrafts = new ArrayList<>();
         for (int i = 0; i < aircraftIdInputs.size(); i++) {
             aircraftIds = aircraftIds.concat(aircraftIdInputs.get(i)).concat("-");
+            try {
+                selectedAircrafts.add(fleetBean.getAircraft(Long.parseLong(aircraftIdInputs.get(i))));
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -74,5 +84,13 @@ public class AircraftReportManagedBean {
 
     public void setAircrafts(List<Aircraft> aircrafts) {
         this.aircrafts = aircrafts;
+    }
+
+    public List<Aircraft> getSelectedAircrafts() {
+        return selectedAircrafts;
+    }
+
+    public void setSelectedAircrafts(List<Aircraft> selectedAircrafts) {
+        this.selectedAircrafts = selectedAircrafts;
     }
 }
