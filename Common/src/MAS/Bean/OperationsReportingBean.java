@@ -1,8 +1,12 @@
 package MAS.Bean;
 
-import MAS.Entity.*;
+import MAS.Entity.Flight;
+import MAS.Entity.FlightReport;
+import MAS.Entity.MaintenanceReport;
+import MAS.Entity.User;
 import MAS.Exception.NotFoundException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +19,9 @@ public class OperationsReportingBean {
 
     @PersistenceContext
     EntityManager em;
+
+    @EJB
+    AircraftMaintenanceSlotBean aircraftMaintenanceSlotBean;
 
     /**
      * Flight Report Methods
@@ -84,6 +91,9 @@ public class OperationsReportingBean {
         MaintenanceReport maintenanceReport = em.find(MaintenanceReport.class, maintenanceReportId);
         if (maintenanceReport == null) throw new NotFoundException();
         maintenanceReport.setStatus(status);
+        if (status == 2) {
+            aircraftMaintenanceSlotBean.clearAircraftMiles(maintenanceReport.getMaintenanceSlot().getId());
+        }
         em.persist(maintenanceReport);
     }
 
