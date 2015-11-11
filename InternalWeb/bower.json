@@ -9,7 +9,8 @@
     "animate.css": "~3.4.0",
     "open-sans": "~1.1.0",
     "fullcalendar": "~2.4.0",
-    "fullcalendar-scheduler": "~1.0.2"
+    "fullcalendar-scheduler": "~1.0.2",
+    "nvd3": "~1.8.1"
   },
   "resolutions": {
     "bootstrap": "~3.3.1"

@@ -116,6 +116,11 @@ public class ReportingDataManagedBean {
         public String name;
     }
 
+    private class CustomerItem {
+        public String revenuePerMile;
+        public String flightCount;
+    }
+
     public void search() throws NotFoundException {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String query = params.get("q");
@@ -125,6 +130,9 @@ public class ReportingDataManagedBean {
         String campaignIds = params.get("campaignIds");
 
         switch (query) {
+            case "customerSegment":
+                showCustomerSegmentation();
+                return;
             case "campaignTimetable":
                 showCampaignTimetable(campaignIds);
                 return;
@@ -156,6 +164,10 @@ public class ReportingDataManagedBean {
                 outputJSON("[]");
                 return;
         }
+    }
+
+    private void showCustomerSegmentation() {
+
     }
 
     private void showCampaignTimetable(String campaignIds) throws NotFoundException {

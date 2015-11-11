@@ -66,7 +66,6 @@ public class CustomerSegmentationManagedBean {
         return Constants.CUSTOMER_SEGMENT_NAMES[customer.segment];
     }
 
-
     public List<AnalysedCustomer> getCustomers() {
         return customers;
     }
