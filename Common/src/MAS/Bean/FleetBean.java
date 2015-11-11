@@ -77,6 +77,13 @@ public class FleetBean {
         em.persist(aircraft);
     }
 
+    public void updateAircraftMiles(long id, int miles) throws NotFoundException {
+        Aircraft aircraft = em.find(Aircraft.class, id);
+        if (aircraft == null) throw new NotFoundException();
+        aircraft.setMilesSinceLastMaint(aircraft.getMilesSinceLastMaint() + miles);
+        em.persist(aircraft);
+    }
+
     //-----------------SEAT CONFIG---------------------------
     public long createAircraftSeatConfig(String seatConfig, String name, int weight, long typeId) throws NotFoundException {
         AircraftSeatConfig aircraftSeatConfig = new AircraftSeatConfig();

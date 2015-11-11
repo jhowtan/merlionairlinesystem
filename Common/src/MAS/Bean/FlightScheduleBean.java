@@ -481,6 +481,7 @@ public class FlightScheduleBean {
         flight.setActualDepartureTime(date);
         try {
             fleetBean.changeAircraftLocation(flight.getAircraftAssignment().getAircraft().getId(), flight.getAircraftAssignment().getRoute().getDestination().getId());
+            fleetBean.updateAircraftMiles(flight.getAircraftAssignment().getAircraft().getId(), (int)flight.getAircraftAssignment().getRoute().getDistance());
         } catch (Exception e) {}
         int milesFlown = new Double(flight.getAircraftAssignment().getRoute().getDistance()).intValue();
         List<ETicket> etickets = getETicketsForFlight(flight);
