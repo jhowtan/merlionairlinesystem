@@ -210,4 +210,21 @@ public class CampaignBean {
         }
         throw new NotFoundException();
     }
+
+    public int getCampaignUsage(long id) throws NotFoundException{
+        Campaign campaign = em.find(Campaign.class, id);
+        if (campaign == null) throw new NotFoundException();
+        return campaign.getUsageCount();
+    }
+
+    public double getConversionRate(long campaignId) throws NotFoundException {
+        Campaign campaign = em.find(Campaign.class, campaignId);
+        if (campaign == null) throw new NotFoundException();
+        double usage = (double)campaign.getUsageCount();
+        double numCustomers = 0;
+        for (CampaignGroup group : campaign.getCampaignGroups()) {
+            numCustomers += group.getCustomers().size();
+        }
+        return usage/numCustomers;
+    }
 }
