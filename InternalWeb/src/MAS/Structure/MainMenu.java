@@ -18,7 +18,8 @@ public class MainMenu {
                         new MenuEntry("Users", null, Pages.LIST_USERS, Pages.CREATE_USER, Pages.UPDATE_USER),
                         new MenuEntry("Roles", null, Pages.LIST_ROLES, Pages.CREATE_ROLE, Pages.UPDATE_ROLE),
                         new MenuEntry("Workgroups", null, Pages.LIST_WORKGROUPS, Pages.CREATE_WORKGROUP, Pages.UPDATE_WORKGROUP),
-                        new MenuEntry("Audit Log", null, Pages.VIEW_AUDIT_LOG)
+                        new MenuEntry("Audit Log", null, Pages.VIEW_AUDIT_LOG),
+                        new MenuEntry("System Maintenance", null, Pages.SYSTEM_MAINTENANCE)
                 )
         );
 

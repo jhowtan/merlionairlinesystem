@@ -9,6 +9,7 @@ public class Pages {
     public static final Page LIST_USERS = new Page("/App/SystemAdmin/users", Permissions.MANAGE_USERS);
     public static final Page CREATE_USER = new Page("/App/SystemAdmin/createUser", Permissions.MANAGE_USERS);
     public static final Page UPDATE_USER = new Page("/App/SystemAdmin/updateUser", Permissions.MANAGE_USERS);
+    public static final Page SYSTEM_MAINTENANCE = new Page("/App/SystemAdmin/maintenance", Permissions.SYSTEM_MAINTENANCE);
 
     public static final Page LIST_ROLES = new Page("/App/SystemAdmin/roles", Permissions.MANAGE_ROLES);
     public static final Page CREATE_ROLE = new Page("/App/SystemAdmin/createRole", Permissions.MANAGE_ROLES);

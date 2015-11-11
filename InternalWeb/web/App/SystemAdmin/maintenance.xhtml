@@ -1,0 +1,60 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">System Maintenance - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">System Maintenance</h1>
+                    <p><textarea id="sys-maint-log" class="sys-maint-log" readonly="readonly" rows="28">Maintenance System Ready
+
+&gt; </textarea></p>
+                    <p>
+                        <h:form>
+                            <h:commandButton styleClass="btn btn-primary btn-lg" value="Run Daily Maintenance">
+                                <f:ajax onevent="dailyMaintenanceEvent" listener="#{maintenanceManagedBean.runMaintenanceListener}" />
+                            </h:commandButton>
+                        </h:form>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <style type="text/css">
+            textarea.sys-maint-log {
+                width: 100%;
+                font-family: "Courier New", Courier, monospace;
+                padding: 20px;
+                color: #fff;
+                background: #000;
+                font-size: 14px;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="javascript">
+        <script type="text/javascript">
+            var startDate;
+            var endDate;
+            function dailyMaintenanceEvent(event) {
+                var sysMaintLogEl = $('#sys-maint-log');
+                if (event.status == "begin") {
+                    startDate = new Date();
+                    sysMaintLogEl.val(sysMaintLogEl.val() + "RunDailyMaintenance" + "\n\n");
+                    sysMaintLogEl.val(sysMaintLogEl.val() + "Running daily maintenance script...\n");
+                }
+                if (event.status == "success") {
+                    endDate = new Date();
+                    var time = (endDate.getMilliseconds() - startDate.getMilliseconds()) / 1000;
+                    sysMaintLogEl.val(sysMaintLogEl.val() + "Maintenance completed in " + time + " seconds.\n\n> ");
+                }
+            }
+        </script>
+    </ui:define>
+</ui:composition>
