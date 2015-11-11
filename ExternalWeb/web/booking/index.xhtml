@@ -348,7 +348,28 @@
                         <hr/>
                     </ui:repeat>
 
-                    <h:panelGroup rendered="#{flightSearchManagedBean.canRedeemMiles()}">
+                    <h:panelGroup rendered="#{authManagedBean.authenticated}">
+                        <div class="row">
+                            <div class="col-lg-4 col-lg-offset-1">
+                                <h2 class="form-heading">Promotional Code</h2>
+                                <p class="form-subheading">Enter your promo code if you have one.</p>
+                            </div>
+                            <div class="col-lg-5 col-lg-offset-1">
+                                <div class="form-group #{!promoCode.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="promoCode">Promotional Code</label>
+                                    <h:inputText value="#{flightSearchManagedBean.promoCode}" binding="#{promoCode}" class="form-control" id="promoCode">
+                                        <f:ajax render="milesRedemption paymentSelection" />
+                                        <f:attribute name="customerId" value="#{authManagedBean.customerId}" />
+                                        <f:validator validatorId="promoCodeValidator" />
+                                    </h:inputText>
+                                    <h:message for="promoCode" styleClass="help-block" />
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{flightSearchManagedBean.canRedeemMiles()}" id="milesRedemption">
                         <div class="row">
                             <div class="col-lg-4 col-lg-offset-1">
                                 <h2 class="form-heading">Redeem Miles</h2>

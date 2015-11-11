@@ -68,6 +68,7 @@ public class FlightSearchManagedBean {
     private String paymentName;
     private String paymentCard;
     private int milesRedeemed;
+    private String promoCode;
 
     // Step 5
     private PNR pnr;
@@ -315,6 +316,14 @@ public class FlightSearchManagedBean {
 
     public void setTotalPricePerPerson(double totalPricePerPerson) {
         this.totalPricePerPerson = totalPricePerPerson;
+    }
+
+    public String getPromoCode() {
+        return promoCode;
+    }
+
+    public void setPromoCode(String promoCode) {
+        this.promoCode = promoCode;
     }
 
     private class AirportComparator implements Comparator<Airport> {
