@@ -30,10 +30,50 @@
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/cards.css" />
     <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/css/app.css" />
 
+    <script type="text/javascript">
+        var loadingAnimationDelay = 300;
+        var webkitAnimationEndEvent = function() {
+            document.getElementById('preloader').style.display = 'none';
+        };
+        var loadingCheck = function(complete) {
+            var exec = function() {};
+            setTimeout(function() {
+                if (complete()) return;
+                document.getElementById('preloader').style.display = 'block';
+                document.getElementById('preloader').firstElementChild.className = 'animated fadeIn';
+                document.getElementById('preloader').firstElementChild.removeEventListener("webkitAnimationEnd", webkitAnimationEndEvent);
+                document.body.style.height = '100%';
+                document.body.style.overflow = 'hidden';
+                exec = function() {
+                    document.body.style.height = 'auto';
+                    document.body.style.overflow = 'auto';
+                    document.getElementById('preloader').firstElementChild.className = 'animated fadeOut';
+                    document.getElementById('preloader').firstElementChild.addEventListener("webkitAnimationEnd", webkitAnimationEndEvent);
+                };
+            }, loadingAnimationDelay);
+            return function() {
+                exec();
+            };
+        };
+        window.onload = loadingCheck(function() {
+            return document.readyState === "complete";
+        });
+
+        window.onbeforeunload = function(){
+            loadingCheck(function() {
+                return false;
+            });
+        };
+    </script>
 
 </h:head>
 
 <h:body>
+    <div id="preloader">
+        <div class="animated fadeIn">
+            <span class="circles-loader">Loading&#8230;</span>
+        </div>
+    </div>
     <div id="wrapper">
 
         <nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 0">
@@ -166,6 +206,42 @@
             });
         }
         setTimeout(checkSession, #{authManagedBean.getTimeout()} + timeout_check_delay);
+
+        //<![CDATA[
+        function addXMLRequestCallback(callback){
+            var oldSend, i;
+            if( XMLHttpRequest.callbacks ) {
+                // we've already overridden send() so just add the callback
+                XMLHttpRequest.callbacks.push( callback );
+            } else {
+                // create a callback queue
+                XMLHttpRequest.callbacks = [callback];
+                // store the native send()
+                oldSend = XMLHttpRequest.prototype.send;
+                // override the native send()
+                XMLHttpRequest.prototype.send = function(){
+                    // process the callback queue
+                    // the xhr instance is passed into each callback but seems pretty useless
+                    // you can't tell what its destination is or call abort() without an error
+                    // so only really good for logging that a request has happened
+                    // I could be wrong, I hope so...
+                    // EDIT: I suppose you could override the onreadystatechange handler though
+                    for( i = 0; i < XMLHttpRequest.callbacks.length; i++ ) {
+                        XMLHttpRequest.callbacks[i]( this );
+                    }
+                    // call the native send()
+                    oldSend.apply(this, arguments);
+                }
+            }
+        }
+        //]]>
+
+        addXMLRequestCallback(function( xhr ) {
+            xhr.onload = loadingCheck(function() {
+                return xhr.readyState === 4;
+            });
+        });
+
     </script>
 
 </h:body>
