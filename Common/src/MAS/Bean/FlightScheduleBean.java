@@ -551,4 +551,15 @@ public class FlightScheduleBean {
                 .setParameter("aircraft", aircraft).getResultList();
         return flights.size() != 0 || maintenanceSlots.size() != 0;
     }
+
+    public Airport getLatestDestination(long aircraftId) throws NotFoundException {
+        Aircraft aircraft = fleetBean.getAircraft(aircraftId);
+        if (aircraft == null) throw new NotFoundException();
+        List<Flight> flights = em.createQuery("SELECT f from Flight f WHERE f.aircraftAssignment.aircraft = :aircraft ORDER BY f.arrivalTime DESC", Flight.class)
+                .setParameter("aircraft", aircraft).setMaxResults(1).getResultList();
+        if (flights.size() > 0)
+            return flights.get(0).getAircraftAssignment().getRoute().getDestination();
+        else
+            return aircraft.getCurrentLocation();
+    }
 }

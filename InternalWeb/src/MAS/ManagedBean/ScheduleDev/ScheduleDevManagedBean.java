@@ -1,6 +1,7 @@
 package MAS.ManagedBean.ScheduleDev;
 
 import MAS.Bean.FleetBean;
+import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.RouteBean;
 import MAS.Bean.ScheduleDevelopmentBean;
 import MAS.Common.Utils;
@@ -31,6 +32,8 @@ public class ScheduleDevManagedBean {
     FleetBean fleetBean;
     @EJB
     RouteBean routeBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
 
     private List<Airport> allAirports;
     private List<String> selectAirportsId;
@@ -163,8 +166,13 @@ public class ScheduleDevManagedBean {
         }
         acLocInputs = new String[selectAircrafts.size()];
         for (int i = 0; i < acLocInputs.length; i++) {
-            if (selectAircrafts.get(i).getCurrentLocation() != null)
-                acLocInputs[i] = selectAircrafts.get(i).getCurrentLocation().getId();
+            if (selectAircrafts.get(i).getCurrentLocation() != null) {
+                try {
+                    acLocInputs[i] = flightScheduleBean.getLatestDestination(selectAircrafts.get(i).getId()).getId();
+                } catch (Exception e) {
+                    acLocInputs[i] = selectAircrafts.get(i).getCurrentLocation().getId();
+                }
+            }
         }
     }
     public boolean showAcButtons() {
