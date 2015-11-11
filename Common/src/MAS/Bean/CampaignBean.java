@@ -1,9 +1,6 @@
 package MAS.Bean;
 
-import MAS.Entity.Campaign;
-import MAS.Entity.CampaignGroup;
-import MAS.Entity.Customer;
-import MAS.Entity.Route;
+import MAS.Entity.*;
 import MAS.Exception.NotFoundException;
 
 import javax.ejb.EJB;
@@ -180,6 +177,18 @@ public class CampaignBean {
                 if (campaignGroup.getCustomers().contains(customer)) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean validateCampaignForFlight(long campaignId, long bookingClassId) throws NotFoundException {
+        BookingClass bookingClass = em.find(BookingClass.class, bookingClassId);
+        Campaign campaign = em.find(Campaign.class, campaignId);
+        if (bookingClass == null || campaign == null) throw new NotFoundException();
+        if (campaign.getRoutes().contains(bookingClass.getFlight().getAircraftAssignment().getRoute())) {
+            if (campaign.getBookingClasses().contains(bookingClass.getName())) {
+                return true;
             }
         }
         return false;

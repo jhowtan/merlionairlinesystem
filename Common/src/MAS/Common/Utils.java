@@ -181,6 +181,10 @@ public class Utils {
         return amount;
     }
 
+    public static int randBetween(int start, int end) {
+        return start + (int)Math.round(Math.random() * (end - start));
+    }
+
     public static String padRight(String s, int n) {
         return String.format("%1$-" + n + "s", s);
     }
