@@ -582,7 +582,7 @@ public class ScheduleDevelopmentBean {
                         flightScheduleBean.createFlight("MA" + aircraftAssignment.getId(), dateTime, Utils.minutesLater(dateTime, (int) Utils.calculateDuration(route.getDistance(), aircraft.getSeatConfig().getAircraftType().getSpeed())),
                                 aircraftAssignment.getId(), true);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                     result++;
                 }
@@ -592,7 +592,7 @@ public class ScheduleDevelopmentBean {
                     try {
                         aircraftMaintenanceSlotBean.createSlot(dateTime, acMaintTime, happenings.maintHistory.get(j).getId(), aircraft.getId());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }

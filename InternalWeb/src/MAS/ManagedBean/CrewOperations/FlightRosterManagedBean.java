@@ -263,10 +263,11 @@ public class FlightRosterManagedBean {
 
         for (User user : users) {
             SearchResult r = new SearchResult();
+
             try {
-                r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + " @ " + flightRosterBean.getLastDestination(user.getId()).getId() + " from " + user.getBaseAirport().getId() + ")";
+                r.label = user.getFirstName() + " " + user.getLastName() + ", " + Constants.JOB_NAMES[user.getJob()] + " (" + user.getUsername() + " @ " + flightRosterBean.getLastDestination(user.getId()).getId() + " from " + user.getBaseAirport().getId() + ")";
             } catch (Exception e) {
-                r.label = user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + " @ " + user.getCurrentLocation() + " from " + user.getBaseAirport().getId() + ")";
+                r.label = user.getFirstName() + " " + user.getLastName() + ", " + Constants.JOB_NAMES[user.getJob()] + " (" + user.getUsername() + " @ " + user.getCurrentLocation() + " from " + user.getBaseAirport().getId() + ")";
             }
             r.value = String.valueOf(user.getId());
             searchResults.add(r);

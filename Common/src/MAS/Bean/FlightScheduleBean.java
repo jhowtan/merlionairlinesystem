@@ -551,6 +551,14 @@ public class FlightScheduleBean {
                 .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
                 .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
                 .setParameter("aircraft", aircraft).getResultList();
+//        String debug = fleetBean.getAircraft(aircraftId).getId() + ": (" + startTime + " - " + endTime + ")\n";
+//        for (Flight flight : flights) {
+//            debug = debug.concat(flight.getDepartureTime() + " - " + flight.getArrivalTime() + "\n");
+//        }
+//        for (AircraftMaintenanceSlot slot : maintenanceSlots) {
+//            debug = debug.concat(slot.getStartTime() + " / " + slot.getDuration() + "\n");
+//        }
+//        System.out.println(debug);
         return flights.size() != 0 || maintenanceSlots.size() != 0;
     }
 
