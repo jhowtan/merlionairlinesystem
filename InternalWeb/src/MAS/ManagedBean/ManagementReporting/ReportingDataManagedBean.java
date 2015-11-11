@@ -143,6 +143,9 @@ public class ReportingDataManagedBean {
         System.out.println(jobIdsString.length + " " + jobIdsString[0]);
         for (String jobIdString : jobIdsString) {
             // Deal with users for job
+            if (jobIdString.equals("")) {
+                continue;
+            }
             int jobId = Integer.parseInt(jobIdString);
             crewStaff = userBean.getUsersWithJobs(jobId);
             for (User crew : crewStaff) {
@@ -171,7 +174,7 @@ public class ReportingDataManagedBean {
 
                         cr.id = String.valueOf(crew.getId());
                         cr.fullName = crew.getFirstName() + " " + crew.getLastName();
-                        cr.job = (jobId == Constants.cockpitCrewJobId) ? "Cockpit Crew" : "Cabin Crew";
+                        cr.fullName = cr.fullName.concat(" (" + ((jobId == Constants.cockpitCrewJobId) ? "Cockpit Crew" : "Cabin Crew") + ")");
                         crewCalendarResources.add(cr);
                     }
                 }
@@ -191,7 +194,7 @@ public class ReportingDataManagedBean {
 
                         cr.id = String.valueOf(crew.getId());
                         cr.fullName = crew.getFirstName() + " " + crew.getLastName();
-                        cr.job = "Maintenance Crew";
+                        cr.fullName = cr.fullName.concat(" (" + "Maintenance Crew" + ")");
                         crewCalendarResources.add(cr);
                     }
                 }
