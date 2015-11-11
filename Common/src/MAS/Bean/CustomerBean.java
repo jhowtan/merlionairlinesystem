@@ -89,13 +89,22 @@ public class CustomerBean {
                 anaCustomer.customer = customer;
                 anaCustomer.flightCount = eTickets.size();
                 anaCustomer.revenuePerMile = 0;
+                double pVD = 0;
+                double pVN = 0;
                 for (ETicket eTicket : eTickets) {
-                    anaCustomer.revenuePerMile += Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
-                                                    eTicket.getBookingClass().getFareRule().getPriceMul();
+                    double weight = Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
+                            eTicket.getBookingClass().getFareRule().getPriceMul();
+                    anaCustomer.revenuePerMile += weight;
 
                     //Calculate CLV
-                    anaCustomer.cV += Constants.TRAVEL_CLASS_PRICE_MULTIPLIER[eTicket.getBookingClass().getTravelClass()] *
-                            eTicket.getBookingClass().getFareRule().getPriceMul();
+                    anaCustomer.cV += weight;
+                    if (eTicket.getFlight().getActualDepartureTime().compareTo(CLVmaxDate) == 1 &&
+                            eTicket.getFlight().getActualDepartureTime().compareTo(CLVminDate) == -1) {
+                        pVD += weight;
+                    } else if (eTicket.getFlight().getActualDepartureTime().compareTo(CLVminDate) >= 0) {
+                        pVN += weight;
+                    }
+                    anaCustomer.pV = pVN/(pVD * 0.5);
                 }
                 anaCustomer.analyseSegment();
 

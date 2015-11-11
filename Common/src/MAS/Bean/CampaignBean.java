@@ -166,33 +166,42 @@ public class CampaignBean {
         return em.createQuery("SELECT c from CampaignGroup c", CampaignGroup.class).getResultList();
     }
 
-    public boolean validateCode(String code, long customerId) {
+    public boolean validateCode(String code, long customerId, List<Long> bookingClassIds) {
         Customer customer = em.find(Customer.class, customerId);
         if (customer == null) return false;
         List<Campaign> possibleCampaigns = em.createQuery("SELECT c from Campaign c where c.code = :code", Campaign.class)
                 .setParameter("code", code).getResultList();
         for (int i = 0; i < possibleCampaigns.size(); i ++) {
-            List<CampaignGroup> campaignGroups = possibleCampaigns.get(i).getCampaignGroups();
+            Campaign campaign = possibleCampaigns.get(i);
+            List<CampaignGroup> campaignGroups = campaign.getCampaignGroups();
             for (CampaignGroup campaignGroup : campaignGroups) {
                 if (campaignGroup.getCustomers().contains(customer)) {
-                    return true;
+                    for (Long bkClassId : bookingClassIds) {
+                        BookingClass bookingClass = em.find(BookingClass.class, bkClassId);
+                        if (bookingClass == null) return false;
+                        if (campaign.getRoutes().contains(bookingClass.getFlight().getAircraftAssignment().getRoute())) {
+                            if (campaign.getBookingClasses().contains(bookingClass.getName())) {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
         }
         return false;
     }
 
-    public boolean validateCampaignForFlight(long campaignId, long bookingClassId) throws NotFoundException {
-        BookingClass bookingClass = em.find(BookingClass.class, bookingClassId);
-        Campaign campaign = em.find(Campaign.class, campaignId);
-        if (bookingClass == null || campaign == null) throw new NotFoundException();
-        if (campaign.getRoutes().contains(bookingClass.getFlight().getAircraftAssignment().getRoute())) {
-            if (campaign.getBookingClasses().contains(bookingClass.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean validateCampaignForFlight(long campaignId, long bookingClassId) throws NotFoundException {
+//        BookingClass bookingClass = em.find(BookingClass.class, bookingClassId);
+//        Campaign campaign = em.find(Campaign.class, campaignId);
+//        if (bookingClass == null || campaign == null) throw new NotFoundException();
+//        if (campaign.getRoutes().contains(bookingClass.getFlight().getAircraftAssignment().getRoute())) {
+//            if (campaign.getBookingClasses().contains(bookingClass.getName())) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public double useCode(String code, long customerId) throws NotFoundException {
         Customer customer = em.find(Customer.class, customerId);
