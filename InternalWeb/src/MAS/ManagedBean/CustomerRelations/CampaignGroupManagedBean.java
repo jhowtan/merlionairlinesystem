@@ -46,9 +46,9 @@ public class CampaignGroupManagedBean {
             desc = campaignGroup.getDescription();
             populateExistingCustomers();
         } catch (Exception e) {
-            populateCustomers();
-            load();
         }
+        populateCustomers();
+        load();
     }
 
     private void load() {

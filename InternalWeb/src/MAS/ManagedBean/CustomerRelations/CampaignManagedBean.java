@@ -56,6 +56,7 @@ public class CampaignManagedBean {
             for (int i = 0; i < campaign.getCampaignGroups().size(); i++) {
                 campaignGroupIds.add(String.valueOf(campaign.getCampaignGroups().get(i).getId()));
             }
+            System.out.println(campaign.getCampaignGroups());
             routeIds = new ArrayList<>();
             for (int i = 0; i < campaign.getRoutes().size(); i++) {
                 routeIds.add(String.valueOf(campaign.getRoutes().get(i).getId()));
@@ -66,8 +67,9 @@ public class CampaignManagedBean {
             }
             if (bookingClassesString.length() > 1) bookingClassesString = bookingClassesString.substring(0, bookingClassesString.length() - 1);
         } catch (Exception e) {
-            load();
+
         }
+        load();
     }
 
     private void load() {
@@ -83,7 +85,10 @@ public class CampaignManagedBean {
             for (String s : routeIds) {
                 routeIdLongs.add(Long.parseLong(s));
             }
-            campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
+            long campaignId = campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
+            for (String s : campaignGroupIds) {
+                campaignBean.addCampaignGroup(campaignId, Long.valueOf(s));
+            }
             FacesMessage m = new FacesMessage("Campaign: " + campaignName + " created.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
@@ -103,6 +108,9 @@ public class CampaignManagedBean {
                 routeIdLongs.add(Long.parseLong(s));
             }
             campaignBean.updateCampaign(campaign.getId(), campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
+            for (String s : campaignGroupIds) {
+                campaignBean.addCampaignGroup(campaign.getId(), Long.valueOf(s));
+            }
             FacesMessage m = new FacesMessage("Campaign: " + campaign.getName() + " updated.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
