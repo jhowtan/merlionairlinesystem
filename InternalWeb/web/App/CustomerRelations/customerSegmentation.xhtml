@@ -98,13 +98,9 @@
 
                     nv.addGraph(function() {
                         var chart = nv.models.scatterChart()
-//                                .showDistX(true)
-//                                .showDistY(true)
                                 .color(d3.scale.category10().range())
                                 .xDomain([150,250])
                                 .yDomain([300,500]);
-//                        chart.xAxis.tickFormat(d3.format('20f'));
-//                        chart.yAxis.tickFormat(d3.format('20f'));
 
                         chart.tooltipContent(function(key) {
                             return '<h3 style="padding: 5px;">' + key.point.name + '</h3>';
