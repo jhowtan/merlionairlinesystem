@@ -17,6 +17,11 @@
                     </div>
                 </div>
                 <hr/>
+                <ui:repeat value="#{facesContext.getMessageList('status')}" var="message">
+                    <h:panelGroup layout="block" styleClass="alert #{(message.severity == 'ERROR 2') ? 'alert-danger' : 'alert-info'}">
+                        #{message.detail}
+                    </h:panelGroup>
+                </ui:repeat>
             </div>
 
             <h:panelGroup styleClass="container" rendered="#{flightSearchManagedBean.step == 1}" layout="block">
