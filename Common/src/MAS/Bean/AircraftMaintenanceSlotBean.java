@@ -32,6 +32,7 @@ public class AircraftMaintenanceSlotBean {
         Airport airport = em.find(Airport.class, airportId);
         Aircraft aircraft = em.find(Aircraft.class, aircraftId);
         if (airport == null || aircraft == null) throw new NotFoundException();
+        if (airport.getHangars() < 1) throw new NotFoundException();
         AircraftMaintenanceSlot slot = new AircraftMaintenanceSlot();
         slot.setStartTime(startTime);
         slot.setDuration(duration);
