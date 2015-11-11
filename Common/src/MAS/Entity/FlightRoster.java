@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class FlightRoster {
+public class FlightRoster implements Comparable<FlightRoster> {
     private long id;
 
     @GeneratedValue
@@ -73,5 +73,9 @@ public class FlightRoster {
 
     public void setSignedOut(List<User> signedOut) {
         this.signedOut = signedOut;
+    }
+
+    public int compareTo(FlightRoster another) {
+        return this.getFlight().getDepartureTime().compareTo(another.getFlight().getDepartureTime());
     }
 }

@@ -8,8 +8,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Customer Segmentation</h1>
-                    <ui:repeat value="#{customerSegmentationManagedBean.customers}" var="c">
-                        #{c.flightCount} #{c.revenuePerMile}
+                    <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="segment">
+                        __Segment__
+                        <ui:repeat value="#{segment}" var="c">
+                            #{c.flightCount} #{c.revenuePerMile}
+                        </ui:repeat>
                     </ui:repeat>
                 </div>
             </div>

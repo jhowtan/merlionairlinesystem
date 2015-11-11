@@ -170,8 +170,37 @@ public class FlightRosterBean {
         //Initialise airport buckets
         //For each flight, choose flight attendants. If unable, mark as incomplete
         for (int i = 0; i < flightBids.size(); i++) {
-            User crew = flightBids.get(i).getBidder();
-            Airport loc = crew.getCurrentLocation();
+//            User crew = flightBids.get(i).getBidder();
+//            Airport loc;
+//            try {
+//                loc = getLastDestination(crew.getId());
+//            } catch (Exception e) {
+//                loc = crew.getCurrentLocation();
+//            }
+//            if (airports.indexOf(loc) == -1) {
+//                airports.add(loc);
+//                airportBuckets.add(new ArrayList<>());
+//            }
+//            HypoCrew hypoCrew = new HypoCrew();
+//            hypoCrew.user = crew;
+//            hypoCrew.location = crew.getCurrentLocation();
+//            hypoCrew.lastSuccess = Utils.monthStart(1);
+//            hypoCrew.readyTime = Utils.monthStart(1);
+//            airportBuckets.get(airports.indexOf(loc)).add(hypoCrew);
+            flightBids.get(i).setStatus(1);
+            em.merge(flightBids.get(i));
+        }
+        List<User> cabinCrew = userBean.getUsersWithJobs(Constants.cabinCrewJobId);
+        List<User> cockpitCrew = userBean.getUsersWithJobs(Constants.cockpitCrewJobId);
+        cabinCrew.addAll(cockpitCrew);
+        for (int i = 0; i < cabinCrew.size(); i++) {
+            User crew = cabinCrew.get(i);
+            Airport loc;
+            try {
+                loc = getLastDestination(crew.getId());
+            } catch (Exception e) {
+                loc = crew.getCurrentLocation();
+            }
             if (airports.indexOf(loc) == -1) {
                 airports.add(loc);
                 airportBuckets.add(new ArrayList<>());
@@ -182,8 +211,6 @@ public class FlightRosterBean {
             hypoCrew.lastSuccess = Utils.monthStart(1);
             hypoCrew.readyTime = Utils.monthStart(1);
             airportBuckets.get(airports.indexOf(loc)).add(hypoCrew);
-            flightBids.get(i).setStatus(1);
-            em.merge(flightBids.get(i));
         }
 
         for (int i = 0; i < flights.size(); i++) {
@@ -303,5 +330,12 @@ public class FlightRosterBean {
             }
         }
         airportBuckets.get(airports.indexOf(hypoCrew.location)).add(hypoCrew);
+    }
+
+    public Airport getLastDestination(long userId) throws NotFoundException {
+        List<FlightRoster> flightRosters = getFlightRostersOfUser(userId);
+        Collections.sort(flightRosters);
+        FlightRoster flightRoster = flightRosters.get(flightRosters.size() - 1);
+        return flightRoster.getFlight().getAircraftAssignment().getRoute().getDestination();
     }
 }
