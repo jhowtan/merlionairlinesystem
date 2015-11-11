@@ -22,6 +22,10 @@ public class BookingClassBean {
 
     //-----------------Booking classes---------------------------
     public long createBookingClass(String name, int allocation, int travelClass, long fareRuleId, long flightId, double price) throws NotFoundException {
+        return createBookingClass(name, allocation, travelClass, fareRuleId, flightId, price, true);
+    }
+
+    public long createBookingClass(String name, int allocation, int travelClass, long fareRuleId, long flightId, double price, boolean shouldFlush) throws NotFoundException {
         FareRule fareRule = em.find(FareRule.class, fareRuleId);
         Flight flight = em.find(Flight.class, flightId);
         if (fareRule == null || flight == null) throw new NotFoundException();
@@ -35,8 +39,12 @@ public class BookingClassBean {
         bookingClass.setFlight(flight);
         bookingClass.setPrice(price);
         em.persist(bookingClass);
-        em.flush();
-        return bookingClass.getId();
+        if (shouldFlush) {
+            em.flush();
+            return bookingClass.getId();
+        } else {
+            return -1;
+        }
     }
 
     public void changeName(long id, String name) throws NotFoundException {
