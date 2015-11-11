@@ -6,6 +6,7 @@ import MAS.Common.Utils;
 import MAS.Entity.AircraftAssignment;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 import MAS.ManagedBean.CommonManagedBean;
 
@@ -16,8 +17,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @ManagedBean
 public class CreateFlightManagedBean {
@@ -47,20 +49,30 @@ public class CreateFlightManagedBean {
         setAircraftAssignments(routeBean.getAllAircraftAssignments());
     }
 
-    public void createFlight() throws NotFoundException {
-        Date departureDateTime = Utils.addTimeToDate(departureDate, departureTime);
-        flightScheduleBean.createFlight(code,
-                Utils.addTimeToDate(departureDate, departureTime),
-                Utils.minutesLater(departureDateTime, flightDuration), aaId, createBkClass);
-        authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
-        setCode(null);
-        setAaId(0);
-        setDepartureTime(null);
-        setDepartureDate(null);
-        setFlightDuration(0);
-        FacesMessage m = new FacesMessage("Flight created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createFlight() {
+        try {
+            Date departureDateTime = Utils.addTimeToDate(departureDate, departureTime);
+            flightScheduleBean.createFlight(code,
+                    Utils.addTimeToDate(departureDate, departureTime),
+                    Utils.minutesLater(departureDateTime, flightDuration), aaId, createBkClass);
+            authManagedBean.createAuditLog("Created new flight: " + code, "create_flight");
+            setCode(null);
+            setAaId(0);
+            setDepartureTime(null);
+            setDepartureDate(null);
+            setFlightDuration(0);
+            FacesMessage m = new FacesMessage("Flight created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (ScheduleClashException e) {
+            FacesMessage m = new FacesMessage("Flight could not be created due to schedule clash.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Flight could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void createRecurringFlight() {
@@ -79,30 +91,22 @@ public class CreateFlightManagedBean {
             FacesMessage m = new FacesMessage("Recurring flight created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (ScheduleClashException e) {
+            FacesMessage m = new FacesMessage("Flight could not be created due to schedule clash.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.printStackTrace();
+            FacesMessage m = new FacesMessage("Flights could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NoItemsCreatedException e) {
-            // This is triggered when no flights are created
-            // @TODO: Show some error message
+            FacesMessage m = new FacesMessage("No flights could be created within this time period.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
             e.printStackTrace();
         }
     }
-
-//    private Date addTimeToDate(Date date, String time) {
-//        if (time.length() != 5)
-//            return null;
-//        try {
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(date);
-//            String dateString = Integer.toString(cal.get(Calendar.YEAR)) + "-" +
-//                    Integer.toString(cal.get(Calendar.MONTH)+1) + "-" +
-//                    Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
-//            return new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString + " " + time);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     public void acTypeChangeListener(AjaxBehaviorEvent event) {
         try {

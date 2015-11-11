@@ -180,8 +180,8 @@
                                                         <f:selectItems value="#{scheduleDevManagedBean.allRoutes}" var="rt"
                                                                        itemLabel="#{commonManagedBean.formatRoute(rt)}" itemValue="#{rt.origin.id.concat(' '.concat(rt.destination.id))}" />
                                                     </h:selectManyListbox>
-                                                    <h:message for="routes" styleClass="help-block" />
                                                 </div>
+                                                <h:message for="routes" styleClass="help-block" />
                                             </h:panelGroup>
                                             <h:panelGroup id="customRoute">
                                                 <br/>
@@ -328,7 +328,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <blockquote>
-                                        <p>Success! #{scheduleDevManagedBean.flightsCreated} flights scheduled.</p>
+                                        <h:panelGroup rendered="#{scheduleDevManagedBean.success == 1}">
+                                            <p>Success! #{scheduleDevManagedBean.flightsCreated} flights scheduled.</p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{scheduleDevManagedBean.success == 2}">
+                                            <p>Sorry, timetable could not be created due to schedule clashes.</p>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{scheduleDevManagedBean.success == 3}">
+                                            <p>Sorry, timetable could not be created.</p>
+                                        </h:panelGroup>
                                     </blockquote>
                                 </div>
                             </div>

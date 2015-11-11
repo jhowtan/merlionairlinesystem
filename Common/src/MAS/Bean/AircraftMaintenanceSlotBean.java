@@ -1,10 +1,13 @@
 package MAS.Bean;
 
+import MAS.Common.Utils;
 import MAS.Entity.Aircraft;
 import MAS.Entity.AircraftMaintenanceSlot;
 import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,11 +21,14 @@ public class AircraftMaintenanceSlotBean {
     @PersistenceContext
     EntityManager em;
 
+    @EJB
+    FlightScheduleBean flightScheduleBean;
+
     public AircraftMaintenanceSlotBean() {
     }
 
     //-----------------Maintenance slots---------------------------
-    public long createSlot(Date startTime, double duration, String airportId, long aircraftId) throws NotFoundException {
+    public long createSlot(Date startTime, double duration, String airportId, long aircraftId) throws NotFoundException, ScheduleClashException {
         Airport airport = em.find(Airport.class, airportId);
         Aircraft aircraft = em.find(Aircraft.class, aircraftId);
         if (airport == null || aircraft == null) throw new NotFoundException();
@@ -31,6 +37,9 @@ public class AircraftMaintenanceSlotBean {
         slot.setDuration(duration);
         slot.setAirport(airport);
         slot.setAircraft(aircraft);
+        if (flightScheduleBean.checkScheduleClash(aircraftId, startTime, Utils.minutesLater(startTime, (int)duration))) {
+            throw new ScheduleClashException();
+        }
         em.persist(slot);
         em.flush();
         return slot.getId();

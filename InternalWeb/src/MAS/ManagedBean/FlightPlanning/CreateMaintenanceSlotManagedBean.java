@@ -6,6 +6,7 @@ import MAS.Bean.RouteBean;
 import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
@@ -47,16 +48,26 @@ public class CreateMaintenanceSlotManagedBean {
         setAirports(routeBean.getAllAirports());
     }
 
-    public void createMaintenanceSlot() throws NotFoundException {
-        Date timestamp = addTimeToDate(startDate, startTime);
-        System.out.println(timestamp);
-        Airport airport = routeBean.getAirport(airportId);
-        Aircraft aircraft = fleetBean.getAircraft(aircraftId);
-        aircraftMaintenanceSlotBean.createSlot(addTimeToDate(startDate, startTime), duration, airportId, aircraftId);
-        authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
-        FacesMessage m = new FacesMessage("Maintenance slot for " + aircraft.getTailNumber() + " created successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void createMaintenanceSlot() {
+        try {
+            Date timestamp = addTimeToDate(startDate, startTime);
+            System.out.println(timestamp);
+            Airport airport = routeBean.getAirport(airportId);
+            Aircraft aircraft = fleetBean.getAircraft(aircraftId);
+            aircraftMaintenanceSlotBean.createSlot(addTimeToDate(startDate, startTime), duration, airportId, aircraftId);
+            authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
+            FacesMessage m = new FacesMessage("Maintenance slot for " + aircraft.getTailNumber() + " created successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (ScheduleClashException e) {
+            FacesMessage m = new FacesMessage("Maintenance slot could not be created due to schedule clash.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (NotFoundException e) {
+            FacesMessage m = new FacesMessage("Maintenance slot could not be created.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     private Date addTimeToDate(Date date, String time) {

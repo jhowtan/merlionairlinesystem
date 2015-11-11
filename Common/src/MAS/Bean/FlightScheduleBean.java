@@ -7,6 +7,7 @@ import MAS.Common.Utils;
 import MAS.Entity.*;
 import MAS.Exception.NoItemsCreatedException;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -49,7 +50,7 @@ public class FlightScheduleBean {
     }
 
     //-----------------Flights---------------------------
-    public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId) throws NotFoundException {
+    public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId) throws NotFoundException, ScheduleClashException {
         Flight flight = new Flight();
         flight.setCode(code);
         flight.setArrivalTime(arrivalTime);
@@ -57,12 +58,15 @@ public class FlightScheduleBean {
         AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aircraftAssignmentId);
         if (aircraftAssignment == null) throw new NotFoundException();
         flight.setAircraftAssignment(aircraftAssignment);
+        if (checkScheduleClash(aircraftAssignment.getAircraft().getId(), departureTime, arrivalTime)) {
+            throw new ScheduleClashException();
+        }
         em.persist(flight);
         em.flush();
         return flight.getId();
     }
 
-    public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId, boolean createBkingClass) throws NotFoundException {
+    public long createFlight(String code, Date departureTime, Date arrivalTime, long aircraftAssignmentId, boolean createBkingClass) throws NotFoundException, ScheduleClashException {
         long flightId = createFlight(code, departureTime, arrivalTime, aircraftAssignmentId);
         if (createBkingClass)
             createDefaultBookingClasses(flightId);
@@ -70,7 +74,7 @@ public class FlightScheduleBean {
         return  flightId;
     }
 
-    private void createDefaultBookingClasses(long flightId) throws  NotFoundException{
+    private void createDefaultBookingClasses(long flightId) throws  NotFoundException {
         Flight flight = em.find(Flight.class, flightId);
         FareRule fareN = fareRuleBean.getFareRuleByName(Constants.FARE_NORMAL);
         FareRule fareE = fareRuleBean.getFareRuleByName(Constants.FARE_EARLY);
@@ -153,7 +157,7 @@ public class FlightScheduleBean {
         return flight.getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig();
     }
 
-    public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays) throws NotFoundException, NoItemsCreatedException {
+    public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays) throws NotFoundException, NoItemsCreatedException, ScheduleClashException {
         AircraftAssignment aircraftAssignment = em.find(AircraftAssignment.class, aircraftAssignmentId);
         if (aircraftAssignment == null) throw new NotFoundException();
 
@@ -186,7 +190,8 @@ public class FlightScheduleBean {
             calendar.setTime(currDepartureDate);
             if (recurringDaysList.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
                 // @TODO: Check if flight can be scheduled at this time
-
+                if (checkScheduleClash(aircraftAssignment.getAircraft().getId(), (Date) currDepartureDate.clone(),(Date) currArrivalDate.clone()))
+                    throw new ScheduleClashException();
                 Flight flight = new Flight();
                 flight.setCode(code);
                 flight.setArrivalTime((Date) currArrivalDate.clone());
@@ -211,7 +216,7 @@ public class FlightScheduleBean {
         return flightGroup.getId();
     }
 
-    public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays, boolean createBkingClass) throws NotFoundException, NoItemsCreatedException {
+    public long createRecurringFlight(String code, long aircraftAssignmentId, String departureTime, int flightDuration, Date recurringStartDate, Date recurringEndDate, int[] recurringDays, boolean createBkingClass) throws NotFoundException, NoItemsCreatedException, ScheduleClashException {
         long flightGrpId = createRecurringFlight(code, aircraftAssignmentId, departureTime, flightDuration, recurringStartDate, recurringEndDate, recurringDays);
 
         if (createBkingClass) {
@@ -528,5 +533,22 @@ public class FlightScheduleBean {
             default:
                 return 100;
         }
+    }
+
+    public boolean checkScheduleClash(long aircraftId, Date startTime, Date endTime) throws NotFoundException {
+        Aircraft aircraft = fleetBean.getAircraft(aircraftId);
+        if (aircraft == null) throw new NotFoundException();
+        List<Flight> flights = em.createQuery("SELECT f from Flight f WHERE f.aircraftAssignment.aircraft = :aircraft AND " +
+                "(f.departureTime >= :startTime AND f.departureTime <= :endTime) OR (f.departureTime <= :startTime AND f.arrivalTime >= :endTime) OR (f.arrivalTime >= :startTime AND f.arrivalTime <= :endTime)", Flight.class)
+                .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
+                .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
+                .setParameter("aircraft", aircraft).getResultList();
+        List<AircraftMaintenanceSlot> maintenanceSlots = em.createQuery("SELECT m from AircraftMaintenanceSlot m WHERE m.aircraft = :aircraft AND " +
+                "(m.startTime >= :startTime AND m.startTime <= :endTime) OR (m.startTime <= :startTime AND FUNCTION('ADDDATE', m.startTime, 1) >= :endTime) " +
+                "OR (FUNCTION('ADDDATE', m.startTime, 1) >= :startTime AND FUNCTION('ADDDATE', m.startTime, 1) <= :endTime)", AircraftMaintenanceSlot.class)
+                .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
+                .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
+                .setParameter("aircraft", aircraft).getResultList();
+        return flights.size() != 0 && maintenanceSlots.size() != 0;
     }
 }

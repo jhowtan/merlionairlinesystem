@@ -2,8 +2,12 @@ package MAS.Bean;
 
 import MAS.Common.Constants;
 import MAS.Common.Utils;
-import MAS.Entity.*;
+import MAS.Entity.Aircraft;
+import MAS.Entity.AircraftAssignment;
+import MAS.Entity.Airport;
+import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 import MAS.ScheduleDev.HypoAircraft;
 import MAS.ScheduleDev.HypoRoute;
 import MAS.ScheduleDev.HypoTransit;
@@ -13,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -559,7 +562,7 @@ public class ScheduleDevelopmentBean {
         em.flush();
     }
 
-    public int saveSuggestedFlights(Date startTime) {
+    public int saveSuggestedFlights(Date startTime) throws ScheduleClashException{
         int result = 0;
         List<HypoTransit> allHappenings = ta.getAllHistory();
         for (int i = 0; i < allHappenings.size(); i++) {

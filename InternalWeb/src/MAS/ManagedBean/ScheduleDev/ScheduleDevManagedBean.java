@@ -8,6 +8,7 @@ import MAS.Entity.Aircraft;
 import MAS.Entity.Airport;
 import MAS.Entity.Route;
 import MAS.Exception.NotFoundException;
+import MAS.Exception.ScheduleClashException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -56,6 +57,7 @@ public class ScheduleDevManagedBean {
     private String startTime;
     private Date start;
     private int step = 0;
+    private int success;
 
     private int flightsCreated;
     private List<String[]> routeOutputTable;
@@ -70,6 +72,7 @@ public class ScheduleDevManagedBean {
         selectAircraftsId = new ArrayList<>();
         breadcrumbs = new ArrayList<>();
         breadcrumbs.add("Select Airports");
+        success = 0;
     }
 
     public void selectAirportAjaxListener(AjaxBehaviorEvent event) {
@@ -273,9 +276,18 @@ public class ScheduleDevManagedBean {
         try {
             flightsCreated = scheduleDevelopmentBean.processFlights(start, duration * 60 * 24);
             step = 4;
+            success = 1;
             breadcrumbs.add("End");
-        } catch (Exception e) {
+        } catch (ScheduleClashException e) {step = 4;
+            step = 4;
+            success = 2;
+            breadcrumbs.add("End");
+        }
+        catch (Exception e) {
             e.printStackTrace();
+            step = 4;
+            success = 3;
+            breadcrumbs.add("End");
         }
     }
 
@@ -455,5 +467,13 @@ public class ScheduleDevManagedBean {
 
     public void setBreadcrumbs(List<String> breadcrumbs) {
         this.breadcrumbs = breadcrumbs;
+    }
+
+    public int getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(int success) {
+        this.success = success;
     }
 }
