@@ -14,58 +14,64 @@
                             #{message.detail}
                         </h:panelGroup>
                     </ui:repeat>
-                    <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="segment">
-                        __Segment__
-                        <ui:repeat value="#{segment}" var="c">
-                        </ui:repeat>
-                    </ui:repeat>
-                    <div id="cust-segment-chart">
-                        <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Customer Segmentation</div>
+                        <div class="panel-body">
+                            <div id="cust-segment-chart">
+                                <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-12">
-                    <table class="table table-striped" id="customer_table">
-                        <thead>
-                        <tr>
-                            <th>FFP Number</th>
-                            <th>Name</th>
-                            <th>Value/Mile</th>
-                            <th>Flight Count</th>
-                            <th>cV</th>
-                            <th>pV</th>
-                            <th>Customer Segment</th>
-                            <th>Include</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="cList">
-                            <ui:repeat value="#{cList}" var="c">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Customer Table
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped" id="customer_table">
+                                <thead>
                                 <tr>
-                                    <td>#{c.customer.id}</td>
-                                    <td>#{c.customer.firstName} #{c.customer.lastName}</td>
-                                    <td>#{commonManagedBean.formatDoubleTwoDecimal(c.revenuePerMile)}</td>
-                                    <td>#{c.flightCount}</td>
-                                    <td>#{commonManagedBean.formatDoubleTwoDecimal(c.cV)}</td>
-                                    <td>#{commonManagedBean.formatDoubleTwoDecimal(c.pV)}</td>
-                                    <td>#{customerSegmentationManagedBean.displaySegment(c)}</td>
-                                    <td>
-                                        <label>
-                                            <h:selectBooleanCheckbox value="#{customerSegmentationManagedBean.customerMap[c.customer.id]}" />
-                                        </label>
-                                    </td>
+                                    <th>FFP Number</th>
+                                    <th>Name</th>
+                                    <th>Value/Mile</th>
+                                    <th>Flight Count</th>
+                                    <th>cV</th>
+                                    <th>pV</th>
+                                    <th>Customer Segment</th>
+                                    <th>Include</th>
                                 </tr>
-                            </ui:repeat>
-                        </ui:repeat>
-                        </tbody>
-                    </table>
-                </div>
-                <h:form>
-                <div class="col-lg-12 text-right">
-                    <div class="btn-group">
-                        <h:commandButton action="#{customerSegmentationManagedBean.createCampaignGroup()}" value="Create Campaign Group" styleClass="btn btn-success"/>
+                                </thead>
+                                <tbody>
+                                <ui:repeat value="#{customerSegmentationManagedBean.segmentedCustomers}" var="cList">
+                                    <ui:repeat value="#{cList}" var="c">
+                                        <tr>
+                                            <td>#{c.customer.id}</td>
+                                            <td>#{c.customer.firstName} #{c.customer.lastName}</td>
+                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.revenuePerMile)}</td>
+                                            <td>#{c.flightCount}</td>
+                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.cV)}</td>
+                                            <td>#{commonManagedBean.formatDoubleTwoDecimal(c.pV)}</td>
+                                            <td>#{customerSegmentationManagedBean.displaySegment(c)}</td>
+                                            <td>
+                                                <label>
+                                                    <h:selectBooleanCheckbox value="#{customerSegmentationManagedBean.customerMap[c.customer.id]}" />
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                </ui:repeat>
+                                </tbody>
+                            </table>
+                            <h:form>
+                                <div class="text-right">
+                                    <div class="btn-group">
+                                        <h:commandButton action="#{customerSegmentationManagedBean.createCampaignGroup()}" value="Create Campaign Group" styleClass="btn btn-success"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
                     </div>
                 </div>
-                </h:form>
+
             </div>
         </div>
     </ui:define>
@@ -80,14 +86,24 @@
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
                 ]
             });
+            $.get("getCustomerSegments.xhtml", function(data) {
+                var chartData = [];
+
+                // HANDLE DATA CALLBACK HERE
+                d3.select('#cust-segment-chart svg')
+                        .datum(data)
+                        .transition().duration(500)
+                        .call(chart);
+            });
+
             var dataLoad = function(groups, points) {
-                var data = [],
-                        shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
-                        random = d3.random.normal();
+                var data = [];
+                var shapes = ['circle'];
+                var random = d3.random.normal();
                 // <![CDATA[
                 for (i = 0; i < groups; i++) {
                     data.push({
-                        key: 'Group ' + i,
+                        key: 'Segment ' + i,
                         values: []
                     });
 
@@ -95,8 +111,8 @@
                         data[i].values.push({
                             x: random()
                             , y: random()
-                            , size: Math.random()
-                            , shape: shapes[j % 6]
+                            , size: 1
+                            , shape: 'circle'
                         });
                     }
                 }
@@ -110,7 +126,6 @@
                         .showDistX(true)
                         .showDistY(true)
                         .color(d3.scale.category10().range());
-                console.log(chart);
                 chart.xAxis.tickFormat(d3.format('.02f'));
                 chart.yAxis.tickFormat(d3.format('.02f'));
 

@@ -2026,7 +2026,7 @@ td.profitability-gain {
   -webkit-box-align:center;
 
   /* W3C */
-  display:box;
+  display: box;
   box-pack:center;
   box-align:center;
 }
@@ -2101,6 +2101,7 @@ td.profitability-gain {
   height: 35px;
   top: 18.75px;
   left: 10.82532px;
+}
 
 #cust-segment-chart svg {
   height: 500px;

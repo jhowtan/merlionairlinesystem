@@ -4,13 +4,18 @@ import MAS.Bean.CampaignBean;
 import MAS.Bean.CustomerBean;
 import MAS.Common.Constants;
 import MAS.CustomerAnalysis.AnalysedCustomer;
+import MAS.ManagedBean.Auth.AuthManagedBean;
 import MAS.ManagedBean.CommonManagedBean;
+import com.google.gson.Gson;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 @ManagedBean
@@ -20,9 +25,24 @@ public class CustomerSegmentationManagedBean {
     @EJB
     CampaignBean campaignBean;
 
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
+
     private List<AnalysedCustomer> customers;
     private List<List<AnalysedCustomer>> segmentedCustomers;
     private Map<Long, Boolean> customerMap;
+
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
+
+    private class CustomerItem {
+        public String name;
+        public String revenuePerMile;
+        public String flightCount;
+        public String cV;
+        public String pV;
+    }
 
     @PostConstruct
     private void init() {
@@ -40,6 +60,49 @@ public class CustomerSegmentationManagedBean {
                 }
             }
         }
+    }
+
+    public void getSegmentJSON() {
+        ArrayList<CustomerItem> custItems = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < segmentedCustomers.get(i).size(); j++) {
+                AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
+                CustomerItem customerItem = new CustomerItem();
+                customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
+                customerItem.flightCount = String.valueOf(customer.flightCount);
+                customerItem.revenuePerMile = String.valueOf(customer.revenuePerMile);
+                customerItem.cV = String.valueOf(customer.cV);
+                customerItem.pV = String.valueOf(customer.pV);
+                custItems.add(customerItem);
+            }
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(custItems);
+
+        outputJSON(json);
+    }
+
+    public void outputJSON(String json) {
+        if(!authManagedBean.isAuthenticated()) {
+            json = "[]";
+        }
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) ctx.getExternalContext().getResponse();
+        response.setContentLength(json.length());
+        response.setContentType("application/json");
+
+        try {
+            response.getOutputStream().write(json.getBytes());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ctx.responseComplete();
     }
 
     public void createCampaignGroup() {
@@ -89,4 +152,5 @@ public class CustomerSegmentationManagedBean {
     public void setCustomerMap(Map<Long, Boolean> customerMap) {
         this.customerMap = customerMap;
     }
+
 }
