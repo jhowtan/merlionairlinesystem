@@ -112,24 +112,24 @@
             <div class="container">
                 <h1 class="ffp-title">Recent Activity</h1>
                 <h:panelGroup styleClass="panel panel-default" layout="block">
-                    <div class="panel-body text-center">
+                    <div class="panel-body">
                         <h:panelGroup rendered="#{empty ffpManagedBean.customerLogs}">
-                            You currently have no activities.
+                            <div class="text-center">
+                                You currently have no activities.
+                            </div>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{!empty ffpManagedBean.customerLogs}">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th width="30%">Time</th>
-                                        <th width="30%">Category</th>
-                                        <th width="40%">Description</th>
+                                        <th width="70%">Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <ui:repeat value="#{ffpManagedBean.customerLogs}" var="activity">
                                         <tr>
                                             <td>#{activity.timestamp}</td>
-                                            <td>#{activity.category}</td>
                                             <td>#{activity.description}</td>
                                         </tr>
                                     </ui:repeat>

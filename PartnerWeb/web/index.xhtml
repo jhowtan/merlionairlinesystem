@@ -1,12 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-    #{flightSearchManagedBean.test()}
-</f:view>
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MAS Partners</title>
+
+    <link type="text/css" rel="stylesheet" href="#{commonManagedBean.getRoot()}/assets/vendor/bootstrap/dist/css/bootstrap.min.css" />
+</h:head>
+
+<h:body>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                MAS Partners
+            </h1>
+        </div>
+        <ol>
+            <li><h:link outcome="FFPAlliance/index">FFP Alliance Partner Crediting Miles to MAS</h:link></li>
+            <li><h:link outcome="FFPAlliance/incoming">Miles Credited from MAS</h:link></li>
+            <li><h:link outcome="DDS/index">DDS Partners</h:link></li>
+        </ol>
+    </div>
+
+</h:body>
 </html>
