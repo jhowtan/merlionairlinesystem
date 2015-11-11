@@ -5,6 +5,51 @@ body {
     padding-top: 50px;
 }
 
+/* Animation */
+.delay05s {
+    -webkit-animation-delay: 0.5s;
+    -moz-animation-delay: 0.5s;
+    -o-animation-delay: 0.5s;
+    animation-delay: 0.5s;
+}
+.delay1s {
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -o-animation-delay: 1s;
+    animation-delay: 1s;
+}
+.delay2s {
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -o-animation-delay: 1s;
+    animation-delay: 1s;
+}
+.delay3s {
+    -webkit-animation-delay: 3s;
+    -moz-animation-delay: 3s;
+    -o-animation-delay: 3s;
+    animation-delay: 3s;
+}
+.delay4s {
+    -webkit-animation-delay: 4s;
+    -moz-animation-delay: 4s;
+    -o-animation-delay: 4s;
+    animation-delay: 4s;
+}
+.delay5s {
+    -webkit-animation-delay: 5s;
+    -moz-animation-delay: 5s;
+    -o-animation-delay: 5s;
+    animation-delay: 5s;
+}
+
+/* Custom Container */
+@media (min-width: 1600px) {
+    .container-larger {
+        width: 1570px;
+    }
+}
+
 /* Bootstrap Btn Style */
 .btn {
     border-radius: 5px;
@@ -15,6 +60,20 @@ body {
 
 .btn-no-uppercase {
     text-transform: none;
+}
+
+.btn-blue {
+    background: #04208a;
+    color: #fff;
+}
+
+.btn-blue:hover {
+    color: #fff;
+    background: #041c5d;
+}
+
+.btn-not-rounded {
+    border-radius: 0;
 }
 
 /* Bootstrap Navbar Color */
@@ -309,16 +368,132 @@ section.splash-full {
     }
 }
 
-/* Home Splash */
+/* Home Page */
 
-section.splash.home {
-    background-image: url("../img/splash-home.jpg");
+.home-banner {
+    background-image: url("../img/banner-home.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: 80%;
+    height: 300px;
+    width: 100%;
+    position: relative;
+}
+
+
+.home-banner .tagline {
+    margin-top: 10px;
+}
+
+.home-banner .tagline {
+    padding: 15px 35px;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 580px;
+    font-size: 25px;
+}
+
+.home-banner .tagline p {
+    margin: 0;
+}
+
+.home-banner .tagline p.lead {
+    font-size: 1em;
+}
+
+.home-banner .tagline p.sublead {
+    font-size: 0.6em;
+    color: #ddd;
+    margin-left: 30px;
+}
+
+.home h1 {
+    color: #15076b;
+    font-size: 35px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.home-banner p.action {
+    margin-top: 15px;
 }
 
 @media (min-width: 768px) {
-    section.splash.home .booking-form {
-        margin-top: 50px;
+    .home-banner {
+        height: 650px
     }
+    .home-banner .tagline {
+        font-size: 35px;
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+    }
+}
+
+.home .info-block {
+    background-image: url("../img/pattern.png");
+    color: #15076c;
+    margin-bottom: 25px;
+}
+
+.home .info-block p {
+    margin: 0;
+}
+
+.home .info-block .left {
+    float: left;
+    padding: 10px;
+}
+
+.home .info-block .right {
+    float: right;
+    padding: 15px;
+}
+
+.home .info-block p.lead {
+    font-size: 22px;
+}
+
+.home .info-block p.sublead {
+    font-size: 18px;
+}
+
+.home .promo-block {
+    border: 1px solid #ccc;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 10px;
+}
+
+.home .promo-block .country {
+    color: #15076b;
+    font-size: 25px;
+}
+
+.home .promo-block .class {
+    color: #555;
+    font-size: 14px;
+}
+
+.home .promo-block .from {
+    color: #333;
+    font-size: 15px;
+    margin-bottom: -5px;
+    text-align: right;
+}
+
+.home .promo-block .price {
+    color: #15076b;
+    font-size: 28px;
+    text-align: right;
+}
+
+.home .promo-block .currency {
+    color: #15076b;
+    font-size: 20px;
+    margin-right: 5px;
 }
 
 /* FFP Main Page */
