@@ -38,10 +38,10 @@ public class CustomerSegmentationManagedBean {
 
     private class CustomerItem {
         public String name;
-        public String revenuePerMile;
-        public String flightCount;
+        public String y;
+        public String x;
         public String cV;
-        public String pV;
+        public String size;
     }
 
     @PostConstruct
@@ -70,10 +70,10 @@ public class CustomerSegmentationManagedBean {
                 AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
                 CustomerItem customerItem = new CustomerItem();
                 customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
-                customerItem.flightCount = String.valueOf(customer.flightCount);
-                customerItem.revenuePerMile = String.valueOf(customer.revenuePerMile);
-                customerItem.cV = String.valueOf(customer.cV);
-                customerItem.pV = String.valueOf(customer.pV);
+                customerItem.x = String.valueOf(customer.flightCount);
+                customerItem.y = CommonManagedBean.formatDoubleTwoDecimal(customer.revenuePerMile);
+                customerItem.cV = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
+                customerItem.size = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
                 custItems.add(customerItem);
             }
         }

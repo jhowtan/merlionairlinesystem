@@ -87,57 +87,43 @@
                 ]
             });
             $.get("getCustomerSegments.xhtml", function(data) {
-                var chartData = [];
+                $(document).ready(function() {
+                    var chartData = [];
+                    chartData.push({
+                        key: 'Customer',
+                        values: data
+                    })
 
-                // HANDLE DATA CALLBACK HERE
-                d3.select('#cust-segment-chart svg')
-                        .datum(data)
-                        .transition().duration(500)
-                        .call(chart);
-            });
 
-            var dataLoad = function(groups, points) {
-                var data = [];
-                var shapes = ['circle'];
-                var random = d3.random.normal();
-                // <![CDATA[
-                for (i = 0; i < groups; i++) {
-                    data.push({
-                        key: 'Segment ' + i,
-                        values: []
-                    });
 
-                    for (j = 0; j < points; j++) {
-                        data[i].values.push({
-                            x: random()
-                            , y: random()
-                            , size: 1
-                            , shape: 'circle'
+                    nv.addGraph(function() {
+                        var chart = nv.models.scatterChart()
+//                                .showDistX(true)
+//                                .showDistY(true)
+                                .color(d3.scale.category10().range())
+                                .xDomain([150,250])
+                                .yDomain([300,500]);
+//                        chart.xAxis.tickFormat(d3.format('20f'));
+//                        chart.yAxis.tickFormat(d3.format('20f'));
+
+                        chart.tooltipContent(function(key) {
+                            return '<h3 style="padding: 5px;">' + key.point.name + '</h3>';
                         });
-                    }
-                }
-                // ]]>
 
-                return data;
-            };
+                        // HANDLE DATA CALLBACK HERE
+                        d3.select('#cust-segment-chart svg')
+                                .datum(chartData)
+                                .transition().duration(500)
+                                .call(chart);
 
-            nv.addGraph(function() {
-                var chart = nv.models.scatterChart()
-                        .showDistX(true)
-                        .showDistY(true)
-                        .color(d3.scale.category10().range());
-                chart.xAxis.tickFormat(d3.format('.02f'));
-                chart.yAxis.tickFormat(d3.format('.02f'));
+                        nv.utils.windowResize(chart.update);
 
-                d3.select('#cust-segment-chart svg')
-                        .datum(dataLoad(4,40))
-                        .transition().duration(500)
-                        .call(chart);
-
-                nv.utils.windowResize(chart.update);
-
-                return chart;
+                        return chart;
+                    });
+                });
             });
+
+
         </script>
     </ui:define>
 </ui:composition>
