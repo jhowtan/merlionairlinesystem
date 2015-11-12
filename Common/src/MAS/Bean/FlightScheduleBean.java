@@ -189,7 +189,6 @@ public class FlightScheduleBean {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(currDepartureDate);
             if (recurringDaysList.contains(calendar.get(Calendar.DAY_OF_WEEK))) {
-                // @TODO: Check if flight can be scheduled at this time
                 if (checkScheduleClash(aircraftAssignment.getAircraft().getId(), (Date) currDepartureDate.clone(),(Date) currArrivalDate.clone()))
                     throw new ScheduleClashException();
                 Flight flight = new Flight();

@@ -46,9 +46,6 @@ public class UpdateFlightGroupManagedBean {
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-        if (flightGroup == null || flightGroup.getFlights().size() == 0) {
-            // @TODO: Show an error, there are no flights in this FlightGroup or FlightGroup does not exist
-        }
         Flight flight = flightGroup.getFlights().get(0);
         code = flight.getCode();
         aaId = flight.getAircraftAssignment().getId();

@@ -73,7 +73,6 @@ public class RouteBean {
     public void removeCity(String id) throws NotFoundException {
         City city = em.find(City.class, id);
         if (city == null) throw new NotFoundException();
-        // @TODO: Check for airports in this city
         em.remove(city);
     }
 
@@ -96,11 +95,9 @@ public class RouteBean {
         return country;
     }
 
-    // @TODO: Refactor
     public void removeCountry(String id) throws NotFoundException {
         Country country = em.find(Country.class, id);
         if (country == null) throw new NotFoundException();
-        // Check for cities in this country
         em.remove(country);
     }
 

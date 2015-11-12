@@ -79,7 +79,6 @@ public class Cabin {
         return row;
     }
 
-    //TODO: Check whether removing this function breaks createSeatConfig page
     public void setRepresentation(String val) { }
 
     public int getTravelClass() {
