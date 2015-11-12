@@ -479,6 +479,7 @@ public class FlightScheduleBean {
 
     public void departFlight(Flight flight, Date date) {
         flight.setActualDepartureTime(date);
+        flight.setStatus(6);
         try {
             fleetBean.changeAircraftLocation(flight.getAircraftAssignment().getAircraft().getId(), flight.getAircraftAssignment().getRoute().getDestination().getId());
             fleetBean.updateAircraftMiles(flight.getAircraftAssignment().getAircraft().getId(), (int)flight.getAircraftAssignment().getRoute().getDistance());
