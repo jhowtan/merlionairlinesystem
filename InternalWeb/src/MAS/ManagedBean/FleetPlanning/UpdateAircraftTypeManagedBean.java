@@ -60,7 +60,7 @@ public class UpdateAircraftTypeManagedBean {
         seatConfigs = fleetBean.findSeatConfigByType(typeId);
     }
 
-    public void save() throws NotFoundException {
+    public void save() {
         try {
             fleetBean.changeAircraftTypeName(type.getId(), typeName);
             fleetBean.changeAircraftTypeFuelCap(type.getId(), fuelCapacity);
@@ -69,17 +69,20 @@ public class UpdateAircraftTypeManagedBean {
             fleetBean.changeAircraftTypeFuelEff(type.getId(), fuelEfficiency);
             fleetBean.changeAircraftTypeSpeed(type.getId(), speed);
             fleetBean.changeAircraftTypeWeight(type.getId(), weight);
+
+            authManagedBean.createAuditLog("Updated aircraft type information: " + typeName, "update_aircraft_type");
+
+            init();
+
+            FacesMessage m = new FacesMessage("Aircraft type details updated successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.printStackTrace();
+            FacesMessage m = new FacesMessage("Aircraft type details could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
-
-        authManagedBean.createAuditLog("Updated aircraft type information: " + typeName, "update_aircraft_type");
-
-        init();
-
-        FacesMessage m = new FacesMessage("Aircraft type details updated successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
     public void deleteSeatConfig(long id) throws NotFoundException{

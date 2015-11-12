@@ -63,15 +63,26 @@ public class UpdateMaintenanceSlotManagedBean {
         duration = slot.getDuration();
     }
 
-    public void save() throws NotFoundException {
-        Date timestamp = addTimeToDate(startDate, startTime);
-        System.out.println(timestamp);
-        aircraftMaintenanceSlotBean.changeSlotDuration(slot.getId(), duration);
-        aircraftMaintenanceSlotBean.changeSlotStartTime(slot.getId(), timestamp);
-        authManagedBean.createAuditLog("Updated maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
-        FacesMessage m = new FacesMessage("Maintenance slot updated successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void save() {
+        try {
+            Date timestamp = addTimeToDate(startDate, startTime);
+            if (!aircraftMaintenanceSlotBean.checkAvailability(airport.getId(), timestamp, duration)) {
+                FacesMessage m = new FacesMessage("No hangar will be available at this time.");
+                m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            } else {
+                aircraftMaintenanceSlotBean.changeSlotDuration(slot.getId(), duration);
+                aircraftMaintenanceSlotBean.changeSlotStartTime(slot.getId(), timestamp);
+                authManagedBean.createAuditLog("Updated maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
+                FacesMessage m = new FacesMessage("Maintenance slot updated successfully.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            }
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Maintenance slot could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     private Date addTimeToDate(Date date, String time) {

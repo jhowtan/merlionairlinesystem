@@ -52,19 +52,22 @@ public class UpdateAircraftManagedBean {
         airportList = routeBean.getAllAirports();
     }
 
-    public void save() throws NotFoundException {
+    public void save() {
         try {
             fleetBean.changeAircraftConfig(aircraft.getId(), seatConfig);
             fleetBean.changeAircraftLocation(aircraft.getId(), currentApId);
+
+            authManagedBean.createAuditLog("Updated aircraft information: " + aircraft.getTailNumber(), "update_aircraft");
+
+            FacesMessage m = new FacesMessage("Aircraft has been successfully updated.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
             e.printStackTrace();
+            FacesMessage m = new FacesMessage("Aircraft could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
         }
-
-        authManagedBean.createAuditLog("Updated aircraft information: " + aircraft.getTailNumber(), "update_aircraft");
-
-        FacesMessage m = new FacesMessage("Aircraft has been successfully updated.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
     public List<AircraftSeatConfig> getAllSeatConfig() {

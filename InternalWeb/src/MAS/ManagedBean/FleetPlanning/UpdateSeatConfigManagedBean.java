@@ -56,14 +56,20 @@ public class UpdateSeatConfigManagedBean {
         }
     }
 
-    public void updateConfig() throws NotFoundException {
-        fleetBean.changeSeatConfigWeight(aircraftSeatConfig.getId(), weight);
-        fleetBean.changeName(aircraftSeatConfig.getId(), configName);
+    public void updateConfig() {
+        try {
+            fleetBean.changeSeatConfigWeight(aircraftSeatConfig.getId(), weight);
+            fleetBean.changeName(aircraftSeatConfig.getId(), configName);
 
-        FacesMessage m = new FacesMessage("Seat Configuration updated successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
-        authManagedBean.createAuditLog("Updated Seat Configuration: " + configName, "update_seat_config");
+            FacesMessage m = new FacesMessage("Seat Configuration updated successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+            authManagedBean.createAuditLog("Updated Seat Configuration: " + configName, "update_seat_config");
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Seat Configuration could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {

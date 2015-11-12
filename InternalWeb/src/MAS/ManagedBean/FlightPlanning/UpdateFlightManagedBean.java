@@ -63,19 +63,25 @@ public class UpdateFlightManagedBean {
         }
     }
 
-    public void save() throws NotFoundException {
-        System.out.println(addTimeToDate(departureDate, departureTime));
-        flightScheduleBean.changeFlightCode(flight.getId(), code);
-        Date departureDateTime = addTimeToDate(departureDate, departureTime);
-        flightScheduleBean.changeFlightTimings(flight.getId(),
-                departureDateTime,
-                Utils.minutesLater(departureDateTime, flightDuration));
-        flightScheduleBean.removeFlightFromFlightGroup(flight.getId());
-        flightGroup = null;
-        authManagedBean.createAuditLog("Updated flight: " + flight.getCode(), "update_flight");
-        FacesMessage m = new FacesMessage("Flight updated successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
+    public void save() {
+        try {
+            //System.out.println(addTimeToDate(departureDate, departureTime));
+            flightScheduleBean.changeFlightCode(flight.getId(), code);
+            Date departureDateTime = addTimeToDate(departureDate, departureTime);
+            flightScheduleBean.changeFlightTimings(flight.getId(),
+                    departureDateTime,
+                    Utils.minutesLater(departureDateTime, flightDuration));
+            flightScheduleBean.removeFlightFromFlightGroup(flight.getId());
+            flightGroup = null;
+            authManagedBean.createAuditLog("Updated flight: " + flight.getCode(), "update_flight");
+            FacesMessage m = new FacesMessage("Flight updated successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Flight could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     private Date addTimeToDate(Date date, String time) {

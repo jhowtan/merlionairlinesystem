@@ -15,10 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.text.SimpleDateFormat;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,13 +57,19 @@ public class UpdateFlightGroupManagedBean {
         flights = flightGroup.getFlights();
     }
 
-    public void save() throws NotFoundException {
-        flightScheduleBean.updateRecurringFlight(flightGroupId, code, departureTime, flightDuration);
-        authManagedBean.createAuditLog("Updated recurring flight: " + code, "update_recurring_flight");
-        FacesMessage m = new FacesMessage("Flight group updated successfully.");
-        m.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage("status", m);
-        init();
+    public void save() {
+        try {
+            flightScheduleBean.updateRecurringFlight(flightGroupId, code, departureTime, flightDuration);
+            authManagedBean.createAuditLog("Updated recurring flight: " + code, "update_recurring_flight");
+            FacesMessage m = new FacesMessage("Flight group updated successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+            init();
+        } catch (Exception e) {
+            FacesMessage m = new FacesMessage("Flight group could not be updated.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
     }
 
     public String formatAA() {
