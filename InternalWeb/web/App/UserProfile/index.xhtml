@@ -101,7 +101,7 @@
                                         <td>#{workgroup.users.size()}</td>
                                         <td>
                                             <h:form>
-                                                <h:commandLink styleClass="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</h:commandLink>
+                                                <h:commandLink action="#{userProfileManagedBean.viewWorkgroup(workgroup.id)}" styleClass="btn btn-xs btn-primary"><i class="fa fa-eye"></i>View</h:commandLink>
                                             </h:form>
                                         </td>
                                     </tr>
@@ -110,7 +110,31 @@
                             </table>
                         </div>
                     </div>
-
+                    <h:panelGroup rendered="#{!empty userProfileManagedBean.usersList}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Workgroups</div>
+                            <div class="panel-body">
+                                <table class="table" id="users_table">
+                                    <thead>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Contact Number</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{userProfileManagedBean.usersList}" var="user">
+                                        <tr>
+                                            <td>#{user.firstName} #{user.lastName}</td>
+                                            <td>#{user.email}</td>
+                                            <td>#{user.phone}</td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </h:panelGroup>
                 </div>
             </div>
         </div>

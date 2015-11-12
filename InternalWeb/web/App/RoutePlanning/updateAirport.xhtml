@@ -73,7 +73,7 @@
                                     <div class="form-group col-lg-12 #{!hangars.valid ? 'has-error' : ''}">
                                         <label class="control-label" for="hangars">Hangars</label>
                                         <h:inputText id="hangars" binding="#{hangars}"
-                                                     value="#{updateAirportManagedBean.hangars}" styleClass="form-control" pt:placeholder="e.g. 2" required="true" requiredMessage="Hangars is required.">
+                                                     value="#{updateAirportManagedBean.hangars}" styleClass="form-control" pt:type="number" pt:min="0" pt:placeholder="e.g. 2" required="true" requiredMessage="Hangars is required.">
                                             <!-- Validation or set inputText type as number-->
                                         </h:inputText>
                                         <h:message for="hangars" styleClass="help-block" />

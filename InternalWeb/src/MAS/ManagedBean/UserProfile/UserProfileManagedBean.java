@@ -28,7 +28,9 @@ public class UserProfileManagedBean {
 
     private User user = new User();
     private String phone = "";
+    private Workgroup workgroup;
     private List<Workgroup> workgroups;
+    private List<User> usersList;
 
     @PostConstruct
     public void init() {
@@ -67,6 +69,15 @@ public class UserProfileManagedBean {
         }
     }
 
+    public void viewWorkgroup(long id) {
+        try {
+            workgroup = workgroupBean.getWorkgroup(id);
+            usersList = workgroup.getUsers();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Workgroup> getWorkgroups() {
         return workgroups;
     }
@@ -93,5 +104,13 @@ public class UserProfileManagedBean {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<User> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
     }
 }
