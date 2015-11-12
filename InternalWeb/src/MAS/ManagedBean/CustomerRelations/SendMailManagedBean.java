@@ -42,7 +42,7 @@ public class SendMailManagedBean {
     public void sendMail() {
         try {
             for (Customer customer : campaignGroup.getCustomers()) {
-                mailBean.send(customer.getEmail(), customer.getDisplayName(), subject, body);
+                mailBean.send(customer.getEmail(), customer.getDisplayName(), subject, body.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " "), body);
             }
             FacesMessage m = new FacesMessage("Mails sent successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
