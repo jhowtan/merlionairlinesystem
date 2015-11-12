@@ -22,39 +22,40 @@
                     <!-- BEGIN FORM PANEL BODY -->
                     <h:form>
                         <div class="panel panel-default">
-                            <div class="panel-heading">PNR Booking Reference #{specialRequestsManagedBean.pnr.id}</div>
+                            <div class="panel-heading">Passenger Name Record: #{specialRequestsManagedBean.pnr.bookingReference}</div>
                             <div class="panel-body">
                                 <div class="form-group col-lg-12 #{!flightSegment.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="flightSegment">Select Flight Segment:</label>
                                     <br/>
-                                    <h:selectOneMenu styleClass="form-control" id="flightSegment" value="#{specialRequestsManagedBean.flightId}" binding="#{flightSegment}" required="true" requiredMessage="A flight segment is required.">
+                                    <h:selectOneMenu styleClass="form-control" id="flightSegment" value="#{specialRequestsManagedBean.flightCode}" binding="#{flightSegment}">
                                         <f:selectItem itemLabel="Select a flight segment" />
-                                        <f:selectItems value="#{specialRequestsManagedBean.getFlightTicketCollections(specialRequestsManagedBean.pnr)}" var="fl"
-                                                       itemLabel="#{fl.flight.aircraftAssignment.route.origin.id} - #{fl.flight.aircraftAssignment.route.destination.id}: #{fl.flight.code}" itemValue="#{fl.flight.id}" />
-                                        <f:ajax listener="#{specialRequestsManagedBean.changeListener}" render="passenger" />
+                                        <f:selectItems value="#{specialRequestsManagedBean.pnr.itineraries}" var="it"
+                                                       itemLabel="#{it.origin} - #{it.destination}: #{it.flightCode}" itemValue="#{it.flightCode}" />
+                                        <f:ajax listener="#{specialRequestsManagedBean.changeListener}" render="ssRequest" />
                                     </h:selectOneMenu>
                                     <h:message for="flightSegment" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!passenger.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="passenger">Select Passenger:</label>
                                     <br/>
-                                    <h:selectOneMenu styleClass="form-control" id="passenger" value="#{specialRequestsManagedBean.eticketId}" binding="#{passenger}" required="true" requiredMessage="A passenger is required.">
+                                    <h:selectOneMenu styleClass="form-control" id="passenger" value="#{specialRequestsManagedBean.passengerName}" binding="#{passenger}">
                                         <f:selectItem itemLabel="Select a passenger" />
-                                        <f:selectItems value="#{specialRequestsManagedBean.eTickets}" var="et"
-                                                       itemLabel="#{et.passengerName}" itemValue="#{et.id}" />
+                                        <f:selectItems value="#{specialRequestsManagedBean.pnr.passengers}" var="passenger"
+                                                       itemLabel="#{passenger}" itemValue="#{passenger}" />
+                                        <f:ajax listener="#{specialRequestsManagedBean.changeListener}" render="ssRequest" />
                                     </h:selectOneMenu>
                                     <h:message for="passenger" styleClass="help-block" />
                                 </div>
                                 <div class="form-group col-lg-12 #{!ssRequest.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="ssRequest">Special Service Request:</label>
                                     <br/>
-                                    <h:inputTextarea rows="10" styleClass="form-control" id="ssRequest" value="#{specialRequestsManagedBean.specialServiceRequest}" binding="#{ssRequest}" required="true" requiredMessage="Please key in the customer's special service request.">
+                                    <h:inputTextarea disabled="#{!specialRequestsManagedBean.validSelection}" rows="10" styleClass="form-control" id="ssRequest" value="#{specialRequestsManagedBean.specialServiceRequest}" binding="#{ssRequest}" required="true" requiredMessage="Please key in the customer's special service request.">
                                     </h:inputTextarea>
                                     <h:message for="ssRequest" styleClass="help-block" />
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="text-right">
-                                        <h:commandLink outcome="#{specialRequestsManagedBean.save()}" styleClass="btn btn-default btn-success">Save</h:commandLink>
+                                        <h:commandLink action="#{specialRequestsManagedBean.save}" styleClass="btn btn-default btn-success">Save</h:commandLink>
                                     </div>
                                 </div>
                             </div>

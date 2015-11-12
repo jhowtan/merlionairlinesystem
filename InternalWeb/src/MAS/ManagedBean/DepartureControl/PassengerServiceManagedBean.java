@@ -2,6 +2,7 @@ package MAS.ManagedBean.DepartureControl;
 
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.MealSelectionBean;
+import MAS.Bean.PNRBean;
 import MAS.Common.SeatConfigObject;
 import MAS.Entity.ETicket;
 import MAS.Entity.Flight;
@@ -23,6 +24,8 @@ public class PassengerServiceManagedBean {
     FlightScheduleBean flightScheduleBean;
     @EJB
     MealSelectionBean mealSelectionBean;
+    @EJB
+    PNRBean pnrBean;
 
     private Flight flight;
     private SeatConfigObject seatConfigObject;
@@ -36,6 +39,10 @@ public class PassengerServiceManagedBean {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getSpecialRequest(ETicket eTicket) {
+        return pnrBean.getRequest(eTicket);
     }
 
     public List<ETicket> getPassengers() {
