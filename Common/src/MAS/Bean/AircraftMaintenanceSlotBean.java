@@ -12,6 +12,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class AircraftMaintenanceSlotBean {
 
     //-----------------Maintenance slots---------------------------
     public long createSlot(Date startTime, double duration, String airportId, long aircraftId) throws NotFoundException, ScheduleClashException {
+        if (!checkAvailability(airportId, startTime, duration)) {
+            throw new ScheduleClashException();
+        }
         Airport airport = em.find(Airport.class, airportId);
         Aircraft aircraft = em.find(Aircraft.class, aircraftId);
         if (airport == null || aircraft == null) throw new NotFoundException();
@@ -92,5 +96,23 @@ public class AircraftMaintenanceSlotBean {
         AircraftMaintenanceSlot slot = em.find(AircraftMaintenanceSlot.class, id);
         if (slot == null) throw new NotFoundException();
         slot.getAircraft().setMilesSinceLastMaint(0);
+    }
+
+    public boolean checkAvailability(String airportId, Date startTime, double duration) throws NotFoundException {
+        Airport airport = em.find(Airport.class, airportId);
+        if (airport == null) throw new NotFoundException();
+        Date endTime = Utils.minutesLater(startTime, (int) duration);
+        List<AircraftMaintenanceSlot> maintenanceSlots = em.createQuery("SELECT m from AircraftMaintenanceSlot m WHERE m.airport = :airport " +
+                "AND ((m.startTime > :startTime AND m.startTime < :endTime) OR (m.startTime < :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) > :endTime) " +
+                "OR (FUNCTION('ADDTIME', m.startTime, m.duration) > :startTime AND FUNCTION('ADDTIME', m.startTime, m.duration) < :endTime))", AircraftMaintenanceSlot.class)
+                .setParameter("startTime", startTime, TemporalType.TIMESTAMP)
+                .setParameter("endTime", endTime, TemporalType.TIMESTAMP)
+                .setParameter("airport", airport).getResultList();
+//        String debug = "(" + startTime + " - " + endTime + ")\n";
+//        for (AircraftMaintenanceSlot slot : maintenanceSlots) {
+//            debug = debug.concat(slot.getStartTime() + " / " + slot.getDuration() + "\n");
+//        }
+//        System.out.println(debug);
+        return maintenanceSlots.size() < airport.getHangars();
     }
 }

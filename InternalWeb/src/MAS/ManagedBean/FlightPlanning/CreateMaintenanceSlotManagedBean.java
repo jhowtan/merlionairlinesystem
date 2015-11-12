@@ -51,14 +51,20 @@ public class CreateMaintenanceSlotManagedBean {
     public void createMaintenanceSlot() {
         try {
             Date timestamp = addTimeToDate(startDate, startTime);
-            System.out.println(timestamp);
-            Airport airport = routeBean.getAirport(airportId);
-            Aircraft aircraft = fleetBean.getAircraft(aircraftId);
-            aircraftMaintenanceSlotBean.createSlot(addTimeToDate(startDate, startTime), duration, airportId, aircraftId);
-            authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
-            FacesMessage m = new FacesMessage("Maintenance slot for " + aircraft.getTailNumber() + " created successfully.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
-            FacesContext.getCurrentInstance().addMessage("status", m);
+            if (!aircraftMaintenanceSlotBean.checkAvailability(airportId, timestamp, duration)) {
+                FacesMessage m = new FacesMessage("No hangar will be available at this time.");
+                m.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            }
+            else {
+                Airport airport = routeBean.getAirport(airportId);
+                Aircraft aircraft = fleetBean.getAircraft(aircraftId);
+                aircraftMaintenanceSlotBean.createSlot(timestamp, duration, airportId, aircraftId);
+                authManagedBean.createAuditLog("Created new maintenance slot for: " + aircraft.getTailNumber() + " - " + airport.getId() + " @ " + timestamp, "create_maintenance_slot");
+                FacesMessage m = new FacesMessage("Maintenance slot for " + aircraft.getTailNumber() + " created successfully.");
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            }
         } catch (ScheduleClashException e) {
             FacesMessage m = new FacesMessage("Maintenance slot could not be created due to schedule clash.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
