@@ -2103,7 +2103,8 @@ td.profitability-gain {
   left: 10.82532px;
 }
 
-#cust-segment-chart svg {
+#cust-segment-chart svg,
+#cust-segment2-chart svg {
   height: 500px;
 }
 

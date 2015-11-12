@@ -15,23 +15,31 @@
                         </h:panelGroup>
                     </ui:repeat>
                     <div class="panel panel-default">
-                        <div class="panel-heading">Customer Segmentation</div>
+                        <div class="panel-heading">Customer Segmentation - Revenue per Mile vs Flight Count</div>
                         <div class="panel-body">
                             <div id="cust-segment-chart">
                                 <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
                             </div>
-                                <h:form>
-                                    <div class="row">
-                                        <div class="col-lg-12 text-center">
-                                            <div class="button-group">
-                                            <ui:repeat value="#{customerSegmentationManagedBean.grpNames}" var="grp" varStatus="varStatus">
-                                                <h:commandButton action="#{customerSegmentationManagedBean.createSegmentGroup(varStatus.index)}"
-                                                             disabled="#{customerSegmentationManagedBean.segmentedCustomers.get(varStatus.index).size() == 0}" value="Create Group for #{grp}" styleClass="#{customerSegmentationManagedBean.getButtonColour(varStatus.index)}"/>
-                                            </ui:repeat>
-                                            </div>
+                            <h:form>
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <div class="button-group">
+                                        <ui:repeat value="#{customerSegmentationManagedBean.grpNames}" var="grp" varStatus="varStatus">
+                                            <h:commandButton action="#{customerSegmentationManagedBean.createSegmentGroup(varStatus.index)}"
+                                                         disabled="#{customerSegmentationManagedBean.segmentedCustomers.get(varStatus.index).size() == 0}" value="Create Group for #{grp}" styleClass="#{customerSegmentationManagedBean.getButtonColour(varStatus.index)}"/>
+                                        </ui:repeat>
                                         </div>
                                     </div>
-                                </h:form>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Customer Segmentation - Current Value vs Potential Value</div>
+                        <div class="panel-body">
+                            <div id="cust-segment2-chart">
+                                <h:outputText value="&lt;svg&gt;&lt;/svg&gt;" escape="false" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +109,7 @@
                     { 'bSortable': false, 'bSearchable': false, 'aTargets': [6] }
                 ]
             });
-            $.get("getCustomerSegments.xhtml", function(data) {
+            $.get("getCustomerSegments.xhtml?q=1", function(data) {
                 $(document).ready(function() {
                     var chartData = [];
                     for (var i = 0; i < 4; i++){
@@ -131,6 +139,46 @@
 
                         // HANDLE DATA CALLBACK HERE
                         d3.select('#cust-segment-chart svg')
+                                .datum(chartData)
+                                .transition().duration(500)
+                                .call(chart);
+
+                        nv.utils.windowResize(chart.update);
+
+                        return chart;
+                    });
+                });
+            });
+            $.get("getCustomerSegments.xhtml?q=2", function(data) {
+                $(document).ready(function() {
+                    var chartData = [];
+                    for (var i = 0; i < 4; i++){
+                        chartData.push({
+                            key: data[i].key,
+                            values: data[i].data
+                        });
+                    }
+
+                    nv.addGraph(function() {
+                        var chart = nv.models.scatterChart()
+                                .showDistX(true)
+                                .showDistY(true)
+                                .color(d3.scale.category10().range())
+                                .xDomain([1.7,4])
+                                .yDomain([300,500]);;
+
+                        chart.xAxis.tickFormat(d3.format('.f'));
+                        chart.yAxis.tickFormat(d3.format('.01f'));
+
+                        chart.tooltip.contentGenerator(function(key) {
+                            return '<div class="text-center"><strong>'+ key.point.name +'</strong>' +
+                                    '<p>Customer ID: ' + key.point.custId + '</p>' +
+                                    '<p>Current value: ' + key.point.cV + '</p>' +
+                                    '<p>Potential value: ' + key.point.pV + '</p></div>';
+                        });
+
+                        // HANDLE DATA CALLBACK HERE
+                        d3.select('#cust-segment2-chart svg')
                                 .datum(chartData)
                                 .transition().duration(500)
                                 .call(chart);

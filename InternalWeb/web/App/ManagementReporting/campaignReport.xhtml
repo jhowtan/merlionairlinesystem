@@ -117,7 +117,7 @@
                                                     <td>#{commonManagedBean.formatDate("dd MMM yy",c.startDate)} - #{commonManagedBean.formatDate("dd MMM yy",c.endDate)}</td>
                                                     <td>#{c.discount * 100}%</td>
                                                     <td>#{c.usageCount}</td>
-                                                    <td>#{campaignReportManagedBean.getConversionRate(c.id) * 100}%</td>
+                                                    <td>#{commonManagedBean.formateDoubleRounded(campaignReportManagedBean.getConversionRate(c.id) * 100)}%</td>
                                                     <td>
                                                         <h:form>
                                                             <h:commandLink action="#{campaignReportManagedBean.viewSelectedCampaign(c.id)}"

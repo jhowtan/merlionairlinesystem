@@ -72,24 +72,47 @@ public class CustomerSegmentationManagedBean {
     }
 
     public void getSegmentJSON() {
+        String q = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
         ArrayList<CustomerSegment> custSegments = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            CustomerSegment custSegment = new CustomerSegment();
-            custSegment.key = Constants.CUSTOMER_SEGMENT_NAMES[i];
-            custSegment.data = new ArrayList<>();
-            for (int j = 0; j < segmentedCustomers.get(i).size(); j++) {
-                AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
-                CustomerItem customerItem = new CustomerItem();
-                customerItem.custId = String.valueOf(customer.customer.getId());
-                customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
-                customerItem.x = String.valueOf(customer.flightCount);
-                customerItem.y = CommonManagedBean.formatDoubleTwoDecimal(customer.revenuePerMile);
-                customerItem.cV = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
-                customerItem.pV = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
-                customerItem.size = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
-                custSegment.data.add(customerItem);
+        if (q.equals("1")) {
+            for (int i = 0; i < 4; i++) {
+                CustomerSegment custSegment = new CustomerSegment();
+                custSegment.key = Constants.CUSTOMER_SEGMENT_NAMES[i];
+                custSegment.data = new ArrayList<>();
+                for (int j = 0; j < segmentedCustomers.get(i).size(); j++) {
+                    AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
+                    CustomerItem customerItem = new CustomerItem();
+                    customerItem.custId = String.valueOf(customer.customer.getId());
+                    customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
+                    customerItem.x = String.valueOf(customer.flightCount);
+                    customerItem.y = CommonManagedBean.formatDoubleTwoDecimal(customer.revenuePerMile);
+                    customerItem.cV = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
+                    customerItem.pV = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
+                    customerItem.size = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
+                    custSegment.data.add(customerItem);
+                }
+                custSegments.add(custSegment);
             }
-            custSegments.add(custSegment);
+        }
+        else if (q.equals("2")) {
+            for (int i = 0; i < 4; i++) {
+                CustomerSegment custSegment = new CustomerSegment();
+                custSegment.key = Constants.CUSTOMER_SEGMENT_NAMES[i];
+                custSegment.data = new ArrayList<>();
+                for (int j = 0; j < segmentedCustomers.get(i).size(); j++) {
+                    AnalysedCustomer customer = segmentedCustomers.get(i).get(j);
+                    CustomerItem customerItem = new CustomerItem();
+                    customerItem.custId = String.valueOf(customer.customer.getId());
+                    customerItem.name = customer.customer.getFirstName() + " " + customer.customer.getLastName();
+                    customerItem.x = String.valueOf(customer.pV);
+                    customerItem.y = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
+                    customerItem.cV = CommonManagedBean.formatDoubleTwoDecimal(customer.cV);
+                    customerItem.pV = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
+                    customerItem.size = CommonManagedBean.formatDoubleTwoDecimal(customer.pV);
+                    custSegment.data.add(customerItem);
+                }
+                custSegments.add(custSegment);
+            }
         }
 
         Gson gson = new Gson();
