@@ -3,9 +3,11 @@ package MAS.ManagedBean.CustomerRelations;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Bean.MealSelectionBean;
 import MAS.Bean.PNRBean;
+import MAS.Common.Constants;
 import MAS.Common.Utils;
 import MAS.Entity.ETicket;
 import MAS.Entity.Flight;
+import MAS.Entity.Itinerary;
 import MAS.Entity.PNR;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
@@ -33,117 +35,55 @@ public class SpecialRequestsManagedBean {
     @EJB
     FlightScheduleBean flightScheduleBean;
 
-    private String bookingReference;
-    private String passengerLastName;
     private PNR pnr;
-    private List<ETicket> eTickets;
     private String specialServiceRequest;
-    private String eticketId;
-    private String flightId;
+
+    private String flightCode;
+    private String passengerName;
+    private boolean validSelection;
 
     @PostConstruct
     public void init() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        bookingReference = params.get("bookingReference");
-        passengerLastName = params.get("passengerLastName");
-        retrievePNR();
-    }
-
-    public void retrievePNR() {
+        String bookingReference = params.get("bookingReference");
         try {
-            pnr = pnrBean.getPNR(Utils.convertBookingReference(bookingReference), passengerLastName);
+            pnr = pnrBean.getPNR(Utils.convertBookingReference(bookingReference));
         } catch (Exception e) {
             pnr = null;
         }
     }
 
     public void changeListener(AjaxBehaviorEvent event) {
+        validSelection = false;
+        int passengerNum = -1;
+        int itineraryNum = -1;
         try {
-            eTickets = pnrBean.getETicketsByPNR(pnr);
-            Flight fl = flightScheduleBean.getFlight(Long.parseLong(flightId));
-            for (ETicket et : eTickets) {
-                if (!et.getFlight().equals(fl)) {
-                    eTickets.remove(et);
-                }
-            }
+            passengerNum = pnrBean.getPassengerNumber(pnr, passengerName);
+            itineraryNum = pnrBean.getItineraryNumber(pnr, flightCode);
+            validSelection = true;
+            specialServiceRequest = pnrBean.getPassengerSpecialServiceRequest(pnr, passengerNum, itineraryNum, Constants.SSR_ACTION_CODE_REQUEST).getValue();
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            specialServiceRequest = "";
         }
     }
 
     public void save() {
         try {
-            //TODO: Save SSR request
-
+            specialServiceRequest = specialServiceRequest.replaceAll("\\s+", " ").trim();
+            int passengerNum = pnrBean.getPassengerNumber(pnr, passengerName);
+            int itineraryNum = pnrBean.getItineraryNumber(pnr, flightCode);
+            pnrBean.setSpecialServiceRequest(pnr, passengerNum, Constants.SSR_ACTION_CODE_REQUEST, specialServiceRequest, itineraryNum);
+            pnrBean.updatePNR(pnr);
             FacesMessage m = new FacesMessage("Special service request for the customer has been saved successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
-        }catch (Exception e){
+        } catch (Exception e){
             FacesMessage m = new FacesMessage("There was an error saving the special service request.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
 
     }
-
-    public List<FlightTicketCollection> getFlightTicketCollections(PNR pnr) {
-        List<ETicket> eTickets = pnrBean.getETicketsByPNR(pnr);
-        HashMap<Flight, List<ETicket>> eTicketHashMap = new HashMap<>();
-        for (ETicket eTicket : eTickets) {
-            Flight flight = eTicket.getFlight();
-            if (!eTicketHashMap.containsKey(flight)) {
-                eTicketHashMap.put(flight, new ArrayList<>());
-            }
-            eTicketHashMap.get(flight).add(eTicket);
-        }
-        List<Flight> flights = new ArrayList<>(eTicketHashMap.keySet());
-        Collections.sort(flights, new FlightComparator());
-        List<FlightTicketCollection> flightTicketCollections = new ArrayList<>();
-        for (Flight flight : flights) {
-            FlightTicketCollection flightTicketCollection = new FlightTicketCollection();
-            flightTicketCollection.setFlight(flight);
-            flightTicketCollection.seteTickets(eTicketHashMap.get(flight));
-            flightTicketCollections.add(flightTicketCollection);
-        }
-        return flightTicketCollections;
-    }
-
-    public String getEticketId() {
-        return eticketId;
-    }
-
-    public void setEticketId(String eticketId) {
-        this.eticketId = eticketId;
-    }
-
-    private class FlightComparator implements Comparator<Flight> {
-        @Override
-        public int compare(Flight o1, Flight o2) {
-            return o1.getDepartureTime().compareTo(o2.getDepartureTime());
-        }
-    }
-
-    public class FlightTicketCollection {
-        private Flight flight;
-        private List<ETicket> eTickets;
-
-        public Flight getFlight() {
-            return flight;
-        }
-
-        public void setFlight(Flight flight) {
-            this.flight = flight;
-        }
-
-        public List<ETicket> geteTickets() {
-            return eTickets;
-        }
-
-        public void seteTickets(List<ETicket> eTickets) {
-            this.eTickets = eTickets;
-        }
-    }
-
 
     public PNR getPnr() {
         return pnr;
@@ -164,19 +104,28 @@ public class SpecialRequestsManagedBean {
         this.specialServiceRequest = specialServiceRequest;
     }
 
-    public List<ETicket> geteTickets() {
-        return eTickets;
+
+    public String getFlightCode() {
+        return flightCode;
     }
 
-    public void seteTickets(List<ETicket> eTickets) {
-        this.eTickets = eTickets;
+    public void setFlightCode(String flightCode) {
+        this.flightCode = flightCode;
     }
 
-    public String getFlightId() {
-        return flightId;
+    public String getPassengerName() {
+        return passengerName;
     }
 
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
+    public void setPassengerName(String passengerName) {
+        this.passengerName = passengerName;
+    }
+
+    public boolean isValidSelection() {
+        return validSelection;
+    }
+
+    public void setValidSelection(boolean validSelection) {
+        this.validSelection = validSelection;
     }
 }

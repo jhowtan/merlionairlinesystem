@@ -175,4 +175,16 @@ public class PNRBean {
             throw new CancelException();
         }
     }
+
+    public String getRequest(ETicket eTicket) {
+        try {
+            PNR pnr = eTicket.getPnr();
+            int passengerNum = getPassengerNumber(pnr, eTicket.getPassengerName());
+            int itineraryNum = getItineraryNumber(pnr, eTicket.getFlight());
+            return getPassengerSpecialServiceRequest(pnr, passengerNum, itineraryNum, Constants.SSR_ACTION_CODE_REQUEST).getValue();
+        } catch (NotFoundException e) {
+            return "";
+        }
+    }
+
 }
