@@ -37,6 +37,7 @@
                                 <td>
                                     <h:form>
                                         <div class="btn-group">
+                                            <h:link outcome="/App/CustomerRelations/sendMail" styleClass="btn btn-default btn-xs btn-primary"><f:param name="cmGrpId" value="#{cm.id}"><i class="fa fa-envelope-o"></i> Send Mail</f:param></h:link>
                                             <h:link outcome="/App/CustomerRelations/viewCustomerGroup" styleClass="btn btn-default btn-xs btn-info"><f:param name="cmGrpId" value="#{cm.id}"><i class="fa fa-pencil"></i> Edit Group</f:param></h:link>
                                             <h:commandLink action="#{campaignGroupManagedBean.delete(cm)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete customer group: #{cm.name}?');"><i class="fa fa-trash"/> Delete</h:commandLink>
                                         </div>

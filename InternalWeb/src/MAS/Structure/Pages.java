@@ -125,4 +125,5 @@ public class Pages {
     public static final Page CREATE_CUSTOMERGROUP = new Page("/App/CustomerRelations/createCustomerGroup", Permissions.MANAGE_CAMPAIGNS);
     public static final Page UPDATE_CUSTOMERGROUP = new Page("/App/CustomerRelations/viewCustomerGroup", Permissions.MANAGE_CAMPAIGNS);
     public static final Page CUSTOMER_SEGMENTATION = new Page("/App/CustomerRelations/customerSegmentation", Permissions.MANAGE_CAMPAIGNS);
+    public static final Page SEND_TARGETED_MAIL = new Page("/App/CustomerRelations/sendMail", Permissions.MANAGE_CAMPAIGNS);
 }
