@@ -49,8 +49,8 @@ public class CreateCityManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (Exception e) {
-            FacesMessage m = new FacesMessage("City could not be created.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesMessage m = new FacesMessage("City could not be created, it may already exist.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
     }

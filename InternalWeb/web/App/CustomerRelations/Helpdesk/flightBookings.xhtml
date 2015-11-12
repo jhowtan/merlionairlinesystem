@@ -18,7 +18,7 @@
                         <th>Booking Reference</th>
                         <th>Flight</th>
                         <th>Date</th>
-                        <th></th>
+                        <th>Manage</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,6 +30,9 @@
                             <td style="vertical-align: middle;" class="text-right">
                                 <a target="_blank" href="/ExternalWeb_war_exploded/booking/manage.xhtml?bookingReference=#{eticket.pnr.bookingReference}&amp;passengerLastName=#{flightBookingsManagedBean.customer.lastName}" class="btn btn-primary btn-sm">
                                     Manage
+                                </a>
+                                <a href="/InternalWeb_war_exploded/App/CustomerRelations/manageSpecialRequests.xhtml?bookingReference=#{eticket.pnr.bookingReference}&amp;passengerLastName=#{flightBookingsManagedBean.customer.lastName}" class="btn btn-info btn-sm">
+                                    Special Requests
                                 </a>
                             </td>
                         </tr>

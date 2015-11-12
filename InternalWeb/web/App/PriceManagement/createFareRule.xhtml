@@ -64,7 +64,7 @@
                                         <div class="form-group col-lg-6 #{!milesAccrual.valid ? 'has-error' : ''}">
                                             <label class="control-label" for="milesAccrual">FFP Millage Accrual</label>
                                             <div class="input-group">
-                                                <h:inputText pt:type="number" pt:min="0" pt:max="100" id="milesAccrual" binding="#{milesAccrual}" value="#{createFareRuleManagedBean.milesAccrual}" styleClass="form-control" />
+                                                <h:inputText pt:type="number" pt:min="0" id="milesAccrual" binding="#{milesAccrual}" value="#{createFareRuleManagedBean.milesAccrual}" styleClass="form-control" />
                                                 <div class="input-group-addon">%</div>
                                             </div>
                                             <h:message for="milesAccrual" styleClass="help-block" />
