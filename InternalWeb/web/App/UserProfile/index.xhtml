@@ -118,6 +118,7 @@
                                     <thead>
                                     <tr>
                                         <th>Full Name</th>
+                                        <th>Role(s)</th>
                                         <th>Email</th>
                                         <th>Contact Number</th>
                                     </tr>
@@ -126,6 +127,11 @@
                                     <ui:repeat value="#{userProfileManagedBean.usersList}" var="user">
                                         <tr>
                                             <td>#{user.firstName} #{user.lastName}</td>
+                                            <td>
+                                                <div>
+                                                    <ui:repeat value="#{user.roles}" var="r">#{r.name}<br/></ui:repeat>
+                                                </div>
+                                            </td>
                                             <td>#{user.email}</td>
                                             <td>#{user.phone}</td>
                                         </tr>
