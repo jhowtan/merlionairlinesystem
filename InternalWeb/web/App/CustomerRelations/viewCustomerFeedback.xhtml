@@ -1,0 +1,40 @@
+<ui:composition template="/WEB-INF/templates/default.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Customer Feedback - Merlion Airline System</ui:define>
+
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Customer Feedback</h1>
+
+                    <h:panelGroup rendered="#{empty customerFeedbackManagedBean.feedback}">
+                        <p>Unable to load customer feedback.</p>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{!empty customerFeedbackManagedBean.feedback}">
+                        <p class="lead">
+                            <strong>Email Address: </strong> #{customerFeedbackManagedBean.feedback.email}
+                        </p>
+                        <p class="lead">
+                            <strong>Subject: </strong> #{customerFeedbackManagedBean.feedback.subject}
+                        </p>
+                        <p class="lead">
+                            <strong>Message: </strong><br />
+                            <textarea class="form-control" rows="20" readonly="readonly">#{customerFeedbackManagedBean.feedback.body}</textarea>
+                        </p>
+                        <p>
+                            <h:form>
+                                <h:commandButton styleClass="btn btn-primary btn-lg" value="#{customerFeedbackManagedBean.feedback.responded ? 'Marked as Resolved' : 'Mark as Resolved'}" disabled="#{customerFeedbackManagedBean.feedback.responded}" action="#{customerFeedbackManagedBean.setResponded(true)}" />
+                            </h:form>
+                        </p>
+                    </h:panelGroup>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

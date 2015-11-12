@@ -7,6 +7,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 @Stateless(name = "FeedbackEJB")
@@ -19,6 +20,7 @@ public class FeedbackBean {
     EntityManager em;
 
     public Feedback createFeedback(Feedback feedback) {
+        feedback.setDate(new Date());
         em.persist(feedback);
         em.flush();
         return feedback;

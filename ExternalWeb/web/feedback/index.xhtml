@@ -26,7 +26,7 @@
                                 <div class="form-group #{!email.valid ? 'has-error' : ''}">
                                     <label class="control-label" for="email">Email Address</label>
                                     <h:inputText pt:type="email" value="#{feedbackManagedBean.email}" binding="#{email}" class="form-control" id="email">
-                                        <f:validator validatorId="emailValidator" />
+                                        <f:validator validatorId="feedbackEmailValidator" />
                                     </h:inputText>
                                     <h:message for="email" styleClass="help-block" />
                                 </div>

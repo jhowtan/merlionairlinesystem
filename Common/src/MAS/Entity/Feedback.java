@@ -1,6 +1,7 @@
 package MAS.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Daryl on 10/11/2015.
@@ -73,5 +74,17 @@ public class Feedback {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    private Date date;
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
