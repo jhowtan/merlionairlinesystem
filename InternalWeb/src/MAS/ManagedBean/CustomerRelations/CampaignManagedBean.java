@@ -86,8 +86,10 @@ public class CampaignManagedBean {
                 routeIdLongs.add(Long.parseLong(s));
             }
             long campaignId = campaignBean.createCampaign(campaignName, startDate, endDate, discount, bkClasses, routeIdLongs, targetStartDate, targetEndDate, code);
-            for (String s : campaignGroupIds) {
-                campaignBean.addCampaignGroup(campaignId, Long.valueOf(s));
+            if (campaignGroupIds != null) {
+                for (String s : campaignGroupIds) {
+                    campaignBean.addCampaignGroup(campaignId, Long.valueOf(s));
+                }
             }
             FacesMessage m = new FacesMessage("Campaign: " + campaignName + " created.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
