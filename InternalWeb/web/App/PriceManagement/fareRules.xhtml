@@ -2,7 +2,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="title">Fare Rules - Merlion Airline System</ui:define>
 
@@ -33,6 +33,7 @@
                                     <td>#{fareRule.name}</td>
                                     <td>
                                         <h:form>
+                                            <h:commandLink action="#{fareRuleManagedBean.viewFareRule(fareRule.id)}" styleClass="btn btn-default btn-xs btn-primary"><i class="fa fa-eye"></i> View</h:commandLink>
                                             <h:commandLink action="#{fareRuleManagedBean.delete(fareRule.id)}" styleClass="btn btn-default btn-xs btn-danger" onclick="return confirm('Are you sure you wish to delete fare rule #{fareRule.name}?');"><i class="fa fa-trash"></i> Delete</h:commandLink>
                                         </h:form>
                                     </td>
@@ -41,6 +42,53 @@
                         </tbody>
                     </table>
                 </div>
+                <h:panelGroup rendered="#{fareRuleManagedBean.fareRule != null}">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Fare Rule</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="minimumStay">Minimum Stay</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="minimumStay" readonly="true" binding="#{minimumStay}" value="#{fareRuleManagedBean.fareRule.minimumStay}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="maximumStay">Maximum Stay</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="maximumStay" readonly="true" binding="#{maximumStay}" value="#{fareRuleManagedBean.fareRule.maximumStay}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="advancePurchase">Advance Purchase</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="advancePurchase" readonly="true" binding="#{advancePurchase}" value="#{fareRuleManagedBean.fareRule.advancePurchase}" styleClass="form-control" />
+                                        <div class="input-group-addon">days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label class="control-label" for="milesAccrual">FFP Millage Accrual</label>
+                                    <div class="input-group">
+                                        <h:inputText pt:type="number" id="milesAccrual" readonly="true" binding="#{milesAccrual}" value="#{fareRuleManagedBean.fareRule.milesAccrual}" styleClass="form-control" />
+                                        <div class="input-group-addon">%</div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="minimumPassengers">Minimum Passengers in Group</label>
+                                    <h:inputText pt:type="number" id="minimumPassengers" readonly="true" binding="#{minimumPassengers}" value="#{fareRuleManagedBean.fareRule.minimumPassengers}" styleClass="form-control" />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label" for="freeCancellation">Free Cancellation</label>
+                                    <h:inputText id="freeCancellation" binding="#{freeCancellation}" readonly="true" value="#{fareRuleManagedBean.fareRule.freeCancellation ? 'Yes' : 'No'}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </h:panelGroup>
             </div>
         </div>
     </ui:define>
