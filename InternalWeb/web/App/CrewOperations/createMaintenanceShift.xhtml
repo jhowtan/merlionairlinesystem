@@ -25,6 +25,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Maintenance Shift Details</div>
                             <div class="panel-body">
+                                <div class="form-group #{!name.valid ? 'has-error' : ''}">
+                                    <label class="control-label" for="name">Name</label>
+                                    <h:inputText id="name" binding="#{name}" value="#{createMaintenanceShiftManagedBean.name}" styleClass="form-control" required="true" pt:placeholder="Changi Shift 1" requiredMessage="Maintenance name is required.">
+                                    </h:inputText>
+                                    <h:message for="username" styleClass="help-block" />
+                                </div>
                                 <div class="form-group #{airport.valid ? '' : 'has-error'}">
                                     <label class="control-label" for="airport">Airport:</label>
                                     <h:selectOneMenu styleClass="form-control" binding="#{airport}"

@@ -1,6 +1,9 @@
 package MAS.ManagedBean.CrewOperations;
 
-import MAS.Bean.*;
+import MAS.Bean.AircraftMaintenanceSlotBean;
+import MAS.Bean.MaintenanceShiftBean;
+import MAS.Bean.RouteBean;
+import MAS.Bean.UserBean;
 import MAS.Common.Constants;
 import MAS.Entity.Airport;
 import MAS.Entity.MaintenanceShift;
@@ -38,6 +41,7 @@ public class CreateMaintenanceShiftManagedBean {
     private List<User> allCrewMembers;
     private List<Airport> airports;
     private String airport;
+    private String name;
 
     @PostConstruct
     public void init() {
@@ -70,6 +74,7 @@ public class CreateMaintenanceShiftManagedBean {
             }
             maintenanceShift.setCrew(selectedCrewMembers);
             maintenanceShift.setAirport(routeBean.getAirport(airport));
+            maintenanceShift.setName(name);
             maintenanceShiftBean.createMaintenanceShift(maintenanceShift);
 
             FacesMessage m = new FacesMessage("Created maintenance shift for chosen users successfully.");
@@ -122,5 +127,13 @@ public class CreateMaintenanceShiftManagedBean {
 
     public void setAirport(String airport) {
         this.airport = airport;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -3,9 +3,6 @@ package MAS.Entity;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Daryl on 9/11/2015.
- */
 @Entity
 public class MaintenanceShift {
     private long id;
@@ -40,5 +37,16 @@ public class MaintenanceShift {
 
     public void setAirport(Airport airport) {
         this.airport = airport;
+    }
+
+    private String name;
+
+    @Basic
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

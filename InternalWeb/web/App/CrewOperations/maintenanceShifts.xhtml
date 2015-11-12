@@ -2,7 +2,6 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Maintenance Shifts - Merlion Airline System</ui:define>
 
@@ -26,6 +25,7 @@
                             <table class="table table-striped" id="maintenance-shift-table">
                                 <thead>
                                 <tr>
+                                    <th>Name</th>
                                     <th>Airport</th>
                                     <th>City</th>
                                     <th>Country</th>
@@ -37,6 +37,7 @@
                                 <tbody>
                                 <ui:repeat value="#{maintenanceShiftManagedBean.getAllMaintenanceShifts()}" var="ms">
                                     <tr>
+                                        <td>#{ms.name}</td>
                                         <td>#{ms.airport.name} (#{ms.airport.id})</td>
                                         <td>#{ms.airport.city.name}</td>
                                         <td>#{ms.airport.city.country.name}</td>
