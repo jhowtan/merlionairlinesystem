@@ -93,7 +93,8 @@ public class MainMenu {
                         new MenuEntry("Helpdesk", null, Pages.HELPDESK, Pages.HELPDESK_CUSTOMER, Pages.HELPDESK_UPDATE_CUSTOMER_PROFILE, Pages.HELPDESK_UPDATE_MEMBERSHIP, Pages.HELPDESK_ISSUE_CARD),
                         new MenuEntry("Campaigns", null, Pages.VIEW_CAMPAIGNS, Pages.CREATE_CAMPAIGN, Pages.UPDATE_CAMPAIGN),
                         new MenuEntry("Customer Groups", null, Pages.VIEW_CUSTOMERGROUPS, Pages.CREATE_CUSTOMERGROUP, Pages.UPDATE_CUSTOMERGROUP),
-                        new MenuEntry("Customer Segmentation", null, Pages.CUSTOMER_SEGMENTATION)
+                        new MenuEntry("Customer Segmentation", null, Pages.CUSTOMER_SEGMENTATION),
+                        new MenuEntry("Customer Feedback", null, Pages.CUSTOMER_FEEDBACK, Pages.VIEW_CUSTOMER_FEEDBACK)
                 )
         );
 
