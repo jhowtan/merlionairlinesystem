@@ -6,7 +6,9 @@ import MAS.Bean.OperationsReportingBean;
 import MAS.Bean.UserBean;
 import MAS.Common.Constants;
 import MAS.Common.Utils;
-import MAS.Entity.*;
+import MAS.Entity.AircraftMaintenanceSlot;
+import MAS.Entity.Airport;
+import MAS.Entity.MaintenanceReport;
 import MAS.Exception.NotFoundException;
 import MAS.ManagedBean.Auth.AuthManagedBean;
 
@@ -73,11 +75,11 @@ public class CreateMaintenanceReportManagedBean {
             maintenanceReport.setMaintenanceSlot(aircraftMaintenanceSlotBean.getSlot(aircraftMaintenanceSlotId));
             maintenanceReport = operationsReportingBean.createMaintenanceReport(maintenanceReport);
             authManagedBean.createAuditLog("Created new maintenance report: " + maintenanceReport.getMaintenanceSlot().getAirport() + " - " + maintenanceReport.getId() + " @ ", "create_maintenance_report");
-            FacesMessage m = new FacesMessage("Maintenance report created for" + maintenanceReport.getMaintenanceSlot().toString() + " successfully.");
+            FacesMessage m = new FacesMessage("Maintenance report created successfully.");
             m.setSeverity(FacesMessage.SEVERITY_INFO);
             FacesContext.getCurrentInstance().addMessage("status", m);
         } catch (NotFoundException e) {
-            FacesMessage m = new FacesMessage("Cannot find present user in system");
+            FacesMessage m = new FacesMessage("Maintenance report could not be created.");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);        }
     }

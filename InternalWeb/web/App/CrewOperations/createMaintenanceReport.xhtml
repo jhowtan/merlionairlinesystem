@@ -29,9 +29,9 @@
                                     <div class="row">
                                         <div class="form-group col-lg-12 #{!maintenanceSlot.valid ? 'has-error' : ''}">
                                             <label class="control-label" for="flight">Maintenance Slot</label>
-                                            <h:selectOneMenu id="flight" binding="#{maintenanceSlot}" value="#{createMaintenanceReportManagedBean.maintenanceSlotId}" styleClass="form-control">
-                                                <f:selectItems value="#{createMaintenanceReportManagedBean.crewFlights}" var="f"
-                                                               itemValue="#{f.id}" itemLabel="#{f.code} (#{commonManagedBean.formatDate('dd/MM/yy', f.departureTime)}): #{f.aircraftAssignment.route.origin.id} - #{f.aircraftAssignment.route.destination.id}">
+                                            <h:selectOneMenu id="flight" binding="#{maintenanceSlot}" value="#{createMaintenanceReportManagedBean.aircraftMaintenanceSlotId}" styleClass="form-control">
+                                                <f:selectItems value="#{createMaintenanceReportManagedBean.crewMaintenanceSlots}" var="s"
+                                                               itemValue="#{s.id}" itemLabel="For #{s.aircraft.tailNumber} on #{commonManagedBean.formatDate('dd MMM yy', s.startTime)} @ #{s.airport.id} ">
                                                 </f:selectItems>
                                             </h:selectOneMenu>
                                             <h:message for="flight" styleClass="help-block" />

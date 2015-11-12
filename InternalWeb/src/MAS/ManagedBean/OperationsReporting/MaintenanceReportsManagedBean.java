@@ -32,6 +32,7 @@ public class MaintenanceReportsManagedBean {
     public void updateReportStatus(int status) {
         try {
             operationsReportingBean.updateMaintenanceReportStatus(selectedMaintenanceReport.getId(), status);
+            selectedMaintenanceReport = null;
         } catch (NotFoundException e) {
             FacesMessage m = new FacesMessage("Cannot acknowledge/resolve a maintenance report that does not exist!");
             m.setSeverity(FacesMessage.SEVERITY_ERROR);

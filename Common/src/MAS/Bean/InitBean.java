@@ -293,6 +293,10 @@ public class InitBean {
                         crewCertificationBean.createCrewCertification(certification);
                     }
                 }
+                ArrayList<Long> maintPermissions = new ArrayList<>();
+                maintPermissions.add(roleBean.findPermission(Permissions.CREW_CERTIFICATION).getId());
+                maintPermissions.add(roleBean.findPermission(Permissions.MAINTENANCE_REPORTING).getId());
+                roleId = roleBean.createRole("Maintenance Crew", maintPermissions);
                 for (int i = 0; i < 50; i ++) { //Maintenance crew
                     String selFName = firstNames[(int)(Math.random() * firstNames.length)];
                     String selLName = lastNames[(int)(Math.random() * lastNames.length)];

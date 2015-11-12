@@ -230,6 +230,7 @@
                 </div>
                 <div class="col-lg-12">
                     <h:panelGroup id="bookingClassTable">
+                    <h:panelGroup rendered="#{profitabilityReportManagedBean.selectedFlightId != 0}">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="bookclass-table-heading">
                             <a data-toggle="collapse" href="#bookclass-table" aria-controls="bookclass-table">
@@ -277,6 +278,7 @@
                             </div>
                         </div>
                     </div> <!--END OF PANEL -->
+                    </h:panelGroup>
                     </h:panelGroup>
                 </div>
             </div>
