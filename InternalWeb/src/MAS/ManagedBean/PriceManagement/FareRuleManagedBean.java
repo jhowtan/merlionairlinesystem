@@ -21,6 +21,8 @@ public class FareRuleManagedBean {
     @ManagedProperty(value="#{authManagedBean}")
     private AuthManagedBean authManagedBean;
 
+    private FareRule fareRule;
+
     public List<FareRule> getAllFareRules() {
         return fareRuleBean.getAllFareRules();
     }
@@ -41,6 +43,22 @@ public class FareRuleManagedBean {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("status", m);
         }
+    }
+
+    public void viewFareRule(long id) {
+        try {
+            fareRule = fareRuleBean.getFareRule(id);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FareRule getFareRule() {
+        return fareRule;
+    }
+
+    public void setFareRule(FareRule fareRule) {
+        this.fareRule = fareRule;
     }
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
