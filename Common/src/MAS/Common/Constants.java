@@ -99,4 +99,7 @@ public class Constants {
     public static int MILES_TO_CENTS = 3;
 
     public static String[] CUSTOMER_SEGMENT_NAMES = {"Business Travellers", "Family Travellers", "Globetrotters", "Casual Travellers"};
+
+    public static final String[] PARTNERS = {"CHAN", "CTCS", "GLTR", "HTTS", "TTSG"};
+    public static final double[] PARTNER_COMMISSION = {0.07, 0.08, 0.10, 0.07, 0.05};
 }

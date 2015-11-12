@@ -126,10 +126,19 @@ public class DirectDistributionSystem {
                     }
                 }
             }
+            bookFlightBean.addPartnerCost(calculatePrice(b), partnerId);
         } catch (NotFoundException e) {
             throw new BookingException();
         }
         return pnr.getBookingReference();
+    }
+
+    private double calculatePrice(List<BookingClass> bookingClasses) {
+        double result = 0;
+        for (BookingClass bookingClass : bookingClasses) {
+            result += bookingClass.getPrice();
+        }
+        return  result;
     }
 
     public static void main(String[] argv) {

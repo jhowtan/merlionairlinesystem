@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class BookFlightBean {
     PNRBean pnrBean;
     @EJB
     BookingClassBean bookingClassBean;
+    @EJB
+    CostsBean costsBean;
 
     public BookFlightBean() {
     }
@@ -119,6 +122,16 @@ public class BookFlightBean {
             em.persist(eTicket);
         }
         return pnr;
+    }
+
+    public void addPartnerCost(double price, String partnerCode) {
+        try {
+            if (Arrays.asList(Constants.PARTNERS).indexOf(partnerCode) != -1) {
+                costsBean.createCost(Constants.COST_ANNUAL, Constants.PARTNER_COMMISSION[Arrays.asList(Constants.PARTNERS).indexOf(partnerCode)] * price, "Commission for " + partnerCode, -1);
+            }
+        } catch (Exception e) {
+            //
+        }
     }
 
 }
