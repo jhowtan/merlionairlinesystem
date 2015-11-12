@@ -67,7 +67,7 @@ public class ProfitabilityReportManagedBean {
         setMaxProfit(0);
     }
 
-    public void flightFilterChangeEvent(AjaxBehaviorEvent event) {
+    public void applyFilter() {
         resultList = new ArrayList<>(templateList);
         //apply filter magic
         for (int i = 0; i < resultList.size(); i++) {
@@ -137,6 +137,10 @@ public class ProfitabilityReportManagedBean {
                 }
             }
         }
+    }
+
+    public void flightFilterChangeEvent(AjaxBehaviorEvent event) {
+        applyFilter();
     }
 
     public boolean flightInMonth(Flight flight) {
