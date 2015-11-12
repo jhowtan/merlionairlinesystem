@@ -282,7 +282,7 @@ public class FlightSearchManagedBean {
                         ffpBean.redeemMiles(authManagedBean.getCustomerId(), milesRedeemed);
                         customerLogBean.createCustomerLog(authManagedBean.getCustomerId(), "Redeemed miles for booking " + pnr.getBookingReference(), "redeem_miles");
                     }
-                    if (promoCode.equals(null)) {
+                    if (promoCode != null) {
                         campaignBean.useCode(promoCode, authManagedBean.getCustomerId());
                     }
                 } catch (Exception e) {
