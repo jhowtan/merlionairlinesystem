@@ -71,10 +71,14 @@ public class Constants {
     public static final String FLIGHTJOBS_PER_MONTH = "FLIGHTJOBS_PER_MONTH";
     public static final String FLIGHTJOB_COOLDOWN = "FLIGHTJOB_COOLDOWN";
 
+    public static final int sysAdminJobId = 0;
+    public static final int crewMgrJobId = 1;
+    public static final int fleetPlannerJobId = 2;
     public static final int cabinCrewJobId = 3;
     public static final int cockpitCrewJobId = 4;
     public static final int maintenanceCrewJobId = 5;
-    public static final String[] JOB_NAMES = {"", "", "", "Cabin Crew", "Cockpit Crew", "Maintenance Crew"};
+    public static final int routePlannerJobId = 6;
+    public static final String[] JOB_NAMES = {"System Admin", "Crew Manager", "Fleet Planner", "Cabin Crew", "Cockpit Crew", "Maintenance Crew", "Route Planner"};
 
     public static final String[] BOOKING_CLASS_NAMES = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 

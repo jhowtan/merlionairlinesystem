@@ -3,6 +3,7 @@ package MAS.ManagedBean.SystemAdmin;
 import MAS.Bean.RoleBean;
 import MAS.Bean.RouteBean;
 import MAS.Bean.UserBean;
+import MAS.Common.Constants;
 import MAS.Entity.Airport;
 import MAS.Entity.Role;
 import MAS.Exception.NotFoundException;
@@ -34,6 +35,8 @@ public class CreateUserManagedBean {
     private String email;
     private String phone;
     private String baseAirport;
+    private String job;
+    private List<String> jobList = Arrays.asList(Constants.JOB_NAMES);
 
     private List<Role> roles;
     private Map<Long, Boolean> rolesMap;
@@ -58,7 +61,8 @@ public class CreateUserManagedBean {
     public void createUser() {
         username = username.toLowerCase();
         email = email.toLowerCase();
-
+        System.out.println(job);
+        System.out.println(jobList.indexOf(job));
         ArrayList<Long> roleIds = new ArrayList<>();
         for (Object o : rolesMap.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
@@ -69,6 +73,7 @@ public class CreateUserManagedBean {
         try {
             Long userId = userBean.createUser(username, firstName, lastName, email, phone, routeBean.getAirport(baseAirport));
             userBean.setRoles(userId, roleIds);
+            userBean.changeJob(userId, jobList.indexOf(job));
         } catch (NotFoundException e) {
         }
 
@@ -80,6 +85,7 @@ public class CreateUserManagedBean {
         setEmail(null);
         setPhone(null);
         setBaseAirport(null);
+        setJob(null);
         populateRoles();
 
         FacesMessage m = new FacesMessage("User created successfully.");
@@ -153,5 +159,21 @@ public class CreateUserManagedBean {
 
     public void setBaseAirport(String baseAirport) {
         this.baseAirport = baseAirport;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public List<String> getJobList() {
+        return jobList;
+    }
+
+    public void setJobList(List<String> jobList) {
+        this.jobList = jobList;
     }
 }

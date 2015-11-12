@@ -58,9 +58,9 @@ public class UserManagedBean {
     }
 
     public String displayJob(User user) {
-        if (user.getJob() >= 3) {
+        try {
             return Constants.JOB_NAMES[user.getJob()];
-        } else {
+        } catch (Exception e) {
             return "Untitled";
         }
     }

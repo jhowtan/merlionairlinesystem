@@ -63,6 +63,14 @@
                                             </h:selectOneMenu>
                                             <h:message for="baseAirport" styleClass="help-block" />
                                         </div>
+                                        <div class="form-group col-lg-12 #{!job.valid ? 'has-error' : ''}">
+                                            <label class="control-label" for="job">Job</label>
+                                            <h:selectOneMenu styleClass="form-control" id="job" value="#{createUserManagedBean.job}" binding="#{job}">
+                                                <f:selectItems value="#{createUserManagedBean.jobList}" var="job" varStatus="varStatus"
+                                                               itemLabel="#{job}" itemValue="#{job}" />
+                                            </h:selectOneMenu>
+                                            <h:message for="job" styleClass="help-block" />
+                                        </div>
                                     </div>
                             </div>
                         </div>

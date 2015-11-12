@@ -3,6 +3,7 @@ package MAS.ManagedBean.SystemAdmin;
 import MAS.Bean.RoleBean;
 import MAS.Bean.RouteBean;
 import MAS.Bean.UserBean;
+import MAS.Common.Constants;
 import MAS.Entity.Airport;
 import MAS.Entity.Role;
 import MAS.Entity.User;
@@ -15,10 +16,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ManagedBean
 public class UpdateUserManagedBean {
@@ -42,6 +40,8 @@ public class UpdateUserManagedBean {
     private String baseAirport;
     private List<Role> roles;
     private Map<Long, Boolean> rolesMap;
+    private String job;
+    private List<String> jobList = Arrays.asList(Constants.JOB_NAMES);
 
     @PostConstruct
     public void init() {
@@ -66,6 +66,7 @@ public class UpdateUserManagedBean {
         lastName = user.getLastName();
         email = user.getEmail();
         phone = user.getPhone();
+        job = jobList.get(user.getJob());
         baseAirport = user.getBaseAirport().getId();
     }
 
@@ -96,6 +97,7 @@ public class UpdateUserManagedBean {
         try {
             Long userId = userBean.adminUpdateUserInfo(user.getId(), firstName, lastName, email, phone, routeBean.getAirport(baseAirport));
             userBean.setRoles(userId, roleIds);
+            userBean.changeJob(userId, jobList.indexOf(job));
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
@@ -205,5 +207,13 @@ public class UpdateUserManagedBean {
 
     public void setAuthManagedBean(AuthManagedBean authManagedBean) {
         this.authManagedBean = authManagedBean;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 }
