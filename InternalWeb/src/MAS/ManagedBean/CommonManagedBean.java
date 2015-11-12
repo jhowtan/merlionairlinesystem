@@ -39,6 +39,10 @@ public class CommonManagedBean {
         }
     }
 
+    public static String getJobString(int job) {
+        return Constants.JOB_NAMES[job];
+    }
+
     public static String formatDate(String format, String timezone, Date date) {
         if (date == null) {
             date = new Date();

@@ -55,6 +55,8 @@
                                     <thead>
                                     <tr>
                                         <th>Username</th>
+                                        <th>Base Airport</th>
+                                        <th>Job</th>
                                         <th>Full Name</th>
                                         <th>Email</th>
                                         <th>Action</th>
@@ -64,6 +66,8 @@
                                     <ui:repeat value="#{updateWorkgroupManagedBean.users}" var="user">
                                         <tr>
                                             <td>#{user.username}</td>
+                                            <td>#{user.baseAirport.id}</td>
+                                            <td>#{commonManagedBean.getJobString(user.job)}</td>
                                             <td>#{user.firstName} #{user.lastName}</td>
                                             <td>#{user.email}</td>
                                             <td>
