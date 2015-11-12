@@ -72,7 +72,7 @@
      > SEAT: <ui:fragment rendered="#{eticket.seatNumber != -1}">#{passengerServiceManagedBean.getSeatName(eticket.seatNumber)}</ui:fragment><ui:fragment rendered="#{eticket.seatNumber == -1}">Unallocated</ui:fragment>
     <ui:repeat value="#{passengerServiceManagedBean.getMeals(eticket)}" var="meal" varStatus="mealVarStatus">
      > MEAL #{mealVarStatus.index + 1}: #{meal == '' ? 'Normal Meal' : meal}</ui:repeat>
-     > SPECIAL REQUEST: None
+     > SPECIAL REQUEST: #{! empty passengerServiceManagedBean.getSpecialRequest(eticket) ? passengerServiceManagedBean.getSpecialRequest(eticket) : 'None'}
 </ui:repeat>
 
 
