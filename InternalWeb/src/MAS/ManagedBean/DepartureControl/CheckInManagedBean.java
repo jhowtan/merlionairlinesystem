@@ -213,10 +213,6 @@ public class CheckInManagedBean {
         }
     }
 
-    public void printBaggageTag(long id) {
-        //@TODO: Print Baggage Tag
-    }
-
     public double countTotalWeight() {
         double totalWeight = 0.0;
         for (Baggage baggage : primaryETicket.getBaggages()) {

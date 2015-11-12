@@ -155,7 +155,7 @@
                                                         <td><strong>Baggage #{i.index + 1}:</strong> #{baggage.weight} kg</td>
                                                         <td class="text-right">
                                                             <div class="btn-group">
-                                                                <h:link outcome="printBaggageTag" action="#{checkInManagedBean.printBaggageTag(baggage.id)}" target="_blank" value="Print Baggage Tag" styleClass="btn btn-xs btn-success">
+                                                                <h:link outcome="printBaggageTag" target="_blank" value="Print Baggage Tag" styleClass="btn btn-xs btn-success">
                                                                     <f:param value="#{checkInManagedBean.primaryETicket.id}" name="eticket"/>
                                                                     <f:param value="#{baggage.id}" name="baggage"/>
                                                                 </h:link>
