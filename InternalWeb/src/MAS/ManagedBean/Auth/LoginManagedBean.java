@@ -19,7 +19,7 @@ public class LoginManagedBean {
     public void login() {
         if (authManagedBean.login(username, password)) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT + "/App");
+                FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/App");
             } catch (IOException e) {
                 e.printStackTrace();
             }

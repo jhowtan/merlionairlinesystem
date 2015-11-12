@@ -13,7 +13,7 @@
             </div>
             <div class="panel-body">
                 <p class="lead">Book a flight for #{helpdeskManagedBean.customer.displayName}.</p>
-                <p><a href="http://localhost:8080/ExternalWeb_war_exploded/booking/?firstName=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.firstName)}&amp;lastName=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.lastName)}&amp;ffpNumber=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.id)}" class="btn btn-primary btn-lg" target="_blank">Continue</a></p>
+                <p><a href="/ExternalWeb_war_exploded/booking/?firstName=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.firstName)}&amp;lastName=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.lastName)}&amp;ffpNumber=#{commonManagedBean.urlEncode(helpdeskManagedBean.customer.id)}" class="btn btn-primary btn-lg" target="_blank">Continue</a></p>
             </div>
         </h:panelGroup>
     </ui:define>

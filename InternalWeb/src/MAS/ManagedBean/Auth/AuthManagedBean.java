@@ -139,7 +139,7 @@ public class AuthManagedBean implements Serializable {
 
     public void forwardToLogin() {
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(Constants.WEB_ROOT + "/Auth");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/Auth");
         } catch (IOException e) {
             e.printStackTrace();
         }
