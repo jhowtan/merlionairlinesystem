@@ -12,6 +12,7 @@ import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -71,7 +72,18 @@ public class SpecialRequestsManagedBean {
     }
 
     public void save() {
-        //TODO: Save SSR request
+        try {
+            //TODO: Save SSR request
+
+            FacesMessage m = new FacesMessage("Special service request for the customer has been saved successfully.");
+            m.setSeverity(FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }catch (Exception e){
+            FacesMessage m = new FacesMessage("There was an error saving the special service request.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("status", m);
+        }
+
     }
 
     public List<FlightTicketCollection> getFlightTicketCollections(PNR pnr) {

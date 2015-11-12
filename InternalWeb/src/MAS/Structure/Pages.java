@@ -117,6 +117,8 @@ public class Pages {
     public static final Page HELPDESK_ISSUE_CARD = new Page("/App/CustomerRelations/Helpdesk/issueCard", Permissions.MANAGE_CUSTOMERS);
     public static final Page CUSTOMER_FEEDBACK = new Page("/App/CustomerRelations/customerFeedback", Permissions.MANAGE_CUSTOMERS);
     public static final Page VIEW_CUSTOMER_FEEDBACK = new Page("/App/CustomerRelations/viewCustomerFeedback", Permissions.MANAGE_CUSTOMERS);
+    public static final Page CUSTOMER_FLIGHT_BOOKINGS = new Page("/App/CustomerRelations/Helpdesk/flightBookings", Permissions.MANAGE_CUSTOMERS);
+    public static final Page SPECIAL_REQUEST_FORM = new Page("/App/CustomerRelations/manageSpecialRequests", Permissions.MANAGE_CUSTOMERS);
 
     public static final Page VIEW_CAMPAIGNS = new Page("/App/CustomerRelations/campaigns", Permissions.MANAGE_CAMPAIGNS);
     public static final Page CREATE_CAMPAIGN = new Page("/App/CustomerRelations/createCampaign", Permissions.MANAGE_CAMPAIGNS);
