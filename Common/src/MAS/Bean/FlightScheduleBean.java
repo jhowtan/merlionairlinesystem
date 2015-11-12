@@ -260,8 +260,9 @@ public class FlightScheduleBean {
     public List<Flight> findDepartingFlightsByAirportForCheckIn(Airport baseAirport) {
         return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
                 "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.status < 4 " +
-                "AND f.departureTime < :date", Flight.class)
+                "AND f.departureTime < :date AND f.departureTime > :limitDate", Flight.class)
                 .setParameter("baseAirport", baseAirport)
+                .setParameter("limitDate", Utils.minutesLater(new Date(), -2880), TemporalType.TIMESTAMP)
                 .setParameter("date", Utils.hoursFromNow(48), TemporalType.TIMESTAMP)
                 .getResultList();
     }
@@ -269,8 +270,9 @@ public class FlightScheduleBean {
     public List<Flight> findDepartingFlightsByAirportForGateControl(Airport baseAirport) {
         return em.createQuery("SELECT f FROM Flight f, AircraftAssignment aa, Route r " +
                 "WHERE f.aircraftAssignment = aa AND aa.route = r AND r.origin = :baseAirport AND f.status < 6 " +
-                "AND f.departureTime < :date", Flight.class)
+                "AND f.departureTime < :date AND f.departureTime > :limitDate", Flight.class)
                 .setParameter("baseAirport", baseAirport)
+                .setParameter("limitDate", Utils.minutesLater(new Date(), -2880), TemporalType.TIMESTAMP)
                 .setParameter("date", Utils.hoursFromNow(48), TemporalType.TIMESTAMP)
                 .getResultList();
     }
