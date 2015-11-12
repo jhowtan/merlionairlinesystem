@@ -58,6 +58,9 @@ public class UpdateAirportManagedBean {
     }
 
     public void save() throws NotFoundException {
+        airport.setHangars(hangars);
+        airport.setId(code);
+        airport.setName(airportName);
         routeBean.updateAirport(airport);
         authManagedBean.createAuditLog("Updated Airport: " + airportName, "update_airport");
 

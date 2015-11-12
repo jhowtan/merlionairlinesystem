@@ -75,10 +75,12 @@ public class SignInOutManagedBean {
 
     public void signOut() {
         try {
-            flightRosterBean.signOutFR(flightRoster.getId(), authManagedBean.getUserId());
-            FacesMessage m = new FacesMessage("Signed out for flight " + flightRoster.getFlight().getCode());
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
-            FacesContext.getCurrentInstance().addMessage("status", m);
+            if (flightRosterBean.getFlightRoster(flightRosterId).getFlight().getActualDepartureTime().compareTo(new Date()) == -1) {
+                flightRosterBean.signOutFR(flightRoster.getId(), authManagedBean.getUserId());
+                FacesMessage m = new FacesMessage("Signed out for flight " + flightRoster.getFlight().getCode());
+                m.setSeverity(FacesMessage.SEVERITY_INFO);
+                FacesContext.getCurrentInstance().addMessage("status", m);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             FacesMessage m = new FacesMessage("Could not sign out from flight.");

@@ -3,7 +3,6 @@ package MAS.Validator;
 import MAS.Bean.BookingClassBean;
 import MAS.Bean.FlightScheduleBean;
 import MAS.Common.SeatConfigObject;
-import MAS.Entity.BookingClass;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -13,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import java.util.List;
 
 @FacesValidator
 public class SeatAllocationValidator implements Validator {
@@ -37,7 +35,11 @@ public class SeatAllocationValidator implements Validator {
             m.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(m);
         }
-
+        if (((UIInput) uiComponent.getAttributes().get("flight")).getValue() == null) {
+            FacesMessage m = new FacesMessage("Please select a flight to proceed.");
+            m.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(m);
+        }
         long flightId = (Long) ((UIInput) uiComponent.getAttributes().get("flight")).getValue();
         int travelClass = (Integer) ((UIInput) uiComponent.getAttributes().get("travelClass")).getValue();
         SeatConfigObject seatConfigObject = new SeatConfigObject();
