@@ -1,36 +1,44 @@
-package MAS.ManagedBean;
+package MAS.ManagedBean.CustomerRelations;
 
 import MAS.Bean.FlightScheduleBean;
+import MAS.Bean.MealSelectionBean;
 import MAS.Bean.PNRBean;
-import MAS.Common.SeatConfigObject;
 import MAS.Common.Utils;
 import MAS.Entity.ETicket;
 import MAS.Entity.Flight;
-import MAS.Entity.Itinerary;
 import MAS.Entity.PNR;
-import MAS.Exception.CancelException;
 import MAS.Exception.NotFoundException;
+import MAS.ManagedBean.Auth.AuthManagedBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class ManageBookingManagedBean {
+public class SpecialRequestsManagedBean {
+    @ManagedProperty(value="#{authManagedBean}")
+    private AuthManagedBean authManagedBean;
+
+    @EJB
+    private PNRBean pnrBean;
+    @EJB
+    private MealSelectionBean mealSelectionBean;
+    @EJB
+    FlightScheduleBean flightScheduleBean;
 
     private String bookingReference;
     private String passengerLastName;
     private PNR pnr;
-
-    @EJB
-    PNRBean pnrBean;
-    @EJB
-    FlightScheduleBean flightScheduleBean;
+    private List<ETicket> eTickets;
+    private String specialServiceRequest;
+    private String eticketId;
+    private String flightId;
 
     @PostConstruct
     public void init() {
@@ -48,39 +56,22 @@ public class ManageBookingManagedBean {
         }
     }
 
-    public String getSeatNumber(ETicket eTicket) {
-        SeatConfigObject seatConfigObject = SeatConfigObject.getInstance(eTicket.getFlight().getAircraftAssignment().getAircraft().getSeatConfig().getSeatConfig());
+    public void changeListener(AjaxBehaviorEvent event) {
         try {
-            return seatConfigObject.convertIntToString(eTicket.getSeatNumber());
-        } catch (NotFoundException e) {
-            return "N/A";
-        }
-    }
-
-    public void cancel() {
-        try {
-            pnrBean.cancel(pnr.getId());
-            pnr = null;
-            bookingReference = null;
-            passengerLastName = null;
-            FacesMessage m = new FacesMessage("Booking successfully cancelled.");
-            m.setSeverity(FacesMessage.SEVERITY_INFO);
-            FacesContext.getCurrentInstance().addMessage("status", m);
-        } catch (CancelException e) {
-            FacesMessage m = new FacesMessage("Unable to cancel your booking. Please contact customer support to make changes to your booking!");
-            m.setSeverity(FacesMessage.SEVERITY_ERROR);
-            FacesContext.getCurrentInstance().addMessage("status", m);
-        }
-    }
-
-    public boolean canCancel() {
-        Date cancel = Utils.hoursFromNow(24 * 2);
-        for (Itinerary itinerary : pnr.getItineraries()) {
-            if (itinerary.getDepartureDate().before(cancel)) {
-                return false;
+            eTickets = pnrBean.getETicketsByPNR(pnr);
+            Flight fl = flightScheduleBean.getFlight(Long.parseLong(flightId));
+            for (ETicket et : eTickets) {
+                if (!et.getFlight().equals(fl)) {
+                    eTickets.remove(et);
+                }
             }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
         }
-        return true;
+    }
+
+    public void save() {
+        //TODO: Save SSR request
     }
 
     public List<FlightTicketCollection> getFlightTicketCollections(PNR pnr) {
@@ -105,6 +96,21 @@ public class ManageBookingManagedBean {
         return flightTicketCollections;
     }
 
+    public String getEticketId() {
+        return eticketId;
+    }
+
+    public void setEticketId(String eticketId) {
+        this.eticketId = eticketId;
+    }
+
+    private class FlightComparator implements Comparator<Flight> {
+        @Override
+        public int compare(Flight o1, Flight o2) {
+            return o1.getDepartureTime().compareTo(o2.getDepartureTime());
+        }
+    }
+
     public class FlightTicketCollection {
         private Flight flight;
         private List<ETicket> eTickets;
@@ -126,28 +132,6 @@ public class ManageBookingManagedBean {
         }
     }
 
-    private class FlightComparator implements Comparator<Flight> {
-        @Override
-        public int compare(Flight o1, Flight o2) {
-            return o1.getDepartureTime().compareTo(o2.getDepartureTime());
-        }
-    }
-
-    public String getBookingReference() {
-        return bookingReference;
-    }
-
-    public void setBookingReference(String bookingReference) {
-        this.bookingReference = bookingReference;
-    }
-
-    public String getPassengerLastName() {
-        return passengerLastName;
-    }
-
-    public void setPassengerLastName(String passengerLastName) {
-        this.passengerLastName = passengerLastName;
-    }
 
     public PNR getPnr() {
         return pnr;
@@ -155,5 +139,32 @@ public class ManageBookingManagedBean {
 
     public void setPnr(PNR pnr) {
         this.pnr = pnr;
+    }
+    public void setAuthManagedBean(AuthManagedBean authManagedBean) {
+        this.authManagedBean = authManagedBean;
+    }
+
+    public String getSpecialServiceRequest() {
+        return specialServiceRequest;
+    }
+
+    public void setSpecialServiceRequest(String specialServiceRequest) {
+        this.specialServiceRequest = specialServiceRequest;
+    }
+
+    public List<ETicket> geteTickets() {
+        return eTickets;
+    }
+
+    public void seteTickets(List<ETicket> eTickets) {
+        this.eTickets = eTickets;
+    }
+
+    public String getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(String flightId) {
+        this.flightId = flightId;
     }
 }
