@@ -43,5 +43,35 @@ public class MailBean {
         return true;
     }
 
+    public boolean send(String recipientEmail, String recipientName, String subject, String bodyText, String bodyHTML) {
+        if (recipientEmail.contains("@example.com")) {
+            // Ignore emails to this domain
+            return true;
+        }
+        MimeMessage msg = new MimeMessage(session);
+        try {
+            msg.setFrom(new InternetAddress(session.getProperty("mail.from"), "Merlion Airlines"));
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail, recipientName));
+            msg.setSubject(subject);
+            Multipart multipart = new MimeMultipart("alternative");
+
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setText(bodyText);
+            multipart.addBodyPart(bodyPart);
+
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            String htmlContent = bodyHTML;
+            htmlPart.setContent(htmlContent, "text/html");
+            multipart.addBodyPart(htmlPart);
+
+            msg.setContent(multipart);
+            Transport.send(msg);
+        } catch (MessagingException|UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
 }
