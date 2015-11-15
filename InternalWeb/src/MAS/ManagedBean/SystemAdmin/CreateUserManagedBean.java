@@ -93,6 +93,10 @@ public class CreateUserManagedBean {
         FacesContext.getCurrentInstance().addMessage("status", m);
     }
 
+    public void addMoreCrew(){
+        userBean.addCrew();
+    }
+
     public String getUsername() {
         return username;
     }
